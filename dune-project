@@ -21,7 +21,7 @@
  (name llvm__2)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml dune)
+ (depends ocaml dune ocamlgraph)
  (tags
   (topics "to describe" your project)))
 
