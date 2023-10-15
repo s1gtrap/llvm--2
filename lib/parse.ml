@@ -25,6 +25,28 @@ let from_string f s =
   in
   parseRes
 
+let from_channel f input =
+  let lexbuf = Lexing.from_channel input in
+  let _, filebuf = initLexer lexbuf in
+  let parseRes =
+    try f Lllexer.token filebuf with
+    | Lllexer.Error msg ->
+        Printf.eprintf "%s%!" msg;
+        failwith "lex"
+    | Llparser.Error ->
+        let pos1 = Lexing.lexeme_start_p filebuf in
+        let pos2 = Lexing.lexeme_end_p filebuf in
+        let lexeme = Lexing.lexeme filebuf in
+        Printf.fprintf stderr "%s:%d:%d - %d:%d: syntax error '%s'\n"
+          pos1.pos_fname pos1.pos_lnum
+          (pos1.pos_cnum - pos1.pos_bol)
+          pos2.pos_lnum
+          (pos2.pos_cnum - pos2.pos_bol + 1)
+          lexeme;
+        failwith "par"
+  in
+  parseRes
+
 let from_file filename =
   let input = open_in filename in
   let filebuf = Lexing.from_channel input in
