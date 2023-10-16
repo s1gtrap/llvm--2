@@ -4,7 +4,6 @@ let () =
   let cfg = Parse.from_channel Llparser.cfgeof Stdlib.stdin in
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
-  Printf.printf "%d\n" (List.length insns);
   List.iteri
     (fun i n ->
       Printf.printf "%d {%s}\t%s\n" i

@@ -41,9 +41,7 @@ let indices ((head, tail) : Ll.cfg) : G.V.t array =
   let tail = List.map snd tail |> List.map insns |> List.map List.length in
   let len = List.fold_left ( + ) off tail in
   let len = len + (2 * List.length tail) in
-  Array.init len (fun i ->
-      Printf.printf "%d\n" i;
-      G.V.create i)
+  Array.init len G.V.create
 
 let blocks ids ((head, tail) : Ll.cfg) : G.V.t S.table =
   let f (i, t) ((n, b) : _ * Ll.block) =
@@ -64,10 +62,7 @@ let graph ((head, tail) : Ll.cfg) : G.V.t array * G.t =
          (fun o (b : Ll.block) -> (o + List.length b.insns + 2, (o, b)))
          (List.length head.insns + 1)
   in
-  let add_edge i j =
-    Printf.printf "add_edge %d %s\n" i (S.name j);
-    G.add_edge g ids.(i) (blk j)
-  in
+  let add_edge i j = G.add_edge g ids.(i) (blk j) in
   let f ((i, b) : _ * Ll.block) =
     for i = i to i + List.length b.insns - 1 do
       G.add_edge g ids.(i) ids.(i + 1)
@@ -103,19 +98,16 @@ let graph ((head, tail) : Ll.cfg) : G.V.t array * G.t =
 let%test "graph" =
   let cfg = parse "ret void" in
   let _ids, g = graph cfg in
-  Printf.printf "%s\n" (dot g);
   dot g = "digraph G {\n  1;\n  3;\n  \n  \n  1 -> 3;\n  \n  }\n"
 
 let%test "graph" =
   let cfg = parse "    br label %a\na:\n    br label %b\nb:\n    ret void" in
   let _ids, g = graph cfg in
-  Printf.printf "%s\n" (dot g);
   dot g = "digraph G {\n  0;\n  1;\n  2;\n  3;\n  \n  \n  1 -> 3;\n  \n  }\n"
 
 let flatten ((head, tail) : Ll.cfg) : insn list =
   let insn i = Insn i in
   let named_block ((n, b) : _ * Ll.block) =
-    Printf.printf "%d\n" (List.length b.insns);
     [ Label n ] @ List.map insn b.insns @ [ Term b.terminator ]
   in
   List.map insn head.insns @ [ Term head.terminator ]
