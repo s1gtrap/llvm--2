@@ -19,15 +19,40 @@ let use (insn : Cfg.insn) =
   | Insn (_, Call (_, _, args)) ->
       List.map snd args |> List.fold_left (fun s e -> op e s) empty
   | Insn (_, Bitcast (_, sop, _)) -> op sop empty
-  | _ -> failwith ""
+  | Insn (_, Gep (_, bop, ops)) ->
+      List.fold_left (fun s o -> op o s) (op bop empty) ops
+  | Insn (_, Zext (_, sop, _)) -> op sop empty
+  | Insn (_, Ptrtoint (_, sop, _)) -> op sop empty
+  | Insn (_, PhiNode (_, ops)) ->
+      List.map fst ops |> List.fold_left (fun s e -> op e s) empty
+  | Term (Ret (_, Some sop)) -> op sop empty
+  | Term (Ret (_, None)) -> empty
+  | Term (Br _) -> empty
+  | Term (Cbr _) -> empty
+  | Term Unreachable -> empty
+  | _ -> failwith (Cfg.string_of_insn insn)
+
+let print (insns : Cfg.insn list) (_ids : Cfg.G.V.t array) (_g : Cfg.G.t)
+    (in_ : Symbol.SS.t array) (out : Symbol.SS.t array) =
+  List.iteri
+    (fun i n ->
+      let sos s = Ll.mapcat "," Symbol.name (Symbol.SS.elements s) in
+      Printf.printf "{%s}\t{%s}\t%s\n"
+        (sos in_.(i))
+        (sos out.(i))
+        (Cfg.string_of_insn n))
+    insns;
+  ()
 
 let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
   let rec dataflow (in_ : Symbol.SS.t array) (out : Symbol.SS.t array) =
-    let ((in', out') : Symbol.set array * Symbol.set array) =
+    print insns ids g in_ out;
+    Printf.printf "\n";
+    let in' = Array.copy in_ in
+    let out' = Array.copy out in
+    let ((in_, out) : Symbol.set array * Symbol.set array) =
       List.fold_left
         (fun (in_, out) (i, insn) ->
-          (*let in_ = in_.(i) in
-            let out = out.(i) in*)
           in_.(i) <-
             Symbol.SS.union (use insn) (Symbol.SS.diff out.(i) (def insn));
           out.(i) <-
@@ -39,7 +64,11 @@ let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
         (in_, out)
         (List.mapi (fun i v -> (i, v)) insns)
     in
-    if in_ = in' && out = out' then (in', out') else dataflow in' out'
+    if
+      Array.for_all2 Symbol.SS.equal in_ in'
+      && Array.for_all2 Symbol.SS.equal out out'
+    then (in', out')
+    else dataflow in_ out
   in
   dataflow
     (Array.init (List.length insns) (fun _ -> Symbol.SS.empty))
