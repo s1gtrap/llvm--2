@@ -21,6 +21,14 @@ let symbol name =
 
 let name (s, _) = s
 
+module SS = Set.Make (struct
+  type t = symbol
+
+  let compare (_, n1) (_, n2) = compare n1 n2
+end)
+
+type set = SS.t
+
 module ST = Map.Make (struct
   type t = symbol
 
