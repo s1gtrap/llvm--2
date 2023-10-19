@@ -1,6 +1,6 @@
 open Llvm__2
 
-let take parser input =
+let task parser input =
   let cfg = Parse.from_channel parser input in
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
@@ -14,19 +14,21 @@ let take parser input =
     insns;
   ()
 
-let take2 parser input =
+let task2 parser input =
   let cfg = Parse.from_channel parser input in
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
   let in_, out = Lva.dataflow insns ids g in
-  List.iteri
-    (fun i n ->
-      let sos s = Ll.mapcat "," Symbol.name (Symbol.SS.elements s) in
-      Printf.printf "{%s}\t{%s}\t%s\n"
-        (sos in_.(i))
-        (sos out.(i))
-        (Cfg.string_of_insn n))
-    insns;
+  Lva.print insns ids g in_ out;
+  ()
+
+let task3 parser input =
+  let cfg = Parse.from_channel parser input in
+  let ids, g = Cfg.graph cfg in
+  let insns = Cfg.flatten cfg in
+  let in_, out = Lva.dataflow insns ids g in
+  let itf = Lva.interf insns in_ out in
+  Printf.printf "%s\n" (Lva.dot itf);
   ()
 
 let () =
@@ -57,8 +59,9 @@ let () =
 
   let oper =
     match !oper with
-    | "cfg" -> take
-    | "lva" -> take2
+    | "cfg" -> task
+    | "lva" -> task2
+    | "itf" -> task3
     | _ ->
         Printf.eprintf "invalid operation: %s\n" !oper;
         exit 1
