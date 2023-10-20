@@ -31,6 +31,15 @@ let task3 parser input =
   Printf.printf "%s\n" (Lva.dot itf);
   ()
 
+let task4 parser input =
+  let cfg = Parse.from_channel parser input in
+  let ids, g = Cfg.graph cfg in
+  let insns = Cfg.flatten cfg in
+  let in_, out = Lva.dataflow insns ids g in
+  let itf = Lva.interf insns in_ out in
+  let _asn = Regalloc.alloc itf in
+  ()
+
 let () =
   let usage_msg = "llvm__2 [-v] -p <parser> <file1> [<file2>] ..." in
   let verbose = ref false in
@@ -62,6 +71,7 @@ let () =
     | "cfg" -> task
     | "lva" -> task2
     | "itf" -> task3
+    | "x86" -> task4
     | _ ->
         Printf.eprintf "invalid operation: %s\n" !oper;
         exit 1

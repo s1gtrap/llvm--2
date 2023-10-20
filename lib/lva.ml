@@ -58,9 +58,9 @@ let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
     let ((in_, out) : Symbol.set array * Symbol.set array) =
       List.fold_left
         (fun (in_, out) (i, insn) ->
-          Printf.printf " def=%s, use=%s\n"
+          (*Printf.printf " def=%s, use=%s\n"
             (printset (def insn))
-            (printset (use insn));
+            (printset (use insn));*)
           (*Printf.printf "  in[%d] = %s, " i (printset in_.(i));*)
           in_.(i) <-
             Symbol.SS.union (use insn) (Symbol.SS.diff out.(i) (def insn));
