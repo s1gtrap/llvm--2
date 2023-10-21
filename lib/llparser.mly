@@ -1,6 +1,5 @@
 %{
   open Ll
-  module S = Symbol
 %}
 
 %token STAR COMMA COLON EQUALS EOF
@@ -20,6 +19,7 @@
 
 %start <Ll.prog> prog
 %start <Ll.cfg> cfgeof
+%start <Symbol.symbol * Ll.fdecl> fdecleof
 %%
 
 %inline typed(X): t=ty x=X { (t,x) }
@@ -60,6 +60,9 @@ fdecl:
           ; cfg = cfg
           }
     ) }
+
+fdecleof:
+  fdecl=fdecl EOF { fdecl }
 
 gdecl:
   | g=GID EQUALS GLOBAL tgi=typed(ginit)

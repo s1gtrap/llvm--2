@@ -1,6 +1,6 @@
 open Llvm__2
 
-let task parser input =
+let cfgcfg parser input =
   let cfg = Parse.from_channel parser input in
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
@@ -14,7 +14,7 @@ let task parser input =
     insns;
   ()
 
-let task2 parser input =
+let cfglva parser input =
   let cfg = Parse.from_channel parser input in
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
@@ -22,23 +22,107 @@ let task2 parser input =
   Lva.print insns ids g in_ out;
   ()
 
-let task3 parser input =
+let cfgitf parser input =
   let cfg = Parse.from_channel parser input in
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
   let in_, out = Lva.dataflow insns ids g in
-  let itf = Lva.interf insns in_ out in
+  let _, itf = Lva.interf insns in_ out in
   Printf.printf "%s\n" (Lva.dot itf);
   ()
 
-let task4 parser input =
+let cfgx86 parser input =
   let cfg = Parse.from_channel parser input in
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
   let in_, out = Lva.dataflow insns ids g in
-  let itf = Lva.interf insns in_ out in
-  let _asn = Regalloc.alloc itf in
+  let lbls, itf = Lva.interf insns in_ out in
+  let _asn = Regalloc.alloc lbls itf in
   ()
+
+let fdeclcfg input =
+  let _name, fdecl = Parse.from_channel Llparser.fdecleof input in
+  let ids, g = Cfg.graph fdecl.cfg in
+  let insns = Cfg.flatten fdecl.cfg in
+  List.iteri
+    (fun i n ->
+      Printf.printf "%d {%s}\t%s\n" i
+        (Ll.mapcat ","
+           (fun v -> string_of_int (Cfg.G.V.label v))
+           (Cfg.G.succ g ids.(i)))
+        (Cfg.string_of_insn n))
+    insns;
+  ()
+
+let fdecllva input =
+  let _name, fdecl = Parse.from_channel Llparser.fdecleof input in
+  let ids, g = Cfg.graph fdecl.cfg in
+  let insns = Cfg.flatten fdecl.cfg in
+  let in_, out = Lva.dataflow insns ids g in
+  Lva.print insns ids g in_ out;
+  ()
+
+let fdeclitf input =
+  let _name, fdecl = Parse.from_channel Llparser.fdecleof input in
+  let ids, g = Cfg.graph fdecl.cfg in
+  let insns = Cfg.flatten fdecl.cfg in
+  let in_, out = Lva.dataflow insns ids g in
+  let _, itf = Lva.interf insns in_ out in
+  Printf.printf "%s\n" (Lva.dot itf);
+  ()
+
+let fdeclx86 input =
+  let name, fdecl = Parse.from_channel Llparser.fdecleof input in
+  let ids, g = Cfg.graph fdecl.cfg in
+  let insns = Cfg.flatten fdecl.cfg in
+  let in_, out = Lva.dataflow insns ids g in
+  let lbls, itf = Lva.interf insns in_ out in
+  let _asn = Regalloc.alloc lbls itf in
+  let tys, _ = fdecl.fty in
+  let args = List.combine fdecl.param tys in
+  let x86 = Regalloc.compile_fdecl args name fdecl in
+  Printf.printf "%s" (Regalloc.string_of_prog x86);
+  ()
+
+(*let progcfg input =
+    let prog = Parse.from_channel Llparser.prog input in
+    let ids, g = Cfg.graph cfg in
+    let insns = Cfg.flatten cfg in
+    List.iteri
+      (fun i n ->
+        Printf.printf "%d {%s}\t%s\n" i
+          (Ll.mapcat ","
+             (fun v -> string_of_int (Cfg.G.V.label v))
+             (Cfg.G.succ g ids.(i)))
+          (Cfg.string_of_insn n))
+      insns;
+    ()
+
+  let proglva parser input =
+    let cfg = Parse.from_channel Llparser.prog input in
+    let ids, g = Cfg.graph cfg in
+    let insns = Cfg.flatten cfg in
+    let in_, out = Lva.dataflow insns ids g in
+    Lva.print insns ids g in_ out;
+    ()
+
+  let progitf parser input =
+    let cfg = Parse.from_channel Llparser.prog input in
+    let ids, g = Cfg.graph cfg in
+    let insns = Cfg.flatten cfg in
+    let in_, out = Lva.dataflow insns ids g in
+    let _, itf = Lva.interf insns in_ out in
+    Printf.printf "%s\n" (Lva.dot itf);
+    ()
+
+  let progx86 input =
+    let cfg = Parse.from_channel Llparser.prog input in
+    let ids, g = Cfg.graph cfg in
+    let insns = Cfg.flatten cfg in
+    let in_, out = Lva.dataflow insns ids g in
+    let lbls, itf = Lva.interf insns in_ out in
+    let _asn = Regalloc.alloc lbls itf in
+    ()*)
 
 let () =
   let usage_msg = "llvm__2 [-v] -p <parser> <file1> [<file2>] ..." in
@@ -58,26 +142,46 @@ let () =
 
   Arg.parse speclist anon_fun usage_msg;
 
-  let parser =
-    match !parser with
-    | "cfg" -> Llparser.cfgeof
-    | _ ->
-        Printf.eprintf "invalid parser type: %s\n" !parser;
-        exit 1
-  in
-
-  let oper =
-    match !oper with
-    | "cfg" -> task
-    | "lva" -> task2
-    | "itf" -> task3
-    | "x86" -> task4
-    | _ ->
-        Printf.eprintf "invalid operation: %s\n" !oper;
-        exit 1
-  in
-
-  List.map (function "-" -> Stdlib.stdin | f -> open_in f) !input_files
-  |> List.iter (oper parser);
-
-  ()
+  match !parser with
+  | "cfg" ->
+      let oper =
+        match !oper with
+        | "cfg" -> cfgcfg
+        | "lva" -> cfglva
+        | "itf" -> cfgitf
+        | "x86" -> cfgx86
+        | _ ->
+            Printf.eprintf "invalid operation: %s\n" !oper;
+            exit 1
+      in
+      List.map (function "-" -> Stdlib.stdin | f -> open_in f) !input_files
+      |> List.iter (oper Llparser.cfgeof)
+  | "fdecl" ->
+      let oper =
+        match !oper with
+        | "cfg" -> fdeclcfg
+        | "lva" -> fdecllva
+        | "itf" -> fdeclitf
+        | "x86" -> fdeclx86
+        | _ ->
+            Printf.eprintf "invalid operation: %s\n" !oper;
+            exit 1
+      in
+      List.map (function "-" -> Stdlib.stdin | f -> open_in f) !input_files
+      |> List.iter oper
+  | "prog" ->
+      let oper =
+        match !oper with
+        (*| "cfg" -> progcfg
+          | "lva" -> proglva
+          | "itf" -> progitf
+          | "x86" -> progx86*)
+        | _ ->
+            Printf.eprintf "invalid operation: %s\n" !oper;
+            exit 1
+      in
+      List.map (function "-" -> Stdlib.stdin | f -> open_in f) !input_files
+      |> List.iter oper
+  | _ ->
+      Printf.eprintf "invalid parser type: %s\n" !parser;
+      exit 1

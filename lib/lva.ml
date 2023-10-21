@@ -1,14 +1,16 @@
+module S = Symbol
+
 let def (insn : Cfg.insn) =
-  let empty = Symbol.SS.empty in
+  let empty = S.SS.empty in
   match insn with
   | Label _ -> empty
-  | Insn (Some dop, _) -> Symbol.SS.add dop empty
+  | Insn (Some dop, _) -> S.SS.add dop empty
   | Insn (None, _) -> empty
   | Term _ -> empty
 
 let use (insn : Cfg.insn) =
-  let empty = Symbol.SS.empty in
-  let op o s = match o with Ll.Id i -> Symbol.SS.add i s | _ -> s in
+  let empty = S.SS.empty in
+  let op o s = match o with Ll.Id i -> S.SS.add i s | _ -> s in
   match insn with
   | Label _ -> empty
   | Insn (_, Binop (_, _, lop, rop)) -> op lop empty |> op rop
@@ -33,15 +35,15 @@ let use (insn : Cfg.insn) =
   | _ -> failwith (Cfg.string_of_insn insn)
 
 let printset s =
-  let sos s = Ll.mapcat "," Symbol.name (Symbol.SS.elements s) in
+  let sos s = Ll.mapcat "," S.name (S.SS.elements s) in
   Printf.sprintf "{%s}" (sos s)
 
 let print (insns : Cfg.insn list) (_ids : Cfg.G.V.t array) (_g : Cfg.G.t)
-    (in_ : Symbol.SS.t array) (out : Symbol.SS.t array) =
+    (in_ : S.SS.t array) (out : S.SS.t array) =
   Printf.printf "in\tout\n";
   List.iteri
     (fun i n ->
-      let sos s = Ll.mapcat "," Symbol.name (Symbol.SS.elements s) in
+      let sos s = Ll.mapcat "," S.name (S.SS.elements s) in
       Printf.printf "{%s}\t{%s}\t%s\n"
         (sos in_.(i))
         (sos out.(i))
@@ -50,20 +52,19 @@ let print (insns : Cfg.insn list) (_ids : Cfg.G.V.t array) (_g : Cfg.G.t)
   ()
 
 let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
-  let rec dataflow (in_ : Symbol.SS.t array) (out : Symbol.SS.t array) =
+  let rec dataflow (in_ : S.SS.t array) (out : S.SS.t array) =
     print insns ids g in_ out;
     Printf.printf "\n";
     let in' = Array.copy in_ in
     let out' = Array.copy out in
-    let ((in_, out) : Symbol.set array * Symbol.set array) =
+    let (in_, out) : S.set array * S.set array =
       List.fold_left
         (fun (in_, out) (i, insn) ->
           (*Printf.printf " def=%s, use=%s\n"
             (printset (def insn))
             (printset (use insn));*)
           (*Printf.printf "  in[%d] = %s, " i (printset in_.(i));*)
-          in_.(i) <-
-            Symbol.SS.union (use insn) (Symbol.SS.diff out.(i) (def insn));
+          in_.(i) <- S.SS.union (use insn) (S.SS.diff out.(i) (def insn));
           (*Printf.printf "in[%d] = %s\n" i (printset in_.(i));
             Printf.printf "  out[%d] = %s,\n" i (printset in_.(i));*)
           out.(i) <-
@@ -74,33 +75,31 @@ let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
                    (Cfg.G.V.label v)
                    (printset in_.(Cfg.G.V.label v))
                    i;
-                 Symbol.SS.union s in_.(Cfg.G.V.label v))
-               Symbol.SS.empty succ);
+                 S.SS.union s in_.(Cfg.G.V.label v))
+               S.SS.empty succ);
           (*Printf.printf "  out[%d] = %s\n" i (printset out.(i));*)
           (in_, out))
         (in_, out)
         (List.mapi (fun i v -> (i, v)) insns)
     in
-    if
-      Array.for_all2 Symbol.SS.equal in_ in'
-      && Array.for_all2 Symbol.SS.equal out out'
+    if Array.for_all2 S.SS.equal in_ in' && Array.for_all2 S.SS.equal out out'
     then (in', out')
     else dataflow in_ out
   in
   dataflow
-    (Array.init (List.length insns) (fun _ -> Symbol.SS.empty))
-    (Array.init (List.length insns) (fun _ -> Symbol.SS.empty))
+    (Array.init (List.length insns) (fun _ -> S.SS.empty))
+    (Array.init (List.length insns) (fun _ -> S.SS.empty))
 
 open Graph
 
 module G = Imperative.Graph.Abstract (struct
-  type t = Symbol.symbol
+  type t = S.symbol
 end)
 
 module Display = struct
   include G
 
-  let vertex_name v = Symbol.name (V.label v)
+  let vertex_name v = S.name (V.label v)
   let graph_attributes _ = []
   let default_vertex_attributes _ = []
   let vertex_attributes _ = []
@@ -115,25 +114,25 @@ let dot g =
   Dot_.fprint_graph Format.str_formatter g;
   Format.flush_str_formatter ()
 
-let interf (insns : Cfg.insn list) (_in_ : Symbol.SS.t array)
-    (out : Symbol.SS.t array) : G.t =
+let interf (insns : Cfg.insn list) (_in_ : S.SS.t array) (out : S.SS.t array) :
+    G.V.t S.table * G.t =
   let g = G.create () in
-  let verts : G.vertex Symbol.table ref = ref Symbol.empty in
-  let vert (s : Symbol.symbol) : G.vertex =
-    match Symbol.ST.find_opt s !verts with
+  let verts : G.vertex S.table ref = ref S.empty in
+  let vert (s : S.symbol) : G.vertex =
+    match S.ST.find_opt s !verts with
     | Some v -> v
     | None ->
         let v : G.vertex = G.V.create s in
         G.add_vertex g v;
-        verts := Symbol.ST.add s v !verts;
+        verts := S.ST.add s v !verts;
         v
   in
   List.iteri
     (fun i n ->
       let d = def n in
-      Symbol.SS.iter
+      S.SS.iter
         (fun e1 ->
-          Symbol.SS.iter
+          S.SS.iter
             (fun e2 ->
               let v1 : G.V.t = vert e1 in
               let v2 : G.V.t = vert e2 in
@@ -142,4 +141,4 @@ let interf (insns : Cfg.insn list) (_in_ : Symbol.SS.t array)
         d;
       ())
     insns;
-  g
+  (!verts, g)
