@@ -542,6 +542,20 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
       (param @ names)
   in
   let ctxt = { tdecls; layout } in
+  let pro =
+    [
+      (Pushq, [ Reg Rbp ]);
+      (Movq, [ Reg Rsp; Reg Rbp ]);
+      ( Subq,
+        [
+          Imm
+            (Lit
+               (Int64.of_int
+                  ((List.length named_insns + List.length param) * 8)));
+          Reg Rsp;
+        ] );
+    ]
+  in
   let rec zip a b =
     match (a, b) with
     | a :: taila, b :: tailb -> [ (a, b) ] @ zip taila tailb
@@ -564,7 +578,7 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
   |> List.map (fun (name, global, insns, term) ->
          let head = List.map (compile_insn ctxt) insns |> List.flatten in
          let tail = compile_terminator ctxt term in
-         { lbl = S.name name; global; asm = Text (head @ tail) })
+         { lbl = S.name name; global; asm = Text (pro @ head @ tail) })
 
 let rec compile_ginit = function
   | Ll.GNull -> [ Quad (Lit 0L) ]
