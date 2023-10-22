@@ -84,10 +84,12 @@ let fdeclx86 input =
   Printf.printf "%s" (Regalloc.string_of_prog x86);
   ()
 
-(*let progcfg input =
-    let prog = Parse.from_channel Llparser.prog input in
-    let ids, g = Cfg.graph cfg in
-    let insns = Cfg.flatten cfg in
+let progcfg input =
+  let prog = Parse.from_channel Llparser.prog input in
+  let fdecl ((name, fdecl) : _ * Ll.fdecl) =
+    Printf.printf "%s:\n" (Symbol.name name);
+    let ids, g = Cfg.graph fdecl.cfg in
+    let insns = Cfg.flatten fdecl.cfg in
     List.iteri
       (fun i n ->
         Printf.printf "%d {%s}\t%s\n" i
@@ -97,32 +99,38 @@ let fdeclx86 input =
           (Cfg.string_of_insn n))
       insns;
     ()
+  in
+  List.iter fdecl prog.fdecls
 
-  let proglva parser input =
-    let cfg = Parse.from_channel Llparser.prog input in
-    let ids, g = Cfg.graph cfg in
-    let insns = Cfg.flatten cfg in
+let proglva input =
+  let prog = Parse.from_channel Llparser.prog input in
+  let fdecl ((name, fdecl) : _ * Ll.fdecl) =
+    Printf.printf "%s:\n" (Symbol.name name);
+    let ids, g = Cfg.graph fdecl.cfg in
+    let insns = Cfg.flatten fdecl.cfg in
     let in_, out = Lva.dataflow insns ids g in
     Lva.print insns ids g in_ out;
     ()
+  in
+  List.iter fdecl prog.fdecls
 
-  let progitf parser input =
-    let cfg = Parse.from_channel Llparser.prog input in
-    let ids, g = Cfg.graph cfg in
-    let insns = Cfg.flatten cfg in
+let progitf input =
+  let prog = Parse.from_channel Llparser.prog input in
+  let fdecl ((name, fdecl) : _ * Ll.fdecl) =
+    Printf.printf "%s:\n" (Symbol.name name);
+    let ids, g = Cfg.graph fdecl.cfg in
+    let insns = Cfg.flatten fdecl.cfg in
     let in_, out = Lva.dataflow insns ids g in
     let _, itf = Lva.interf insns in_ out in
     Printf.printf "%s\n" (Lva.dot itf);
     ()
+  in
+  List.iter fdecl prog.fdecls
 
-  let progx86 input =
-    let cfg = Parse.from_channel Llparser.prog input in
-    let ids, g = Cfg.graph cfg in
-    let insns = Cfg.flatten cfg in
-    let in_, out = Lva.dataflow insns ids g in
-    let lbls, itf = Lva.interf insns in_ out in
-    let _asn = Regalloc.alloc lbls itf in
-    ()*)
+let progx86 input =
+  let prog = Parse.from_channel Llparser.prog input in
+  let prog = Regalloc.compile_prog prog in
+  Printf.printf "%s\n" (Regalloc.string_of_prog prog)
 
 let () =
   let usage_msg = "llvm__2 [-v] -p <parser> <file1> [<file2>] ..." in
@@ -172,10 +180,10 @@ let () =
   | "prog" ->
       let oper =
         match !oper with
-        (*| "cfg" -> progcfg
-          | "lva" -> proglva
-          | "itf" -> progitf
-          | "x86" -> progx86*)
+        | "cfg" -> progcfg
+        | "lva" -> proglva
+        | "itf" -> progitf
+        | "x86" -> progx86
         | _ ->
             Printf.eprintf "invalid operation: %s\n" !oper;
             exit 1

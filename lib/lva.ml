@@ -53,8 +53,8 @@ let print (insns : Cfg.insn list) (_ids : Cfg.G.V.t array) (_g : Cfg.G.t)
 
 let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
   let rec dataflow (in_ : S.SS.t array) (out : S.SS.t array) =
-    print insns ids g in_ out;
-    Printf.printf "\n";
+    (*print insns ids g in_ out;
+      Printf.printf "\n";*)
     let in' = Array.copy in_ in
     let out' = Array.copy out in
     let (in_, out) : S.set array * S.set array =
@@ -71,10 +71,10 @@ let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
             (let succ = Cfg.G.succ g ids.(i) in
              List.fold_left
                (fun s v ->
-                 Printf.printf "    adding succ[%d] %s to %d\n"
+                 (*Printf.printf "    adding succ[%d] %s to %d\n"
                    (Cfg.G.V.label v)
                    (printset in_.(Cfg.G.V.label v))
-                   i;
+                   i;*)
                  S.SS.union s in_.(Cfg.G.V.label v))
                S.SS.empty succ);
           (*Printf.printf "  out[%d] = %s\n" i (printset out.(i));*)

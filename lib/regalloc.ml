@@ -239,14 +239,13 @@ let string_of_prog (p : prog) : string =
 type os = Linux | Darwin
 
 let os =
-  (*let ic = Unix.open_process_in "uname" in
-    let uname = input_line ic in
-    let () = close_in ic in
-    match uname with
-    | "Linux" -> Linux
-    | "Darwin" ->*)
-  Darwin
-(*| _ -> raise BackendFatal*)
+  let ic = Unix.open_process_in "uname" in
+  let uname = input_line ic in
+  let () = close_in ic in
+  match uname with
+  | "Linux" -> Linux
+  | "Darwin" -> Darwin
+  | _ -> raise BackendFatal
 
 let mangle s =
   match os with Linux -> Symbol.name s | Darwin -> "_" ^ Symbol.name s
@@ -561,10 +560,6 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
     | [ Cfg.Term t ] -> [ (name, global, insns, t) ]
     | _ -> failwith "invalid cfg"
   in
-  let blocks : (_ * _ * _ * _) list = f name true [] insns in
-  List.iter
-    (fun (i, _, n, _) -> Printf.printf "%s %d\n" (S.name i) (List.length n))
-    blocks;
   f name true [] insns
   |> List.map (fun (name, global, insns, term) ->
          let head = List.map (compile_insn ctxt) insns |> List.flatten in
