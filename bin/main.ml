@@ -127,6 +127,19 @@ let progitf input =
   in
   List.iter fdecl prog.fdecls
 
+let progasn input =
+  let prog = Parse.from_channel Llparser.prog input in
+  let fdecl ((name, fdecl) : _ * Ll.fdecl) =
+    Printf.printf "%s:\n" (Symbol.name name);
+    let ids, g = Cfg.graph fdecl.cfg in
+    let insns = Cfg.flatten fdecl.cfg in
+    let in_, out = Lva.dataflow insns ids g in
+    let lbl, itf = Lva.interf insns in_ out in
+    let asn = Regalloc.alloc lbl itf in
+    Symbol.ST.iter (fun k v -> Printf.printf "%s: %d\n" (Symbol.name k) v) asn
+  in
+  List.iter fdecl prog.fdecls
+
 let progx86 input =
   let prog = Parse.from_channel Llparser.prog input in
   let prog = Regalloc.compile_prog prog in
@@ -183,6 +196,7 @@ let () =
         | "cfg" -> progcfg
         | "lva" -> proglva
         | "itf" -> progitf
+        | "asn" -> progasn
         | "x86" -> progx86
         | _ ->
             Printf.eprintf "invalid operation: %s\n" !oper;
