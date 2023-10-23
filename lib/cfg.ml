@@ -53,7 +53,11 @@ let graph ((head, tail) : Ll.cfg) : G.V.t array * G.t =
   let g = G.create () in
   let ids = indices (head, tail) in
   let blk = blocks ids (head, tail) in
-  let blk l = S.ST.find l blk in
+  let blk l =
+    match S.ST.find_opt l blk with
+    | Some i -> i
+    | None -> failwith (Printf.sprintf "%s" (Symbol.name l))
+  in
   let add i = G.add_vertex g i in
   List.iter add (Array.to_list ids);
   let _, tail =
