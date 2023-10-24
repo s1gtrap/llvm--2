@@ -654,6 +654,11 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
           t ops)
       S.empty phis
   in
+  let movs =
+    match S.ST.find_opt (S.symbol "entry") movs with
+    | Some m -> S.ST.add name m movs
+    | _ -> movs
+  in
   let rec f name global (insns : (Ll.uid option * Ll.insn) list) = function
     | Cfg.Insn i :: tail -> f name global (insns @ [ i ]) tail
     | Cfg.Term t :: Cfg.Label nname :: tail ->
