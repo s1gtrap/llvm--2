@@ -535,9 +535,27 @@ let compile_terminator : ctxt -> operand S.table -> Ll.terminator -> ins list =
 
 module C = Coloring.Mark (Lva.G)
 
-let alloc (l : Lva.G.V.t S.table) (g : Lva.G.t) : int S.table =
+let alloc (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
   C.coloring g 9;
-  S.ST.map (fun v -> Lva.G.Mark.get v) l
+  let var i =
+    match i + 2 with
+    | 0 -> Reg Rax
+    | 1 -> Reg Rcx
+    | 2 -> Reg Rdx
+    | 3 -> Reg Rbx
+    | 4 -> Reg Rsi
+    | 5 -> Reg Rdi
+    | 6 -> Reg R08
+    | 7 -> Reg R09
+    | 8 -> Reg R10
+    | 9 -> Reg R11
+    | 10 -> Reg R12
+    | 11 -> Reg R13
+    | 12 -> Reg R14
+    | 13 -> Reg R15
+    | _i -> Ind3 (Lit 0L, Rbp)
+  in
+  S.ST.map (fun v -> Lva.G.Mark.get v) l |> S.ST.map var
 
 let insns (_insns : Cfg.insn list) (l : Lva.G.V.t S.table) (g : Lva.G.t) :
     int S.table =
@@ -588,7 +606,7 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
     | 5 -> Reg R09
     | _i -> Ind3 (Lit 0L, Rbp)
   in
-  let var i =
+  let _var i =
     match i + 2 with
     | 0 -> Reg Rax
     | 1 -> Reg Rcx
@@ -611,7 +629,7 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
   let insns : Cfg.insn list = Cfg.flatten cfg in
   let in_, out = Lva.dataflow insns ids g in
   let lbl, itf = Lva.interf insns in_ out in
-  let asn = alloc lbl itf |> S.ST.map var in
+  let asn = alloc lbl itf in
   let rec f name global (insns : (Ll.uid option * Ll.insn) list) = function
     | Cfg.Insn i :: tail -> f name global (insns @ [ i ]) tail
     | Cfg.Term t :: Cfg.Label nname :: tail ->
@@ -621,9 +639,13 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
   in
   f name true [] insns
   |> List.map (fun (name, global, insns, term) ->
-         let head = List.map (compile_insn ctxt asn) insns |> List.flatten in
+         let pro : ins list = if global then pro else [] in
+         let head : ins list =
+           List.map (compile_insn ctxt asn) insns |> List.flatten
+         in
+         let head : ins list = pro @ head in
          let tail = compile_terminator ctxt asn term in
-         { lbl = S.name name; global; asm = Text (pro @ head @ tail) })
+         { lbl = S.name name; global; asm = Text (head @ tail) })
 
 let rec compile_ginit = function
   | Ll.GNull -> [ Quad (Lit 0L) ]

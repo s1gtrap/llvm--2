@@ -136,7 +136,10 @@ let progasn input =
     let in_, out = Lva.dataflow insns ids g in
     let lbl, itf = Lva.interf insns in_ out in
     let asn = Regalloc.alloc lbl itf in
-    Symbol.ST.iter (fun k v -> Printf.printf "%s: %d\n" (Symbol.name k) v) asn
+    Symbol.ST.iter
+      (fun k v ->
+        Printf.printf "%s: %s\n" (Symbol.name k) (Regalloc.string_of_operand v))
+      asn
   in
   List.iter fdecl prog.fdecls
 
