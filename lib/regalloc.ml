@@ -630,6 +630,12 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
   let in_, out = Lva.dataflow insns ids g in
   let lbl, itf = Lva.interf insns in_ out in
   let asn = alloc lbl itf in
+  let phinodes =
+    List.filter_map
+      (function
+        | Cfg.Insn (dst, Ll.PhiNode (_, ops)) -> Some (dst, ops) | _ -> None)
+      insns
+  in
   let rec f name global (insns : (Ll.uid option * Ll.insn) list) = function
     | Cfg.Insn i :: tail -> f name global (insns @ [ i ]) tail
     | Cfg.Term t :: Cfg.Label nname :: tail ->
