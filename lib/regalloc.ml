@@ -633,13 +633,25 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
   let phis =
     List.filter_map
       (function
-        | Cfg.Insn (dst, Ll.PhiNode (_, ops)) -> Some (dst, ops) | _ -> None)
+        | Cfg.Insn (Some dst, Ll.PhiNode (_, ops)) -> Some (dst, ops)
+        | _ -> None)
       insns
   in
-  let movs =
+  let movs : ins list S.table =
     List.fold_left
-      (fun t (dst, ops) ->
-        List.fold_left (fun t (src, lbl) -> S.ST.add lbl (src, dst) t) t ops)
+      (fun t ((dst, ops) : S.symbol * _) ->
+        List.fold_left
+          (fun t ((src, lbl) : Ll.operand * _) ->
+            S.ST.update lbl
+              (function
+                | Some movs ->
+                    Some
+                      (movs
+                      @ [ compile_operand ctxt asn (S.ST.find dst asn) src ])
+                | None ->
+                    Some [ compile_operand ctxt asn (S.ST.find dst asn) src ])
+              t)
+          t ops)
       S.empty phis
   in
   let rec f name global (insns : (Ll.uid option * Ll.insn) list) = function
