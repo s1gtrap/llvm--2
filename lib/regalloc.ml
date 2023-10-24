@@ -630,11 +630,17 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
   let in_, out = Lva.dataflow insns ids g in
   let lbl, itf = Lva.interf insns in_ out in
   let asn = alloc lbl itf in
-  let phinodes =
+  let phis =
     List.filter_map
       (function
         | Cfg.Insn (dst, Ll.PhiNode (_, ops)) -> Some (dst, ops) | _ -> None)
       insns
+  in
+  let movs =
+    List.fold_left
+      (fun t (dst, ops) ->
+        List.fold_left (fun t (src, lbl) -> S.ST.add lbl (src, dst) t) t ops)
+      S.empty phis
   in
   let rec f name global (insns : (Ll.uid option * Ll.insn) list) = function
     | Cfg.Insn i :: tail -> f name global (insns @ [ i ]) tail
@@ -650,8 +656,9 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
            List.map (compile_insn ctxt asn) insns |> List.flatten
          in
          let head : ins list = pro @ head in
+         let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
          let tail = compile_terminator ctxt asn term in
-         { lbl = S.name name; global; asm = Text (head @ tail) })
+         { lbl = S.name name; global; asm = Text (head @ movs @ tail) })
 
 let rec compile_ginit = function
   | Ll.GNull -> [ Quad (Lit 0L) ]
