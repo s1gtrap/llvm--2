@@ -5,34 +5,44 @@ GREEN='\033[1;32m'
 NC='\033[0m'
 
 for f in $(find tests -name '*.ll'); do
-	dir=$(dirname $f)
-	exp=$(basename $f .ll)
-	codefile="$dir/$exp.exp-exit"
-	stdoutfile="$dir/$exp.exp-stdout"
-	g=$(./compile.sh $f | tail -n1 | awk '{print $NF}')
+	TESTDIR=$(dirname $f)
+	TESTBASE=$(basename $f .ll)
+	TESTCODEFILE="$TESTDIR/$TESTBASE.exp-exit"
+	TESTSTDOUTFILE="$TESTDIR/$TESTBASE.exp-stdout"
+	TESTSTDERRFILE="$TESTDIR/$TESTBASE.exp-stderr"
+	TESTFILE=$(./compile.sh $f | tail -n1 | awk '{print $NF}')
+
 	printf "$f ... "
+
 	{
 		IFS= read -r -s -d '' CAPTURED_STDERR
 		IFS= read -r -s -d '' CAPTURED_EXIT
 		IFS= read -r -s -d '' CAPTURED_STDOUT
 	} < <((printf '\0%s\n\0' "$(
-		$g
+		$TESTFILE
 		printf '\0%d' "${?}" 1>&2
 	)" 1>&2) 2>&1)
 
 	FAILURE=0
 
-	if [ -f $codefile ]; then
-		EXPECTED_EXIT=$(<$codefile)
+	if [ -f $TESTCODEFILE ]; then
+		EXPECTED_EXIT=$(<$TESTCODEFILE)
 		if [ "$CAPTURED_EXIT" -ne "$EXPECTED_EXIT" ]; then
 			FAILURE=$((FAILURE | 1))
 		fi
 	fi
 
-	if [ -f $stdoutfile ]; then
-		IFS= read -r -s -d '' EXPECTED_STDOUT <$stdoutfile
+	if [ -f $TESTSTDOUTFILE ]; then
+		IFS= read -r -s -d '' EXPECTED_STDOUT <$TESTSTDOUTFILE
 		if [ "$CAPTURED_STDOUT" != "$EXPECTED_STDOUT" ]; then
 			FAILURE=$((FAILURE | 2))
+		fi
+	fi
+
+	if [ -f $TESTSTDERRFILE ]; then
+		IFS= read -r -s -d '' EXPECTED_STDERR <$TESTSTDERRFILE
+		if [ "$CAPTURED_STDERR" != "$EXPECTED_STDERR" ]; then
+			FAILURE=$((FAILURE | 4))
 		fi
 	fi
 
@@ -45,6 +55,9 @@ for f in $(find tests -name '*.ll'); do
 		fi
 		if [ $((FAILURE & 2)) -eq 2 ]; then
 			echo "    stdout '$CAPTURED_STDOUT' != '$EXPECTED_STDOUT'"
+		fi
+		if [ $((FAILURE & 4)) -eq 4 ]; then
+			echo "    stdout '$CAPTURED_STDERR' != '$EXPECTED_STDERR'"
 		fi
 	fi
 done
