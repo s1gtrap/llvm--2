@@ -81,7 +81,7 @@ for f in $(find "${1:-tests}" -name '*.ll'); do
 			echo "    stdout '$CAPTURED_STDOUT' != '$EXPECTED_STDOUT'"
 		fi
 		if [ $((FAILURE & 4)) -eq 4 ]; then
-			echo "    stdout '$CAPTURED_STDERR' != '$EXPECTED_STDERR'"
+			echo "    stderr '$CAPTURED_STDERR' != '$EXPECTED_STDERR'"
 		fi
 	fi
 done
