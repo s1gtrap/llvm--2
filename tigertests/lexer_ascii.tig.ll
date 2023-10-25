@@ -179,7 +179,7 @@ declare void @tigerexit  (i8*, i64)
 @str_$_518 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"|"}
 @str_$_516 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"}"}
 @str_$_514 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"~"}
-@str_$_512 = global { i64, [1 x i8] } {i64 1, [1 x i8] c""}
+@str_$_512 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"\7F"}
 @str_$_510 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"\00"}
 @str_$_508 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"\01"}
 @str_$_506 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"\02"}
@@ -307,7 +307,7 @@ declare void @tigerexit  (i8*, i64)
 @str_$_262 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"|"}
 @str_$_260 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"}"}
 @str_$_258 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"~"}
-@str_$_256 = global { i64, [1 x i8] } {i64 1, [1 x i8] c""}
+@str_$_256 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"\7F"}
 @str_$_254 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"\80"}
 @str_$_252 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"\81"}
 @str_$_250 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"\82"}
