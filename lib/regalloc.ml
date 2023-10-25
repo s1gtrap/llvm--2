@@ -499,8 +499,9 @@ let compile_insn :
       let setinsn = (Set (compile_cnd cnd), [ lookup ctxt.layout dst ]) in
       [ lins; rins; cmpinsn; setzins; setinsn ]
   | Some dst, Call (_, oper, args) ->
+      let dst = S.ST.find dst asn in
       let callins : ins list = compile_call ctxt asn oper args in
-      let storins : ins = (Movq, [ Reg Rax; lookup ctxt.layout dst ]) in
+      let storins : ins = (Movq, [ Reg Rax; dst ]) in
       callins @ [ storins ]
   | None, Call (_, oper, args) -> compile_call ctxt asn oper args
   | Some dst, Bitcast (_, src, _) ->
