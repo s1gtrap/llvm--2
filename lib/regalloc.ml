@@ -471,10 +471,10 @@ let compile_insn :
         (Movq, [ Reg Rsp; lookup ctxt.layout dst ]);
       ]
   | Some dst, Load (_, src) ->
-      let operins = compile_operand ctxt asn (Reg R10) src in
-      let loadins = (Movq, [ Ind2 R10; Reg R10 ]) in
-      let storins = (Movq, [ Reg R10; lookup ctxt.layout dst ]) in
-      [ operins; loadins; storins ]
+      let dst = S.ST.find dst asn in
+      let operins = compile_operand ctxt asn (Reg Rax) src in
+      let loadins = (Movq, [ Ind2 Rax; dst ]) in
+      [ operins; loadins ]
   | None, Store (_, src, dst) ->
       let sins = compile_operand ctxt asn (Reg R10) src in
       let dins = compile_operand ctxt asn (Reg R11) dst in
