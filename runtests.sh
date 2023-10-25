@@ -2,6 +2,7 @@
 
 RED='\033[0;31m'
 GREEN='\033[1;32m'
+MUTED='\033[1;30m'
 NC='\033[0m'
 
 for f in $(find "${1:-tests}" -name '*.ll'); do
@@ -15,7 +16,7 @@ for f in $(find "${1:-tests}" -name '*.ll'); do
 	printf "$f ... "
 
 	if [ -z "$TESTFILE" ]; then
-		printf "${RED}failed!${NC}\n"
+		printf "${RED}failed!${NC} ${MUTED}[ build ]${NC}\n"
 		continue
 	fi
 
@@ -28,10 +29,12 @@ for f in $(find "${1:-tests}" -name '*.ll'); do
 		printf '\0%d' "${?}" 1>&2
 	)" 1>&2) 2>&1)
 
+	ASSERTS=0
 	FAILURE=0
 
 	if [ -f $TESTCODEFILE ]; then
 		EXPECTED_EXIT=$(<$TESTCODEFILE)
+		ASSERTS=$((ASSERTS | 1))
 		if [ "$CAPTURED_EXIT" -ne "$EXPECTED_EXIT" ]; then
 			FAILURE=$((FAILURE | 1))
 		fi
@@ -39,6 +42,7 @@ for f in $(find "${1:-tests}" -name '*.ll'); do
 
 	if [ -f $TESTSTDOUTFILE ]; then
 		IFS= read -r -s -d '' EXPECTED_STDOUT <$TESTSTDOUTFILE
+		ASSERTS=$((ASSERTS | 2))
 		if [ "$CAPTURED_STDOUT" != "$EXPECTED_STDOUT" ]; then
 			FAILURE=$((FAILURE | 2))
 		fi
@@ -46,15 +50,30 @@ for f in $(find "${1:-tests}" -name '*.ll'); do
 
 	if [ -f $TESTSTDERRFILE ]; then
 		IFS= read -r -s -d '' EXPECTED_STDERR <$TESTSTDERRFILE
+		ASSERTS=$((ASSERTS | 4))
 		if [ "$CAPTURED_STDERR" != "$EXPECTED_STDERR" ]; then
 			FAILURE=$((FAILURE | 4))
 		fi
 	fi
 
 	if [ "$FAILURE" -eq "0" ]; then
-		printf "${GREEN}ok!${NC}\n"
+		printf "${GREEN}ok!${NC} ${MUTED}[ build "
 	else
-		printf "${RED}failed!${NC}\n"
+		printf "${RED}failed!${NC} ${MUTED}[ build "
+	fi
+
+	if [ $((ASSERTS & 1)) -eq 1 ]; then
+		printf "exit "
+	fi
+	if [ $((ASSERTS & 2)) -eq 2 ]; then
+		printf "stdout "
+	fi
+	if [ $((ASSERTS & 4)) -eq 4 ]; then
+		printf "stderr "
+	fi
+	printf "]${NC}\n"
+
+	if [ "$FAILURE" -ne "0" ]; then
 		if [ $((FAILURE & 1)) -eq 1 ]; then
 			echo "    exit code $CAPTURED_EXIT != $EXPECTED_EXIT"
 		fi
