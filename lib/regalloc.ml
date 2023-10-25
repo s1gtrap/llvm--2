@@ -33,6 +33,20 @@ type reg =
   | R13
   | R14
   | R15
+  | Al
+  | Cl
+  | Dl
+  | Bl
+  | Sil
+  | Dil
+  | R08b
+  | R09b
+  | R10b
+  | R11b
+  | R12b
+  | R13b
+  | R14b
+  | R15b
 
 type operand =
   | Imm of imm (* immediate *)
@@ -111,6 +125,20 @@ let string_of_reg (r : reg) : string =
   | R13 -> "%r13"
   | R14 -> "%r14"
   | R15 -> "%r15"
+  | Al -> "%al"
+  | Cl -> "%cl"
+  | Dl -> "%dl"
+  | Bl -> "%bl"
+  | Sil -> "%sil"
+  | Dil -> "%dil"
+  | R08b -> "%r8b"
+  | R09b -> "%r9b"
+  | R10b -> "%r10b"
+  | R11b -> "%r11b"
+  | R12b -> "%r12b"
+  | R13b -> "%r13b"
+  | R14b -> "%r14b"
+  | R15b -> "%r15b"
 
 let string_of_lbl (l : lbl) : string = l
 
@@ -497,7 +525,24 @@ let compile_insn :
       let rins = compile_operand ctxt asn rop r in
       let cmpinsn = (Cmpq, [ rop; lop ]) in
       let setzins = (Movq, [ Imm (Lit 0L); dst ]) in
-      let setinsn = (Set (compile_cnd cnd), [ dst ]) in
+      let byteofquad = function
+        | Reg Rax -> Reg Al
+        | Reg Rcx -> Reg Cl
+        | Reg Rdx -> Reg Dl
+        | Reg Rbx -> Reg Bl
+        | Reg Rsi -> Reg Sil
+        | Reg Rdi -> Reg Dil
+        | Reg R08 -> Reg R08b
+        | Reg R09 -> Reg R09b
+        | Reg R10 -> Reg R10b
+        | Reg R11 -> Reg R11b
+        | Reg R12 -> Reg R12b
+        | Reg R13 -> Reg R13b
+        | Reg R14 -> Reg R14b
+        | Reg R15 -> Reg R15b
+        | op -> op
+      in
+      let setinsn = (Set (compile_cnd cnd), [ byteofquad dst ]) in
       [ lins; rins; cmpinsn; setzins; setinsn ]
   | Some dst, Call (_, oper, args) ->
       let dst = S.ST.find dst asn in
@@ -528,8 +573,9 @@ let compile_insn :
   | Some _dst, PhiNode _ -> []
   | insn -> failwith (Ll.string_of_named_insn insn))
 
-let compile_terminator : ctxt -> operand S.table -> Ll.terminator -> ins list =
- fun ctxt asn term ->
+let compile_terminator :
+    ctxt -> operand S.table -> ins list -> Ll.terminator -> ins list =
+ fun ctxt asn movs term ->
   (Comment (Ll.string_of_terminator term), [])
   ::
   (match term with
@@ -543,14 +589,14 @@ let compile_terminator : ctxt -> operand S.table -> Ll.terminator -> ins list =
         (Popq, [ Reg Rbp ]);
         (Retq, []);
       ]
-  | Br lbl -> [ (Jmp, [ Imm (Lbl (S.name lbl)) ]) ]
+  | Br lbl -> movs @ [ (Jmp, [ Imm (Lbl (S.name lbl)) ]) ]
   | Cbr (oper, thn, els) ->
       let operins = compile_operand ctxt asn (Reg Rax) oper in
       let zeroins = (Movq, [ Imm (Lit 0L); Reg Rcx ]) in
       let cmpins : ins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
       let jeq = (J Eq, [ Imm (Lbl (S.name els)) ]) in
       let jmp = (Jmp, [ Imm (Lbl (S.name thn)) ]) in
-      [ operins; zeroins; cmpins; jeq; jmp ]
+      [ operins; zeroins; cmpins ] @ movs @ [ jeq; jmp ]
   | _ -> failwith "")
 
 module C = Coloring.Mark (Lva.G)
@@ -702,8 +748,8 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
          in
          let head : ins list = pro @ head in
          let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
-         let tail = compile_terminator ctxt asn term in
-         { lbl = S.name name; global; asm = Text (head @ movs @ tail) })
+         let tail = compile_terminator ctxt asn movs term in
+         { lbl = S.name name; global; asm = Text (head @ tail) })
 
 let rec compile_ginit = function
   | Ll.GNull -> [ Quad (Lit 0L) ]
