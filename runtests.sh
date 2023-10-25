@@ -14,6 +14,11 @@ for f in $(find tests -name '*.ll'); do
 
 	printf "$f ... "
 
+	if [ -z "$TESTFILE" ]; then
+		printf "${RED}failed!${NC}\n"
+		continue
+	fi
+
 	{
 		IFS= read -r -s -d '' CAPTURED_STDERR
 		IFS= read -r -s -d '' CAPTURED_EXIT
