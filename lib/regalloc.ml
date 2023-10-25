@@ -508,16 +508,19 @@ let compile_insn :
       let storins = (Movq, [ Reg R10; lookup ctxt.layout dst ]) in
       [ opins; storins ]
   | Some dst, Gep (ty, src, operlist) ->
+      let dst = S.ST.find dst asn in
       let gepinsns = compile_gep ctxt asn (ty, src) operlist in
-      let stored = (Movq, [ Reg R11; lookup ctxt.layout dst ]) in
+      let stored = (Movq, [ Reg R11; dst ]) in
       gepinsns @ [ stored ]
   | Some dst, Zext (_, src, _) ->
+      let dst = S.ST.find dst asn in
       let opins = compile_operand ctxt asn (Reg R10) src in
-      let storins = (Movq, [ Reg R10; lookup ctxt.layout dst ]) in
+      let storins = (Movq, [ Reg R10; dst ]) in
       [ opins; storins ]
   | Some dst, Ptrtoint (_, src, _) ->
+      let dst = S.ST.find dst asn in
       let opins = compile_operand ctxt asn (Reg R10) src in
-      let storins = (Movq, [ Reg R10; lookup ctxt.layout dst ]) in
+      let storins = (Movq, [ Reg R10; dst ]) in
       [ opins; storins ]
   | Some _dst, PhiNode _ -> []
   | insn -> failwith (Ll.string_of_named_insn insn))
