@@ -28,7 +28,7 @@ for f in $(find "${1:-tests}" -name '*.ll'); do
 		IFS= read -r -s -d '' CAPTURED_EXIT
 		IFS= read -r -s -d '' CAPTURED_STDOUT
 	} < <((printf '\0%s\n\0' "$(
-		$TESTFILE
+		timeout 5 $TESTFILE
 		printf '\0%d' "${?}" 1>&2
 	)" 1>&2) 2>&1)
 
