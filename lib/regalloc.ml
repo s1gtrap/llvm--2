@@ -492,11 +492,12 @@ let compile_insn :
   | Some dst, Icmp (cnd, _, l, r) ->
       let lop = Reg Rax in
       let rop = Reg Rcx in
+      let dst = S.ST.find dst asn in
       let lins = compile_operand ctxt asn lop l in
       let rins = compile_operand ctxt asn rop r in
       let cmpinsn = (Cmpq, [ rop; lop ]) in
-      let setzins = (Movq, [ Imm (Lit 0L); lookup ctxt.layout dst ]) in
-      let setinsn = (Set (compile_cnd cnd), [ lookup ctxt.layout dst ]) in
+      let setzins = (Movq, [ Imm (Lit 0L); dst ]) in
+      let setinsn = (Set (compile_cnd cnd), [ dst ]) in
       [ lins; rins; cmpinsn; setzins; setinsn ]
   | Some dst, Call (_, oper, args) ->
       let dst = S.ST.find dst asn in
@@ -545,8 +546,8 @@ let compile_terminator : ctxt -> operand S.table -> Ll.terminator -> ins list =
   | Br lbl -> [ (Jmp, [ Imm (Lbl (S.name lbl)) ]) ]
   | Cbr (oper, thn, els) ->
       let operins = compile_operand ctxt asn (Reg Rax) oper in
-      let zeroins = (Movq, [ Imm (Lit 0L); Reg Rax ]) in
-      let cmpins : ins = (Cmpq, [ Reg Rax; Reg Rax ]) in
+      let zeroins = (Movq, [ Imm (Lit 0L); Reg Rcx ]) in
+      let cmpins : ins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
       let jeq = (J Eq, [ Imm (Lbl (S.name els)) ]) in
       let jmp = (Jmp, [ Imm (Lbl (S.name thn)) ]) in
       [ operins; zeroins; cmpins; jeq; jmp ]
@@ -677,6 +678,10 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
           t ops)
       S.empty phis
   in
+  (*S.ST.iter
+    (fun k v ->
+      Printf.printf "%s: %s\n" (S.name k) (Ll.mapcat "," string_of_ins v))
+    movs;*)
   let movs =
     match S.ST.find_opt (S.symbol "entry") movs with
     | Some m -> S.ST.add name m movs
