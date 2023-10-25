@@ -529,7 +529,7 @@ let compile_terminator : ctxt -> operand S.table -> Ll.terminator -> ins list =
       [ operins; (Movq, [ Reg Rbp; Reg Rsp ]); (Popq, [ Reg Rbp ]); (Retq, []) ]
   | Ret (_, None) ->
       [
-        (Movq, [ Imm (Lit 0L); Reg Rax ]);
+        (*(Movq, [ Imm (Lit 0L); Reg Rax ]); (* FIXME *)*)
         (Movq, [ Reg Rbp; Reg Rsp ]);
         (Popq, [ Reg Rbp ]);
         (Retq, []);
