@@ -5,7 +5,10 @@ GREEN='\033[1;32m'
 MUTED='\033[1;30m'
 NC='\033[0m'
 
+COUNT=0
+PASSES=0
 for f in $(find "${1:-tests}" -name '*.ll'); do
+	COUNT=$((COUNT + 1))
 	TESTDIR=$(dirname $f)
 	TESTBASE=$(basename $f .ll)
 	TESTCODEFILE="$TESTDIR/$TESTBASE.exp-exit"
@@ -16,7 +19,7 @@ for f in $(find "${1:-tests}" -name '*.ll'); do
 	printf "$f ... "
 
 	if [ -z "$TESTFILE" ]; then
-		printf "${RED}failed!${NC} ${MUTED}[ build ]${NC}\n"
+		printf "${RED}failed!${NC} [$PASSES/$COUNT] ${MUTED}[ build ]${NC}\n"
 		continue
 	fi
 
@@ -57,9 +60,10 @@ for f in $(find "${1:-tests}" -name '*.ll'); do
 	fi
 
 	if [ "$FAILURE" -eq "0" ]; then
-		printf "${GREEN}ok!${NC} ${MUTED}[ build "
+		PASSES=$((PASSES + 1))
+		printf "${GREEN}ok!${NC} [$PASSES/$COUNT] ${MUTED}[ build "
 	else
-		printf "${RED}failed!${NC} ${MUTED}[ build "
+		printf "${RED}failed!${NC} [$PASSES/$COUNT] ${MUTED}[ build "
 	fi
 
 	if [ $((ASSERTS & 1)) -eq 1 ]; then
