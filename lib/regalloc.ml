@@ -472,11 +472,14 @@ let compile_insn :
         (Subq, [ Imm (Lit (Int64.of_int size)); Reg Rsp ]);
         (Movq, [ Reg Rsp; dst ]);
       ]
-  | Some dst, Load (_, src) ->
-      let dst = S.ST.find dst asn in
-      let operins = compile_operand ctxt asn (Reg Rax) src in
-      let loadins = (Movq, [ Ind2 Rax; dst ]) in
-      [ operins; loadins ]
+  | Some dst, Load (_, src) -> (
+      (* if the variable is unassigned, it's not used so can be optimized away *)
+      match S.ST.find_opt dst asn with
+      | Some dst ->
+          let operins = compile_operand ctxt asn (Reg Rax) src in
+          let loadins = (Movq, [ Ind2 Rax; dst ]) in
+          [ operins; loadins ]
+      | None -> [])
   | None, Store (_, src, dst) ->
       let sins = compile_operand ctxt asn (Reg R10) src in
       let dins = compile_operand ctxt asn (Reg R11) dst in
