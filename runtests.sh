@@ -4,13 +4,13 @@ RED='\033[0;31m'
 GREEN='\033[1;32m'
 NC='\033[0m'
 
-for f in $(find tests -name '*.ll'); do
+for f in $(find "${1:-tests}" -name '*.ll'); do
 	TESTDIR=$(dirname $f)
 	TESTBASE=$(basename $f .ll)
 	TESTCODEFILE="$TESTDIR/$TESTBASE.exp-exit"
 	TESTSTDOUTFILE="$TESTDIR/$TESTBASE.exp-stdout"
 	TESTSTDERRFILE="$TESTDIR/$TESTBASE.exp-stderr"
-	TESTFILE=$(./buildx86.sh $f | tail -n1 | awk '{print $NF}')
+	TESTFILE=$("${2:-./buildx86.sh}" $f | tail -n1 | awk '{print $NF}')
 
 	printf "$f ... "
 
