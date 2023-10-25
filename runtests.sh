@@ -10,7 +10,7 @@ for f in $(find tests -name '*.ll'); do
 	TESTCODEFILE="$TESTDIR/$TESTBASE.exp-exit"
 	TESTSTDOUTFILE="$TESTDIR/$TESTBASE.exp-stdout"
 	TESTSTDERRFILE="$TESTDIR/$TESTBASE.exp-stderr"
-	TESTFILE=$(./compile.sh $f | tail -n1 | awk '{print $NF}')
+	TESTFILE=$(./buildx86.sh $f | tail -n1 | awk '{print $NF}')
 
 	printf "$f ... "
 
