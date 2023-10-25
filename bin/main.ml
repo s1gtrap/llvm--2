@@ -27,7 +27,7 @@ let cfgitf parser input =
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
   let in_, out = Lva.dataflow insns ids g in
-  let _, itf = Lva.interf insns in_ out in
+  let _, itf = Lva.interf [] insns in_ out in
   Printf.printf "%s\n" (Lva.dot itf);
   ()
 
@@ -36,7 +36,7 @@ let cfgx86 parser input =
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
   let in_, out = Lva.dataflow insns ids g in
-  let lbls, itf = Lva.interf insns in_ out in
+  let lbls, itf = Lva.interf [] insns in_ out in
   let _asn = Regalloc.alloc lbls itf in
   ()
 
@@ -67,7 +67,7 @@ let fdeclitf input =
   let ids, g = Cfg.graph fdecl.cfg in
   let insns = Cfg.flatten fdecl.cfg in
   let in_, out = Lva.dataflow insns ids g in
-  let _, itf = Lva.interf insns in_ out in
+  let _, itf = Lva.interf fdecl.param insns in_ out in
   Printf.printf "%s\n" (Lva.dot itf);
   ()
 
@@ -76,7 +76,7 @@ let fdeclx86 input =
   let ids, g = Cfg.graph fdecl.cfg in
   let insns = Cfg.flatten fdecl.cfg in
   let in_, out = Lva.dataflow insns ids g in
-  let lbls, itf = Lva.interf insns in_ out in
+  let lbls, itf = Lva.interf fdecl.param insns in_ out in
   let _asn = Regalloc.alloc lbls itf in
   let tys, _ = fdecl.fty in
   let args = List.combine fdecl.param tys in
@@ -121,7 +121,7 @@ let progitf input =
     let ids, g = Cfg.graph fdecl.cfg in
     let insns = Cfg.flatten fdecl.cfg in
     let in_, out = Lva.dataflow insns ids g in
-    let _, itf = Lva.interf insns in_ out in
+    let _, itf = Lva.interf fdecl.param insns in_ out in
     Printf.printf "%s\n" (Lva.dot itf);
     ()
   in
@@ -134,7 +134,7 @@ let progasn input =
     let ids, g = Cfg.graph fdecl.cfg in
     let insns = Cfg.flatten fdecl.cfg in
     let in_, out = Lva.dataflow insns ids g in
-    let lbl, itf = Lva.interf insns in_ out in
+    let lbl, itf = Lva.interf fdecl.param insns in_ out in
     let asn = Regalloc.alloc lbl itf in
     Symbol.ST.iter
       (fun k v ->

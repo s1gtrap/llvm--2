@@ -602,20 +602,30 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
         ] );
     ]
   in
-  let rec zip a b =
-    match (a, b) with
-    | a :: taila, b :: tailb -> [ (a, b) ] @ zip taila tailb
-    | [], _ | _, [] -> []
+  let ids, g = Cfg.graph cfg in
+  let insns : Cfg.insn list = Cfg.flatten cfg in
+  let in_, out = Lva.dataflow insns ids g in
+  let lbl, itf = Lva.interf param insns in_ out in
+  let asn = alloc lbl itf in
+  let movarg i dst =
+    match S.ST.find_opt dst asn with
+    | Some dst ->
+        Some
+          ( Movq,
+            [
+              (match i with
+              | 0 -> Reg Rdi
+              | 1 -> Reg Rsi
+              | 2 -> Reg Rdx
+              | 3 -> Reg Rcx
+              | 4 -> Reg R08
+              | 5 -> Reg R09
+              | _i -> Ind3 (Lit 0L, Rbp));
+              dst;
+            ] )
+    | None -> None
   in
-  let _arg = function
-    | 0 -> Reg Rdi
-    | 1 -> Reg Rsi
-    | 2 -> Reg Rdx
-    | 3 -> Reg Rcx
-    | 4 -> Reg R08
-    | 5 -> Reg R09
-    | _i -> Ind3 (Lit 0L, Rbp)
-  in
+  let pro = pro @ (List.mapi movarg param |> List.filter_map (fun a -> a)) in
   let _var i =
     match i + 2 with
     | 0 -> Reg Rax
@@ -634,12 +644,6 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
     | 13 -> Reg R15
     | _i -> Ind3 (Lit 0L, Rbp)
   in
-  let _param = zip param [ Rdi; Rsi; Rdx; Rcx; R08; R09 ] in
-  let ids, g = Cfg.graph cfg in
-  let insns : Cfg.insn list = Cfg.flatten cfg in
-  let in_, out = Lva.dataflow insns ids g in
-  let lbl, itf = Lva.interf insns in_ out in
-  let asn = alloc lbl itf in
   let phis =
     List.filter_map
       (function
