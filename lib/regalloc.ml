@@ -504,8 +504,9 @@ let compile_insn :
       callins @ [ storins ]
   | None, Call (_, oper, args) -> compile_call ctxt asn oper args
   | Some dst, Bitcast (_, src, _) ->
+      let dst = S.ST.find dst asn in
       let opins = compile_operand ctxt asn (Reg Rax) src in
-      let storins = (Movq, [ Reg Rax; lookup ctxt.layout dst ]) in
+      let storins = (Movq, [ Reg Rax; dst ]) in
       [ opins; storins ]
   | Some dst, Gep (ty, src, operlist) ->
       let dst = S.ST.find dst asn in
