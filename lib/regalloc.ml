@@ -449,12 +449,13 @@ let compile_insn :
   ::
   (match insn with
   | Some dst, Binop (SDiv, _, lop, rop) ->
-      (* RAX and R10 are volatile, should be good? *)
+      (* RAX and RCX are volatile, should be good? *)
+      let dst = S.ST.find dst asn in
       let lins = compile_operand ctxt asn (Reg Rax) lop in
-      let rins = compile_operand ctxt asn (Reg R10) rop in
+      let rins = compile_operand ctxt asn (Reg Rcx) rop in
       let cqtoins = (Cqto, []) in
-      let opins = (Idivq, [ Reg R10 ]) in
-      let storins = (Movq, [ Reg Rax; lookup ctxt.layout dst ]) in
+      let opins = (Idivq, [ Reg Rcx ]) in
+      let storins = (Movq, [ Reg Rax; dst ]) in
       [ lins; rins; cqtoins; opins; storins ]
   | Some dst, Binop (bop, _, lop, rop) ->
       (* RAX and RCX are volatile, should be good? *)
