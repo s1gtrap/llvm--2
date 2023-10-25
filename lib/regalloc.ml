@@ -336,13 +336,13 @@ let compile_call :
  fun ctxt asn oper args ->
   let args = List.map snd args in
   let push oper =
-    let operins = compile_operand ctxt asn (Reg R10) oper in
-    [ operins; (Pushq, [ Reg R10 ]) ]
+    let operins = compile_operand ctxt asn (Reg Rax) oper in
+    [ operins; (Pushq, [ Reg Rax ]) ]
   in
   let storereg idx oper =
-    let insn = compile_operand ctxt asn (Reg R10) oper in
+    let insn = compile_operand ctxt asn (Reg Rax) oper in
     let reg = arg_loc idx in
-    [ insn; (Movq, [ Reg R10; reg ]) ]
+    [ insn; (Movq, [ Reg Rax; reg ]) ]
   in
   let arginsns =
     let regs, stack =
@@ -387,7 +387,7 @@ let compile_gep :
     ctxt -> operand S.table -> Ll.ty * Ll.operand -> Ll.operand list -> ins list
     =
  fun ctxt asn (ty, oper) ops ->
-  let base = compile_operand ctxt asn (Reg R11) oper in
+  let base = compile_operand ctxt asn (Reg Rcx) oper in
   let rec gep : Ll.operand list -> Ll.ty -> ins list list -> ins list list =
    fun ops ty insns ->
     match (ty, ops) with
@@ -408,22 +408,22 @@ let compile_gep :
           | _ -> raise BackendFatal
         in
         let parins =
-          compile_operand ctxt asn (Reg R10) (IConst64 (Int64.of_int32 i))
+          compile_operand ctxt asn (Reg Rax) (IConst64 (Int64.of_int32 i))
         in
         let offset, ty = offset ty (Int32.to_int i) in
-        let offsins = (Movq, [ Imm (Lit (Int64.of_int offset)); Reg R10 ]) in
-        let childins = (Addq, [ Reg R10; Reg R11 ]) in
+        let offsins = (Movq, [ Imm (Lit (Int64.of_int offset)); Reg Rax ]) in
+        let childins = (Addq, [ Reg Rax; Reg Rcx ]) in
         gep tail ty ([ parins; offsins; childins ] :: insns)
     | Array (_, ty), head :: tail ->
         let elmsize = size_ty ctxt.tdecls ty in
-        let parins = compile_operand ctxt asn (Reg R10) head in
-        let offsins = (Imulq, [ Imm (Lit (Int64.of_int elmsize)); Reg R10 ]) in
-        let childins = (Addq, [ Reg R10; Reg R11 ]) in
+        let parins = compile_operand ctxt asn (Reg Rax) head in
+        let offsins = (Imulq, [ Imm (Lit (Int64.of_int elmsize)); Reg Rax ]) in
+        let childins = (Addq, [ Reg Rax; Reg Rcx ]) in
         gep tail ty ([ parins; offsins; childins ] :: insns)
     | _, head :: tail ->
-        let parins = compile_operand ctxt asn (Reg R10) head in
-        let offsins = (Imulq, [ Imm (Lit 8L); Reg R10; Reg R10 ]) in
-        let childins = (Addq, [ Reg R10; Reg R11 ]) in
+        let parins = compile_operand ctxt asn (Reg Rax) head in
+        let offsins = (Imulq, [ Imm (Lit 8L); Reg Rax; Reg Rax ]) in
+        let childins = (Addq, [ Reg Rax; Reg Rcx ]) in
         gep tail ty ([ parins; offsins; childins ] :: insns)
     | _, [] -> List.rev insns
   in
@@ -481,17 +481,17 @@ let compile_insn :
           [ operins; loadins ]
       | None -> [])
   | None, Store (_, src, dst) ->
-      let sins = compile_operand ctxt asn (Reg R10) src in
-      let dins = compile_operand ctxt asn (Reg R11) dst in
+      let sins = compile_operand ctxt asn (Reg Rax) src in
+      let dins = compile_operand ctxt asn (Reg Rcx) dst in
       let storins =
         match dst with
-        | Id _ -> (Movq, [ Reg R10; Ind2 R11 ])
+        | Id _ -> (Movq, [ Reg Rax; Ind2 Rcx ])
         | _ -> raise BackendFatal
       in
       [ sins; dins; storins ]
   | Some dst, Icmp (cnd, _, l, r) ->
-      let lop = Reg R10 in
-      let rop = Reg R11 in
+      let lop = Reg Rax in
+      let rop = Reg Rcx in
       let lins = compile_operand ctxt asn lop l in
       let rins = compile_operand ctxt asn rop r in
       let cmpinsn = (Cmpq, [ rop; lop ]) in
@@ -504,23 +504,23 @@ let compile_insn :
       callins @ [ storins ]
   | None, Call (_, oper, args) -> compile_call ctxt asn oper args
   | Some dst, Bitcast (_, src, _) ->
-      let opins = compile_operand ctxt asn (Reg R10) src in
-      let storins = (Movq, [ Reg R10; lookup ctxt.layout dst ]) in
+      let opins = compile_operand ctxt asn (Reg Rax) src in
+      let storins = (Movq, [ Reg Rax; lookup ctxt.layout dst ]) in
       [ opins; storins ]
   | Some dst, Gep (ty, src, operlist) ->
       let dst = S.ST.find dst asn in
       let gepinsns = compile_gep ctxt asn (ty, src) operlist in
-      let stored = (Movq, [ Reg R11; dst ]) in
+      let stored = (Movq, [ Reg Rcx; dst ]) in
       gepinsns @ [ stored ]
   | Some dst, Zext (_, src, _) ->
       let dst = S.ST.find dst asn in
-      let opins = compile_operand ctxt asn (Reg R10) src in
-      let storins = (Movq, [ Reg R10; dst ]) in
+      let opins = compile_operand ctxt asn (Reg Rax) src in
+      let storins = (Movq, [ Reg Rax; dst ]) in
       [ opins; storins ]
   | Some dst, Ptrtoint (_, src, _) ->
       let dst = S.ST.find dst asn in
-      let opins = compile_operand ctxt asn (Reg R10) src in
-      let storins = (Movq, [ Reg R10; dst ]) in
+      let opins = compile_operand ctxt asn (Reg Rax) src in
+      let storins = (Movq, [ Reg Rax; dst ]) in
       [ opins; storins ]
   | Some _dst, PhiNode _ -> []
   | insn -> failwith (Ll.string_of_named_insn insn))
@@ -543,8 +543,8 @@ let compile_terminator : ctxt -> operand S.table -> Ll.terminator -> ins list =
   | Br lbl -> [ (Jmp, [ Imm (Lbl (S.name lbl)) ]) ]
   | Cbr (oper, thn, els) ->
       let operins = compile_operand ctxt asn (Reg Rax) oper in
-      let zeroins = (Movq, [ Imm (Lit 0L); Reg R10 ]) in
-      let cmpins : ins = (Cmpq, [ Reg Rax; Reg R10 ]) in
+      let zeroins = (Movq, [ Imm (Lit 0L); Reg Rax ]) in
+      let cmpins : ins = (Cmpq, [ Reg Rax; Reg Rax ]) in
       let jeq = (J Eq, [ Imm (Lbl (S.name els)) ]) in
       let jmp = (Jmp, [ Imm (Lbl (S.name thn)) ]) in
       [ operins; zeroins; cmpins; jeq; jmp ]
@@ -564,8 +564,8 @@ let alloc (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
     | 5 -> Reg Rdi
     | 6 -> Reg R08
     | 7 -> Reg R09
-    | 8 -> Reg R10
-    | 9 -> Reg R11
+    | 8 -> Reg Rax
+    | 9 -> Reg Rcx
     | 10 -> Reg R12
     | 11 -> Reg R13
     | 12 -> Reg R14
@@ -643,8 +643,8 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
     | 5 -> Reg Rdi
     | 6 -> Reg R08
     | 7 -> Reg R09
-    | 8 -> Reg R10
-    | 9 -> Reg R11
+    | 8 -> Reg Rax
+    | 9 -> Reg Rcx
     | 10 -> Reg R12
     | 11 -> Reg R13
     | 12 -> Reg R14
