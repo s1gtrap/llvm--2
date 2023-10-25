@@ -527,7 +527,12 @@ let compile_terminator : ctxt -> operand S.table -> Ll.terminator -> ins list =
       let operins = compile_operand ctxt asn (Reg Rax) oper in
       [ operins; (Movq, [ Reg Rbp; Reg Rsp ]); (Popq, [ Reg Rbp ]); (Retq, []) ]
   | Ret (_, None) ->
-      [ (Movq, [ Reg Rbp; Reg Rsp ]); (Popq, [ Reg Rbp ]); (Retq, []) ]
+      [
+        (Movq, [ Imm (Lit 0L); Reg Rax ]);
+        (Movq, [ Reg Rbp; Reg Rsp ]);
+        (Popq, [ Reg Rbp ]);
+        (Retq, []);
+      ]
   | Br lbl -> [ (Jmp, [ Imm (Lbl (S.name lbl)) ]) ]
   | Cbr (oper, thn, els) ->
       let operins = compile_operand ctxt asn (Reg Rax) oper in
