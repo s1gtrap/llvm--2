@@ -466,10 +466,11 @@ let compile_insn :
       let storins = (Movq, [ Reg Rax; dst ]) in
       [ lins; rins; opins; storins ]
   | Some dst, Alloca ty ->
+      let dst = S.ST.find dst asn in
       let size = size_ty ctxt.tdecls ty in
       [
         (Subq, [ Imm (Lit (Int64.of_int size)); Reg Rsp ]);
-        (Movq, [ Reg Rsp; lookup ctxt.layout dst ]);
+        (Movq, [ Reg Rsp; dst ]);
       ]
   | Some dst, Load (_, src) ->
       let dst = S.ST.find dst asn in
