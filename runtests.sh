@@ -82,10 +82,10 @@ for f in $(find "${1:-tests}" -name '*.ll'); do
 			echo "    exit code $CAPTURED_EXIT != $EXPECTED_EXIT"
 		fi
 		if [ $((FAILURE & 2)) -eq 2 ]; then
-			echo "    stdout '$CAPTURED_STDOUT' != '$EXPECTED_STDOUT'"
+			printf "    stdout '%q' != '%q'\n" "${CAPTURED_STDOUT:0:100}" "${EXPECTED_STDOUT:0:100}"
 		fi
 		if [ $((FAILURE & 4)) -eq 4 ]; then
-			echo "    stderr '$CAPTURED_STDERR' != '$EXPECTED_STDERR'"
+			printf "    stdout '%q' != '%q'\n" "${CAPTURED_STDERR:0:100}" "${EXPECTED_STDERR:0:100}"
 		fi
 	fi
 done
