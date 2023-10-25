@@ -29,7 +29,7 @@ define i64 @tigermain (i8* %$sl) {
  %locals_$_0 = alloca %$locals_tigermain
  %arg_$_1 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 0
  store i8* %$sl, i8** %arg_$_1
- %temp_$_2 = mul i64 2, 2
- %temp_$_3 = add i64 2, %temp_$_2
+ %temp_$_2 = mul i64 1, 2
+ %temp_$_3 = add i64 3, %temp_$_2
  ret i64 %temp_$_3
 }
