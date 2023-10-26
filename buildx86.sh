@@ -10,5 +10,5 @@ if [ $? -ne 0 ]; then
 	exit $?
 fi
 echo "ASM file generated at $TEMPFILEX86"
-clang $TEMPFILEX86 -o $TEMPFILE.out
+arch -x86_64 clang $TEMPFILEX86 -o $TEMPFILE.out
 echo "Out file generated at $TEMPFILE.out"
