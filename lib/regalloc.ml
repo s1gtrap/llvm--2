@@ -14,7 +14,8 @@ let os =
   | "Darwin" -> Darwin
   | _ -> raise BackendFatal
 
-let mangle s = match os with Linux -> Symbol.name s | Darwin -> Symbol.name s
+let mangle s =
+  match os with Linux -> Symbol.name s | Darwin -> "_" ^ Symbol.name s
 
 type lbl = string
 type quad = int64
@@ -153,9 +154,7 @@ let string_of_reg (r : reg) : string =
   | R14b -> "%r14b"
   | R15b -> "%r15b"
 
-let string_of_lbl (l : lbl) : string =
-  (* do the same as mangle *)
-  match os with Linux -> l | Darwin -> Printf.sprintf "_%s" l
+let string_of_lbl (l : lbl) : string = l
 
 let string_of_imm = function
   | Lit i -> Int64.to_string i
@@ -273,8 +272,14 @@ let string_of_elem { lbl; global; asm } : string =
     | Text is -> ("\t.text\n", map_concat "\n" string_of_ins is)
     | Data ds -> ("\t.data\n", map_concat "\n" string_of_data ds)
   in
-  let glb = if global then "\t.globl\t" ^ string_of_lbl lbl ^ "\n" else "" in
-  sec ^ glb ^ string_of_lbl lbl ^ ":\n" ^ body
+  let glb =
+    if global then "\t.globl\t" ^ string_of_lbl (mangle (S.symbol lbl)) ^ "\n"
+    else ""
+  in
+
+  sec ^ glb
+  ^ (if global then string_of_lbl (mangle (S.symbol lbl)) else string_of_lbl lbl)
+  ^ ":\n" ^ body
 
 let string_of_prog (p : prog) : string =
   String.concat "\n" (List.map string_of_elem p)
@@ -774,6 +779,6 @@ module Asm = struct
 end
 
 let compile_prog ({ tdecls; gdecls; fdecls; _ } : Ll.prog) : prog =
-  let g (lbl, gdecl) = Asm.data (mangle lbl) (compile_gdecl gdecl) in
+  let g (lbl, gdecl) = Asm.data (S.name lbl) (compile_gdecl gdecl) in
   let f (name, fdecl) = compile_fdecl tdecls name fdecl in
   List.map g gdecls @ List.concat (List.map f fdecls)
