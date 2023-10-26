@@ -3,6 +3,19 @@ module S = Symbol
 
 exception BackendFatal (* use this for impossible cases *)
 
+type os = Linux | Darwin
+
+let os =
+  let ic = Unix.open_process_in "uname" in
+  let uname = input_line ic in
+  let () = close_in ic in
+  match uname with
+  | "Linux" -> Linux
+  | "Darwin" -> Darwin
+  | _ -> raise BackendFatal
+
+let mangle s = match os with Linux -> Symbol.name s | Darwin -> Symbol.name s
+
 type lbl = string
 type quad = int64
 
@@ -140,7 +153,9 @@ let string_of_reg (r : reg) : string =
   | R14b -> "%r14b"
   | R15b -> "%r15b"
 
-let string_of_lbl (l : lbl) : string = l
+let string_of_lbl (l : lbl) : string =
+  (* do the same as mangle *)
+  match os with Linux -> l | Darwin -> Printf.sprintf "_%s" l
 
 let string_of_imm = function
   | Lit i -> Int64.to_string i
@@ -264,20 +279,6 @@ let string_of_elem { lbl; global; asm } : string =
 let string_of_prog (p : prog) : string =
   String.concat "\n" (List.map string_of_elem p)
 
-type os = Linux | Darwin
-
-let os =
-  let ic = Unix.open_process_in "uname" in
-  let uname = input_line ic in
-  let () = close_in ic in
-  match uname with
-  | "Linux" -> Linux
-  | "Darwin" -> Darwin
-  | _ -> raise BackendFatal
-
-let mangle s =
-  match os with Linux -> Symbol.name s | Darwin -> "_" ^ Symbol.name s
-
 (* Mapping ll comparison operations to X86 condition codes *)
 let compile_cnd (c : Ll.cnd) : cnd =
   match c with
@@ -336,7 +337,7 @@ let compile_operand : ctxt -> operand S.table -> operand -> Ll.operand -> ins =
   | IConst32 i -> (Movq, [ Imm (Lit (Int64.of_int32 i)); dst ])
   | IConst8 i -> (Movq, [ Imm (Lit (Int64.of_int (Char.code i))); dst ])
   | BConst i -> (Movq, [ Imm (Lit (if i then 1L else 0L)); dst ])
-  | Gid gid -> (Movq, [ Imm (Lbl (S.name gid)); dst ])
+  | Gid gid -> (Leaq, [ Ind3 (Lbl (S.name gid), Rip); dst ])
   | Id id ->
       ( Movq,
         [
