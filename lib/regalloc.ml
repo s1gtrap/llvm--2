@@ -342,7 +342,7 @@ let compile_operand : ctxt -> operand S.table -> operand -> Ll.operand -> ins =
   | IConst32 i -> (Movq, [ Imm (Lit (Int64.of_int32 i)); dst ])
   | IConst8 i -> (Movq, [ Imm (Lit (Int64.of_int (Char.code i))); dst ])
   | BConst i -> (Movq, [ Imm (Lit (if i then 1L else 0L)); dst ])
-  | Gid gid -> (Leaq, [ Ind3 (Lbl (S.name gid), Rip); dst ])
+  | Gid gid -> (Leaq, [ Ind3 (Lbl (mangle gid), Rip); dst ])
   | Id id ->
       ( Movq,
         [
@@ -587,11 +587,26 @@ let compile_terminator :
   (match term with
   | Ret (_, Some oper) ->
       let operins = compile_operand ctxt asn (Reg Rax) oper in
-      [ operins; (Movq, [ Reg Rbp; Reg Rsp ]); (Popq, [ Reg Rbp ]); (Retq, []) ]
+      [
+        operins;
+        (Movq, [ Reg Rbp; Reg Rsp ]);
+        (Popq, [ Reg R15 ]);
+        (Popq, [ Reg R14 ]);
+        (Popq, [ Reg R13 ]);
+        (Popq, [ Reg R12 ]);
+        (Popq, [ Reg Rbx ]);
+        (Popq, [ Reg Rbp ]);
+        (Retq, []);
+      ]
   | Ret (_, None) ->
       [
         (*(Movq, [ Imm (Lit 0L); Reg Rax ]); (* FIXME *)*)
         (Movq, [ Reg Rbp; Reg Rsp ]);
+        (Popq, [ Reg R15 ]);
+        (Popq, [ Reg R14 ]);
+        (Popq, [ Reg R13 ]);
+        (Popq, [ Reg R12 ]);
+        (Popq, [ Reg Rbx ]);
         (Popq, [ Reg Rbp ]);
         (Retq, []);
       ]
@@ -653,6 +668,11 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
   let pro =
     [
       (Pushq, [ Reg Rbp ]);
+      (Pushq, [ Reg Rbx ]);
+      (Pushq, [ Reg R12 ]);
+      (Pushq, [ Reg R13 ]);
+      (Pushq, [ Reg R14 ]);
+      (Pushq, [ Reg R15 ]);
       (Movq, [ Reg Rsp; Reg Rbp ]);
       ( Subq,
         [
