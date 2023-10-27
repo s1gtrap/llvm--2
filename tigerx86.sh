@@ -11,5 +11,9 @@ if [ $? -ne 0 ]; then
 	exit $?
 fi
 echo "ASM file generated at $TEMPFILEX86"
-clang runtime.c $TEMPFILEX86 -o $TEMPFILE.out
+if [ "$(uname)" = "Darwin" ]; then
+	arch -x86_64 clang runtime.c $TEMPFILEX86 -o $TEMPFILE.out
+else
+	clang runtime.c $TEMPFILEX86 -o $TEMPFILE.out
+fi
 echo "Out file generated at $TEMPFILE.out"
