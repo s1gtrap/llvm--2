@@ -326,47 +326,44 @@ let () =
       ( "tigertests/lexer_ascii.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 255; Stdout "\n"; Stderr "" ] );
+        [ Exit 255; Stdout ""; Stderr "" ] );
       ( "tigertests/readonly_overwrite.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "\n"; Stderr "" ] );
-      ("tigertests/test5.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/test5.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ( "tigertests/seqorder.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "12345\n"; Stderr "\n" ] );
+        [ Stdout "12345\n"; Stderr "" ] );
       ( "tigertests/emoji_comment.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 42; Stdout "\n"; Stderr "" ] );
+        [ Exit 42; Stdout ""; Stderr "" ] );
       ( "tigertests/recFieldError.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "\n"; Stderr "" ] );
-      ("tigertests/test61.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/test61.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ( "tigertests/test73.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "OK.\n"; Stderr "\n" ] );
-      ( "tigertests/forfor.tig.ll",
-        [ "tiger.c" ],
-        [],
-        [ Stdout "\n"; Stderr "\n" ] );
-      ("tigertests/ddd.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
-      ("tigertests/test57.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
-      ("tigertests/test3.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
-      ("tigertests/test53.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
-      ("tigertests/test30.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+        [ Stdout "OK.\n"; Stderr "" ] );
+      ("tigertests/forfor.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "\n" ]);
+      ("tigertests/ddd.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/test57.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/test3.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/test53.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/test30.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ( "tigertests/test41.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 0; Stdout "\n"; Stderr "" ] );
+        [ Exit 0; Stdout ""; Stderr "" ] );
       ( "tigertests/test69.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 48; Stdout "\n"; Stderr "" ] );
-      ("tigertests/test65.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+        [ Exit 48; Stdout ""; Stderr "" ] );
+      ("tigertests/test65.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ( "tigertests/goodarith.tig.ll",
         [ "tiger.c" ],
         [],
@@ -376,82 +373,82 @@ let () =
         [],
         [ Stdout ""; Stderr "" ] );
       ("tigertests/dynarray.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test51.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test51.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ( "tigertests/test67.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 1; Stdout "\n"; Stderr "" ] );
+        [ Exit 1; Stdout ""; Stderr "" ] );
       ("tigertests/test75.tig.ll", [ "tiger.c" ], [], []);
-      ("tigertests/test1.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test1.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ("tigertests/divorder.tig.ll", [ "tiger.c" ], [], []);
       ( "tigertests/lexer_ascii_alt.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "\n"; Stderr "" ] );
+        [ Stdout ""; Stderr "" ] );
       ( "tigertests/zero.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 0; Stdout "\n"; Stderr "" ] );
-      ("tigertests/test4.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
-      ("tigertests/test8.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ("tigertests/test4.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/test8.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ("tigertests/binary_tree.tig.ll", [ "tiger.c" ], [], []);
       ( "tigertests/test54.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 4; Stdout "\n"; Stderr "" ] );
-      ("tigertests/test37.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
-      ("tigertests/test46.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+        [ Exit 4; Stdout ""; Stderr "" ] );
+      ("tigertests/test37.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/test46.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ("tigertests/test58.tig.ll", [ "tiger.c" ], [], []);
-      ("tigertests/test62.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test62.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ("tigertests/queens.tig.ll", [ "tiger.c" ], [], []);
       ( "tigertests/seq_nested_empty.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "\n"; Stderr "" ] );
-      ("tigertests/test27.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/test27.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ("tigertests/fixedpoints.tig.ll", [ "tiger.c" ], [], []);
-      ("tigertests/test44.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
-      ("tigertests/test48.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test44.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/test48.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ("tigertests/doors.tig.ll", [ "tiger.c" ], [], []);
       ( "tigertests/test56.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 9; Stdout "\n"; Stderr "" ] );
+        [ Exit 9; Stdout ""; Stderr "" ] );
       ("tigertests/split.tig.ll", [ "tiger.c" ], [], []);
-      ("tigertests/test60.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test60.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ("tigertests/test72.tig.ll", [ "tiger.c" ], [], []);
       ( "tigertests/divbyzero.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "\n"; Stderr "Error: division by zero\n" ] );
+        [ Stdout ""; Stderr "Error: division by zero\n" ] );
       ( "tigertests/lexer_formfeed.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "\n"; Stderr "" ] );
+        [ Stdout ""; Stderr "" ] );
       ( "tigertests/if_readonly.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "\n"; Stderr "" ] );
-      ("tigertests/test68.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
-      ("tigertests/test76.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/test68.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/test76.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ( "tigertests/brainfuck.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "\n"; Stderr "" ] );
-      ("tigertests/test64.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
-      ("tigertests/test52.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
-      ("tigertests/lisp.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
-      ("tigertests/color.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
-      ("tigertests/test2.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
-      ("tigertests/div213.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/test64.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/test52.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/lisp.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/color.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/test2.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/div213.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ( "tigertests/simplevar.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "\n"; Stderr "" ] );
-      ("tigertests/test66.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/test66.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ( "tigertests/test74.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 24; Stdout "\n"; Stderr "" ] );
-      ("tigertests/test42.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+        [ Exit 24; Stdout ""; Stderr "" ] );
+      ("tigertests/test42.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
     ]
