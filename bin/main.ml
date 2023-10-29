@@ -148,19 +148,26 @@ let progx86 input =
   let prog = Regalloc.compile_prog prog in
   Printf.printf "%s\n" (Regalloc.string_of_prog prog)
 
+let progexe output input =
+  let prog = Parse.from_channel Llparser.prog input in
+  let prog = Regalloc.compile_prog prog in
+  Printf.printf "%s\n" (Regalloc.string_of_prog prog)
+
 let () =
   let usage_msg = "llvm__2 [-v] -p <parser> <file1> [<file2>] ..." in
   let verbose = ref false in
   let input_files = ref [] in
   let parser = ref "" in
   let oper = ref "" in
+  let out = ref "" in
   let anon_fun filename = input_files := filename :: !input_files in
 
   let speclist =
     [
       ("-v", Arg.Set verbose, "Output debug information");
       ("-p", Arg.Set_string parser, "Set input parser type");
-      ("-o", Arg.Set_string oper, "Set operation to apply");
+      ("-t", Arg.Set_string oper, "Set operation to apply");
+      ("-o", Arg.Set_string out, "Set output file");
     ]
   in
 
@@ -201,6 +208,7 @@ let () =
         | "itf" -> progitf
         | "asn" -> progasn
         | "x86" -> progx86
+        | "exe" -> progexe out
         | _ ->
             Printf.eprintf "invalid operation: %s\n" !oper;
             exit 1

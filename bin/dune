@@ -1,4 +1,5 @@
-(executable
- (public_name llvm__2)
- (name main)
+(executables
+ (package llvm__2)
+ (names main testrunner)
+ (public_names llvm__2 tests)
  (libraries llvm__2))
