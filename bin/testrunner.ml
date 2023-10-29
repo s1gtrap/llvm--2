@@ -7,7 +7,8 @@ let create_process_with_input command args input_string _f =
   close_out oc;
   let input = ic in
   let pid =
-    Unix.create_process_env command args [||] input Unix.stdout Unix.stderr
+    Unix.create_process_env command args (Unix.environment ()) input Unix.stdout
+      Unix.stderr
   in
   let _ = Unix.waitpid [] pid in
   ()
@@ -21,7 +22,7 @@ let capture_stdout command args =
   let pid =
     Unix.create_process_env command
       (Array.concat [ [| command |]; args ])
-      [||] in_read stdout_write stderr_write
+      (Unix.environment ()) in_read stdout_write stderr_write
   in
 
   Unix.close in_read;
@@ -65,7 +66,9 @@ let compile_test test =
         | Darwin ->
             create_process_with_input "arch"
               [| "arch"; "-x86_64"; "clang"; "-x"; "assembler"; "-"; "-o"; fn |]
-        | Linux -> create_process_with_input "printenv" [| "printenv" |])
+        | Linux ->
+            create_process_with_input "clang"
+              [| "clang"; "-x"; "assembler"; "-"; "-o"; fn |])
           prog fn
       in
       execs := S.add test fn !execs;
@@ -112,9 +115,9 @@ let run tests =
       let rec assert_ = function
         | Exit code :: tail ->
             if exit <> Unix.WEXITED code then
-              Printf.printf "  exit failed: %s != WEXITED %d\n"
+              Printf.printf "  exit failed: %s != %d\n"
                 (match exit with
-                | WEXITED c -> Printf.sprintf "WEXITED %d" c
+                | WEXITED c -> string_of_int c
                 | WSIGNALED c -> Printf.sprintf "WSIGNALED %d" c
                 | WSTOPPED c -> Printf.sprintf "WSTOPPED %d" c)
                 code;
@@ -143,7 +146,7 @@ let run tests =
             in
             if s <> stdout then (
               Printf.printf "  stdout failed:\n";
-              print_diff s stdout);
+              print_diff stdout s);
             assert_ tail
         | [] -> ()
       in
@@ -161,8 +164,7 @@ let run tests =
       in
       Printf.printf "%s\n" s
     in*)
-  List.iter r tests;
-  Printf.printf "done!\n"
+  List.iter r tests
 
 (*let () =
   let fn : string = compile_test "tests/helloworld0.ll" in
@@ -194,7 +196,10 @@ let run tests =
 let () =
   run
     [
+      ("tests/void.ll", [||], [ Stdout "" ]);
       ("tests/zero.ll", [||], [ Exit 0; Stdout "" ]);
+      ("tests/one.ll", [||], [ Exit 1; Stdout "" ]);
+      ("tests/simplest.ll", [||], [ Exit 42; Stdout "" ]);
       ("tests/helloworld0.ll", [||], [ Stdout "Hello world!\n" ]);
       ("tests/helloworld1.ll", [||], [ Exit 0; Stdout "Hello world!\n" ]);
       ( "tests/lorem.ll",
@@ -269,5 +274,10 @@ let () =
       ("tests/argc.ll", [||], [ Exit 1; Stdout "" ]);
       ("tests/argc.ll", [| "two" |], [ Exit 2; Stdout "" ]);
       ("tests/argc.ll", [| "two"; "three" |], [ Exit 3; Stdout "" ]);
-      (*("tests/fprintf.ll", [], [ Exit 0; Stdout ""; Stderr "Hello stderr!" ]);*)
+      ("tests/arith0.ll", [||], [ Exit 6; Stdout "" ]);
+      ("tests/arith1.ll", [||], [ Exit 69; Stdout "" ]);
+      ("tests/loop0.ll", [||], [ Exit 0; Stdout "" ]);
+      ( "tests/loop1.ll",
+        [||],
+        [ Exit 0; Stdout "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n" ] );
     ]
