@@ -47,6 +47,7 @@ let capture_stdout command args =
   (status, !output, "")
 
 let compile_test test =
+  Printf.printf "compiling %s\n" test;
   let fn : string = Filename.temp_file "" "" in
   let prog : string =
     In_channel.open_text test
@@ -87,16 +88,60 @@ let exec exc args = capture_stdout exc args
 
 let run tests =
   let r (file, args, asserts) =
+    let red = "\027[0;31m" in
+    let green = "\027[1;32m" in
+    (*let muted = "\033[1;30m" in*)
+    let nc = "\027[0m" in
     Printf.printf "%s ... " file;
     let exc = compile_test file in
     let exit, stdout, _stderr = exec exc args in
-    List.iter
-      (function
-        | Exit code ->
-            if exit <> Unix.WEXITED code then Printf.printf "exit failed! "
-        | Stdout s -> if s <> stdout then Printf.printf "stdout failed! ")
-      asserts;
-    Printf.printf " done!\n"
+    let rec assert_ = function
+      | Exit code :: tail -> exit = Unix.WEXITED code && assert_ tail
+      | Stdout s :: tail -> s = stdout && assert_ tail
+      | [] -> true
+    in
+    if assert_ asserts then Printf.printf " %sok!\n%s" green nc
+    else
+      let rec assert_ = function
+        | Exit code :: tail ->
+            if exit <> Unix.WEXITED code then
+              Printf.printf "  exit failed: %s != WEXITED %d\n"
+                (match exit with
+                | WEXITED c -> Printf.sprintf "WEXITED %d" c
+                | WSIGNALED c -> Printf.sprintf "WSIGNALED %d" c
+                | WSTOPPED c -> Printf.sprintf "WSTOPPED %d" c)
+                code;
+            assert_ tail
+        | Stdout s :: tail ->
+            let print_diff s1 s2 =
+              let s1 = String.split_on_char '\n' s1 in
+              let s2 = String.split_on_char '\n' s2 in
+              let rec diff s1 s2 =
+                match (s1, s2) with
+                | l1 :: t1, l2 :: t2 when l1 = l2 ->
+                    Printf.printf "    %s\n" l1;
+                    diff t1 t2
+                | l1 :: t1, l2 :: t2 ->
+                    Printf.printf "%s   +%s\n%s   -%s%s\n" green l1 red l2 nc;
+                    diff t1 t2
+                | l1 :: t1, [] ->
+                    Printf.printf "%s   +%s%s\n" green l1 nc;
+                    diff t1 []
+                | [], l2 :: t2 ->
+                    Printf.printf "%s   -%s%s\n" red l2 nc;
+                    diff [] t2
+                | [], [] -> ()
+              in
+              diff s1 s2
+            in
+            if s <> stdout then (
+              Printf.printf "  stdout failed:\n";
+              print_diff s stdout);
+            assert_ tail
+        | [] -> ()
+      in
+      Printf.printf " %sfailed!\n%s" red nc;
+      assert_ asserts
   in
   (*let r (file, _args, _asserts) =
       let s =
@@ -142,10 +187,80 @@ let run tests =
 let () =
   run
     [
+      ("tests/zero.ll", [||], [ Exit 0; Stdout "" ]);
       ("tests/helloworld0.ll", [||], [ Stdout "Hello world!\n" ]);
       ("tests/helloworld1.ll", [||], [ Exit 0; Stdout "Hello world!\n" ]);
-      ("tests/argc.ll", [||], [ Exit 1 ]);
-      ("tests/argc.ll", [| "two" |], [ Exit 2 ]);
-      ("tests/argc.ll", [| "two"; "three" |], [ Exit 3 ]);
+      ( "tests/lorem.ll",
+        [||],
+        [
+          Exit 0;
+          Stdout
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut \
+             tempus viverra est, in posuere justo porttitor sit amet. Duis \
+             vitae nulla eget neque cursus vulputate id vel leo. Nulla et \
+             pellentesque nulla. Etiam sed vulputate risus. Sed tempus varius \
+             est, quis sollicitudin lectus semper tempus. Fusce a ante \
+             egestas, fringilla purus mollis, volutpat neque. Ut eget nisi ut \
+             turpis ullamcorper lacinia. Pellentesque volutpat ultrices massa \
+             in sagittis. Integer aliquam vel ligula vitae pellentesque. Sed \
+             ut neque aliquet, rhoncus ex sit amet, tristique erat. Nullam \
+             porta, mauris vel tincidunt porta, eros ex sagittis lectus, \
+             gravida ultricies lorem ipsum eget nisl. Vivamus commodo velit \
+             convallis velit luctus, eu luctus leo suscipit. Pellentesque \
+             tellus leo, feugiat vel feugiat id, viverra a tellus. Fusce vitae \
+             malesuada nibh, a aliquam magna. Curabitur tortor ligula, \
+             sollicitudin vel sodales sed, gravida eu turpis.\n\n\
+             Duis malesuada erat et leo ultrices vestibulum. Pellentesque nec \
+             viverra nisi, eu viverra tortor. Curabitur facilisis blandit leo \
+             in aliquam. Proin mattis ultricies euismod. Proin vehicula nulla \
+             velit, a viverra leo aliquet at. Mauris ornare sit amet odio id \
+             vestibulum. Nulla blandit pretium ipsum, accumsan pharetra augue \
+             scelerisque at. Morbi lobortis leo at cursus fermentum. Cras eget \
+             ultrices orci. Integer convallis ante erat, et bibendum dui \
+             luctus ac. Duis convallis a lectus feugiat ullamcorper. Etiam \
+             blandit, leo at gravida viverra, urna diam hendrerit massa, at \
+             vestibulum magna nunc sed ex. Aenean interdum dolor sit amet \
+             rhoncus commodo. Maecenas bibendum placerat risus, quis \
+             ullamcorper quam rutrum non.\n\n\
+             Pellentesque non libero pretium, efficitur tortor sit amet, \
+             sollicitudin mauris. Duis tincidunt eros et nulla volutpat \
+             vestibulum. Nullam augue purus, pulvinar non accumsan ut, \
+             condimentum quis arcu. Maecenas faucibus, erat sit amet lacinia \
+             gravida, nisl lorem sagittis ipsum, vel ultricies neque purus ac \
+             risus. Curabitur vitae dapibus erat, eu ornare sapien. Phasellus \
+             ultricies magna ut lectus tincidunt, id elementum enim commodo. \
+             Curabitur consectetur nisl a mollis aliquam. Nunc imperdiet \
+             tellus ut sagittis dictum. Morbi placerat, diam et auctor dictum, \
+             odio risus dapibus massa, eu bibendum elit nibh sed elit. Integer \
+             quis tempor odio, nec posuere ex. Suspendisse condimentum odio at \
+             erat luctus rutrum id tincidunt erat. Sed dictum est eu metus \
+             commodo, sed rhoncus enim pulvinar. Nam sit amet dapibus odio, \
+             vel vehicula arcu. Vestibulum non urna vehicula, sollicitudin \
+             nisl id, efficitur tellus.\n\n\
+             Nulla ac dolor ligula. Sed a purus imperdiet, mollis est in, \
+             porttitor neque. Praesent pulvinar nisi turpis, nec fringilla \
+             tortor varius in. Vivamus ultricies dictum rhoncus. Praesent sed \
+             lacus tortor. Proin fermentum a libero vitae cursus. Cras egestas \
+             diam nec accumsan varius. Sed ut sodales nulla. Aliquam molestie \
+             ac turpis non gravida. Sed scelerisque, erat a feugiat vulputate, \
+             dolor felis placerat urna, ac efficitur eros tortor tristique \
+             mauris. Donec pulvinar nisl quis lacus suscipit, in feugiat nisl \
+             ullamcorper. Phasellus non cursus eros. Nunc scelerisque lobortis \
+             justo at feugiat. Proin augue enim, convallis vel dui aliquet, \
+             accumsan pellentesque justo. Praesent ex sapien, viverra quis leo \
+             id, euismod pulvinar sem.\n\n\
+             Duis aliquet, elit eu porta aliquam, lectus mauris finibus arcu, \
+             at molestie justo enim sed diam. Integer sed risus eget enim \
+             sodales facilisis. Nulla facilisi. Aliquam in nisi sit amet lorem \
+             elementum mattis. In hac habitasse platea dictumst. Morbi \
+             ultricies risus non luctus convallis. Cras luctus sem ut tortor \
+             eleifend semper. Vivamus varius sit amet arcu non placerat. Morbi \
+             sed tellus semper, porta est vel, imperdiet felis. Sed tempus \
+             facilisis faucibus. Sed sed massa ante. Duis eu eleifend neque. \
+             Mauris eleifend enim lorem, eu laoreet lectus dignissim at.\n";
+        ] );
+      ("tests/argc.ll", [||], [ Exit 1; Stdout "" ]);
+      ("tests/argc.ll", [| "two" |], [ Exit 2; Stdout "" ]);
+      ("tests/argc.ll", [| "two"; "three" |], [ Exit 3; Stdout "" ]);
       (*("tests/fprintf.ll", [], [ Exit 0; Stdout ""; Stderr "Hello stderr!" ]);*)
     ]
