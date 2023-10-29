@@ -12,6 +12,40 @@ let create_process_with_input command args input_string _f =
   let _ = Unix.waitpid [] pid in
   ()
 
+let capture_stdout command args =
+  flush stdout;
+  let in_read, _in_write = Unix.pipe () in
+  let stdout_read, stdout_write = Unix.pipe () in
+  let _stderr, stderr_write = Unix.pipe () in
+
+  let pid =
+    Unix.create_process_env command
+      (Array.concat [ [| command |]; args ])
+      [||] in_read stdout_write stderr_write
+  in
+
+  Unix.close in_read;
+  Unix.close stdout_write;
+
+  let output = ref "" in
+  let buffer = Bytes.create 1024 in
+
+  let rec read_output () =
+    flush stdout;
+    let len = Unix.read stdout_read buffer 0 1024 in
+    flush stdout;
+    if len > 0 then (
+      output := !output ^ Bytes.sub_string buffer 0 len;
+      read_output ())
+  in
+
+  read_output ();
+
+  Unix.close stdout_read;
+
+  let _, status = Unix.waitpid [] pid in
+  (status, !output, "")
+
 let compile_test test =
   let fn : string = Filename.temp_file "" "" in
   let prog : string =
@@ -29,11 +63,11 @@ let compile_test test =
   in
   fn
 
-let execute_with_timeout command timeout =
+let _execute_with_timeout command timeout =
   let pid = Unix.fork () in
   if pid = 0 then
     (* This is the child process *)
-    let _ = create_process_with_input command [||] "" "" in
+    let _ = create_process_with_input command [| "xxd" |] "sdasd" "" in
     exit 0
   else
     (* This is the parent process *)
@@ -48,15 +82,20 @@ let execute_with_timeout command timeout =
       Printf.printf "Command timed out after %d seconds\n" timeout;
       Unix.kill pid Sys.sigkill
 
-let exec exc _args =
-  Printf.printf "%s\n" exc;
-  execute_with_timeout "cat" 10
+let exec exc args = capture_stdout exc args
+(*execute_with_timeout "xxd" 5*)
 
 let run tests =
-  let r (file, args, _asserts) =
+  let r (file, args, asserts) =
     Printf.printf "%s ... " file;
     let exc = compile_test file in
-    exec exc args;
+    let exit, stdout, _stderr = exec exc args in
+    List.iter
+      (function
+        | Exit code ->
+            if exit <> Unix.WEXITED code then Printf.printf "exit failed! "
+        | Stdout s -> if s <> stdout then Printf.printf "stdout failed! ")
+      asserts;
     Printf.printf " done!\n"
   in
   (*let r (file, _args, _asserts) =
@@ -103,7 +142,10 @@ let run tests =
 let () =
   run
     [
-      ("tests/helloworld0.ll", [], [ Stdout "Hello world!" ]);
-      ("tests/helloworld1.ll", [], [ Exit 0; Stdout "Hello world!" ]);
+      ("tests/helloworld0.ll", [||], [ Stdout "Hello world!\n" ]);
+      ("tests/helloworld1.ll", [||], [ Exit 0; Stdout "Hello world!\n" ]);
+      ("tests/argc.ll", [||], [ Exit 1 ]);
+      ("tests/argc.ll", [| "two" |], [ Exit 2 ]);
+      ("tests/argc.ll", [| "two"; "three" |], [ Exit 3 ]);
       (*("tests/fprintf.ll", [], [ Exit 0; Stdout ""; Stderr "Hello stderr!" ]);*)
     ]
