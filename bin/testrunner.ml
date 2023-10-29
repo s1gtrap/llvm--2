@@ -15,7 +15,7 @@ let create_process_with_input command args input_string _f =
   let _ = Unix.waitpid [] pid in
   ()
 
-let capture_stdout command args =
+let _capture_stdout command args =
   flush stdout;
   let in_read, _in_write = Unix.pipe () in
   let stdout_read, stdout_write = Unix.pipe () in
@@ -48,6 +48,57 @@ let capture_stdout command args =
 
   let _, status = Unix.waitpid [] pid in
   (status, !output, "")
+
+let execute_with_timeout _command _args timeout :
+    (Unix.process_status * string * string) option =
+  let read_pipe, write_pipe = Unix.pipe () in
+  let in_read, _in_write = Unix.pipe () in
+  let _stdout_read, stdout_write = Unix.pipe () in
+  let _stderr, stderr_write = Unix.pipe () in
+
+  Printf.printf "forking..\n";
+  flush stdout;
+  let pid = Unix.fork () in
+  match pid with
+  | 0 -> (
+      Unix.close read_pipe;
+      Unix.dup2 write_pipe Unix.stdout;
+
+      let command = "ls" in
+      let args = [||] in
+
+      (* This is the child process *)
+      (*let _ = capture_stdout command args in*)
+      let pid =
+        Unix.create_process_env command
+          (Array.concat [ [| command |]; args ])
+          (Unix.environment ()) in_read stdout_write stderr_write
+      in
+      let _, status = Unix.waitpid [] pid in
+      match status with
+      | WEXITED code -> exit code
+      | WSIGNALED code ->
+          Printf.eprintf "exited with WSIGNALED %d" code;
+          exit 255
+      | WSTOPPED code ->
+          Printf.eprintf "exited with WSTOPPED %d" code;
+          exit 255)
+  | pid -> (
+      Unix.close write_pipe;
+      (* This is the parent process *)
+      try
+        let () = ignore (Unix.alarm timeout) in
+        let _, status = Unix.waitpid [] pid in
+        match status with
+        | WEXITED 0 -> Some (status, "", "")
+        | WEXITED _code -> Some (status, "", "")
+        | _ ->
+            Printf.printf "Command terminated abnormally\n";
+            Some (status, "", "")
+      with Unix.Unix_error (EINTR, _, _) ->
+        Printf.printf "Command timed out after %d seconds\n" timeout;
+        Unix.kill pid Sys.sigkill;
+        None)
 
 module S = Map.Make (String)
 
@@ -89,26 +140,7 @@ let compile_test test cargs =
       execs := S.add test fn !execs;
       fn
 
-let _execute_with_timeout command timeout =
-  let pid = Unix.fork () in
-  if pid = 0 then
-    (* This is the child process *)
-    let _ = create_process_with_input command [| "xxd" |] "sdasd" "" in
-    exit 0
-  else
-    (* This is the parent process *)
-    try
-      let () = ignore (Unix.alarm timeout) in
-      let _, status = Unix.waitpid [] pid in
-      match status with
-      | WEXITED 0 -> Printf.printf "Command succeeded\n"
-      | WEXITED code -> Printf.printf "Command failed with exit code %d\n" code
-      | _ -> Printf.printf "Command terminated abnormally\n"
-    with Unix.Unix_error (EINTR, _, _) ->
-      Printf.printf "Command timed out after %d seconds\n" timeout;
-      Unix.kill pid Sys.sigkill
-
-let exec exc args = capture_stdout exc args
+let exec exc args = execute_with_timeout exc args 60
 (*execute_with_timeout "xxd" 5*)
 
 let run tests =
@@ -122,60 +154,62 @@ let run tests =
     Printf.printf "%s ... " file;
     try
       let exc = compile_test file cargs in
-      let exit, stdout, stderr = exec exc args in
-      let rec assert_ = function
-        | Exit code :: tail -> exit = Unix.WEXITED code && assert_ tail
-        | Stdout s :: tail -> s = stdout && assert_ tail
-        | Stderr s :: tail -> s = stderr && assert_ tail
-        | [] -> true
-      in
-      if assert_ asserts then Printf.printf " %sok!\n%s" green nc
-      else
-        let print_diff s1 s2 =
-          let s1 = String.split_on_char '\n' s1 in
-          let s2 = String.split_on_char '\n' s2 in
-          let rec diff s1 s2 =
-            match (s1, s2) with
-            | l1 :: t1, l2 :: t2 when l1 = l2 ->
-                Printf.printf "    %s\n" l1;
-                diff t1 t2
-            | l1 :: t1, l2 :: t2 ->
-                Printf.printf "%s   +%s\n%s   -%s%s\n" green l1 red l2 nc;
-                diff t1 t2
-            | l1 :: t1, [] ->
-                Printf.printf "%s   +%s%s\n" green l1 nc;
-                diff t1 []
-            | [], l2 :: t2 ->
-                Printf.printf "%s   -%s%s\n" red l2 nc;
-                diff [] t2
-            | [], [] -> ()
+      match exec exc args with
+      | Some (exit, stdout, stderr) ->
+          let rec assert_ = function
+            | Exit code :: tail -> exit = Unix.WEXITED code && assert_ tail
+            | Stdout s :: tail -> s = stdout && assert_ tail
+            | Stderr s :: tail -> s = stderr && assert_ tail
+            | [] -> true
           in
-          diff s1 s2
-        in
-        let rec assert_ = function
-          | Exit code :: tail ->
-              if exit <> Unix.WEXITED code then
-                Printf.printf "  exit failed: %s != %d\n"
-                  (match exit with
-                  | WEXITED c -> string_of_int c
-                  | WSIGNALED c -> Printf.sprintf "WSIGNALED %d" c
-                  | WSTOPPED c -> Printf.sprintf "WSTOPPED %d" c)
-                  code;
-              assert_ tail
-          | Stdout s :: tail ->
-              if s <> stdout then (
-                Printf.printf "  stdout failed:\n";
-                print_diff stdout s);
-              assert_ tail
-          | Stderr s :: tail ->
-              if s <> stdout then (
-                Printf.printf "  stdout failed:\n";
-                print_diff stdout s);
-              assert_ tail
-          | [] -> ()
-        in
-        Printf.printf " %sfailed!%s %s\n" red nc exc;
-        assert_ asserts
+          if assert_ asserts then Printf.printf " %sok!\n%s" green nc
+          else
+            let print_diff s1 s2 =
+              let s1 = String.split_on_char '\n' s1 in
+              let s2 = String.split_on_char '\n' s2 in
+              let rec diff s1 s2 =
+                match (s1, s2) with
+                | l1 :: t1, l2 :: t2 when l1 = l2 ->
+                    Printf.printf "    %s\n" l1;
+                    diff t1 t2
+                | l1 :: t1, l2 :: t2 ->
+                    Printf.printf "%s   +%s\n%s   -%s%s\n" green l1 red l2 nc;
+                    diff t1 t2
+                | l1 :: t1, [] ->
+                    Printf.printf "%s   +%s%s\n" green l1 nc;
+                    diff t1 []
+                | [], l2 :: t2 ->
+                    Printf.printf "%s   -%s%s\n" red l2 nc;
+                    diff [] t2
+                | [], [] -> ()
+              in
+              diff s1 s2
+            in
+            let rec assert_ = function
+              | Exit code :: tail ->
+                  if exit <> Unix.WEXITED code then
+                    Printf.printf "  exit failed: %s != %d\n"
+                      (match exit with
+                      | WEXITED c -> string_of_int c
+                      | WSIGNALED c -> Printf.sprintf "WSIGNALED %d" c
+                      | WSTOPPED c -> Printf.sprintf "WSTOPPED %d" c)
+                      code;
+                  assert_ tail
+              | Stdout s :: tail ->
+                  if s <> stdout then (
+                    Printf.printf "  stdout failed:\n";
+                    print_diff stdout s);
+                  assert_ tail
+              | Stderr s :: tail ->
+                  if s <> stdout then (
+                    Printf.printf "  stdout failed:\n";
+                    print_diff stdout s);
+                  assert_ tail
+              | [] -> ()
+            in
+            Printf.printf " %sfailed!%s %s\n" red nc exc;
+            assert_ asserts
+      | None -> Printf.printf "%stimeout!%s\n" red nc
     with CompileError -> Printf.printf "%scompile error!%s\n" red nc
   in
   (*let r (file, _args, _asserts) =
