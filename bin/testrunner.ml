@@ -28,6 +28,25 @@ let compile_test test =
 
 let exec exc _args = Printf.printf "%s\n" exc
 
+let execute_with_timeout command timeout =
+  let pid = Unix.fork () in
+  if pid = 0 then
+    (* This is the child process *)
+    let _ = Unix.system command in
+    exit 0
+  else
+    (* This is the parent process *)
+    try
+      let () = ignore (Unix.alarm timeout) in
+      let _, status = Unix.waitpid [] pid in
+      match status with
+      | WEXITED 0 -> Printf.printf "Command succeeded\n"
+      | WEXITED code -> Printf.printf "Command failed with exit code %d\n" code
+      | _ -> Printf.printf "Command terminated abnormally\n"
+    with Unix.Signals.ALARM ->
+      Printf.printf "Command timed out after %d seconds\n" timeout;
+      kill pid Sys.sigkill
+
 let run tests =
   let r (file, args, _asserts) =
     Printf.printf "%s ... " file;
