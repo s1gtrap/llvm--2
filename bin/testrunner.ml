@@ -22,22 +22,22 @@
     List.iter r tests;
     Printf.printf "done!\n"*)
 
-let create_process_with_input command args _input_string =
+let create_process_with_input command args input_string =
   let ic, oc = Unix.pipe () in
+  let ic2, oc2 = Unix.pipe () in
   let oc = Unix.out_channel_of_descr oc in
-  output_string oc "fdsafs";
+  let _ic2 = Unix.in_channel_of_descr ic2 in
+  output_string oc input_string;
   close_out oc;
   let input = ic in
-  let pid =
-    Unix.create_process_env command args [||] input Unix.stdout Unix.stderr
-  in
+  let pid = Unix.create_process_env command args [||] input oc2 Unix.stderr in
   Printf.printf "fin!\n";
   let _ = Unix.waitpid [] pid in
   Printf.printf "fin!\n";
   ()
 
 let () =
-  let _ = create_process_with_input "xxd" [| "xxd" |] "" in
+  let _ = create_process_with_input "xxd" [| "xxd" |] "sd" in
   Printf.printf "ok!\n";
   let _ = create_process_with_input "sleep" [| "sleep"; "2" |] "" in
   Printf.printf "ok!\n"
