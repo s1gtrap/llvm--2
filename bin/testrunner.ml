@@ -20,19 +20,20 @@ let compile_test test =
     |> Llvm__2.Regalloc.compile_prog |> Llvm__2.Regalloc.string_of_prog
   in
   let _ =
-    create_process_with_input "arch"
-      [| "arch"; "-x86_64"; "clang"; "-x"; "assembler"; "-"; "-o"; fn |]
+    (match Llvm__2.Regalloc.os with
+    | Darwin ->
+        create_process_with_input "arch"
+          [| "arch"; "-x86_64"; "clang"; "-x"; "assembler"; "-"; "-o"; fn |]
+    | Linux -> create_process_with_input "printenv" [| "printenv" |])
       prog fn
   in
   fn
-
-let exec exc _args = Printf.printf "%s\n" exc
 
 let execute_with_timeout command timeout =
   let pid = Unix.fork () in
   if pid = 0 then
     (* This is the child process *)
-    let _ = Unix.system command in
+    let _ = create_process_with_input command [||] "" "" in
     exit 0
   else
     (* This is the parent process *)
@@ -43,15 +44,20 @@ let execute_with_timeout command timeout =
       | WEXITED 0 -> Printf.printf "Command succeeded\n"
       | WEXITED code -> Printf.printf "Command failed with exit code %d\n" code
       | _ -> Printf.printf "Command terminated abnormally\n"
-    with Unix.Signals.ALARM ->
+    with Unix.Unix_error (EINTR, _, _) ->
       Printf.printf "Command timed out after %d seconds\n" timeout;
-      kill pid Sys.sigkill
+      Unix.kill pid Sys.sigkill
+
+let exec exc _args =
+  Printf.printf "%s\n" exc;
+  execute_with_timeout "cat" 10
 
 let run tests =
   let r (file, args, _asserts) =
     Printf.printf "%s ... " file;
     let exc = compile_test file in
-    exec exc args
+    exec exc args;
+    Printf.printf " done!\n"
   in
   (*let r (file, _args, _asserts) =
       let s =
