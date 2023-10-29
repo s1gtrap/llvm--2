@@ -51,7 +51,7 @@ module S = Map.Make (String)
 
 let execs = ref S.empty
 
-let compile_test test =
+let compile_test test cargs =
   match S.find_opt test !execs with
   | Some fn -> fn
   | None ->
@@ -65,10 +65,21 @@ let compile_test test =
         (match Llvm__2.Regalloc.os with
         | Darwin ->
             create_process_with_input "arch"
-              [| "arch"; "-x86_64"; "clang"; "-x"; "assembler"; "-"; "-o"; fn |]
+              (Array.concat
+                 [
+                   [| "arch"; "-x86_64"; "clang" |];
+                   cargs;
+                   [| "-x"; "assembler"; "-"; "-o"; fn |];
+                 ])
         | Linux ->
             create_process_with_input "clang"
-              [| "clang"; "-x"; "assembler"; "-"; "-o"; fn |])
+              (Array.concat
+                 [
+                   [| "clang" |];
+                   cargs;
+                   [| "-x"; "assembler"; "-"; "-o"; fn |];
+                   cargs;
+                 ]))
           prog fn
       in
       execs := S.add test fn !execs;
@@ -97,13 +108,15 @@ let exec exc args = capture_stdout exc args
 (*execute_with_timeout "xxd" 5*)
 
 let run tests =
-  let r (file, args, asserts) =
+  let r (file, cargs, args, asserts) =
+    let cargs = Array.of_list cargs in
+    let args = Array.of_list args in
     let red = "\027[0;31m" in
     let green = "\027[1;32m" in
     (*let muted = "\033[1;30m" in*)
     let nc = "\027[0m" in
     Printf.printf "%s ... " file;
-    let exc = compile_test file in
+    let exc = compile_test file cargs in
     let exit, stdout, _stderr = exec exc args in
     let rec assert_ = function
       | Exit code :: tail -> exit = Unix.WEXITED code && assert_ tail
@@ -150,7 +163,7 @@ let run tests =
             assert_ tail
         | [] -> ()
       in
-      Printf.printf " %sfailed!\n%s" red nc;
+      Printf.printf " %sfailed!%s %s\n" red nc exc;
       assert_ asserts
   in
   (*let r (file, _args, _asserts) =
@@ -196,14 +209,15 @@ let run tests =
 let () =
   run
     [
-      ("tests/void.ll", [||], [ Stdout "" ]);
-      ("tests/zero.ll", [||], [ Exit 0; Stdout "" ]);
-      ("tests/one.ll", [||], [ Exit 1; Stdout "" ]);
-      ("tests/simplest.ll", [||], [ Exit 42; Stdout "" ]);
-      ("tests/helloworld0.ll", [||], [ Stdout "Hello world!\n" ]);
-      ("tests/helloworld1.ll", [||], [ Exit 0; Stdout "Hello world!\n" ]);
+      ("tests/void.ll", [], [], [ Stdout "" ]);
+      ("tests/zero.ll", [], [], [ Exit 0; Stdout "" ]);
+      ("tests/one.ll", [], [], [ Exit 1; Stdout "" ]);
+      ("tests/simplest.ll", [], [], [ Exit 42; Stdout "" ]);
+      ("tests/helloworld0.ll", [], [], [ Stdout "Hello world!\n" ]);
+      ("tests/helloworld1.ll", [], [], [ Exit 0; Stdout "Hello world!\n" ]);
       ( "tests/lorem.ll",
-        [||],
+        [],
+        [],
         [
           Exit 0;
           Stdout
@@ -271,13 +285,15 @@ let () =
              facilisis faucibus. Sed sed massa ante. Duis eu eleifend neque. \
              Mauris eleifend enim lorem, eu laoreet lectus dignissim at.\n";
         ] );
-      ("tests/argc.ll", [||], [ Exit 1; Stdout "" ]);
-      ("tests/argc.ll", [| "two" |], [ Exit 2; Stdout "" ]);
-      ("tests/argc.ll", [| "two"; "three" |], [ Exit 3; Stdout "" ]);
-      ("tests/arith0.ll", [||], [ Exit 6; Stdout "" ]);
-      ("tests/arith1.ll", [||], [ Exit 69; Stdout "" ]);
-      ("tests/loop0.ll", [||], [ Exit 0; Stdout "" ]);
+      ("tests/argc.ll", [], [], [ Exit 1; Stdout "" ]);
+      ("tests/argc.ll", [], [ "two" ], [ Exit 2; Stdout "" ]);
+      ("tests/argc.ll", [], [ "two"; "three" ], [ Exit 3; Stdout "" ]);
+      ("tests/arith0.ll", [], [], [ Exit 6; Stdout "" ]);
+      ("tests/arith1.ll", [], [], [ Exit 69; Stdout "" ]);
+      ("tests/loop0.ll", [], [], [ Exit 0; Stdout "" ]);
       ( "tests/loop1.ll",
-        [||],
+        [],
+        [],
         [ Exit 0; Stdout "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n" ] );
+      ("tigertests/zero.tig.ll", [ "tiger.c" ], [], [ Exit 0; Stdout "" ]);
     ]
