@@ -1,5 +1,7 @@
 type asserts = Exit of int | Stdout of string | Stderr of string
 
+exception CompileError
+
 let create_process_with_input command args input_string _f =
   let ic, oc = Unix.pipe () in
   let oc = Unix.out_channel_of_descr oc in
@@ -57,9 +59,11 @@ let compile_test test cargs =
   | None ->
       let fn : string = Filename.temp_file "" "" in
       let prog : string =
-        In_channel.open_text test
-        |> Llvm__2.Parse.from_channel Llvm__2.Llparser.prog
-        |> Llvm__2.Regalloc.compile_prog |> Llvm__2.Regalloc.string_of_prog
+        try
+          In_channel.open_text test
+          |> Llvm__2.Parse.from_channel Llvm__2.Llparser.prog
+          |> Llvm__2.Regalloc.compile_prog |> Llvm__2.Regalloc.string_of_prog
+        with _ -> raise CompileError
       in
       let _ =
         (match Llvm__2.Regalloc.os with
@@ -116,63 +120,63 @@ let run tests =
     (*let muted = "\033[1;30m" in*)
     let nc = "\027[0m" in
     Printf.printf "%s ... " file;
-    match try Some (compile_test file cargs) with _ -> None with
-    | Some exc ->
-        let exit, stdout, stderr = exec exc args in
-        let rec assert_ = function
-          | Exit code :: tail -> exit = Unix.WEXITED code && assert_ tail
-          | Stdout s :: tail -> s = stdout && assert_ tail
-          | Stderr s :: tail -> s = stderr && assert_ tail
-          | [] -> true
+    try
+      let exc = compile_test file cargs in
+      let exit, stdout, stderr = exec exc args in
+      let rec assert_ = function
+        | Exit code :: tail -> exit = Unix.WEXITED code && assert_ tail
+        | Stdout s :: tail -> s = stdout && assert_ tail
+        | Stderr s :: tail -> s = stderr && assert_ tail
+        | [] -> true
+      in
+      if assert_ asserts then Printf.printf " %sok!\n%s" green nc
+      else
+        let print_diff s1 s2 =
+          let s1 = String.split_on_char '\n' s1 in
+          let s2 = String.split_on_char '\n' s2 in
+          let rec diff s1 s2 =
+            match (s1, s2) with
+            | l1 :: t1, l2 :: t2 when l1 = l2 ->
+                Printf.printf "    %s\n" l1;
+                diff t1 t2
+            | l1 :: t1, l2 :: t2 ->
+                Printf.printf "%s   +%s\n%s   -%s%s\n" green l1 red l2 nc;
+                diff t1 t2
+            | l1 :: t1, [] ->
+                Printf.printf "%s   +%s%s\n" green l1 nc;
+                diff t1 []
+            | [], l2 :: t2 ->
+                Printf.printf "%s   -%s%s\n" red l2 nc;
+                diff [] t2
+            | [], [] -> ()
+          in
+          diff s1 s2
         in
-        if assert_ asserts then Printf.printf " %sok!\n%s" green nc
-        else
-          let print_diff s1 s2 =
-            let s1 = String.split_on_char '\n' s1 in
-            let s2 = String.split_on_char '\n' s2 in
-            let rec diff s1 s2 =
-              match (s1, s2) with
-              | l1 :: t1, l2 :: t2 when l1 = l2 ->
-                  Printf.printf "    %s\n" l1;
-                  diff t1 t2
-              | l1 :: t1, l2 :: t2 ->
-                  Printf.printf "%s   +%s\n%s   -%s%s\n" green l1 red l2 nc;
-                  diff t1 t2
-              | l1 :: t1, [] ->
-                  Printf.printf "%s   +%s%s\n" green l1 nc;
-                  diff t1 []
-              | [], l2 :: t2 ->
-                  Printf.printf "%s   -%s%s\n" red l2 nc;
-                  diff [] t2
-              | [], [] -> ()
-            in
-            diff s1 s2
-          in
-          let rec assert_ = function
-            | Exit code :: tail ->
-                if exit <> Unix.WEXITED code then
-                  Printf.printf "  exit failed: %s != %d\n"
-                    (match exit with
-                    | WEXITED c -> string_of_int c
-                    | WSIGNALED c -> Printf.sprintf "WSIGNALED %d" c
-                    | WSTOPPED c -> Printf.sprintf "WSTOPPED %d" c)
-                    code;
-                assert_ tail
-            | Stdout s :: tail ->
-                if s <> stdout then (
-                  Printf.printf "  stdout failed:\n";
-                  print_diff stdout s);
-                assert_ tail
-            | Stderr s :: tail ->
-                if s <> stdout then (
-                  Printf.printf "  stdout failed:\n";
-                  print_diff stdout s);
-                assert_ tail
-            | [] -> ()
-          in
-          Printf.printf " %sfailed!%s %s\n" red nc exc;
-          assert_ asserts
-    | None -> Printf.printf "%sfailed to compile!%s\n" red nc
+        let rec assert_ = function
+          | Exit code :: tail ->
+              if exit <> Unix.WEXITED code then
+                Printf.printf "  exit failed: %s != %d\n"
+                  (match exit with
+                  | WEXITED c -> string_of_int c
+                  | WSIGNALED c -> Printf.sprintf "WSIGNALED %d" c
+                  | WSTOPPED c -> Printf.sprintf "WSTOPPED %d" c)
+                  code;
+              assert_ tail
+          | Stdout s :: tail ->
+              if s <> stdout then (
+                Printf.printf "  stdout failed:\n";
+                print_diff stdout s);
+              assert_ tail
+          | Stderr s :: tail ->
+              if s <> stdout then (
+                Printf.printf "  stdout failed:\n";
+                print_diff stdout s);
+              assert_ tail
+          | [] -> ()
+        in
+        Printf.printf " %sfailed!%s %s\n" red nc exc;
+        assert_ asserts
+    with CompileError -> Printf.printf "%scompile error!%s\n" red nc
   in
   (*let r (file, _args, _asserts) =
       let s =
