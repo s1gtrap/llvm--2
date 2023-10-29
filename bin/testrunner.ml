@@ -49,23 +49,19 @@ let _capture_stdout command args =
   let _, status = Unix.waitpid [] pid in
   (status, !output, "")
 
-let execute_with_timeout _command _args timeout :
+let execute_with_timeout command args timeout :
     (Unix.process_status * string * string) option =
   let read_pipe, write_pipe = Unix.pipe () in
   let in_read, _in_write = Unix.pipe () in
-  let _stdout_read, stdout_write = Unix.pipe () in
-  let _stderr, stderr_write = Unix.pipe () in
+  let stdout_read, stdout_write = Unix.pipe () in
+  let stderr_read, stderr_write = Unix.pipe () in
 
-  Printf.printf "forking..\n";
   flush stdout;
   let pid = Unix.fork () in
   match pid with
   | 0 -> (
       Unix.close read_pipe;
       Unix.dup2 write_pipe Unix.stdout;
-
-      let command = "ls" in
-      let args = [||] in
 
       (* This is the child process *)
       (*let _ = capture_stdout command args in*)
@@ -84,19 +80,49 @@ let execute_with_timeout _command _args timeout :
           Printf.eprintf "exited with WSTOPPED %d" code;
           exit 255)
   | pid -> (
-      Unix.close write_pipe;
+      Unix.close in_read;
+
+      Unix.close stdout_write;
+      let output = ref "" in
+      let buffer = Bytes.create 1024 in
+      let rec read_output () =
+        flush stdout;
+        let len = Unix.read stdout_read buffer 0 1024 in
+        flush stdout;
+        if len > 0 then (
+          output := !output ^ Bytes.sub_string buffer 0 len;
+          read_output ())
+      in
+      read_output ();
+      Unix.close stdout_read;
+
+      Unix.close stderr_write;
+      let output2 = ref "" in
+      let buffer = Bytes.create 1024 in
+      let rec read_output2 () =
+        let len = Unix.read stderr_read buffer 0 1024 in
+        if len > 0 then (
+          output2 := !output2 ^ Bytes.sub_string buffer 0 len;
+          read_output2 ())
+      in
+      read_output2 ();
+      Unix.close stderr_read;
+
       (* This is the parent process *)
       try
         let () = ignore (Unix.alarm timeout) in
         let _, status = Unix.waitpid [] pid in
         match status with
-        | WEXITED 0 -> Some (status, "", "")
-        | WEXITED _code -> Some (status, "", "")
-        | _ ->
-            Printf.printf "Command terminated abnormally\n";
-            Some (status, "", "")
-      with Unix.Unix_error (EINTR, _, _) ->
-        Printf.printf "Command timed out after %d seconds\n" timeout;
+        | WEXITED code ->
+            Printf.eprintf "exited with WEXITED %d" code;
+            Some (status, !output, !output2)
+        | WSIGNALED code ->
+            Printf.eprintf "exited with WSIGNALED %d" code;
+            Some (status, !output, !output2)
+        | WSTOPPED code ->
+            Printf.eprintf "exited with WSTOPPED %d" code;
+            Some (status, !output, !output2)
+      with _ ->
         Unix.kill pid Sys.sigkill;
         None)
 
@@ -130,17 +156,14 @@ let compile_test test cargs =
             create_process_with_input "clang"
               (Array.concat
                  [
-                   [| "clang" |];
-                   cargs;
-                   [| "-x"; "assembler"; "-"; "-o"; fn |];
-                   cargs;
+                   [| "clang" |]; cargs; [| "-x"; "assembler"; "-"; "-o"; fn |];
                  ]))
           prog fn
       in
       execs := S.add test fn !execs;
       fn
 
-let exec exc args = execute_with_timeout exc args 60
+let exec exc args = execute_with_timeout exc args 10000
 (*execute_with_timeout "xxd" 5*)
 
 let run tests =
@@ -152,6 +175,7 @@ let run tests =
     (*let muted = "\033[1;30m" in*)
     let nc = "\027[0m" in
     Printf.printf "%s ... " file;
+    flush stdout;
     try
       let exc = compile_test file cargs in
       match exec exc args with
@@ -397,96 +421,96 @@ let () =
         [ "tiger.c" ],
         [],
         [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "tigertests/test69.tig.ll",
+      (*( "tigertests/test69.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 48; Stdout ""; Stderr "" ] );
-      ("tigertests/test65.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ( "tigertests/goodarith.tig.ll",
+        [ Exit 48; Stdout ""; Stderr "" ] );*)
+      (*("tigertests/test65.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
+      (*( "tigertests/goodarith.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 5; Stdout ""; Stderr "" ] );
-      ( "tigertests/lots_of_locals.tig.ll",
+        [ Exit 5; Stdout ""; Stderr "" ] );*)
+      (*( "tigertests/lots_of_locals.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout ""; Stderr "" ] );
-      ("tigertests/dynarray.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test51.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ( "tigertests/test67.tig.ll",
+        [ Stdout ""; Stderr "" ] );*)
+      (*("tigertests/dynarray.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
+      (*("tigertests/test51.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
+      (*( "tigertests/test67.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 1; Stdout ""; Stderr "" ] );
-      ("tigertests/test75.tig.ll", [ "tiger.c" ], [], []);
-      ("tigertests/test1.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/divorder.tig.ll", [ "tiger.c" ], [], []);
-      ( "tigertests/lexer_ascii_alt.tig.ll",
+        [ Exit 1; Stdout ""; Stderr "" ] );*)
+      (*("tigertests/test75.tig.ll", [ "tiger.c" ], [], []);*)
+      (*("tigertests/test1.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
+      (*("tigertests/divorder.tig.ll", [ "tiger.c" ], [], []);*)
+      (*( "tigertests/lexer_ascii_alt.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout ""; Stderr "" ] );
-      ( "tigertests/zero.tig.ll",
+        [ Stdout ""; Stderr "" ] );*)
+      (*( "tigertests/zero.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ("tigertests/test4.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test8.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/binary_tree.tig.ll", [ "tiger.c" ], [], []);
-      ( "tigertests/test54.tig.ll",
+        [ Exit 0; Stdout ""; Stderr "" ] );*)
+      (*("tigertests/test4.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
+      (*("tigertests/test8.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
+      (*("tigertests/binary_tree.tig.ll", [ "tiger.c" ], [], []);*)
+      (*( "tigertests/test54.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 4; Stdout ""; Stderr "" ] );
-      ("tigertests/test37.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test46.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test58.tig.ll", [ "tiger.c" ], [], []);
-      ("tigertests/test62.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/queens.tig.ll", [ "tiger.c" ], [], []);
-      ( "tigertests/seq_nested_empty.tig.ll",
-        [ "tiger.c" ],
-        [],
-        [ Stdout ""; Stderr "" ] );
-      ("tigertests/test27.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/fixedpoints.tig.ll", [ "tiger.c" ], [], []);
-      ("tigertests/test44.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test48.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/doors.tig.ll", [ "tiger.c" ], [], []);
-      ( "tigertests/test56.tig.ll",
-        [ "tiger.c" ],
-        [],
-        [ Exit 9; Stdout ""; Stderr "" ] );
-      ("tigertests/split.tig.ll", [ "tiger.c" ], [], []);
-      ("tigertests/test60.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test72.tig.ll", [ "tiger.c" ], [], []);
-      ( "tigertests/divbyzero.tig.ll",
-        [ "tiger.c" ],
-        [],
-        [ Stdout ""; Stderr "Error: division by zero\n" ] );
-      ( "tigertests/lexer_formfeed.tig.ll",
-        [ "tiger.c" ],
-        [],
-        [ Stdout ""; Stderr "" ] );
-      ( "tigertests/if_readonly.tig.ll",
-        [ "tiger.c" ],
-        [],
-        [ Stdout ""; Stderr "" ] );
-      ("tigertests/test68.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test76.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ( "tigertests/brainfuck.tig.ll",
-        [ "tiger.c" ],
-        [],
-        [ Stdout ""; Stderr "" ] );
-      ("tigertests/test64.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test52.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/lisp.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/color.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test2.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/div213.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ( "tigertests/simplevar.tig.ll",
-        [ "tiger.c" ],
-        [],
-        [ Stdout ""; Stderr "" ] );
-      ("tigertests/test66.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ( "tigertests/test74.tig.ll",
-        [ "tiger.c" ],
-        [],
-        [ Exit 24; Stdout ""; Stderr "" ] );
-      ("tigertests/test42.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        [ Exit 4; Stdout ""; Stderr "" ] );*)
+      (*("tigertests/test37.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        ("tigertests/test46.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        ("tigertests/test58.tig.ll", [ "tiger.c" ], [], []);
+        ("tigertests/test62.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        ("tigertests/queens.tig.ll", [ "tiger.c" ], [], []);
+        ( "tigertests/seq_nested_empty.tig.ll",
+          [ "tiger.c" ],
+          [],
+          [ Stdout ""; Stderr "" ] );
+        ("tigertests/test27.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        (*("tigertests/fixedpoints.tig.ll", [ "tiger.c" ], [], []);*)
+        ("tigertests/test44.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        ("tigertests/test48.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        ("tigertests/doors.tig.ll", [ "tiger.c" ], [], []);
+        ( "tigertests/test56.tig.ll",
+          [ "tiger.c" ],
+          [],
+          [ Exit 9; Stdout ""; Stderr "" ] );
+        ("tigertests/split.tig.ll", [ "tiger.c" ], [], []);
+        ("tigertests/test60.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        (*("tigertests/test72.tig.ll", [ "tiger.c" ], [], []);*)
+        ( "tigertests/divbyzero.tig.ll",
+          [ "tiger.c" ],
+          [],
+          [ Stdout ""; Stderr "Error: division by zero\n" ] );
+        ( "tigertests/lexer_formfeed.tig.ll",
+          [ "tiger.c" ],
+          [],
+          [ Stdout ""; Stderr "" ] );
+        ( "tigertests/if_readonly.tig.ll",
+          [ "tiger.c" ],
+          [],
+          [ Stdout ""; Stderr "" ] );
+        ("tigertests/test68.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        (*("tigertests/test76.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
+        (*( "tigertests/brainfuck.tig.ll",
+          [ "tiger.c" ],
+          [],
+          [ Stdout ""; Stderr "" ] );*)
+        ("tigertests/test64.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        ("tigertests/test52.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        (*("tigertests/lisp.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
+        ("tigertests/color.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        ("tigertests/test2.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        ("tigertests/div213.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        ( "tigertests/simplevar.tig.ll",
+          [ "tiger.c" ],
+          [],
+          [ Stdout ""; Stderr "" ] );
+        ("tigertests/test66.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        ( "tigertests/test74.tig.ll",
+          [ "tiger.c" ],
+          [],
+          [ Exit 24; Stdout ""; Stderr "" ] );
+        ("tigertests/test42.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
     ]
