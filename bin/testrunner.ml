@@ -1,4 +1,4 @@
-type asserts = Exit of int | Stdout of string
+type asserts = Exit of int | Stdout of string | Stderr of string
 
 let create_process_with_input command args input_string _f =
   let ic, oc = Unix.pipe () in
@@ -116,55 +116,63 @@ let run tests =
     (*let muted = "\033[1;30m" in*)
     let nc = "\027[0m" in
     Printf.printf "%s ... " file;
-    let exc = compile_test file cargs in
-    let exit, stdout, _stderr = exec exc args in
-    let rec assert_ = function
-      | Exit code :: tail -> exit = Unix.WEXITED code && assert_ tail
-      | Stdout s :: tail -> s = stdout && assert_ tail
-      | [] -> true
-    in
-    if assert_ asserts then Printf.printf " %sok!\n%s" green nc
-    else
-      let rec assert_ = function
-        | Exit code :: tail ->
-            if exit <> Unix.WEXITED code then
-              Printf.printf "  exit failed: %s != %d\n"
-                (match exit with
-                | WEXITED c -> string_of_int c
-                | WSIGNALED c -> Printf.sprintf "WSIGNALED %d" c
-                | WSTOPPED c -> Printf.sprintf "WSTOPPED %d" c)
-                code;
-            assert_ tail
-        | Stdout s :: tail ->
-            let print_diff s1 s2 =
-              let s1 = String.split_on_char '\n' s1 in
-              let s2 = String.split_on_char '\n' s2 in
-              let rec diff s1 s2 =
-                match (s1, s2) with
-                | l1 :: t1, l2 :: t2 when l1 = l2 ->
-                    Printf.printf "    %s\n" l1;
-                    diff t1 t2
-                | l1 :: t1, l2 :: t2 ->
-                    Printf.printf "%s   +%s\n%s   -%s%s\n" green l1 red l2 nc;
-                    diff t1 t2
-                | l1 :: t1, [] ->
-                    Printf.printf "%s   +%s%s\n" green l1 nc;
-                    diff t1 []
-                | [], l2 :: t2 ->
-                    Printf.printf "%s   -%s%s\n" red l2 nc;
-                    diff [] t2
-                | [], [] -> ()
-              in
-              diff s1 s2
+    match try Some (compile_test file cargs) with _ -> None with
+    | Some exc ->
+        let exit, stdout, stderr = exec exc args in
+        let rec assert_ = function
+          | Exit code :: tail -> exit = Unix.WEXITED code && assert_ tail
+          | Stdout s :: tail -> s = stdout && assert_ tail
+          | Stderr s :: tail -> s = stderr && assert_ tail
+          | [] -> true
+        in
+        if assert_ asserts then Printf.printf " %sok!\n%s" green nc
+        else
+          let print_diff s1 s2 =
+            let s1 = String.split_on_char '\n' s1 in
+            let s2 = String.split_on_char '\n' s2 in
+            let rec diff s1 s2 =
+              match (s1, s2) with
+              | l1 :: t1, l2 :: t2 when l1 = l2 ->
+                  Printf.printf "    %s\n" l1;
+                  diff t1 t2
+              | l1 :: t1, l2 :: t2 ->
+                  Printf.printf "%s   +%s\n%s   -%s%s\n" green l1 red l2 nc;
+                  diff t1 t2
+              | l1 :: t1, [] ->
+                  Printf.printf "%s   +%s%s\n" green l1 nc;
+                  diff t1 []
+              | [], l2 :: t2 ->
+                  Printf.printf "%s   -%s%s\n" red l2 nc;
+                  diff [] t2
+              | [], [] -> ()
             in
-            if s <> stdout then (
-              Printf.printf "  stdout failed:\n";
-              print_diff stdout s);
-            assert_ tail
-        | [] -> ()
-      in
-      Printf.printf " %sfailed!%s %s\n" red nc exc;
-      assert_ asserts
+            diff s1 s2
+          in
+          let rec assert_ = function
+            | Exit code :: tail ->
+                if exit <> Unix.WEXITED code then
+                  Printf.printf "  exit failed: %s != %d\n"
+                    (match exit with
+                    | WEXITED c -> string_of_int c
+                    | WSIGNALED c -> Printf.sprintf "WSIGNALED %d" c
+                    | WSTOPPED c -> Printf.sprintf "WSTOPPED %d" c)
+                    code;
+                assert_ tail
+            | Stdout s :: tail ->
+                if s <> stdout then (
+                  Printf.printf "  stdout failed:\n";
+                  print_diff stdout s);
+                assert_ tail
+            | Stderr s :: tail ->
+                if s <> stdout then (
+                  Printf.printf "  stdout failed:\n";
+                  print_diff stdout s);
+                assert_ tail
+            | [] -> ()
+          in
+          Printf.printf " %sfailed!%s %s\n" red nc exc;
+          assert_ asserts
+    | None -> Printf.printf "%sfailed to compile!%s\n" red nc
   in
   (*let r (file, _args, _asserts) =
       let s =
@@ -296,4 +304,154 @@ let () =
         [],
         [ Exit 0; Stdout "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n" ] );
       ("tigertests/zero.tig.ll", [ "tiger.c" ], [], [ Exit 0; Stdout "" ]);
+      ("tigertests/test12.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/arith.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 2; Stdout ""; Stderr "" ] );
+      ( "tigertests/nil_seq_last_ok.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/test63.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/test55.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 9; Stdout ""; Stderr "" ] );
+      ("tigertests/test59.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/test47.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "tigertests/lexer_ascii.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 255; Stdout "\n"; Stderr "" ] );
+      ( "tigertests/readonly_overwrite.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "\n"; Stderr "" ] );
+      ("tigertests/test5.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ( "tigertests/seqorder.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "12345\n"; Stderr "\n" ] );
+      ( "tigertests/emoji_comment.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 42; Stdout "\n"; Stderr "" ] );
+      ( "tigertests/recFieldError.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "\n"; Stderr "" ] );
+      ("tigertests/test61.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ( "tigertests/test73.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "OK.\n"; Stderr "\n" ] );
+      ( "tigertests/forfor.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "\n"; Stderr "\n" ] );
+      ("tigertests/ddd.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test57.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test3.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test53.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test30.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ( "tigertests/test41.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 0; Stdout "\n"; Stderr "" ] );
+      ( "tigertests/test69.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 48; Stdout "\n"; Stderr "" ] );
+      ("tigertests/test65.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ( "tigertests/goodarith.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 5; Stdout ""; Stderr "" ] );
+      ( "tigertests/lots_of_locals.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/dynarray.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/test51.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ( "tigertests/test67.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 1; Stdout "\n"; Stderr "" ] );
+      ("tigertests/test75.tig.ll", [ "tiger.c" ], [], []);
+      ("tigertests/test1.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/divorder.tig.ll", [ "tiger.c" ], [], []);
+      ( "tigertests/lexer_ascii_alt.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "\n"; Stderr "" ] );
+      ( "tigertests/zero.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 0; Stdout "\n"; Stderr "" ] );
+      ("tigertests/test4.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test8.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/binary_tree.tig.ll", [ "tiger.c" ], [], []);
+      ( "tigertests/test54.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 4; Stdout "\n"; Stderr "" ] );
+      ("tigertests/test37.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test46.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test58.tig.ll", [ "tiger.c" ], [], []);
+      ("tigertests/test62.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/queens.tig.ll", [ "tiger.c" ], [], []);
+      ( "tigertests/seq_nested_empty.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "\n"; Stderr "" ] );
+      ("tigertests/test27.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/fixedpoints.tig.ll", [ "tiger.c" ], [], []);
+      ("tigertests/test44.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test48.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/doors.tig.ll", [ "tiger.c" ], [], []);
+      ( "tigertests/test56.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 9; Stdout "\n"; Stderr "" ] );
+      ("tigertests/split.tig.ll", [ "tiger.c" ], [], []);
+      ("tigertests/test60.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test72.tig.ll", [ "tiger.c" ], [], []);
+      ( "tigertests/divbyzero.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "\n"; Stderr "Error: division by zero\n" ] );
+      ( "tigertests/lexer_formfeed.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "\n"; Stderr "" ] );
+      ( "tigertests/if_readonly.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "\n"; Stderr "" ] );
+      ("tigertests/test68.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test76.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ( "tigertests/brainfuck.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "\n"; Stderr "" ] );
+      ("tigertests/test64.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test52.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/lisp.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/color.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/test2.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ("tigertests/div213.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ( "tigertests/simplevar.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "\n"; Stderr "" ] );
+      ("tigertests/test66.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
+      ( "tigertests/test74.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 24; Stdout "\n"; Stderr "" ] );
+      ("tigertests/test42.tig.ll", [ "tiger.c" ], [], [ Stdout "\n"; Stderr "" ]);
     ]
