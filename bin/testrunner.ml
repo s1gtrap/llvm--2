@@ -55,6 +55,7 @@ let execute_with_timeout command args timeout :
   let in_read, _in_write = Unix.pipe () in
   let stdout_read, stdout_write = Unix.pipe () in
   let stderr_read, stderr_write = Unix.pipe () in
+  let out_stderr_write = Unix.out_channel_of_descr stderr_write in
 
   flush stdout;
   let pid = Unix.fork () in
@@ -74,10 +75,10 @@ let execute_with_timeout command args timeout :
       match status with
       | WEXITED code -> exit code
       | WSIGNALED code ->
-          Printf.eprintf "exited with WSIGNALED %d" code;
+          Printf.fprintf out_stderr_write "exited with WSIGNALED %d" code;
           exit 255
       | WSTOPPED code ->
-          Printf.eprintf "exited with WSTOPPED %d" code;
+          Printf.fprintf out_stderr_write "exited with WSTOPPED %d" code;
           exit 255)
   | pid -> (
       Unix.close in_read;
@@ -113,14 +114,14 @@ let execute_with_timeout command args timeout :
         let () = ignore (Unix.alarm timeout) in
         let _, status = Unix.waitpid [] pid in
         match status with
-        | WEXITED code ->
-            Printf.eprintf "exited with WEXITED %d" code;
+        | WEXITED _code ->
+            (*Printf.eprintf "exited with WEXITED %d" code;*)
             Some (status, !output, !output2)
-        | WSIGNALED code ->
-            Printf.eprintf "exited with WSIGNALED %d" code;
+        | WSIGNALED _code ->
+            (*Printf.eprintf "exited with WSIGNALED %d" code;*)
             Some (status, !output, !output2)
-        | WSTOPPED code ->
-            Printf.eprintf "exited with WSTOPPED %d" code;
+        | WSTOPPED _code ->
+            (*Printf.eprintf "exited with WSTOPPED %d" code;*)
             Some (status, !output, !output2)
       with _ ->
         Unix.kill pid Sys.sigkill;
