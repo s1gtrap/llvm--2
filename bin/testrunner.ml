@@ -46,23 +46,30 @@ let capture_stdout command args =
   let _, status = Unix.waitpid [] pid in
   (status, !output, "")
 
+module S = Map.Make (String)
+
+let execs = ref S.empty
+
 let compile_test test =
-  Printf.printf "compiling %s\n" test;
-  let fn : string = Filename.temp_file "" "" in
-  let prog : string =
-    In_channel.open_text test
-    |> Llvm__2.Parse.from_channel Llvm__2.Llparser.prog
-    |> Llvm__2.Regalloc.compile_prog |> Llvm__2.Regalloc.string_of_prog
-  in
-  let _ =
-    (match Llvm__2.Regalloc.os with
-    | Darwin ->
-        create_process_with_input "arch"
-          [| "arch"; "-x86_64"; "clang"; "-x"; "assembler"; "-"; "-o"; fn |]
-    | Linux -> create_process_with_input "printenv" [| "printenv" |])
-      prog fn
-  in
-  fn
+  match S.find_opt test !execs with
+  | Some fn -> fn
+  | None ->
+      let fn : string = Filename.temp_file "" "" in
+      let prog : string =
+        In_channel.open_text test
+        |> Llvm__2.Parse.from_channel Llvm__2.Llparser.prog
+        |> Llvm__2.Regalloc.compile_prog |> Llvm__2.Regalloc.string_of_prog
+      in
+      let _ =
+        (match Llvm__2.Regalloc.os with
+        | Darwin ->
+            create_process_with_input "arch"
+              [| "arch"; "-x86_64"; "clang"; "-x"; "assembler"; "-"; "-o"; fn |]
+        | Linux -> create_process_with_input "printenv" [| "printenv" |])
+          prog fn
+      in
+      execs := S.add test fn !execs;
+      fn
 
 let _execute_with_timeout command timeout =
   let pid = Unix.fork () in
