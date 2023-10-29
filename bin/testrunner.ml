@@ -22,24 +22,41 @@
     List.iter r tests;
     Printf.printf "done!\n"*)
 
-let create_process_with_input command args input_string =
+let create_process_with_input command args input_string _f =
   let ic, oc = Unix.pipe () in
-  let ic2, oc2 = Unix.pipe () in
   let oc = Unix.out_channel_of_descr oc in
-  let _ic2 = Unix.in_channel_of_descr ic2 in
   output_string oc input_string;
   close_out oc;
   let input = ic in
-  let pid = Unix.create_process_env command args [||] input oc2 Unix.stderr in
+  let pid =
+    Unix.create_process_env command args [||] input Unix.stdout Unix.stderr
+  in
   Printf.printf "fin!\n";
   let _ = Unix.waitpid [] pid in
   Printf.printf "fin!\n";
   ()
 
+let compile_test test =
+  let fn : string = Filename.temp_file "" "" in
+  Printf.printf "%s\n" fn;
+  let prog : string =
+    In_channel.open_text test
+    |> Llvm__2.Parse.from_channel Llvm__2.Llparser.prog
+    |> Llvm__2.Regalloc.compile_prog |> Llvm__2.Regalloc.string_of_prog
+  in
+
+  let _ =
+    create_process_with_input "arch"
+      [| "arch"; "-x86_64"; "clang"; "-x"; "assembler"; "-"; "-o"; fn |]
+      prog fn
+  in
+  fn
+
 let () =
-  let _ = create_process_with_input "xxd" [| "xxd" |] "sd" in
+  let fn : string = compile_test "tests/helloworld0.ll" in
+  Printf.printf "%s\n" fn;
   Printf.printf "ok!\n";
-  let _ = create_process_with_input "sleep" [| "sleep"; "2" |] "" in
+  let _ = create_process_with_input "sleep" [| "sleep"; "2" |] "" fn in
   Printf.printf "ok!\n"
 
 (* Handle the process status as needed *)

@@ -148,7 +148,7 @@ let progx86 input =
   let prog = Regalloc.compile_prog prog in
   Printf.printf "%s\n" (Regalloc.string_of_prog prog)
 
-let progexe output input =
+let progexe _output input =
   let prog = Parse.from_channel Llparser.prog input in
   let prog = Regalloc.compile_prog prog in
   Printf.printf "%s\n" (Regalloc.string_of_prog prog)
