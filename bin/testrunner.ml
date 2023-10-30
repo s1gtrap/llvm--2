@@ -1,4 +1,8 @@
-type asserts = Exit of int | Stdout of string | Stderr of string
+type asserts =
+  | Exit of int
+  | Stdout of string
+  | Stderr of string
+  | Timeout of int
 
 exception CompileError
 
@@ -36,7 +40,7 @@ let _capture_stdout command args =
   let _, status = Unix.waitpid [] pid in
   (status, !output, "")
 
-let execute_with_timeout command args timeout :
+let execute_with_timeout command args _timeout :
     (Unix.process_status * string * string) option =
   let read_pipe, write_pipe = Unix.pipe () in
   let in_read, _in_write = Unix.pipe () in
@@ -67,7 +71,7 @@ let execute_with_timeout command args timeout :
       | WSTOPPED code ->
           Printf.fprintf out_stderr_write "exited with WSTOPPED %d" code;
           exit 255)
-  | pid -> (
+  | pid ->
       Unix.close in_read;
 
       Unix.close stdout_write;
@@ -81,7 +85,7 @@ let execute_with_timeout command args timeout :
           output := !output ^ Bytes.sub_string buffer 0 len;
           read_output ())
       in
-      read_output ();
+      (try read_output () with _ -> ());
       Unix.close stdout_read;
 
       Unix.close stderr_write;
@@ -93,26 +97,23 @@ let execute_with_timeout command args timeout :
           output2 := !output2 ^ Bytes.sub_string buffer 0 len;
           read_output2 ())
       in
-      read_output2 ();
+      (try read_output2 () with _ -> ());
       Unix.close stderr_read;
 
       (* This is the parent process *)
-      try
-        let () = ignore (Unix.alarm timeout) in
-        let _, status = Unix.waitpid [] pid in
-        match status with
-        | WEXITED _code ->
-            (*Printf.eprintf "exited with WEXITED %d" code;*)
-            Some (status, !output, !output2)
-        | WSIGNALED _code ->
-            (*Printf.eprintf "exited with WSIGNALED %d" code;*)
-            Some (status, !output, !output2)
-        | WSTOPPED _code ->
-            (*Printf.eprintf "exited with WSTOPPED %d" code;*)
-            Some (status, !output, !output2)
-      with _ ->
+      let handle_sigalrm _ =
+        Printf.printf "Caught SIGALRM signal %d\n" pid;
+        flush stdout;
         Unix.kill pid Sys.sigkill;
-        None)
+        failwith "sdfdsf"
+      in
+
+      Sys.set_signal Sys.sigalrm (Sys.Signal_handle handle_sigalrm);
+      let () = ignore (Unix.alarm 1) in
+      Printf.printf "\nFIN!\n\n";
+      None
+(*Unix.kill pid Sys.sigkill;
+  None)*)
 
 module S = Map.Make (String)
 
@@ -151,7 +152,7 @@ let compile_test test cargs =
       execs := S.add test fn !execs;
       fn
 
-let exec exc args = execute_with_timeout exc args 10000
+let exec exc args = execute_with_timeout exc args 10
 (*execute_with_timeout "xxd" 5*)
 
 let run tests =
@@ -172,6 +173,7 @@ let run tests =
             | Exit code :: tail -> exit = Unix.WEXITED code && assert_ tail
             | Stdout s :: tail -> s = stdout && assert_ tail
             | Stderr s :: tail -> s = stderr && assert_ tail
+            | Timeout _ :: tail -> false && assert_ tail
             | [] -> true
           in
           if assert_ asserts then Printf.printf " %sok!\n%s" green nc
@@ -216,6 +218,9 @@ let run tests =
                   if s <> stderr then (
                     Printf.printf "  stderr failed:\n";
                     print_diff stderr s);
+                  assert_ tail
+              | Timeout _ :: tail ->
+                  Printf.printf "  finished before timeout!\n";
                   assert_ tail
               | [] -> ()
             in
@@ -315,6 +320,7 @@ let () =
         [],
         [],
         [ Exit 0; Stdout "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n" ] );
+      ("tests/loop2.ll", [], [], [ Timeout 5 ]);
       ("tigertests/zero.tig.ll", [ "tiger.c" ], [], [ Exit 0; Stdout "" ]);
       ("tigertests/test12.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ( "tigertests/arith.tig.ll",
@@ -410,11 +416,11 @@ let () =
         [ Exit 0; Stdout ""; Stderr "" ] );
       ("tigertests/test4.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ("tigertests/test8.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/test54.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Exit 4; Stdout ""; Stderr "" ] );
       (*("tigertests/binary_tree.tig.ll", [ "tiger.c" ], [], []);
-        ( "tigertests/test54.tig.ll",
-          [ "tiger.c" ],
-          [],
-          [ Exit 4; Stdout ""; Stderr "" ] );
         ("tigertests/test37.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
         ("tigertests/test46.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
         ("tigertests/test58.tig.ll", [ "tiger.c" ], [], []);
