@@ -124,16 +124,17 @@ let run tests =
               let rec diff s1 s2 =
                 match (s1, s2) with
                 | l1 :: t1, l2 :: t2 when l1 = l2 ->
-                    Printf.printf "    %s\n" l1;
+                    Printf.printf "    %s\n" (String.escaped l1);
                     diff t1 t2
                 | l1 :: t1, l2 :: t2 ->
-                    Printf.printf "%s   +%s\n%s   -%s%s\n" green l1 red l2 nc;
+                    Printf.printf "%s   +%s\n%s   -%s%s\n" green
+                      (String.escaped l1) red (String.escaped l2) nc;
                     diff t1 t2
                 | l1 :: t1, [] ->
-                    Printf.printf "%s   +%s%s\n" green l1 nc;
+                    Printf.printf "%s   +%s%s\n" green (String.escaped l1) nc;
                     diff t1 []
                 | [], l2 :: t2 ->
-                    Printf.printf "%s   -%s%s\n" red l2 nc;
+                    Printf.printf "%s   -%s%s\n" red (String.escaped l2) nc;
                     diff [] t2
                 | [], [] -> ()
               in
@@ -161,7 +162,7 @@ let run tests =
             in
             Printf.printf " %sfailed!%s %s\n" red nc exc;
             assert_ asserts
-      | Error _ -> Printf.printf "%serror!%s\n" red nc
+      | Error _ -> Printf.printf "%sruntime error!%s\n" red nc
       | Timeout -> Printf.printf "%stimeout!%s\n" red nc
     with CompileError -> Printf.printf "%scompile error!%s\n" red nc
   in
