@@ -444,4 +444,4 @@ let () =
     ]
   in
   let passes = run tests in
-  Printf.printf "[%d/%d]" passes (List.length tests)
+  Printf.printf "passed [%d/%d]\n" passes (List.length tests)
