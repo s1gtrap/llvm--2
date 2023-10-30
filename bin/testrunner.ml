@@ -417,14 +417,14 @@ let () =
         [],
         [ Stdout ""; Stderr "" ] );
       ("tigertests/test68.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      (*("tigertests/test76.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
+      ("tigertests/test76.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       (*( "tigertests/brainfuck.tig.ll",
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "" ] );*)
       ("tigertests/test64.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ("tigertests/test52.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      (*("tigertests/lisp.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
+      ("tigertests/lisp.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ( "tigertests/color.tig.ll",
         [ "tiger.c" ],
         [],
