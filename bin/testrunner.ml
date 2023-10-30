@@ -11,23 +11,27 @@ module S = Map.Make (String)
 
 let execs = ref S.empty
 
+let string_of_process_status (s : Unix.process_status) =
+  match s with
+  | WEXITED code -> Printf.sprintf "WEXITED %d" code
+  | WSIGNALED code -> Printf.sprintf "WSIGNALED %d" code
+  | WSTOPPED code -> Printf.sprintf "WSTOPPED %d" code
+
 let _string_of_status (s : status) =
   match s with
   | Exit (code, stdout, stderr) ->
       Printf.sprintf "Exit (%d, \"%s\", \"%s\")" code (String.escaped stdout)
         (String.escaped stderr)
-  | Error (WEXITED _, _, _) -> failwith "unreachable"
-  | Error (WSIGNALED code, stdout, stderr) ->
-      Printf.sprintf "Error (WSIGNALED %d, \"%s\", \"%s\")" code
-        (String.escaped stdout) (String.escaped stderr)
-  | Error (WSTOPPED code, stdout, stderr) ->
-      Printf.sprintf "Error (WSTOPPED %d, \"%s\", \"%s\")" code
+  | Error (code, stdout, stderr) ->
+      Printf.sprintf "Error (%s, \"%s\", \"%s\")"
+        (string_of_process_status code)
         (String.escaped stdout) (String.escaped stderr)
   | Timeout -> "Timeout"
 
-let execute command _args (input : string) : status =
+let execute command args (input : string) : status =
   let stdin_read, stdin_write = Unix.pipe () in
   let stdout_read, stdout_write = Unix.pipe () in
+  let stderr_read, stderr_write = Unix.pipe () in
 
   flush stdout;
   let oc = Unix.out_channel_of_descr stdin_write in
@@ -35,32 +39,42 @@ let execute command _args (input : string) : status =
   close_out oc;
   let pid =
     Unix.create_process_env "timeout"
-      [| "timeout"; "5"; command |]
-      (Unix.environment ()) stdin_read stdout_write Unix.stderr
+      (Array.concat [ [| "timeout"; "5" |]; [| command |]; args ])
+      (Unix.environment ()) stdin_read stdout_write stderr_write
   in
   let status = Unix.waitpid [] pid in
 
   Unix.close stdout_write;
-  let output = ref "" in
+  let stdout = ref "" in
   let buffer = Bytes.create 1024 in
   let rec read_output () =
-    flush stdout;
     let len = Unix.read stdout_read buffer 0 1024 in
-    flush stdout;
     if len > 0 then (
-      output := !output ^ Bytes.sub_string buffer 0 len;
+      stdout := !stdout ^ Bytes.sub_string buffer 0 len;
       read_output ())
   in
   (try read_output () with _ -> ());
   Unix.close stdout_read;
 
+  Unix.close stderr_write;
+  let stderr = ref "" in
+  let buffer = Bytes.create 1024 in
+  let rec read_output () =
+    let len = Unix.read stderr_read buffer 0 1024 in
+    if len > 0 then (
+      stderr := !stderr ^ Bytes.sub_string buffer 0 len;
+      read_output ())
+  in
+  (try read_output () with _ -> ());
+  Unix.close stderr_read;
+
   match status with
   | _, WEXITED 124 ->
       (* timeout *)
       Timeout
-  | _, WEXITED code -> Exit (code, !output, "")
-  | _, WSIGNALED code -> Error (WSIGNALED code, !output, "")
-  | _, WSTOPPED code -> Error (WSTOPPED code, !output, "")
+  | _, WEXITED code -> Exit (code, !stdout, !stderr)
+  | _, WSIGNALED code -> Error (WSIGNALED code, !stdout, !stderr)
+  | _, WSTOPPED code -> Error (WSTOPPED code, !stdout, !stderr)
 
 let compile_test test cargs =
   match S.find_opt test !execs with
@@ -96,6 +110,7 @@ let compile_test test cargs =
       fn
 
 let run tests =
+  let passes = ref 0 in
   let r (file, cargs, args, asserts) =
     let cargs = Array.of_list cargs in
     let args = Array.of_list args in
@@ -116,7 +131,9 @@ let run tests =
             | Timeout :: tail -> false && assert_ tail
             | [] -> true
           in
-          if assert_ asserts then Printf.printf " %sok!\n%s" green nc
+          if assert_ asserts then (
+            passes := !passes + 1;
+            Printf.printf " %sok!\n%s" green nc)
           else
             let print_diff s1 s2 =
               let s1 = String.split_on_char '\n' s1 in
@@ -162,14 +179,22 @@ let run tests =
             in
             Printf.printf " %sfailed!%s %s\n" red nc exc;
             assert_ asserts
-      | Error _ -> Printf.printf "%sruntime error!%s\n" red nc
-      | Timeout -> Printf.printf "%stimeout!%s\n" red nc
+      | Error (s, _, "") ->
+          Printf.printf "%sruntime error!%s %s\n  exit code: %s\n" red nc exc
+            (string_of_process_status s)
+      | Error (s, _, stderr) ->
+          Printf.printf "%sruntime error!%s %s\n  exit code: %s\n  stdout: %s\n"
+            red nc exc
+            (string_of_process_status s)
+            stderr
+      | Timeout -> Printf.printf "%stimeout!%s %s\n" red nc exc
     with CompileError -> Printf.printf "%scompile error!%s\n" red nc
   in
-  List.iter r tests
+  List.iter r tests;
+  !passes
 
 let () =
-  run
+  let tests =
     [
       ("tests/void.ll", [], [], [ Stdout "" ]);
       ("tests/zero.ll", [], [], [ Exit 0; Stdout "" ]);
@@ -400,7 +425,10 @@ let () =
       ("tigertests/test64.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ("tigertests/test52.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       (*("tigertests/lisp.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
-      ("tigertests/color.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/color.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "[44mHello[0m\nBye\n[34mHello[0m"; Stderr "" ] );
       ("tigertests/test2.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ("tigertests/div213.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ( "tigertests/simplevar.tig.ll",
@@ -414,3 +442,6 @@ let () =
         [ Exit 24; Stdout ""; Stderr "" ] );
       ("tigertests/test42.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
     ]
+  in
+  let passes = run tests in
+  Printf.printf "[%d/%d]" passes (List.length tests)
