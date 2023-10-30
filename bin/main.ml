@@ -1,6 +1,9 @@
 open Llvm__2
 
+let open_ = function "-" -> Stdlib.stdin | f -> open_in f
+
 let cfgcfg parser input =
+  let input = open_ input in
   let cfg = Parse.from_channel parser input in
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
@@ -15,6 +18,7 @@ let cfgcfg parser input =
   ()
 
 let cfglva parser input =
+  let input = open_ input in
   let cfg = Parse.from_channel parser input in
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
@@ -23,6 +27,7 @@ let cfglva parser input =
   ()
 
 let cfgitf parser input =
+  let input = open_ input in
   let cfg = Parse.from_channel parser input in
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
@@ -32,6 +37,7 @@ let cfgitf parser input =
   ()
 
 let cfgx86 parser input =
+  let input = open_ input in
   let cfg = Parse.from_channel parser input in
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
@@ -41,6 +47,7 @@ let cfgx86 parser input =
   ()
 
 let fdeclcfg input =
+  let input = open_ input in
   let _name, fdecl = Parse.from_channel Llparser.fdecleof input in
   let ids, g = Cfg.graph fdecl.cfg in
   let insns = Cfg.flatten fdecl.cfg in
@@ -55,6 +62,7 @@ let fdeclcfg input =
   ()
 
 let fdecllva input =
+  let input = open_ input in
   let _name, fdecl = Parse.from_channel Llparser.fdecleof input in
   let ids, g = Cfg.graph fdecl.cfg in
   let insns = Cfg.flatten fdecl.cfg in
@@ -63,6 +71,7 @@ let fdecllva input =
   ()
 
 let fdeclitf input =
+  let input = open_ input in
   let _name, fdecl = Parse.from_channel Llparser.fdecleof input in
   let ids, g = Cfg.graph fdecl.cfg in
   let insns = Cfg.flatten fdecl.cfg in
@@ -72,6 +81,7 @@ let fdeclitf input =
   ()
 
 let fdeclx86 input =
+  let input = open_ input in
   let name, fdecl = Parse.from_channel Llparser.fdecleof input in
   let ids, g = Cfg.graph fdecl.cfg in
   let insns = Cfg.flatten fdecl.cfg in
@@ -85,6 +95,7 @@ let fdeclx86 input =
   ()
 
 let progcfg input =
+  let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
     Printf.printf "%s:\n" (Symbol.name name);
@@ -103,6 +114,7 @@ let progcfg input =
   List.iter fdecl prog.fdecls
 
 let proglva input =
+  let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
     Printf.printf "%s:\n" (Symbol.name name);
@@ -115,6 +127,7 @@ let proglva input =
   List.iter fdecl prog.fdecls
 
 let progitf input =
+  let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
     Printf.printf "%s:\n" (Symbol.name name);
@@ -128,6 +141,7 @@ let progitf input =
   List.iter fdecl prog.fdecls
 
 let progasn input =
+  let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
     Printf.printf "%s:\n" (Symbol.name name);
@@ -144,11 +158,13 @@ let progasn input =
   List.iter fdecl prog.fdecls
 
 let progx86 input =
+  let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let prog = Regalloc.compile_prog prog in
   Printf.printf "%s\n" (Regalloc.string_of_prog prog)
 
 let progexe output cargs input =
+  let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let prog = Regalloc.compile_prog prog in
   let prog = Regalloc.string_of_prog prog in
@@ -206,8 +222,7 @@ let () =
             Printf.eprintf "invalid operation: %s\n" !oper;
             exit 1
       in
-      List.map (function "-" -> Stdlib.stdin | f -> open_in f) !input_files
-      |> List.iter (oper Llparser.cfgeof)
+      List.iter (oper Llparser.cfgeof) !input_files
   | "fdecl" ->
       let oper =
         match !oper with
@@ -219,8 +234,7 @@ let () =
             Printf.eprintf "invalid operation: %s\n" !oper;
             exit 1
       in
-      List.map (function "-" -> Stdlib.stdin | f -> open_in f) !input_files
-      |> List.iter oper
+      List.iter oper !input_files
   | _ ->
       let oper =
         match !oper with
@@ -229,7 +243,13 @@ let () =
         | "itf" -> progitf
         | "asn" -> progasn
         | "x86" -> progx86
-        | _ -> progexe !out [| !clang |]
+        | _ ->
+            fun input ->
+              let out =
+                match !out with
+                | "" -> Filename.basename (Filename.remove_extension input)
+                | out -> out
+              in
+              progexe out [| !clang |] input
       in
-      List.map (function "-" -> Stdlib.stdin | f -> open_in f) !input_files
-      |> List.iter oper
+      List.iter oper !input_files
