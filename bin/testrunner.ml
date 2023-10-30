@@ -224,45 +224,7 @@ let run tests =
       | None -> Printf.printf "%stimeout!%s\n" red nc
     with CompileError -> Printf.printf "%scompile error!%s\n" red nc
   in
-  (*let r (file, _args, _asserts) =
-      let s =
-        let ic = open_in file in
-        try
-          let s = really_input_string ic (in_channel_length ic) in
-          close_in ic;
-          s
-        with e -> raise e
-      in
-      Printf.printf "%s\n" s
-    in*)
   List.iter r tests
-
-(*let () =
-  let fn : string = compile_test "tests/helloworld0.ll" in
-  Printf.printf "%s\n" fn;
-  Printf.printf "ok!\n"*)
-
-(* Handle the process status as needed *)
-
-(*let create_process_with_input command args input_string =
-  let stdin_pipe_out, stdin_pipe_in = pipe () in
-  let pid = create_process command args stdin_pipe_in stdout stderr in
-
-  (* Replace the child process's stdin with the write-end of the pipe *)
-  dup2 stdin_pipe_out stdin;
-
-  (* Close the write-end of the pipe in the parent process *)
-  close stdin_pipe_out;
-
-  (* Write the input string to the child process's stdin *)
-  let output_channel = out_channel_of_descr stdin in
-  output_string output_channel input_string;
-  close_out output_channel;
-
-  (* Wait for the child process to complete *)
-  let _, status = waitpid [] pid in
-
-  status*)
 
 let () =
   run
@@ -416,44 +378,44 @@ let () =
         [ "tiger.c" ],
         [],
         [ Exit 0; Stdout ""; Stderr "" ] );
-      (*( "tigertests/test69.tig.ll",
+      ( "tigertests/test69.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 48; Stdout ""; Stderr "" ] );*)
-      (*("tigertests/test65.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
-      (*( "tigertests/goodarith.tig.ll",
+        [ Exit 48; Stdout ""; Stderr "" ] );
+      ("tigertests/test65.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/goodarith.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 5; Stdout ""; Stderr "" ] );*)
-      (*( "tigertests/lots_of_locals.tig.ll",
+        [ Exit 5; Stdout ""; Stderr "" ] );
+      ( "tigertests/lots_of_locals.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout ""; Stderr "" ] );*)
-      (*("tigertests/dynarray.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
-      (*("tigertests/test51.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
-      (*( "tigertests/test67.tig.ll",
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/dynarray.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/test51.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/test67.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 1; Stdout ""; Stderr "" ] );*)
-      (*("tigertests/test75.tig.ll", [ "tiger.c" ], [], []);*)
-      (*("tigertests/test1.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
-      (*("tigertests/divorder.tig.ll", [ "tiger.c" ], [], []);*)
-      (*( "tigertests/lexer_ascii_alt.tig.ll",
+        [ Exit 1; Stdout ""; Stderr "" ] );
+      ("tigertests/test75.tig.ll", [ "tiger.c" ], [], []);
+      ("tigertests/test1.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/divorder.tig.ll", [ "tiger.c" ], [], []);
+      ( "tigertests/lexer_ascii_alt.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout ""; Stderr "" ] );*)
-      (*( "tigertests/zero.tig.ll",
+        [ Stdout ""; Stderr "" ] );
+      ( "tigertests/zero.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Exit 0; Stdout ""; Stderr "" ] );*)
-      (*("tigertests/test4.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
-      (*("tigertests/test8.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);*)
-      (*("tigertests/binary_tree.tig.ll", [ "tiger.c" ], [], []);*)
-      (*( "tigertests/test54.tig.ll",
-        [ "tiger.c" ],
-        [],
-        [ Exit 4; Stdout ""; Stderr "" ] );*)
-      (*("tigertests/test37.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ("tigertests/test4.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/test8.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      (*("tigertests/binary_tree.tig.ll", [ "tiger.c" ], [], []);
+        ( "tigertests/test54.tig.ll",
+          [ "tiger.c" ],
+          [],
+          [ Exit 4; Stdout ""; Stderr "" ] );
+        ("tigertests/test37.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
         ("tigertests/test46.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
         ("tigertests/test58.tig.ll", [ "tiger.c" ], [], []);
         ("tigertests/test62.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
