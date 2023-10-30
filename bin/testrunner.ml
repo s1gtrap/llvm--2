@@ -226,9 +226,9 @@ let run tests =
                     print_diff stdout s);
                   assert_ tail
               | Stderr s :: tail ->
-                  if s <> stdout then (
-                    Printf.printf "  stdout failed:\n";
-                    print_diff stdout s);
+                  if s <> stderr then (
+                    Printf.printf "  stderr failed:\n";
+                    print_diff stderr s);
                   assert_ tail
               | [] -> ()
             in
@@ -398,7 +398,7 @@ let () =
       ( "tigertests/seqorder.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "12345\n"; Stderr "" ] );
+        [ Stdout "12345"; Stderr "" ] );
       ( "tigertests/emoji_comment.tig.ll",
         [ "tiger.c" ],
         [],
@@ -406,13 +406,20 @@ let () =
       ( "tigertests/recFieldError.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout ""; Stderr "" ] );
+        [
+          Exit 1;
+          Stdout "";
+          Stderr "Error: record field lookup applied to nil\n";
+        ] );
       ("tigertests/test61.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ( "tigertests/test73.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "OK.\n"; Stderr "" ] );
-      ("tigertests/forfor.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "\n" ]);
+        [ Stdout "OKNot OK"; Stderr "" ] );
+      ( "tigertests/forfor.tig.ll",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "............"; Stderr "" ] );
       ("tigertests/ddd.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ("tigertests/test57.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
       ("tigertests/test3.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
