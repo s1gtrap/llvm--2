@@ -17,12 +17,13 @@ let string_of_status = function
   | Timeout -> "Timeout"
 
 let execute command : status =
+  let stdout_read, stdout_write = Unix.pipe () in
   match Unix.fork () with
   | 0 -> (
       let _ = Unix.alarm 2 in
       let pid =
         Unix.create_process_env command [| command |] (Unix.environment ())
-          Unix.stdin Unix.stdout Unix.stderr
+          Unix.stdin stdout_write Unix.stderr
       in
       match Unix.waitpid [] pid with
       | _, WEXITED code -> exit code
@@ -33,8 +34,24 @@ let execute command : status =
           Printf.eprintf "WSTOPPED %d\n" code;
           exit 0xffffffff)
   | pid ->
+      let read read write =
+        Unix.close write;
+        let output = ref "" in
+        let buffer = Bytes.create 1024 in
+        let rec r (_ : unit) =
+          let len = Unix.read stdout_read buffer 0 1024 in
+          if len > 0 then (
+            output := !output ^ Bytes.sub_string buffer 0 len;
+            r ())
+        in
+        r ();
+        Unix.close read;
+        !output
+      in
+      let stdout = try read stdout_read stdout_write with _ -> "" in
+
       let _ = Unix.waitpid [] pid in
-      Exit (0, command, "")
+      Exit (0, stdout, "")
 
 let () =
   let _ = Printf.sprintf "%s\n" (string_of_status Timeout) in
