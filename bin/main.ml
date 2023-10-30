@@ -148,10 +148,29 @@ let progx86 input =
   let prog = Regalloc.compile_prog prog in
   Printf.printf "%s\n" (Regalloc.string_of_prog prog)
 
-let progexe _output input =
+let progexe output cargs input =
   let prog = Parse.from_channel Llparser.prog input in
   let prog = Regalloc.compile_prog prog in
-  Printf.printf "%s\n" (Regalloc.string_of_prog prog)
+  let prog = Regalloc.string_of_prog prog in
+  let _ =
+    (match Llvm__2.Regalloc.os with
+    | Darwin ->
+        Build.create_process_with_input "arch"
+          (Array.concat
+             [
+               [| "arch"; "-x86_64"; "clang" |];
+               cargs;
+               [| "-x"; "assembler"; "-"; "-o"; output |];
+             ])
+    | Linux ->
+        Build.create_process_with_input "clang"
+          (Array.concat
+             [
+               [| "clang" |]; cargs; [| "-x"; "assembler"; "-"; "-o"; output |];
+             ]))
+      prog output
+  in
+  ()
 
 let () =
   let usage_msg = "llvm__2 [-v] -p <parser> <file1> [<file2>] ..." in
@@ -160,6 +179,7 @@ let () =
   let parser = ref "" in
   let oper = ref "" in
   let out = ref "" in
+  let clang = ref "" in
   let anon_fun filename = input_files := filename :: !input_files in
 
   let speclist =
@@ -168,6 +188,7 @@ let () =
       ("-p", Arg.Set_string parser, "Set input parser type");
       ("-t", Arg.Set_string oper, "Set operation to apply");
       ("-o", Arg.Set_string out, "Set output file");
+      ("-c", Arg.Set_string clang, "Set clang parameters");
     ]
   in
 
@@ -200,7 +221,7 @@ let () =
       in
       List.map (function "-" -> Stdlib.stdin | f -> open_in f) !input_files
       |> List.iter oper
-  | "prog" ->
+  | _ ->
       let oper =
         match !oper with
         | "cfg" -> progcfg
@@ -208,13 +229,7 @@ let () =
         | "itf" -> progitf
         | "asn" -> progasn
         | "x86" -> progx86
-        | "exe" -> progexe out
-        | _ ->
-            Printf.eprintf "invalid operation: %s\n" !oper;
-            exit 1
+        | _ -> progexe !out [| !clang |]
       in
       List.map (function "-" -> Stdlib.stdin | f -> open_in f) !input_files
       |> List.iter oper
-  | _ ->
-      Printf.eprintf "invalid parser type: %s\n" !parser;
-      exit 1

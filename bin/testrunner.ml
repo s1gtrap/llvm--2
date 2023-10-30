@@ -2,19 +2,6 @@ type asserts = Exit of int | Stdout of string | Stderr of string
 
 exception CompileError
 
-let create_process_with_input command args input_string _f =
-  let ic, oc = Unix.pipe () in
-  let oc = Unix.out_channel_of_descr oc in
-  output_string oc input_string;
-  close_out oc;
-  let input = ic in
-  let pid =
-    Unix.create_process_env command args (Unix.environment ()) input Unix.stdout
-      Unix.stderr
-  in
-  let _ = Unix.waitpid [] pid in
-  ()
-
 let _capture_stdout command args =
   flush stdout;
   let in_read, _in_write = Unix.pipe () in
@@ -146,7 +133,7 @@ let compile_test test cargs =
       let _ =
         (match Llvm__2.Regalloc.os with
         | Darwin ->
-            create_process_with_input "arch"
+            Llvm__2.Build.create_process_with_input "arch"
               (Array.concat
                  [
                    [| "arch"; "-x86_64"; "clang" |];
@@ -154,7 +141,7 @@ let compile_test test cargs =
                    [| "-x"; "assembler"; "-"; "-o"; fn |];
                  ])
         | Linux ->
-            create_process_with_input "clang"
+            Llvm__2.Build.create_process_with_input "clang"
               (Array.concat
                  [
                    [| "clang" |]; cargs; [| "-x"; "assembler"; "-"; "-o"; fn |];
