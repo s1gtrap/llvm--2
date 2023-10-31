@@ -390,7 +390,7 @@ let compile_call :
     in
     List.concat (List.mapi storereg regs @ List.map push (List.rev stack))
   in
-  let crsaved = [ Rax; Rcx; Rdx; Rsi; Rdi; R08; R09; R10; R11 ] in
+  let crsaved = [ Rcx; Rdx; Rsi; Rdi; R08; R09; R10; R11 ] in
   let callins =
     match oper with
     | Gid id -> (Callq, [ Imm (Lbl (mangle id)) ])
