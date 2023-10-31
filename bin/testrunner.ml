@@ -33,7 +33,6 @@ let execute command args (input : string) : status =
   let stdout_read, stdout_write = Unix.pipe () in
   let stderr_read, stderr_write = Unix.pipe () in
 
-  flush stdout;
   let oc = Unix.out_channel_of_descr stdin_write in
   output_string oc input;
   close_out oc;
@@ -42,6 +41,8 @@ let execute command args (input : string) : status =
       (Array.concat [ [| "timeout"; "5" |]; [| command |]; args ])
       (Unix.environment ()) stdin_read stdout_write stderr_write
   in
+  Unix.close stdin_read;
+
   let status = Unix.waitpid [] pid in
 
   Unix.close stdout_write;
@@ -291,8 +292,8 @@ let () =
         [],
         [ Exit 0; Stdout "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n" ] );
       ("tests/loop2.ll", [], [], [ Timeout ]);
-      ("tests/collatz-phi.ll", [], [], [ Exit 1; Stdout "invalid arguments\n" ]);
       ("tests/alloca.ll", [], [], [ Exit 42; Stdout ""; Stderr "" ]);
+      ("tests/collatz-phi.ll", [], [], [ Exit 1; Stdout "invalid arguments\n" ]);
       ("tests/collatz-phi.ll", [], [ "1" ], [ Exit 0; Stdout "1\n" ]);
       ("tests/collatz-phi.ll", [], [ "2" ], [ Exit 0; Stdout "2\n1\n" ]);
       ( "tests/collatz-phi.ll",
@@ -300,6 +301,135 @@ let () =
         [ "3" ],
         [ Exit 0; Stdout "3\n10\n5\n16\n8\n4\n2\n1\n" ] );
       ( "tests/collatz-phi.ll",
+        [],
+        [ "1312" ],
+        [
+          Exit 0;
+          Stdout
+            "1312\n\
+             656\n\
+             328\n\
+             164\n\
+             82\n\
+             41\n\
+             124\n\
+             62\n\
+             31\n\
+             94\n\
+             47\n\
+             142\n\
+             71\n\
+             214\n\
+             107\n\
+             322\n\
+             161\n\
+             484\n\
+             242\n\
+             121\n\
+             364\n\
+             182\n\
+             91\n\
+             274\n\
+             137\n\
+             412\n\
+             206\n\
+             103\n\
+             310\n\
+             155\n\
+             466\n\
+             233\n\
+             700\n\
+             350\n\
+             175\n\
+             526\n\
+             263\n\
+             790\n\
+             395\n\
+             1186\n\
+             593\n\
+             1780\n\
+             890\n\
+             445\n\
+             1336\n\
+             668\n\
+             334\n\
+             167\n\
+             502\n\
+             251\n\
+             754\n\
+             377\n\
+             1132\n\
+             566\n\
+             283\n\
+             850\n\
+             425\n\
+             1276\n\
+             638\n\
+             319\n\
+             958\n\
+             479\n\
+             1438\n\
+             719\n\
+             2158\n\
+             1079\n\
+             3238\n\
+             1619\n\
+             4858\n\
+             2429\n\
+             7288\n\
+             3644\n\
+             1822\n\
+             911\n\
+             2734\n\
+             1367\n\
+             4102\n\
+             2051\n\
+             6154\n\
+             3077\n\
+             9232\n\
+             4616\n\
+             2308\n\
+             1154\n\
+             577\n\
+             1732\n\
+             866\n\
+             433\n\
+             1300\n\
+             650\n\
+             325\n\
+             976\n\
+             488\n\
+             244\n\
+             122\n\
+             61\n\
+             184\n\
+             92\n\
+             46\n\
+             23\n\
+             70\n\
+             35\n\
+             106\n\
+             53\n\
+             160\n\
+             80\n\
+             40\n\
+             20\n\
+             10\n\
+             5\n\
+             16\n\
+             8\n\
+             4\n\
+             2\n\
+             1\n";
+        ] );
+      ("tests/collatz-mut.ll", [], [], [ Exit 1; Stdout "invalid arguments\n" ]);
+      ("tests/collatz-mut.ll", [], [ "1" ], [ Exit 0; Stdout "1\n" ]);
+      ("tests/collatz-mut.ll", [], [ "2" ], [ Exit 0; Stdout "2\n1\n" ]);
+      ( "tests/collatz-mut.ll",
+        [],
+        [ "3" ],
+        [ Exit 0; Stdout "3\n10\n5\n16\n8\n4\n2\n1\n" ] );
+      ( "tests/collatz-mut.ll",
         [],
         [ "1312" ],
         [
@@ -578,7 +708,7 @@ let () =
         [ "tiger.c" ],
         [],
         [ Exit 24; Stdout ""; Stderr "" ] );
-      (*("tigertests/test42.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);)*)
+      ("tigertests/test42.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
     ]
   in
   let passes = run tests in
