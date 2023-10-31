@@ -402,9 +402,8 @@ let compile_call :
     | len -> Int64.of_int ((len - 6) * 8)
   in
   let freeins = (Addq, [ Imm (Lit freen); Reg Rsp ]) in
-  arginsns
-  @ List.map (fun r -> (Pushq, [ Reg r ])) crsaved
-  @ [ callins; freeins ]
+  List.map (fun r -> (Pushq, [ Reg r ])) crsaved
+  @ arginsns @ [ callins; freeins ]
   @ List.map (fun r -> (Popq, [ Reg r ])) (List.rev crsaved)
 
 let rec size_ty : (Ll.uid * Ll.ty) list -> Ll.ty -> int =
