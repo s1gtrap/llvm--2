@@ -114,7 +114,7 @@ let dot g =
   Dot_.fprint_graph Format.str_formatter g;
   Format.flush_str_formatter ()
 
-let interf (_param : Ll.uid list) (insns : Cfg.insn list) (in_ : S.SS.t array)
+let interf (param : Ll.uid list) (insns : Cfg.insn list) (in_ : S.SS.t array)
     (out : S.SS.t array) : G.V.t S.table * G.t =
   let g = G.create () in
   let verts : G.vertex S.table ref = ref S.empty in
@@ -132,6 +132,16 @@ let interf (_param : Ll.uid list) (insns : Cfg.insn list) (in_ : S.SS.t array)
       let _ = vert i in
       ())
     in_.(0);
+  List.iter
+    (fun p1 ->
+      List.iter
+        (fun p2 ->
+          if p1 <> p2 then
+            let v1 : G.V.t = vert p1 in
+            let v2 : G.V.t = vert p2 in
+            if v1 <> v2 then G.add_edge g v1 v2)
+        param)
+    param;
   List.iteri
     (fun i n ->
       let d = def n in
