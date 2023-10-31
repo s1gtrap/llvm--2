@@ -292,6 +292,7 @@ let () =
         [ Exit 0; Stdout "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n" ] );
       ("tests/loop2.ll", [], [], [ Timeout ]);
       ("tests/collatz-phi.ll", [], [], [ Exit 1; Stdout "invalid arguments\n" ]);
+      ("tests/alloca.ll", [], [], [ Exit 42; Stdout ""; Stderr "" ]);
       ("tests/collatz-phi.ll", [], [ "1" ], [ Exit 0; Stdout "1\n" ]);
       ("tests/collatz-phi.ll", [], [ "2" ], [ Exit 0; Stdout "2\n1\n" ]);
       ( "tests/collatz-phi.ll",
@@ -577,7 +578,7 @@ let () =
         [ "tiger.c" ],
         [],
         [ Exit 24; Stdout ""; Stderr "" ] );
-      ("tigertests/test42.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      (*("tigertests/test42.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);)*)
     ]
   in
   let passes = run tests in

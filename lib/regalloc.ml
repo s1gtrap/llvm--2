@@ -369,32 +369,28 @@ let compile_call :
     ins list =
  fun ctxt asn oper args ->
   let args = List.map snd args in
-  let push oper =
-    let operins = compile_operand ctxt asn (Reg Rax) oper in
-    [ operins; (Pushq, [ Reg Rax ]) ]
-  in
-  let storereg idx oper =
-    let insn = compile_operand ctxt asn (Reg Rax) oper in
-    let reg = arg_loc idx in
-    [ insn; (Movq, [ Reg Rax; reg ]) ]
-  in
-  let arginsns =
-    let regs, stack =
-      let rec separate args acc idx =
-        match args with
-        | args when idx == 6 -> (List.rev acc, args)
-        | arg :: args -> separate args (arg :: acc) (idx + 1)
-        | [] -> (List.rev acc, [])
-      in
-      separate args [] 0
-    in
-    List.concat (List.mapi storereg regs @ List.map push (List.rev stack))
-  in
   let crsaved = [ Rcx; Rdx; Rsi; Rdi; R08; R09; R10; R11 ] in
   let callins =
     match oper with
     | Gid id -> (Callq, [ Imm (Lbl (mangle id)) ])
     | _ -> raise BackendFatal
+  in
+  let pusharg _i dst : ins list =
+    let ins = compile_operand ctxt asn (Reg Rax) dst in
+    [ ins ] @ [ (Pushq, [ Reg Rax ]) ]
+  in
+  let poparg i _ =
+    ( Popq,
+      [
+        (match i with
+        | 0 -> Reg Rdi
+        | 1 -> Reg Rsi
+        | 2 -> Reg Rdx
+        | 3 -> Reg Rcx
+        | 4 -> Reg R08
+        | 5 -> Reg R09
+        | i -> Ind3 (Lit (Int64.of_int ((3 * 8) + ((i - 6) * 8))), Rbp));
+      ] )
   in
   let freen =
     match List.length args with
@@ -403,7 +399,9 @@ let compile_call :
   in
   let freeins = (Addq, [ Imm (Lit freen); Reg Rsp ]) in
   List.map (fun r -> (Pushq, [ Reg r ])) crsaved
-  @ arginsns @ [ callins; freeins ]
+  @ List.flatten (List.mapi pusharg args)
+  @ List.rev (List.mapi poparg args)
+  @ [ callins; freeins ]
   @ List.map (fun r -> (Popq, [ Reg r ])) (List.rev crsaved)
 
 let rec size_ty : (Ll.uid * Ll.ty) list -> Ll.ty -> int =
