@@ -456,7 +456,7 @@ let compile_gep :
         gep tail ty ([ parins; offsins; childins ] :: insns)
     | _, head :: tail ->
         let parins = compile_operand ctxt asn (Reg Rax) head in
-        let offsins = (Imulq, [ Imm (Lit 8L); Reg Rax; Reg Rax ]) in
+        let offsins = (Imulq, [ Imm (Lit 8L); Reg Rax ]) in
         let childins = (Addq, [ Reg Rax; Reg Rcx ]) in
         gep tail ty ([ parins; offsins; childins ] :: insns)
     | _, [] -> List.rev insns
