@@ -689,25 +689,25 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
   let in_, out = Lva.dataflow insns ids g in
   let lbl, itf = Lva.interf param insns in_ out in
   let asn = alloc lbl itf in
-  let movarg i dst =
-    match S.ST.find_opt dst asn with
-    | Some dst ->
-        Some
-          ( Movq,
-            [
-              (match i with
-              | 0 -> Reg Rdi
-              | 1 -> Reg Rsi
-              | 2 -> Reg Rdx
-              | 3 -> Reg Rcx
-              | 4 -> Reg R08
-              | 5 -> Reg R09
-              | _i -> Ind3 (Lit 0L, Rbp));
-              dst;
-            ] )
-    | None -> None
+  let pusharg i _ =
+    ( Pushq,
+      [
+        (match i with
+        | 0 -> Reg Rdi
+        | 1 -> Reg Rsi
+        | 2 -> Reg Rdx
+        | 3 -> Reg Rcx
+        | 4 -> Reg R08
+        | 5 -> Reg R09
+        | i -> Ind3 (Lit (Int64.of_int ((3 * 8) + ((i - 6) * 8))), Rbp));
+      ] )
   in
-  let pro = pro @ (List.mapi movarg param |> List.filter_map (fun a -> a)) in
+  let poparg _i dst =
+    match S.ST.find_opt dst asn with
+    | Some dst -> (Popq, [ dst ])
+    | None -> failwith ""
+  in
+  let pro = pro @ List.mapi pusharg param @ List.mapi poparg (List.rev param) in
   let _var i =
     match i + 2 with
     | 0 -> Reg Rax
