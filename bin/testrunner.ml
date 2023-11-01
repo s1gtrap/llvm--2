@@ -112,7 +112,7 @@ let compile_test test cargs =
 
 let run tests =
   let passes = ref 0 in
-  let r (file, cargs, args, asserts) =
+  let r (file, stdin, cargs, args, asserts) =
     let cargs = Array.of_list cargs in
     let args = Array.of_list args in
     let red = "\027[0;31m" in
@@ -123,7 +123,7 @@ let run tests =
     flush stdout;
     try
       let exc = compile_test file cargs in
-      match execute exc args "" with
+      match execute exc args stdin with
       | Exit (exit, stdout, stderr) ->
           let rec assert_ = function
             | Exit code :: tail -> exit = code && assert_ tail
@@ -206,13 +206,199 @@ let run tests =
 let () =
   let tests =
     [
-      ("tests/void.ll", [], [], [ Stdout "" ]);
-      ("tests/zero.ll", [], [], [ Exit 0; Stdout "" ]);
-      ("tests/one.ll", [], [], [ Exit 1; Stdout "" ]);
-      ("tests/simplest.ll", [], [], [ Exit 42; Stdout "" ]);
-      ("tests/helloworld0.ll", [], [], [ Stdout "Hello world!\n" ]);
-      ("tests/helloworld1.ll", [], [], [ Exit 0; Stdout "Hello world!\n" ]);
+      ( "dolphintests/_prog_01.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "5\n"; Stderr "" ] );
+      ( "dolphintests/_prog_02.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "6\n"; Stderr "" ] );
+      ( "dolphintests/_prog_03.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "11\n"; Stderr "" ] );
+      ( "dolphintests/_prog_04.ll",
+        "0",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: 1\n"; Stderr "" ] );
+      ( "dolphintests/_prog_04.ll",
+        "1",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: 2\n"; Stderr "" ] );
+      ( "dolphintests/_prog_04.ll",
+        "42",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: 43\n"; Stderr "" ] );
+      ( "dolphintests/_prog_05.ll",
+        "69",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: 70\n"; Stderr "" ] );
+      ( "dolphintests/_prog_05.ll",
+        "100",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: 101\n"; Stderr "" ] );
+      ( "dolphintests/_prog_05.ll",
+        "101",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: "; Stderr "" ] );
+      ( "dolphintests/_prog_06.ll",
+        "100",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: 101\n"; Stderr "" ] );
+      ( "dolphintests/_prog_06.ll",
+        "1337",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: -1\n"; Stderr "" ] );
+      ( "dolphintests/_prog_09.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_15.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_16.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_17.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_18.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_19.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_20.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_22.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_23.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_24.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_25.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_26.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_27.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_28.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_20.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_22.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_23.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_24.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_25.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_26.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_27.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_28.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_31.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_32.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_33.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "10\n"; Stderr "" ] );
+      ( "dolphintests/_prog_36.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ("tests/void.ll", "", [], [], [ Stdout "" ]);
+      ("tests/zero.ll", "", [], [], [ Exit 0; Stdout "" ]);
+      ("tests/one.ll", "", [], [], [ Exit 1; Stdout "" ]);
+      ("tests/simplest.ll", "", [], [], [ Exit 42; Stdout "" ]);
+      ("tests/helloworld0.ll", "", [], [], [ Stdout "Hello world!\n" ]);
+      ("tests/helloworld1.ll", "", [], [], [ Exit 0; Stdout "Hello world!\n" ]);
       ( "tests/lorem.ll",
+        "",
         [],
         [],
         [
@@ -282,39 +468,47 @@ let () =
              facilisis faucibus. Sed sed massa ante. Duis eu eleifend neque. \
              Mauris eleifend enim lorem, eu laoreet lectus dignissim at.\n";
         ] );
-      ("tests/argc.ll", [], [], [ Exit 1; Stdout "" ]);
-      ("tests/argc.ll", [], [ "two" ], [ Exit 2; Stdout "" ]);
-      ("tests/argc.ll", [], [ "two"; "three" ], [ Exit 3; Stdout "" ]);
-      ("tests/argv0.ll", [], [], [ Exit 1 ]);
-      ("tests/argv1.ll", [], [ "hello" ], [ Exit 2; Stdout "hello\n" ]);
-      ("tests/add.ll", [], [ "1"; "2" ], [ Exit 3; Stdout "" ]);
-      ("tests/add.ll", [], [ "-13"; "12" ], [ Exit 255; Stdout "" ]);
-      ("tests/atoi.ll", [], [ "1" ], [ Exit 1; Stdout "" ]);
-      ("tests/atoi.ll", [], [ "255" ], [ Exit 255; Stdout "" ]);
-      ("tests/atoi.ll", [], [ "0" ], [ Exit 0; Stdout "" ]);
-      ("tests/atoi.ll", [], [ "1" ], [ Exit 1; Stdout "" ]);
-      ("tests/atoi.ll", [], [ "255" ], [ Exit 255; Stdout "" ]);
+      ("tests/argc.ll", "", [], [], [ Exit 1; Stdout "" ]);
+      ("tests/argc.ll", "", [], [ "two" ], [ Exit 2; Stdout "" ]);
+      ("tests/argc.ll", "", [], [ "two"; "three" ], [ Exit 3; Stdout "" ]);
+      ("tests/argv0.ll", "", [], [], [ Exit 1 ]);
+      ("tests/argv1.ll", "", [], [ "hello" ], [ Exit 2; Stdout "hello\n" ]);
+      ("tests/add.ll", "", [], [ "1"; "2" ], [ Exit 3; Stdout "" ]);
+      ("tests/add.ll", "", [], [ "-13"; "12" ], [ Exit 255; Stdout "" ]);
+      ("tests/atoi.ll", "", [], [ "1" ], [ Exit 1; Stdout "" ]);
+      ("tests/atoi.ll", "", [], [ "255" ], [ Exit 255; Stdout "" ]);
+      ("tests/atoi.ll", "", [], [ "0" ], [ Exit 0; Stdout "" ]);
+      ("tests/atoi.ll", "", [], [ "1" ], [ Exit 1; Stdout "" ]);
+      ("tests/atoi.ll", "", [], [ "255" ], [ Exit 255; Stdout "" ]);
       ( "tests/argv2.ll",
+        "",
         [],
         [ "hello"; "world" ],
         [ Exit 3; Stdout "hello\nworld\n" ] );
-      ("tests/arith0.ll", [], [], [ Exit 6; Stdout "" ]);
-      ("tests/arith1.ll", [], [], [ Exit 69; Stdout "" ]);
-      ("tests/loop0.ll", [], [], [ Exit 0; Stdout "" ]);
+      ("tests/arith0.ll", "", [], [], [ Exit 6; Stdout "" ]);
+      ("tests/arith1.ll", "", [], [], [ Exit 69; Stdout "" ]);
+      ("tests/loop0.ll", "", [], [], [ Exit 0; Stdout "" ]);
       ( "tests/loop1.ll",
+        "",
         [],
         [],
         [ Exit 0; Stdout "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n" ] );
-      ("tests/loop2.ll", [], [], [ Timeout ]);
-      ("tests/alloca.ll", [], [], [ Exit 42; Stdout ""; Stderr "" ]);
-      ("tests/collatz-phi.ll", [], [], [ Exit 1; Stdout "invalid arguments\n" ]);
-      ("tests/collatz-phi.ll", [], [ "1" ], [ Exit 0; Stdout "1\n" ]);
-      ("tests/collatz-phi.ll", [], [ "2" ], [ Exit 0; Stdout "2\n1\n" ]);
+      ("tests/loop2.ll", "", [], [], [ Timeout ]);
+      ("tests/alloca.ll", "", [], [], [ Exit 42; Stdout ""; Stderr "" ]);
       ( "tests/collatz-phi.ll",
+        "",
+        [],
+        [],
+        [ Exit 1; Stdout "invalid arguments\n" ] );
+      ("tests/collatz-phi.ll", "", [], [ "1" ], [ Exit 0; Stdout "1\n" ]);
+      ("tests/collatz-phi.ll", "", [], [ "2" ], [ Exit 0; Stdout "2\n1\n" ]);
+      ( "tests/collatz-phi.ll",
+        "",
         [],
         [ "3" ],
         [ Exit 0; Stdout "3\n10\n5\n16\n8\n4\n2\n1\n" ] );
       ( "tests/collatz-phi.ll",
+        "",
         [],
         [ "1312" ],
         [
@@ -436,14 +630,20 @@ let () =
              2\n\
              1\n";
         ] );
-      ("tests/collatz-mut.ll", [], [], [ Exit 1; Stdout "invalid arguments\n" ]);
-      ("tests/collatz-mut.ll", [], [ "1" ], [ Exit 0; Stdout "1\n" ]);
-      ("tests/collatz-mut.ll", [], [ "2" ], [ Exit 0; Stdout "2\n1\n" ]);
       ( "tests/collatz-mut.ll",
+        "",
+        [],
+        [],
+        [ Exit 1; Stdout "invalid arguments\n" ] );
+      ("tests/collatz-mut.ll", "", [], [ "1" ], [ Exit 0; Stdout "1\n" ]);
+      ("tests/collatz-mut.ll", "", [], [ "2" ], [ Exit 0; Stdout "2\n1\n" ]);
+      ( "tests/collatz-mut.ll",
+        "",
         [],
         [ "3" ],
         [ Exit 0; Stdout "3\n10\n5\n16\n8\n4\n2\n1\n" ] );
       ( "tests/collatz-mut.ll",
+        "",
         [],
         [ "1312" ],
         [
@@ -565,44 +765,69 @@ let () =
              2\n\
              1\n";
         ] );
-      ("tigertests/zero.tig.ll", [ "tiger.c" ], [], [ Exit 0; Stdout "" ]);
-      ("tigertests/test12.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/zero.tig.ll", "", [ "tiger.c" ], [], [ Exit 0; Stdout "" ]);
+      ( "tigertests/test12.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
       ( "tigertests/arith.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Exit 2; Stdout ""; Stderr "" ] );
       ( "tigertests/nil_seq_last_ok.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "" ] );
-      ("tigertests/test63.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/test63.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
       ( "tigertests/test55.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Exit 9; Stdout ""; Stderr "" ] );
-      ("tigertests/test59.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/test59.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
       ( "tigertests/test47.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Exit 0; Stdout ""; Stderr "" ] );
       ( "tigertests/lexer_ascii.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Exit 255; Stdout ""; Stderr "" ] );
       ( "tigertests/readonly_overwrite.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "" ] );
-      ("tigertests/test5.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/test5.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
       ( "tigertests/seqorder.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Stdout "12345"; Stderr "" ] );
       ( "tigertests/emoji_comment.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Exit 42; Stdout ""; Stderr "" ] );
       ( "tigertests/recFieldError.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [
@@ -610,119 +835,241 @@ let () =
           Stdout "";
           Stderr "Error: record field lookup applied to nil\n";
         ] );
-      ("tigertests/test61.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/test61.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
       ( "tigertests/test73.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Stdout "OK."; Stderr "" ] );
       ( "tigertests/forfor.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Stdout "............"; Stderr "" ] );
-      ("tigertests/ddd.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test57.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test3.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test53.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test30.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ("tigertests/ddd.tig.ll", "", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/test57.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ( "tigertests/test3.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ( "tigertests/test53.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ( "tigertests/test30.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
       ( "tigertests/test41.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Exit 0; Stdout ""; Stderr "" ] );
       ( "tigertests/test69.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Exit 48; Stdout ""; Stderr "" ] );
-      ("tigertests/test65.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/test65.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
       ( "tigertests/goodarith.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Exit 5; Stdout ""; Stderr "" ] );
       ( "tigertests/lots_of_locals.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "" ] );
-      ("tigertests/dynarray.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test51.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/dynarray.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ( "tigertests/test51.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
       ( "tigertests/test67.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Exit 1; Stdout ""; Stderr "" ] );
-      ("tigertests/test75.tig.ll", [ "tiger.c" ], [], []);
-      ("tigertests/test1.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/divorder.tig.ll", [ "tiger.c" ], [], []);
+      ("tigertests/test75.tig.ll", "", [ "tiger.c" ], [], []);
+      ( "tigertests/test1.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/divorder.tig.ll", "", [ "tiger.c" ], [], []);
       ( "tigertests/lexer_ascii_alt.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "" ] );
       ( "tigertests/zero.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Exit 0; Stdout ""; Stderr "" ] );
-      ("tigertests/test4.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test8.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ( "tigertests/test54.tig.ll",
-        [ "tiger.c" ],
-        [],
-        [ Exit 4; Stdout ""; Stderr "" ] );
-      (*("tigertests/binary_tree.tig.ll", [ "tiger.c" ], [], []);*)
-      ("tigertests/test37.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test46.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test58.tig.ll", [ "tiger.c" ], [], []);
-      ("tigertests/test62.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/queens.tig.ll", [ "tiger.c" ], [], []);
-      ( "tigertests/seq_nested_empty.tig.ll",
+      ( "tigertests/test4.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "" ] );
-      ("tigertests/test27.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      (*("tigertests/fixedpoints.tig.ll", [ "tiger.c" ], [], []);*)
-      ("tigertests/test44.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test48.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/doors.tig.ll", [ "tiger.c" ], [], []);
+      ( "tigertests/test8.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ( "tigertests/test54.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Exit 4; Stdout ""; Stderr "" ] );
+      (*("tigertests/binary_tree.tig.ll","", [ "tiger.c" ], [], []);*)
+      ( "tigertests/test37.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ( "tigertests/test46.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/test58.tig.ll", "", [ "tiger.c" ], [], []);
+      ( "tigertests/test62.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/queens.tig.ll", "", [ "tiger.c" ], [], []);
+      ( "tigertests/seq_nested_empty.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ( "tigertests/test27.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      (*("tigertests/fixedpoints.tig.ll","", [ "tiger.c" ], [], []);*)
+      ( "tigertests/test44.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ( "tigertests/test48.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/doors.tig.ll", "", [ "tiger.c" ], [], []);
       ( "tigertests/test56.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Exit 9; Stdout ""; Stderr "" ] );
-      ("tigertests/split.tig.ll", [ "tiger.c" ], [], []);
-      ("tigertests/test60.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      (*("tigertests/test72.tig.ll", [ "tiger.c" ], [], []);*)
+      ("tigertests/split.tig.ll", "", [ "tiger.c" ], [], []);
+      ( "tigertests/test60.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      (*("tigertests/test72.tig.ll","", [ "tiger.c" ], [], []);*)
       ( "tigertests/divbyzero.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "Error: division by zero\n" ] );
       ( "tigertests/lexer_formfeed.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "" ] );
       ( "tigertests/if_readonly.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "" ] );
-      ("tigertests/test68.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test76.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      (*( "tigertests/brainfuck.tig.ll",
+      ( "tigertests/test68.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ( "tigertests/test76.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      (*("", "tigertests/brainfuck.tig.ll",
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "" ] );*)
-      ("tigertests/test64.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/test52.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/lisp.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ( "tigertests/color.tig.ll",
-        [ "tiger.c" ],
-        [],
-        [ Stdout "[44mHello[0m\nBye\n[34mHello[0m"; Stderr "" ] );
-      ("tigertests/test2.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ("tigertests/div213.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
-      ( "tigertests/simplevar.tig.ll",
+      ( "tigertests/test64.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "" ] );
-      ("tigertests/test66.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/test52.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ("tigertests/lisp.tig.ll", "", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/color.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout "[44mHello[0m\nBye\n[34mHello[0m"; Stderr "" ] );
+      ( "tigertests/test2.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ( "tigertests/div213.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ( "tigertests/simplevar.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
+      ( "tigertests/test66.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
       ( "tigertests/test74.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
         [ Exit 24; Stdout ""; Stderr "" ] );
-      ("tigertests/test42.tig.ll", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/test42.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [ Stdout ""; Stderr "" ] );
     ]
   in
   let passes = run tests in
