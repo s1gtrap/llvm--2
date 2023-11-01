@@ -146,7 +146,7 @@ named_insn:
   { u_opt, i }
 
 bracket:
-  | LBRACKET op=UID COMMA lbl=UID RBRACKET { (Id op, lbl) }
+  | LBRACKET op=operand COMMA lbl=UID RBRACKET { (op, lbl) }
 
 insn:
   | b=bop t=ty o1=operand COMMA o2=operand
