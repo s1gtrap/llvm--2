@@ -605,7 +605,7 @@ let () =
       ( "tigertests/test73.tig.ll",
         [ "tiger.c" ],
         [],
-        [ Stdout "OKNot OK"; Stderr "" ] );
+        [ Stdout "OK."; Stderr "" ] );
       ( "tigertests/forfor.tig.ll",
         [ "tiger.c" ],
         [],
