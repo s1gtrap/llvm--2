@@ -188,7 +188,16 @@ let run tests =
             red nc exc
             (string_of_process_status s)
             stderr
-      | Timeout -> Printf.printf "%stimeout!%s %s\n" red nc exc
+      | Timeout ->
+          Printf.printf "%stimeout!%s %s\n"
+            (match
+               List.find_opt (function Timeout -> true | _ -> false) asserts
+             with
+            | Some _ ->
+                passes := !passes + 1;
+                green
+            | None -> red)
+            nc exc
     with CompileError -> Printf.printf "%scompile error!%s\n" red nc
   in
   List.iter r tests;
