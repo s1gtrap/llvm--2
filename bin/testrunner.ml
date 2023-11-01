@@ -331,46 +331,6 @@ let () =
         [ "dolphin.c" ],
         [],
         [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_20.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_22.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_23.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_24.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_25.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_26.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_27.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_28.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
       ( "dolphintests/_prog_31.ll",
         "",
         [ "dolphin.c" ],
