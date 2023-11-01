@@ -554,6 +554,7 @@ let compile_insn :
       callins @ [ storins ]
   | None, Call (_, oper, args) -> compile_call ctxt asn oper args
   | Some dst, Bitcast (_, src, _) ->
+      (*Printf.printf "%s\n" (S.name dst);*)
       let dst = S.ST.find dst asn in
       let opins = compile_operand ctxt asn (Reg Rax) src in
       let storins = (Movq, [ Reg Rax; dst ]) in
@@ -619,32 +620,36 @@ let compile_terminator :
 
 module C = Coloring.Mark (Lva.G)
 
-let alloc (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
-  C.coloring g 9;
-  let var i =
-    match i + 2 with
-    | 0 -> Reg Rax
-    | 1 -> Reg Rcx
-    | 2 -> Reg Rdx
-    | 3 -> Reg Rbx
-    | 4 -> Reg Rsi
-    | 5 -> Reg Rdi
-    | 6 -> Reg R08
-    | 7 -> Reg R09
-    | 8 -> Reg R10
-    | 9 -> Reg R11
-    | 10 -> Reg R12
-    | 11 -> Reg R13
-    | 12 -> Reg R14
-    | 13 -> Reg R15
-    (* FIXME *)
-    | _i -> Ind3 (Lit 0L, Rbp)
-  in
-  S.ST.map (fun v -> Lva.G.Mark.get v) l |> S.ST.map var
+type allocator = Ocamlgraph
+
+let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
+  match a with
+  | Ocamlgraph ->
+      C.coloring g 9;
+      let var i =
+        match i + 2 with
+        | 0 -> Reg Rax
+        | 1 -> Reg Rcx
+        | 2 -> Reg Rdx
+        | 3 -> Reg Rbx
+        | 4 -> Reg Rsi
+        | 5 -> Reg Rdi
+        | 6 -> Reg R08
+        | 7 -> Reg R09
+        | 8 -> Reg R10
+        | 9 -> Reg R11
+        | 10 -> Reg R12
+        | 11 -> Reg R13
+        | 12 -> Reg R14
+        | 13 -> Reg R15
+        (* FIXME *)
+        | _i -> Ind3 (Lit 0L, Rbp)
+      in
+      S.ST.map (fun v -> Lva.G.Mark.get v) l |> S.ST.map var
 
 let insns (_insns : Cfg.insn list) (l : Lva.G.V.t S.table) (g : Lva.G.t) :
     int S.table =
-  let _asn = alloc l g in
+  let _asn = alloc Ocamlgraph l g in
   let _insn (_insns : Cfg.insn) (_l : Lva.G.V.t S.table) (_g : Lva.G.t) = 4 in
   S.empty
 
@@ -686,7 +691,7 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
   let insns : Cfg.insn list = Cfg.flatten cfg in
   let in_, out = Lva.dataflow insns ids g in
   let lbl, itf = Lva.interf param insns in_ out in
-  let asn = alloc lbl itf in
+  let asn = alloc Ocamlgraph lbl itf in
   let pusharg i _ =
     ( Pushq,
       [

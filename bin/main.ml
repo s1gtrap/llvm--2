@@ -43,7 +43,7 @@ let cfgx86 parser input =
   let insns = Cfg.flatten cfg in
   let in_, out = Lva.dataflow insns ids g in
   let lbls, itf = Lva.interf [] insns in_ out in
-  let _asn = Regalloc.alloc lbls itf in
+  let _asn = Regalloc.alloc Regalloc.Ocamlgraph lbls itf in
   ()
 
 let fdeclcfg input =
@@ -87,7 +87,7 @@ let fdeclx86 input =
   let insns = Cfg.flatten fdecl.cfg in
   let in_, out = Lva.dataflow insns ids g in
   let lbls, itf = Lva.interf fdecl.param insns in_ out in
-  let _asn = Regalloc.alloc lbls itf in
+  let _asn = Regalloc.alloc Regalloc.Ocamlgraph lbls itf in
   let tys, _ = fdecl.fty in
   let args = List.combine fdecl.param tys in
   let x86 = Regalloc.compile_fdecl args name fdecl in
@@ -149,7 +149,7 @@ let progasn input =
     let insns = Cfg.flatten fdecl.cfg in
     let in_, out = Lva.dataflow insns ids g in
     let lbl, itf = Lva.interf fdecl.param insns in_ out in
-    let asn = Regalloc.alloc lbl itf in
+    let asn = Regalloc.alloc Regalloc.Ocamlgraph lbl itf in
     Symbol.ST.iter
       (fun k v ->
         Printf.printf "%s: %s\n" (Symbol.name k) (Regalloc.string_of_operand v))
