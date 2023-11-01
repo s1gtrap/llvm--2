@@ -631,10 +631,12 @@ let alloc (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
     | 5 -> Reg Rdi
     | 6 -> Reg R08
     | 7 -> Reg R09
-    | 8 -> Reg R12
-    | 9 -> Reg R13
-    | 10 -> Reg R14
-    | 11 -> Reg R15
+    | 8 -> Reg R10
+    | 9 -> Reg R11
+    | 10 -> Reg R12
+    | 11 -> Reg R13
+    | 12 -> Reg R14
+    | 13 -> Reg R15
     (* FIXME *)
     | _i -> Ind3 (Lit 0L, Rbp)
   in
