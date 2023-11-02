@@ -91,6 +91,7 @@ type opcode =
   | Shlq
   | Sarq
   | Shrq
+  | Srem
   | Jmp
   | J of cnd
   | Cmpq
@@ -204,6 +205,7 @@ let string_of_opcode (opc : opcode) : string =
   | Shlq -> "shlq"
   | Sarq -> "sarq"
   | Shrq -> "shrq"
+  | Srem -> "srem"
   | Jmp -> "jmp"
   | J c -> "j" ^ string_of_cnd c
   | Cmpq -> "cmpq"
@@ -465,7 +467,7 @@ let compile_bop : Ll.bop -> opcode = function
   | Sub -> Subq
   | Mul -> Imulq
   | SDiv -> Idivq
-  | SRem -> failwith "TODO"
+  | SRem -> Srem
   | Shl -> Shlq
   | Lshr -> Shrq
   | Ashr -> Sarq
@@ -487,6 +489,16 @@ let compile_insn :
       let cqtoins = (Cqto, []) in
       let opins = (Idivq, [ Reg Rcx ]) in
       let storins = (Movq, [ Reg Rax; dst ]) in
+      [ lins; rins; cqtoins; opins; storins ]
+  | Some dst, Binop (SRem, _, lop, rop) ->
+      (* RAX and RCX are volatile, should be good? *)
+      (* FIXME: %edx is overwritten *)
+      let dst = S.ST.find dst asn in
+      let lins = compile_operand ctxt asn (Reg Rax) lop in
+      let rins = compile_operand ctxt asn (Reg Rcx) rop in
+      let cqtoins = (Cqto, []) in
+      let opins = (Idivq, [ Reg Rcx ]) in
+      let storins = (Movq, [ Reg Rdx; dst ]) in
       [ lins; rins; cqtoins; opins; storins ]
   | Some dst, Binop (bop, _, lop, rop) ->
       (* RAX and RCX are volatile, should be good? *)

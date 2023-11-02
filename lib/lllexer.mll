@@ -53,6 +53,7 @@ rule token = parse
   | "sgt"              { SGT }
   | "sge"              { SGE }
   | "shl"              { SHL }
+  | "srem"             { SREM }
   | "ret"              { RET }
   | "getelementptr"    { GEP }
   | "zext"             { ZEXT }
