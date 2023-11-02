@@ -86,7 +86,8 @@ let compile_test test cargs =
         try
           In_channel.open_text test
           |> Llvm__2.Parse.from_channel Llvm__2.Llparser.prog
-          |> Llvm__2.Regalloc.compile_prog |> Llvm__2.Regalloc.string_of_prog
+          |> Llvm__2.Regalloc.compile_prog Llvm__2.Regalloc.Greedy
+          |> Llvm__2.Regalloc.string_of_prog
         with _ -> raise CompileError
       in
       let _ =

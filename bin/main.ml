@@ -80,17 +80,12 @@ let fdeclitf input =
   Printf.printf "%s\n" (Lva.dot itf);
   ()
 
-let fdeclx86 input =
+let fdeclx86 alc input =
   let input = open_ input in
   let name, fdecl = Parse.from_channel Llparser.fdecleof input in
-  let ids, g = Cfg.graph fdecl.cfg in
-  let insns = Cfg.flatten fdecl.cfg in
-  let in_, out = Lva.dataflow insns ids g in
-  let lbls, itf = Lva.interf fdecl.param insns in_ out in
-  let _asn = Regalloc.alloc Regalloc.Ocamlgraph lbls itf in
   let tys, _ = fdecl.fty in
   let args = List.combine fdecl.param tys in
-  let x86 = Regalloc.compile_fdecl args name fdecl in
+  let x86 = Regalloc.compile_fdecl alc args name fdecl in
   Printf.printf "%s" (Regalloc.string_of_prog x86);
   ()
 
@@ -140,7 +135,7 @@ let progitf input =
   in
   List.iter fdecl prog.fdecls
 
-let progasn input =
+let progasn (alloc_ : Regalloc.allocator) input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
@@ -149,7 +144,7 @@ let progasn input =
     let insns = Cfg.flatten fdecl.cfg in
     let in_, out = Lva.dataflow insns ids g in
     let lbl, itf = Lva.interf fdecl.param insns in_ out in
-    let asn = Regalloc.alloc Regalloc.Ocamlgraph lbl itf in
+    let asn = Regalloc.alloc alloc_ lbl itf in
     Symbol.ST.iter
       (fun k v ->
         Printf.printf "%s: %s\n" (Symbol.name k) (Regalloc.string_of_operand v))
@@ -157,16 +152,16 @@ let progasn input =
   in
   List.iter fdecl prog.fdecls
 
-let progx86 input =
+let progx86 (alloc_ : Regalloc.allocator) input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
-  let prog = Regalloc.compile_prog prog in
+  let prog = Regalloc.compile_prog alloc_ prog in
   Printf.printf "%s\n" (Regalloc.string_of_prog prog)
 
-let progexe output cargs input =
+let progexe output cargs (alloc_ : Regalloc.allocator) input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
-  let prog = Regalloc.compile_prog prog in
+  let prog = Regalloc.compile_prog alloc_ prog in
   let prog = Regalloc.string_of_prog prog in
   let _ =
     (match Llvm__2.Regalloc.os with
@@ -196,6 +191,7 @@ let () =
   let oper = ref "" in
   let out = ref "" in
   let clang = ref "" in
+  let alloc = ref "" in
   let anon_fun filename = input_files := filename :: !input_files in
 
   let speclist =
@@ -205,10 +201,18 @@ let () =
       ("-t", Arg.Set_string oper, "Set operation to apply");
       ("-o", Arg.Set_string out, "Set output file");
       ("-c", Arg.Set_string clang, "Set clang parameters");
+      ("-a", Arg.Set_string alloc, "Set register allocator");
     ]
   in
 
   Arg.parse speclist anon_fun usage_msg;
+
+  let alc =
+    match !alloc with
+    | "ocamlgraph" -> Regalloc.Ocamlgraph
+    | "greedy" -> Regalloc.Greedy
+    | "briggs" | _ -> Regalloc.Briggs
+  in
 
   match !parser with
   | "cfg" ->
@@ -229,7 +233,7 @@ let () =
         | "cfg" -> fdeclcfg
         | "lva" -> fdecllva
         | "itf" -> fdeclitf
-        | "x86" -> fdeclx86
+        | "x86" -> fdeclx86 alc
         | _ ->
             Printf.eprintf "invalid operation: %s\n" !oper;
             exit 1
@@ -241,8 +245,8 @@ let () =
         | "cfg" -> progcfg
         | "lva" -> proglva
         | "itf" -> progitf
-        | "asn" -> progasn
-        | "x86" -> progx86
+        | "asn" -> progasn alc
+        | "x86" -> progx86 alc
         | _ ->
             fun input ->
               let out =
@@ -250,6 +254,6 @@ let () =
                 | "" -> Filename.basename (Filename.remove_extension input)
                 | out -> out
               in
-              progexe out [| !clang |] input
+              progexe out [| !clang |] alc input
       in
       List.iter oper !input_files

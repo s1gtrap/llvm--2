@@ -620,41 +620,52 @@ let compile_terminator :
 
 module C = Coloring.Mark (Lva.G)
 
-type allocator = Ocamlgraph
+type allocator = Ocamlgraph | Briggs | Greedy
 
 let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
+  let var i =
+    match i + 2 with
+    | 0 -> Reg Rax
+    | 1 -> Reg Rcx
+    | 2 -> Reg Rdx
+    | 3 -> Reg Rbx
+    | 4 -> Reg Rsi
+    | 5 -> Reg Rdi
+    | 6 -> Reg R08
+    | 7 -> Reg R09
+    | 8 -> Reg R10
+    | 9 -> Reg R11
+    | 10 -> Reg R12
+    | 11 -> Reg R13
+    | 12 -> Reg R14
+    | 13 -> Reg R15
+    (* FIXME *)
+    | _i -> Ind3 (Lit 0L, Rbp)
+  in
   match a with
   | Ocamlgraph ->
-      C.coloring g 9;
-      let var i =
-        match i + 2 with
-        | 0 -> Reg Rax
-        | 1 -> Reg Rcx
-        | 2 -> Reg Rdx
-        | 3 -> Reg Rbx
-        | 4 -> Reg Rsi
-        | 5 -> Reg Rdi
-        | 6 -> Reg R08
-        | 7 -> Reg R09
-        | 8 -> Reg R10
-        | 9 -> Reg R11
-        | 10 -> Reg R12
-        | 11 -> Reg R13
-        | 12 -> Reg R14
-        | 13 -> Reg R15
-        (* FIXME *)
-        | _i -> Ind3 (Lit 0L, Rbp)
-      in
+      C.coloring g 12;
       S.ST.map (fun v -> Lva.G.Mark.get v) l |> S.ST.map var
+  | Briggs ->
+      let color _k = failwith "" in
+      color 2
+  | Greedy ->
+      let c = ref 0 in
+      S.ST.map
+        (fun _v ->
+          let v = var !c in
+          c := !c + 1;
+          v)
+        l
 
-let insns (_insns : Cfg.insn list) (l : Lva.G.V.t S.table) (g : Lva.G.t) :
+let insns (_insns : Cfg.insn list) (_l : Lva.G.V.t S.table) (_g : Lva.G.t) :
     int S.table =
-  let _asn = alloc Ocamlgraph l g in
   let _insn (_insns : Cfg.insn) (_l : Lva.G.V.t S.table) (_g : Lva.G.t) = 4 in
   S.empty
 
-let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
- fun tdecls name { param; cfg; _ } ->
+let compile_fdecl :
+    allocator -> (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
+ fun (alc : allocator) tdecls name { param; cfg; _ } ->
   (* move out of pre-assigned parameter registers (rsi, rdi, .. r9) *)
   let head, tail = cfg in
   let _, blocks = List.split tail in
@@ -691,7 +702,7 @@ let compile_fdecl : (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
   let insns : Cfg.insn list = Cfg.flatten cfg in
   let in_, out = Lva.dataflow insns ids g in
   let lbl, itf = Lva.interf param insns in_ out in
-  let asn = alloc Ocamlgraph lbl itf in
+  let asn = alloc alc lbl itf in
   let pusharg i _ =
     ( Pushq,
       [
@@ -801,7 +812,7 @@ module Asm = struct
   let gtext l is = { lbl = l; global = true; asm = Text is }
 end
 
-let compile_prog ({ tdecls; gdecls; fdecls; _ } : Ll.prog) : prog =
+let compile_prog alc ({ tdecls; gdecls; fdecls; _ } : Ll.prog) : prog =
   let g (lbl, gdecl) = Asm.data (S.name lbl) (compile_gdecl gdecl) in
-  let f (name, fdecl) = compile_fdecl tdecls name fdecl in
+  let f (name, fdecl) = compile_fdecl alc tdecls name fdecl in
   List.map g gdecls @ List.concat (List.map f fdecls)
