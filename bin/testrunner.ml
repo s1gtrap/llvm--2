@@ -98,14 +98,12 @@ let compile_test test cargs =
                  [
                    [| "arch"; "-x86_64"; "clang" |];
                    cargs;
-                   [| "-x"; "assembler"; "-"; "-o"; fn |];
+                   [| "-x"; "assembler"; "-o"; fn |];
                  ])
         | Linux ->
             Llvm__2.Build.create_process_with_input "clang"
               (Array.concat
-                 [
-                   [| "clang" |]; cargs; [| "-x"; "assembler"; "-"; "-o"; fn |];
-                 ]))
+                 [ [| "clang" |]; cargs; [| "-x"; "assembler"; "-o"; fn |] ]))
           prog fn
       in
       execs := S.add test fn !execs;
@@ -207,151 +205,6 @@ let run tests =
 let () =
   let tests =
     [
-      ( "dolphintests/_prog_01.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout "5\n"; Stderr "" ] );
-      ( "dolphintests/_prog_02.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout "6\n"; Stderr "" ] );
-      ( "dolphintests/_prog_03.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout "11\n"; Stderr "" ] );
-      ( "dolphintests/_prog_04.ll",
-        "0",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout "Please enter an integer: 1\n"; Stderr "" ] );
-      ( "dolphintests/_prog_04.ll",
-        "1",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout "Please enter an integer: 2\n"; Stderr "" ] );
-      ( "dolphintests/_prog_04.ll",
-        "42",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout "Please enter an integer: 43\n"; Stderr "" ] );
-      ( "dolphintests/_prog_05.ll",
-        "69",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout "Please enter an integer: 70\n"; Stderr "" ] );
-      ( "dolphintests/_prog_05.ll",
-        "100",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout "Please enter an integer: 101\n"; Stderr "" ] );
-      ( "dolphintests/_prog_05.ll",
-        "101",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout "Please enter an integer: "; Stderr "" ] );
-      ( "dolphintests/_prog_06.ll",
-        "100",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout "Please enter an integer: 101\n"; Stderr "" ] );
-      ( "dolphintests/_prog_06.ll",
-        "1337",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout "Please enter an integer: -1\n"; Stderr "" ] );
-      ( "dolphintests/_prog_09.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_15.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_16.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_17.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_18.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_19.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_20.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_22.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_23.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_24.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_25.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_26.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_27.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_28.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_31.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_32.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
-      ( "dolphintests/_prog_33.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout "10\n"; Stderr "" ] );
-      ( "dolphintests/_prog_36.ll",
-        "",
-        [ "dolphin.c" ],
-        [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
       ("tests/void.ll", "", [], [], [ Stdout "" ]);
       ("tests/zero.ll", "", [], [], [ Exit 0; Stdout "" ]);
       ("tests/one.ll", "", [], [], [ Exit 1; Stdout "" ]);
@@ -726,6 +579,151 @@ let () =
              2\n\
              1\n";
         ] );
+      ( "dolphintests/_prog_01.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "5\n"; Stderr "" ] );
+      ( "dolphintests/_prog_02.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "6\n"; Stderr "" ] );
+      ( "dolphintests/_prog_03.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "11\n"; Stderr "" ] );
+      ( "dolphintests/_prog_04.ll",
+        "0",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: 1\n"; Stderr "" ] );
+      ( "dolphintests/_prog_04.ll",
+        "1",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: 2\n"; Stderr "" ] );
+      ( "dolphintests/_prog_04.ll",
+        "42",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: 43\n"; Stderr "" ] );
+      ( "dolphintests/_prog_05.ll",
+        "69",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: 70\n"; Stderr "" ] );
+      ( "dolphintests/_prog_05.ll",
+        "100",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: 101\n"; Stderr "" ] );
+      ( "dolphintests/_prog_05.ll",
+        "101",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: "; Stderr "" ] );
+      ( "dolphintests/_prog_06.ll",
+        "100",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: 101\n"; Stderr "" ] );
+      ( "dolphintests/_prog_06.ll",
+        "1337",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "Please enter an integer: -1\n"; Stderr "" ] );
+      ( "dolphintests/_prog_09.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_15.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_16.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_17.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_18.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_19.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_20.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_22.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_23.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_24.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_25.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_26.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_27.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_28.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_31.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_32.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "dolphintests/_prog_33.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout "10\n"; Stderr "" ] );
+      ( "dolphintests/_prog_36.ll",
+        "",
+        [ "dolphin.c" ],
+        [],
+        [ Exit 0; Stdout ""; Stderr "" ] );
       ("tigertests/zero.tig.ll", "", [ "tiger.c" ], [], [ Exit 0; Stdout "" ]);
       ( "tigertests/test12.tig.ll",
         "",
@@ -980,11 +978,12 @@ let () =
         "",
         [ "tiger.c" ],
         [],
-        [ Stdout ""; Stderr "" ] );
-      (*("", "tigertests/brainfuck.tig.ll",
+        [ Stdout "abcdefghijklmnopqrstuvwxyz0123456789"; Stderr "" ] );
+      ( "tigertests/brainfuck.tig.ll",
+        "",
         [ "tiger.c" ],
         [],
-        [ Stdout ""; Stderr "" ] );*)
+        [ Stdout "Hello World!\n\n"; Stderr "" ] );
       ( "tigertests/test64.tig.ll",
         "",
         [ "tiger.c" ],
@@ -995,7 +994,30 @@ let () =
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "" ] );
-      ("tigertests/lisp.tig.ll", "", [ "tiger.c" ], [], [ Stdout ""; Stderr "" ]);
+      ( "tigertests/lisp.tig.ll",
+        "",
+        [ "tiger.c" ],
+        [],
+        [
+          Stdout
+            "The dummy input is:\n\
+             (letrec ((collatz (lambda (v) (progn (print v) (ifb (= v 1) \
+             (progn (newline) 1) (progn (print \" -> \") (ifb (= v (* (/ v 2) \
+             2)) (collatz (/ v 2)) (collatz (+ (* v 3) 1))))))))) (collatz \
+             117))\n\
+            \ (progn (print \"bye bye\") (newline))\n\
+            \ (progn (print \"exiting...\") (newline) (exit))\n\
+             Let's spin the REPL... use (exit) if you get too dizzy\n\
+             >>> Standard library loaded\n\
+             ()\n\
+             >>> 117 -> 352 -> 176 -> 88 -> 44 -> 22 -> 11 -> 34 -> 17 -> 52 \
+             -> 26 -> 13 -> 40 -> 20 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1\n\
+             1\n\
+             >>> bye bye\n\
+             ()\n\
+             >>> exiting...\n";
+          Stderr "";
+        ] );
       ( "tigertests/color.tig.ll",
         "",
         [ "tiger.c" ],

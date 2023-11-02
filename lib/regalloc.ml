@@ -520,8 +520,9 @@ let compile_insn :
       match S.ST.find_opt dst asn with
       | Some dst ->
           let operins = compile_operand ctxt asn (Reg Rax) src in
-          let loadins = (Movq, [ Ind2 Rax; dst ]) in
-          [ operins; loadins ]
+          let loadins = (Movq, [ Ind2 Rax; Reg Rax ]) in
+          let storins = (Movq, [ Reg Rax; dst ]) in
+          [ operins; loadins; storins ]
       | None -> [])
   | None, Store (_, src, dst) ->
       let sins = compile_operand ctxt asn (Reg Rax) src in
@@ -634,6 +635,11 @@ module C = Coloring.Mark (Lva.G)
 
 type allocator = Ocamlgraph | Briggs | Greedy
 
+let string_of_allocator = function
+  | Ocamlgraph -> "ocamlgraph"
+  | Briggs -> "briggs"
+  | Greedy -> "greedy"
+
 let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
   let var i =
     match i + 2 with
@@ -652,23 +658,27 @@ let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
     | 12 -> Reg R14
     | 13 -> Reg R15
     (* FIXME *)
-    | _i -> Ind3 (Lit 0L, Rbp)
+    | i -> Ind3 (Lit (Int64.of_int (i * -8)), Rbp)
   in
-  match a with
-  | Ocamlgraph ->
-      C.coloring g 12;
-      S.ST.map (fun v -> Lva.G.Mark.get v) l |> S.ST.map var
-  | Briggs ->
-      let color _k = failwith "" in
-      color 2
-  | Greedy ->
-      let c = ref 0 in
-      S.ST.map
-        (fun _v ->
-          let v = var !c in
-          c := !c + 1;
-          v)
-        l
+  let l =
+    match a with
+    | Ocamlgraph ->
+        C.coloring g 12;
+        S.ST.map (fun v -> Lva.G.Mark.get v) l |> S.ST.map var
+    | Briggs ->
+        let color _k = failwith "" in
+        color 2
+    | Greedy ->
+        let c = ref 0 in
+        S.ST.map
+          (fun _v ->
+            let v = var !c in
+            c := !c + 1;
+            v)
+          l
+  in
+
+  l
 
 let insns (_insns : Cfg.insn list) (_l : Lva.G.V.t S.table) (_g : Lva.G.t) :
     int S.table =

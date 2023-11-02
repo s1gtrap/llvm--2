@@ -171,14 +171,12 @@ let progexe output cargs (alloc_ : Regalloc.allocator) input =
              [
                [| "arch"; "-x86_64"; "clang" |];
                cargs;
-               [| "-x"; "assembler"; "-"; "-o"; output |];
+               [| "-x"; "assembler"; "-o"; output |];
              ])
     | Linux ->
         Build.create_process_with_input "clang"
           (Array.concat
-             [
-               [| "clang" |]; cargs; [| "-x"; "assembler"; "-"; "-o"; output |];
-             ]))
+             [ [| "clang" |]; cargs; [| "-x"; "assembler"; "-o"; output |] ]))
       prog output
   in
   ()
