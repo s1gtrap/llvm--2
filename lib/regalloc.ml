@@ -647,22 +647,21 @@ let string_of_allocator = function
 let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
   let var i =
     match i + 2 with
-    | 0 -> Reg Rax
-    | 1 -> Reg Rcx
-    | 2 -> Reg Rdx
-    | 3 -> Reg Rbx
-    | 4 -> Reg Rsi
-    | 5 -> Reg Rdi
-    | 6 -> Reg R08
-    | 7 -> Reg R09
-    | 8 -> Reg R10
-    | 9 -> Reg R11
-    | 10 -> Reg R12
-    | 11 -> Reg R13
-    | 12 -> Reg R14
-    | 13 -> Reg R15
-    (* FIXME *)
-    | i -> Ind3 (Lit (Int64.of_int (i * -8)), Rbp)
+    (*| 0 -> Reg Rax
+      | 1 -> Reg Rcx (* NOTE: %rax and %rcx are scratch registers *)*)
+    | 0 -> Reg Rdx
+    | 1 -> Reg Rbx
+    | 2 -> Reg Rsi
+    | 3 -> Reg Rdi
+    | 4 -> Reg R08
+    | 5 -> Reg R09
+    | 6 -> Reg R10
+    | 7 -> Reg R11
+    | 8 -> Reg R12
+    | 9 -> Reg R13
+    | 10 -> Reg R14
+    | 11 -> Reg R15
+    | i -> Ind3 (Lit (Int64.of_int ((i - 11) * -8)), Rbp)
   in
   let l =
     match a with
