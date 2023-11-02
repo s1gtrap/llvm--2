@@ -484,22 +484,26 @@ let compile_insn :
   | Some dst, Binop (SDiv, _, lop, rop) ->
       (* RAX and RCX are volatile, should be good? *)
       let dst = S.ST.find dst asn in
+      let pushdx = (Pushq, [ Reg Rdx ]) in
       let lins = compile_operand ctxt asn (Reg Rax) lop in
       let rins = compile_operand ctxt asn (Reg Rcx) rop in
       let cqtoins = (Cqto, []) in
       let opins = (Idivq, [ Reg Rcx ]) in
       let storins = (Movq, [ Reg Rax; dst ]) in
-      [ lins; rins; cqtoins; opins; storins ]
+      let popdx = (Popq, [ Reg Rdx ]) in
+      [ pushdx; lins; rins; cqtoins; opins; storins; popdx ]
   | Some dst, Binop (SRem, _, lop, rop) ->
       (* RAX and RCX are volatile, should be good? *)
       (* FIXME: %edx is overwritten *)
       let dst = S.ST.find dst asn in
+      let pushdx = (Pushq, [ Reg Rdx ]) in
       let lins = compile_operand ctxt asn (Reg Rax) lop in
       let rins = compile_operand ctxt asn (Reg Rcx) rop in
       let cqtoins = (Cqto, []) in
       let opins = (Idivq, [ Reg Rcx ]) in
       let storins = (Movq, [ Reg Rdx; dst ]) in
-      [ lins; rins; cqtoins; opins; storins ]
+      let popdx = (Popq, [ Reg Rdx ]) in
+      [ pushdx; lins; rins; cqtoins; opins; storins; popdx ]
   | Some dst, Binop (bop, _, lop, rop) ->
       (* RAX and RCX are volatile, should be good? *)
       let dst = S.ST.find dst asn in

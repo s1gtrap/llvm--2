@@ -668,7 +668,7 @@ let () =
         "",
         [ "dolphin.c" ],
         [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
+        [ Exit 0; Stdout "10\n10\n10\n10\n10\n"; Stderr "" ] );
       ( "dolphintests/_prog_22.ll",
         "",
         [ "dolphin.c" ],
