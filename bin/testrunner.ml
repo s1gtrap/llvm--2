@@ -764,7 +764,7 @@ let () =
         "",
         [ "tiger.c" ],
         [],
-        [ Exit 255; Stdout ""; Stderr "" ] );
+        [ Exit 0; Stdout ""; Stderr "" ] );
       ( "tigertests/readonly_overwrite.tig.ll",
         "",
         [ "tiger.c" ],

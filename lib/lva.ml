@@ -127,6 +127,7 @@ let interf (param : Ll.uid list) (insns : Cfg.insn list) (in_ : S.SS.t array)
         verts := S.ST.add s v !verts;
         v
   in
+  (* add all function parameters *)
   S.SS.iter
     (fun i ->
       let _ = vert i in
@@ -142,6 +143,8 @@ let interf (param : Ll.uid list) (insns : Cfg.insn list) (in_ : S.SS.t array)
             if v1 <> v2 then G.add_edge g v1 v2)
         param)
     param;
+  (* add all defs *)
+  List.map def insns |> List.iter (S.SS.iter (fun v -> ignore (vert v)));
   List.iteri
     (fun i n ->
       let d = def n in
