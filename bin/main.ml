@@ -166,10 +166,10 @@ let progexe output cargs (alloc_ : Regalloc.allocator) input =
   let _ =
     (match Llvm__2.Regalloc.os with
     | Darwin ->
-        Build.create_process_with_input "arch"
+        Build.create_process_with_input "clang"
           (Array.concat
              [
-               [| "arch"; "-x86_64"; "clang" |];
+               [| "clang"; "-target"; "x86_64-unknown-darwin" |];
                cargs;
                [| "-x"; "assembler"; "-o"; output |];
              ])
