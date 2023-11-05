@@ -93,10 +93,10 @@ let compile_test test cargs =
       let _ =
         (match Llvm__2.Regalloc.os with
         | Darwin ->
-            Llvm__2.Build.create_process_with_input "arch"
+            Llvm__2.Build.create_process_with_input "clang"
               (Array.concat
                  [
-                   [| "arch"; "-x86_64"; "clang" |];
+                   [| "clang"; "-target"; "x86_64-unknown-darwin" |];
                    cargs;
                    [| "-x"; "assembler"; "-o"; fn |];
                  ])
@@ -579,6 +579,8 @@ let () =
              2\n\
              1\n";
         ] );
+      ("tests/fib0.ll", "", [], [], [ Stdout ""; Stderr "" ]);
+      ("tests/fib1.ll", "", [], [ "34" ], [ Stdout ""; Stderr "" ]);
       ( "dolphintests/_prog_01.ll",
         "",
         [ "dolphin.c" ],
