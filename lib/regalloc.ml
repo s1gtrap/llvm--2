@@ -671,41 +671,6 @@ let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
     | Ocamlgraph ->
         C.coloring g 12;
         S.ST.mapi (fun _k v -> Lva.G.Mark.get v) l |> S.ST.map var
-    | Briggs ->
-        let _briggs _ = () in
-        let _k = 14 in
-        let k = 2 in
-        let rec simplify r s asn =
-          if r < k then
-            let degrees = S.ST.map (Lva.G.out_degree g) l in
-            let unassigned =
-              S.ST.filter
-                (fun o _ -> Option.is_none (S.ST.find_opt o asn))
-                degrees
-            in
-            let insignificant = S.ST.filter (fun _ d -> d < k) unassigned in
-
-            match S.ST.choose_opt insignificant with
-            | Some (op, _deg) ->
-                (* assign o to r *)
-                simplify (r + 1) s (S.ST.add op (var r) asn)
-            | None -> spill r s asn
-          else spill r s asn
-        and spill r s asn =
-          let degrees = S.ST.map (Lva.G.out_degree g) l in
-          let unassigned =
-            S.ST.filter
-              (fun o _ -> Option.is_none (S.ST.find_opt o asn))
-              degrees
-          in
-          (*let significant = S.ST.filter (fun _ d -> d >= k) unassigned in*)
-          match S.ST.choose_opt unassigned with
-          | Some (op, _deg) ->
-              (* spill to stack *)
-              simplify r (s + 1) (S.ST.add op (var (s + 12)) asn)
-          | None -> asn
-        in
-        simplify 0 0 S.empty
     | Greedy ->
         let c = ref 0 in
         S.ST.map
@@ -714,6 +679,30 @@ let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
             c := !c + 1;
             v)
           l
+    | Briggs ->
+        let k = 2 in
+        let simplify _asn =
+          let simplify g =
+            (* mark nodes as colorables *)
+            let rec remove_vertex (l : Lva.G.V.t S.table) =
+              let degrees = S.ST.map (Lva.G.out_degree g) l in
+              let insignificant = S.ST.filter (fun _ d -> d < k) degrees in
+              match S.ST.choose_opt insignificant with
+              | Some (op, deg) ->
+                  Printf.printf "removing %s (%d < %d)\n" (S.name op) deg k;
+                  Lva.G.remove_vertex g (S.ST.find op l);
+                  op :: remove_vertex (S.ST.remove op l)
+              | None -> []
+            in
+            remove_vertex l
+          in
+          let stack = simplify g in
+          Printf.printf "Marked as colorable: ";
+          List.iter (fun k -> Printf.printf "%s " (S.name k)) stack;
+          Printf.printf "\n";
+          failwith ""
+        in
+        simplify S.empty
   in
 
   l
