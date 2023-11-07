@@ -349,7 +349,7 @@ let compile_operand :
   | Id id -> (
       match S.ST.find_opt id asn with
       | Some (Ind3 src) ->
-          [ (Movq, [ Ind3 src; Reg Rax ]); (Movq, [ Reg Rax; dst ]) ]
+          [ (Movq, [ Ind3 src; Reg Rcx ]); (Movq, [ Reg Rcx; dst ]) ]
       | Some i -> [ (Movq, [ i; dst ]) ]
       | None -> failwith (Printf.sprintf "%s" (S.name id)))
 
