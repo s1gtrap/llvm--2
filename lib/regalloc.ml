@@ -643,6 +643,8 @@ let string_of_allocator = function
   | Briggs -> "briggs"
   | Greedy -> "greedy"
 
+module VS = Set.Make (Lva.G.V)
+
 let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
   let var i =
     let j =
@@ -680,23 +682,27 @@ let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
             v)
           l
     | Briggs ->
-        let k = 2 in
+        let c = 2 in
         let simplify _asn =
-          let simplify g =
+          let simplify () =
             (* mark nodes as colorables *)
-            let rec remove_vertex (l : Lva.G.V.t S.table) =
-              let degrees = S.ST.map (Lva.G.out_degree g) l in
-              let insignificant = S.ST.filter (fun _ d -> d < k) degrees in
-              match S.ST.choose_opt insignificant with
-              | Some (op, deg) ->
-                  Printf.printf "removing %s (%d < %d)\n" (S.name op) deg k;
-                  Lva.G.remove_vertex g (S.ST.find op l);
-                  op :: remove_vertex (S.ST.remove op l)
+            let rec remove_vertex (removed_vertices : VS.t)
+                (l : Lva.G.V.t S.table) =
+              let insig _k v =
+                let mem k = not (VS.mem k removed_vertices) in
+                let degree = Lva.G.succ g v |> List.filter mem |> List.length in
+                if degree < c then Some (v, degree) else None
+              in
+              match S.ST.filter_map insig l |> S.ST.choose_opt with
+              | Some (k, (v, deg)) ->
+                  Printf.printf "removing %s (%d < %d)\n" (S.name k) deg c;
+                  k
+                  :: remove_vertex (VS.add v removed_vertices) (S.ST.remove k l)
               | None -> []
             in
-            remove_vertex l
+            remove_vertex VS.empty l
           in
-          let stack = simplify g in
+          let stack = simplify () in
           Printf.printf "Marked as colorable: ";
           List.iter (fun k -> Printf.printf "%s " (S.name k)) stack;
           Printf.printf "\n";
@@ -704,7 +710,6 @@ let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
         in
         simplify S.empty
   in
-
   l
 
 let insns (_insns : Cfg.insn list) (_l : Lva.G.V.t S.table) (_g : Lva.G.t) :
