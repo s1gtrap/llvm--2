@@ -646,31 +646,116 @@ let string_of_allocator = function
 
 let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
   let var i =
-    match i + 2 with
-    (*| 0 -> Reg Rax
-      | 1 -> Reg Rcx (* NOTE: %rax and %rcx are scratch registers *)*)
-    | 0 -> Reg Rdx
-    | 1 -> Reg Rbx
-    | 2 -> Reg Rsi
-    | 3 -> Reg Rdi
-    | 4 -> Reg R08
-    | 5 -> Reg R09
-    | 6 -> Reg R10
-    | 7 -> Reg R11
-    | 8 -> Reg R12
-    | 9 -> Reg R13
-    | 10 -> Reg R14
-    | 11 -> Reg R15
-    | i -> Ind3 (Lit (Int64.of_int ((i - 11) * -8)), Rbp)
+    let j =
+      match i with
+      (*| 0 -> Reg Rax
+        | 1 -> Reg Rcx (* NOTE: %rax and %rcx are scratch registers *)*)
+      | 0 -> Reg Rdx
+      | 1 -> Reg Rbx
+      | 2 -> Reg Rsi
+      | 3 -> Reg Rdi
+      | 4 -> Reg R08
+      | 5 -> Reg R09
+      | 6 -> Reg R10
+      | 7 -> Reg R11
+      | 8 -> Reg R12
+      | 9 -> Reg R13
+      | 10 -> Reg R14
+      | 11 -> Reg R15
+      | i -> Ind3 (Lit (Int64.of_int ((i - 11) * -8)), Rbp)
+    in
+    flush stdout;
+    j
   in
   let l =
     match a with
     | Ocamlgraph ->
         C.coloring g 12;
-        S.ST.map (fun v -> Lva.G.Mark.get v) l |> S.ST.map var
+        S.ST.mapi
+          (fun k v ->
+            Printf.printf "%s\n" (S.name k);
+            flush stdout;
+            Lva.G.Mark.get v)
+          l
+        |> S.ST.map var
     | Briggs ->
-        let color _k = failwith "" in
-        color 2
+        let _briggs _ = () in
+        let _k = 14 in
+        let k = 2 in
+        let rec simplify r s asn =
+          let choose () =
+            let find_any key =
+              let t = true in
+              Printf.printf "trying %s = %b..\n" (S.name key) t;
+              flush stdout;
+              t
+            in
+            let print k _v =
+              Printf.printf "%s = %s\n" (S.name k)
+                (match S.ST.find_opt k asn with
+                | Some _ -> Printf.sprintf "Some _"
+                | None -> Printf.sprintf "None")
+            in
+            let print_asn () =
+              Printf.printf "---\n";
+              S.ST.iter
+                (fun k v ->
+                  Printf.printf "%s: %s\n" (S.name k) (string_of_operand v);
+                  ())
+                asn;
+              Printf.printf "---\n"
+            in
+            S.ST.iter print l;
+            (match S.ST.find_first_opt find_any l with
+            | Some (o, _) -> Printf.printf "found %s\n" (S.name o)
+            | _ -> ());
+            let _find_key key =
+              let t =
+                match S.ST.find_opt key asn with
+                | Some _ -> false
+                | None -> true
+              in
+              Printf.printf "trying %s = %b..\n" (S.name key) t;
+              flush stdout;
+              t
+            in
+            print_asn ();
+            let o = S.ST.find_first_opt find_any l in
+            Printf.printf "returning %s\n" (S.name (fst (Option.get o)));
+            o
+          in
+          match choose () with
+          | Some (c, _) ->
+              Printf.printf "si set %s = %s\n" (S.name c)
+                (string_of_operand (var r));
+              flush stdout;
+              simplify (r + 1) s (S.ST.add c (var r) asn)
+          | None -> spill r s asn
+        and spill r s asn =
+          let choose () =
+            S.ST.find_first_opt
+              (fun key ->
+                let v = S.ST.find key l in
+                let t =
+                  Option.is_none (S.ST.find_opt key asn)
+                  && Lva.G.out_degree g v >= k
+                in
+                Printf.printf "trying %s = %b..\n" (S.name key) t;
+                flush stdout;
+                t)
+              l
+          in
+          match choose () with
+          | Some (c, _) ->
+              Printf.printf "sp set %s = %s\n" (S.name c)
+                (string_of_operand (var (s + 12)));
+              flush stdout;
+              flush stdout;
+              simplify r (s + 1)
+                (S.ST.add c (var r) (S.ST.add c (var (s + 12)) asn))
+          | None -> asn
+        in
+        simplify 0 0 S.empty
     | Greedy ->
         let c = ref 0 in
         S.ST.map
@@ -744,7 +829,7 @@ let compile_fdecl :
   let poparg _i dst =
     match S.ST.find_opt dst asn with
     | Some dst -> (Popq, [ dst ])
-    | None -> failwith ""
+    | None -> failwith (Printf.sprintf "cannot pop %s" (S.name dst))
   in
   let pro = pro @ List.mapi pusharg param @ List.mapi poparg (List.rev param) in
   let _var i =
