@@ -336,23 +336,22 @@ let lookup m x =
    destination (usually a register).
 *)
 
-let compile_operand : ctxt -> operand S.table -> operand -> Ll.operand -> ins =
+let compile_operand :
+    ctxt -> operand S.table -> operand -> Ll.operand -> ins list =
  fun _ctxt asn dst src ->
   match src with
-  | Null -> (Movq, [ Imm (Lit 0L); dst ])
-  | IConst64 i -> (Movq, [ Imm (Lit i); dst ])
-  | IConst32 i -> (Movq, [ Imm (Lit (Int64.of_int32 i)); dst ])
-  | IConst8 i -> (Movq, [ Imm (Lit (Int64.of_int (Char.code i))); dst ])
-  | BConst i -> (Movq, [ Imm (Lit (if i then 1L else 0L)); dst ])
-  | Gid gid -> (Leaq, [ Ind3 (Lbl (mangle gid), Rip); dst ])
-  | Id id ->
-      ( Movq,
-        [
-          (match S.ST.find_opt id asn with
-          | Some i -> i
-          | None -> failwith (Printf.sprintf "%s" (S.name id)));
-          dst;
-        ] )
+  | Null -> [ (Movq, [ Imm (Lit 0L); dst ]) ]
+  | IConst64 i -> [ (Movq, [ Imm (Lit i); dst ]) ]
+  | IConst32 i -> [ (Movq, [ Imm (Lit (Int64.of_int32 i)); dst ]) ]
+  | IConst8 i -> [ (Movq, [ Imm (Lit (Int64.of_int (Char.code i))); dst ]) ]
+  | BConst i -> [ (Movq, [ Imm (Lit (if i then 1L else 0L)); dst ]) ]
+  | Gid gid -> [ (Leaq, [ Ind3 (Lbl (mangle gid), Rip); dst ]) ]
+  | Id id -> (
+      match S.ST.find_opt id asn with
+      | Some (Ind3 src) ->
+          [ (Movq, [ Ind3 src; Reg Rax ]); (Movq, [ Reg Rax; dst ]) ]
+      | Some i -> [ (Movq, [ i; dst ]) ]
+      | None -> failwith (Printf.sprintf "%s" (S.name id)))
 
 let arg_loc : int -> operand = function
   | 0 -> Reg Rdi
@@ -379,7 +378,7 @@ let compile_call :
   in
   let pusharg _i dst : ins list =
     let ins = compile_operand ctxt asn (Reg Rax) dst in
-    [ ins ] @ [ (Pushq, [ Reg Rax ]) ]
+    ins @ [ (Pushq, [ Reg Rax ]) ]
   in
   let poparg i _ =
     ( Popq,
@@ -446,21 +445,21 @@ let compile_gep :
         let offset, ty = offset ty (Int32.to_int i) in
         let offsins = (Movq, [ Imm (Lit (Int64.of_int offset)); Reg Rax ]) in
         let childins = (Addq, [ Reg Rax; Reg Rcx ]) in
-        gep tail ty ([ parins; offsins; childins ] :: insns)
+        gep tail ty ((parins @ [ offsins; childins ]) :: insns)
     | Array (_, ty), head :: tail ->
         let elmsize = size_ty ctxt.tdecls ty in
         let parins = compile_operand ctxt asn (Reg Rax) head in
         let offsins = (Imulq, [ Imm (Lit (Int64.of_int elmsize)); Reg Rax ]) in
         let childins = (Addq, [ Reg Rax; Reg Rcx ]) in
-        gep tail ty ([ parins; offsins; childins ] :: insns)
+        gep tail ty ((parins @ [ offsins; childins ]) :: insns)
     | _, head :: tail ->
         let parins = compile_operand ctxt asn (Reg Rax) head in
         let offsins = (Imulq, [ Imm (Lit 8L); Reg Rax ]) in
         let childins = (Addq, [ Reg Rax; Reg Rcx ]) in
-        gep tail ty ([ parins; offsins; childins ] :: insns)
+        gep tail ty ((parins @ [ offsins; childins ]) :: insns)
     | _, [] -> List.rev insns
   in
-  base :: List.concat (gep ops (Array (0, ty)) [])
+  base @ List.concat (gep ops (Array (0, ty)) [])
 
 let compile_bop : Ll.bop -> opcode = function
   | Add -> Addq
@@ -491,7 +490,7 @@ let compile_insn :
       let opins = (Idivq, [ Reg Rcx ]) in
       let storins = (Movq, [ Reg Rax; dst ]) in
       let popdx = (Popq, [ Reg Rdx ]) in
-      [ pushdx; lins; rins; cqtoins; opins; storins; popdx ]
+      [ pushdx ] @ lins @ rins @ [ cqtoins; opins; storins; popdx ]
   | Some dst, Binop (SRem, _, lop, rop) ->
       (* RAX and RCX are volatile, should be good? *)
       (* FIXME: %edx is overwritten *)
@@ -503,7 +502,7 @@ let compile_insn :
       let opins = (Idivq, [ Reg Rcx ]) in
       let storins = (Movq, [ Reg Rdx; dst ]) in
       let popdx = (Popq, [ Reg Rdx ]) in
-      [ pushdx; lins; rins; cqtoins; opins; storins; popdx ]
+      [ pushdx ] @ lins @ rins @ [ cqtoins; opins; storins; popdx ]
   | Some dst, Binop (bop, _, lop, rop) ->
       (* RAX and RCX are volatile, should be good? *)
       let dst = S.ST.find dst asn in
@@ -511,7 +510,7 @@ let compile_insn :
       let rins = compile_operand ctxt asn (Reg Rcx) rop in
       let opins = (compile_bop bop, [ Reg Rcx; Reg Rax ]) in
       let storins = (Movq, [ Reg Rax; dst ]) in
-      [ lins; rins; opins; storins ]
+      lins @ rins @ [ opins; storins ]
   | Some dst, Alloca ty ->
       let dst = S.ST.find dst asn in
       let size = size_ty ctxt.tdecls ty in
@@ -526,7 +525,7 @@ let compile_insn :
           let operins = compile_operand ctxt asn (Reg Rax) src in
           let loadins = (Movq, [ Ind2 Rax; Reg Rax ]) in
           let storins = (Movq, [ Reg Rax; dst ]) in
-          [ operins; loadins; storins ]
+          operins @ [ loadins; storins ]
       | None -> [])
   | None, Store (_, src, dst) ->
       let sins = compile_operand ctxt asn (Reg Rax) src in
@@ -536,7 +535,7 @@ let compile_insn :
         | Id _ -> (Movq, [ Reg Rax; Ind2 Rcx ])
         | _ -> raise BackendFatal
       in
-      [ sins; dins; storins ]
+      sins @ dins @ [ storins ]
   | Some dst, Icmp (cnd, _, l, r) ->
       let lop = Reg Rax in
       let rop = Reg Rcx in
@@ -563,7 +562,7 @@ let compile_insn :
         | op -> op
       in
       let setinsn = (Set (compile_cnd cnd), [ byteofquad dst ]) in
-      [ lins; rins; cmpinsn; setzins; setinsn ]
+      lins @ rins @ [ cmpinsn; setzins; setinsn ]
   | Some dst, Call (_, oper, args) ->
       let dst = S.ST.find dst asn in
       let callins : ins list = compile_call ctxt asn oper args in
@@ -575,7 +574,7 @@ let compile_insn :
       let dst = S.ST.find dst asn in
       let opins = compile_operand ctxt asn (Reg Rax) src in
       let storins = (Movq, [ Reg Rax; dst ]) in
-      [ opins; storins ]
+      opins @ [ storins ]
   | Some dst, Gep (ty, src, operlist) ->
       let dst = S.ST.find dst asn in
       let gepinsns = compile_gep ctxt asn (ty, src) operlist in
@@ -585,12 +584,12 @@ let compile_insn :
       let dst = S.ST.find dst asn in
       let opins = compile_operand ctxt asn (Reg Rax) src in
       let storins = (Movq, [ Reg Rax; dst ]) in
-      [ opins; storins ]
+      opins @ [ storins ]
   | Some dst, Ptrtoint (_, src, _) ->
       let dst = S.ST.find dst asn in
       let opins = compile_operand ctxt asn (Reg Rax) src in
       let storins = (Movq, [ Reg Rax; dst ]) in
-      [ opins; storins ]
+      opins @ [ storins ]
   | Some _dst, PhiNode _ -> []
   | insn -> failwith (Ll.string_of_named_insn insn))
 
@@ -602,17 +601,17 @@ let compile_terminator :
   (match term with
   | Ret (_, Some oper) ->
       let operins = compile_operand ctxt asn (Reg Rax) oper in
-      [
-        operins;
-        (Movq, [ Reg Rbp; Reg Rsp ]);
-        (Popq, [ Reg R15 ]);
-        (Popq, [ Reg R14 ]);
-        (Popq, [ Reg R13 ]);
-        (Popq, [ Reg R12 ]);
-        (Popq, [ Reg Rbx ]);
-        (Popq, [ Reg Rbp ]);
-        (Retq, []);
-      ]
+      operins
+      @ [
+          (Movq, [ Reg Rbp; Reg Rsp ]);
+          (Popq, [ Reg R15 ]);
+          (Popq, [ Reg R14 ]);
+          (Popq, [ Reg R13 ]);
+          (Popq, [ Reg R12 ]);
+          (Popq, [ Reg Rbx ]);
+          (Popq, [ Reg Rbp ]);
+          (Retq, []);
+        ]
   | Ret (_, None) ->
       [
         (*(Movq, [ Imm (Lit 0L); Reg Rax ]); (* FIXME *)*)
@@ -632,7 +631,7 @@ let compile_terminator :
       let cmpins : ins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
       let jeq = (J Eq, [ Imm (Lbl (S.name els)) ]) in
       let jmp = (Jmp, [ Imm (Lbl (S.name thn)) ]) in
-      [ operins; zeroins; cmpins ] @ movs @ [ jeq; jmp ]
+      operins @ [ zeroins; cmpins ] @ movs @ [ jeq; jmp ]
   | _ -> failwith "")
 
 module C = Coloring.Mark (Lva.G)
@@ -866,10 +865,9 @@ let compile_fdecl :
               (function
                 | Some movs ->
                     Some
-                      (movs
-                      @ [ compile_operand ctxt asn (S.ST.find dst asn) src ])
+                      (movs @ compile_operand ctxt asn (S.ST.find dst asn) src)
                 | None ->
-                    Some [ compile_operand ctxt asn (S.ST.find dst asn) src ])
+                    Some (compile_operand ctxt asn (S.ST.find dst asn) src))
               t)
           t ops)
       S.empty phis
