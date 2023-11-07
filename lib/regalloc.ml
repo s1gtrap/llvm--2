@@ -347,11 +347,11 @@ let compile_operand :
   | BConst i -> [ (Movq, [ Imm (Lit (if i then 1L else 0L)); dst ]) ]
   | Gid gid -> [ (Leaq, [ Ind3 (Lbl (mangle gid), Rip); dst ]) ]
   | Id id -> (
-      match S.ST.find_opt id asn with
-      | Some (Ind3 src) ->
-          [ (Movq, [ Ind3 src; Reg Rcx ]); (Movq, [ Reg Rcx; dst ]) ]
-      | Some i -> [ (Movq, [ i; dst ]) ]
-      | None -> failwith (Printf.sprintf "%s" (S.name id)))
+      match (dst, S.ST.find_opt id asn) with
+      | Ind3 dst, Some (Ind3 src) ->
+          [ (Movq, [ Ind3 src; Reg Rcx ]); (Movq, [ Reg Rcx; Ind3 dst ]) ]
+      | dst, Some i -> [ (Movq, [ i; dst ]) ]
+      | _, None -> failwith (Printf.sprintf "%s" (S.name id)))
 
 let arg_loc : int -> operand = function
   | 0 -> Reg Rdi
@@ -670,88 +670,39 @@ let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
     match a with
     | Ocamlgraph ->
         C.coloring g 12;
-        S.ST.mapi
-          (fun k v ->
-            Printf.printf "%s\n" (S.name k);
-            flush stdout;
-            Lva.G.Mark.get v)
-          l
-        |> S.ST.map var
+        S.ST.mapi (fun _k v -> Lva.G.Mark.get v) l |> S.ST.map var
     | Briggs ->
         let _briggs _ = () in
         let _k = 14 in
         let k = 2 in
         let rec simplify r s asn =
-          let choose () =
-            let find_any key =
-              let t = true in
-              Printf.printf "trying %s = %b..\n" (S.name key) t;
-              flush stdout;
-              t
+          if r < k then
+            let degrees = S.ST.map (Lva.G.out_degree g) l in
+            let unassigned =
+              S.ST.filter
+                (fun o _ -> Option.is_none (S.ST.find_opt o asn))
+                degrees
             in
-            let print k _v =
-              Printf.printf "%s = %s\n" (S.name k)
-                (match S.ST.find_opt k asn with
-                | Some _ -> Printf.sprintf "Some _"
-                | None -> Printf.sprintf "None")
-            in
-            let print_asn () =
-              Printf.printf "---\n";
-              S.ST.iter
-                (fun k v ->
-                  Printf.printf "%s: %s\n" (S.name k) (string_of_operand v);
-                  ())
-                asn;
-              Printf.printf "---\n"
-            in
-            S.ST.iter print l;
-            (match S.ST.find_first_opt find_any l with
-            | Some (o, _) -> Printf.printf "found %s\n" (S.name o)
-            | _ -> ());
-            let _find_key key =
-              let t =
-                match S.ST.find_opt key asn with
-                | Some _ -> false
-                | None -> true
-              in
-              Printf.printf "trying %s = %b..\n" (S.name key) t;
-              flush stdout;
-              t
-            in
-            print_asn ();
-            let o = S.ST.find_first_opt find_any l in
-            Printf.printf "returning %s\n" (S.name (fst (Option.get o)));
-            o
-          in
-          match choose () with
-          | Some (c, _) ->
-              Printf.printf "si set %s = %s\n" (S.name c)
-                (string_of_operand (var r));
-              flush stdout;
-              simplify (r + 1) s (S.ST.add c (var r) asn)
-          | None -> spill r s asn
+            let insignificant = S.ST.filter (fun _ d -> d < k) unassigned in
+
+            match S.ST.choose_opt insignificant with
+            | Some (op, _deg) ->
+                (* assign o to r *)
+                simplify (r + 1) s (S.ST.add op (var r) asn)
+            | None -> spill r s asn
+          else spill r s asn
         and spill r s asn =
-          let choose () =
-            S.ST.find_first_opt
-              (fun key ->
-                let v = S.ST.find key l in
-                let t =
-                  Option.is_none (S.ST.find_opt key asn)
-                  && Lva.G.out_degree g v >= k
-                in
-                Printf.printf "trying %s = %b..\n" (S.name key) t;
-                flush stdout;
-                t)
-              l
+          let degrees = S.ST.map (Lva.G.out_degree g) l in
+          let unassigned =
+            S.ST.filter
+              (fun o _ -> Option.is_none (S.ST.find_opt o asn))
+              degrees
           in
-          match choose () with
-          | Some (c, _) ->
-              Printf.printf "sp set %s = %s\n" (S.name c)
-                (string_of_operand (var (s + 12)));
-              flush stdout;
-              flush stdout;
-              simplify r (s + 1)
-                (S.ST.add c (var r) (S.ST.add c (var (s + 12)) asn))
+          (*let significant = S.ST.filter (fun _ d -> d >= k) unassigned in*)
+          match S.ST.choose_opt unassigned with
+          | Some (op, _deg) ->
+              (* spill to stack *)
+              simplify r (s + 1) (S.ST.add op (var (s + 12)) asn)
           | None -> asn
         in
         simplify 0 0 S.empty

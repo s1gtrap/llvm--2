@@ -77,7 +77,7 @@ let execute command args (input : string) : status =
   | _, WSIGNALED code -> Error (WSIGNALED code, !stdout, !stderr)
   | _, WSTOPPED code -> Error (WSTOPPED code, !stdout, !stderr)
 
-let compile_test test cargs =
+let compile_test (alc : Llvm__2.Regalloc.allocator) test cargs =
   match S.find_opt test !execs with
   | Some fn -> fn
   | None ->
@@ -86,7 +86,7 @@ let compile_test test cargs =
         try
           In_channel.open_text test
           |> Llvm__2.Parse.from_channel Llvm__2.Llparser.prog
-          |> Llvm__2.Regalloc.compile_prog Llvm__2.Regalloc.Greedy
+          |> Llvm__2.Regalloc.compile_prog alc
           |> Llvm__2.Regalloc.string_of_prog
         with _ -> raise CompileError
       in
@@ -106,7 +106,12 @@ let compile_test test cargs =
                  [ [| "clang" |]; cargs; [| "-x"; "assembler"; "-o"; fn |] ]))
           prog fn
       in
-      execs := S.add test fn !execs;
+      execs :=
+        S.add
+          (Printf.sprintf "%s$%s"
+             (Llvm__2.Regalloc.string_of_allocator alc)
+             test)
+          fn !execs;
       fn
 
 let run tests =
@@ -116,88 +121,95 @@ let run tests =
     let args = Array.of_list args in
     let red = "\027[0;31m" in
     let green = "\027[1;32m" in
-    (*let muted = "\033[1;30m" in*)
+    let muted = "\027[1;39m" in
     let nc = "\027[0m" in
-    Printf.printf "%s ... " file;
-    flush stdout;
-    try
-      let exc = compile_test file cargs in
-      match execute exc args stdin with
-      | Exit (exit, stdout, stderr) ->
-          let rec assert_ = function
-            | Exit code :: tail -> exit = code && assert_ tail
-            | Stdout s :: tail -> s = stdout && assert_ tail
-            | Stderr s :: tail -> s = stderr && assert_ tail
-            | Timeout :: tail -> false && assert_ tail
-            | [] -> true
-          in
-          if assert_ asserts then (
-            passes := !passes + 1;
-            Printf.printf " %sok!\n%s" green nc)
-          else
-            let print_diff s1 s2 =
-              let s1 = String.split_on_char '\n' s1 in
-              let s2 = String.split_on_char '\n' s2 in
-              let rec diff s1 s2 =
-                match (s1, s2) with
-                | l1 :: t1, l2 :: t2 when l1 = l2 ->
-                    Printf.printf "    %s\n" (String.escaped l1);
-                    diff t1 t2
-                | l1 :: t1, l2 :: t2 ->
-                    Printf.printf "%s   +%s\n%s   -%s%s\n" green
-                      (String.escaped l1) red (String.escaped l2) nc;
-                    diff t1 t2
-                | l1 :: t1, [] ->
-                    Printf.printf "%s   +%s%s\n" green (String.escaped l1) nc;
-                    diff t1 []
-                | [], l2 :: t2 ->
-                    Printf.printf "%s   -%s%s\n" red (String.escaped l2) nc;
-                    diff [] t2
-                | [], [] -> ()
-              in
-              diff s1 s2
-            in
+    let run_ a =
+      Printf.printf "%s[%s]%s %s ... " muted
+        (Llvm__2.Regalloc.string_of_allocator a)
+        nc file;
+      flush stdout;
+      try
+        let exc = compile_test a file cargs in
+        match execute exc args stdin with
+        | Exit (exit, stdout, stderr) ->
             let rec assert_ = function
-              | Exit code :: tail ->
-                  if exit <> code then
-                    Printf.printf "  exit failed: %d != %d\n" exit code;
-                  assert_ tail
-              | Stdout s :: tail ->
-                  if s <> stdout then (
-                    Printf.printf "  stdout failed:\n";
-                    print_diff stdout s);
-                  assert_ tail
-              | Stderr s :: tail ->
-                  if s <> stderr then (
-                    Printf.printf "  stderr failed:\n";
-                    print_diff stderr s);
-                  assert_ tail
-              | Timeout :: tail ->
-                  Printf.printf "  finished before timeout!\n";
-                  assert_ tail
-              | [] -> ()
+              | Exit code :: tail -> exit = code && assert_ tail
+              | Stdout s :: tail -> s = stdout && assert_ tail
+              | Stderr s :: tail -> s = stderr && assert_ tail
+              | Timeout :: tail -> false && assert_ tail
+              | [] -> true
             in
-            Printf.printf " %sfailed!%s %s\n" red nc exc;
-            assert_ asserts
-      | Error (s, _, "") ->
-          Printf.printf "%sruntime error!%s %s\n  exit code: %s\n" red nc exc
-            (string_of_process_status s)
-      | Error (s, _, stderr) ->
-          Printf.printf "%sruntime error!%s %s\n  exit code: %s\n  stdout: %s\n"
-            red nc exc
-            (string_of_process_status s)
-            stderr
-      | Timeout ->
-          Printf.printf "%stimeout!%s %s\n"
-            (match
-               List.find_opt (function Timeout -> true | _ -> false) asserts
-             with
-            | Some _ ->
-                passes := !passes + 1;
-                green
-            | None -> red)
-            nc exc
-    with CompileError -> Printf.printf "%scompile error!%s\n" red nc
+            if assert_ asserts then (
+              passes := !passes + 1;
+              Printf.printf " %sok!\n%s" green nc)
+            else
+              let print_diff s1 s2 =
+                let s1 = String.split_on_char '\n' s1 in
+                let s2 = String.split_on_char '\n' s2 in
+                let rec diff s1 s2 =
+                  match (s1, s2) with
+                  | l1 :: t1, l2 :: t2 when l1 = l2 ->
+                      Printf.printf "    %s\n" (String.escaped l1);
+                      diff t1 t2
+                  | l1 :: t1, l2 :: t2 ->
+                      Printf.printf "%s   +%s\n%s   -%s%s\n" green
+                        (String.escaped l1) red (String.escaped l2) nc;
+                      diff t1 t2
+                  | l1 :: t1, [] ->
+                      Printf.printf "%s   +%s%s\n" green (String.escaped l1) nc;
+                      diff t1 []
+                  | [], l2 :: t2 ->
+                      Printf.printf "%s   -%s%s\n" red (String.escaped l2) nc;
+                      diff [] t2
+                  | [], [] -> ()
+                in
+                diff s1 s2
+              in
+              let rec assert_ = function
+                | Exit code :: tail ->
+                    if exit <> code then
+                      Printf.printf "  exit failed: %d != %d\n" exit code;
+                    assert_ tail
+                | Stdout s :: tail ->
+                    if s <> stdout then (
+                      Printf.printf "  stdout failed:\n";
+                      print_diff stdout s);
+                    assert_ tail
+                | Stderr s :: tail ->
+                    if s <> stderr then (
+                      Printf.printf "  stderr failed:\n";
+                      print_diff stderr s);
+                    assert_ tail
+                | Timeout :: tail ->
+                    Printf.printf "  finished before timeout!\n";
+                    assert_ tail
+                | [] -> ()
+              in
+              Printf.printf " %sfailed!%s %s\n" red nc exc;
+              assert_ asserts
+        | Error (s, _, "") ->
+            Printf.printf "%sruntime error!%s %s\n  exit code: %s\n" red nc exc
+              (string_of_process_status s)
+        | Error (s, _, stderr) ->
+            Printf.printf
+              "%sruntime error!%s %s\n  exit code: %s\n  stdout: %s\n" red nc
+              exc
+              (string_of_process_status s)
+              stderr
+        | Timeout ->
+            Printf.printf "%stimeout!%s %s\n"
+              (match
+                 List.find_opt (function Timeout -> true | _ -> false) asserts
+               with
+              | Some _ ->
+                  passes := !passes + 1;
+                  green
+              | None -> red)
+              nc exc
+      with CompileError -> Printf.printf "%scompile error!%s\n" red nc
+    in
+    run_ Llvm__2.Regalloc.Greedy;
+    run_ Llvm__2.Regalloc.Briggs
   in
   List.iter r tests;
   !passes
@@ -1058,4 +1070,4 @@ let () =
     ]
   in
   let passes = run tests in
-  Printf.printf "passed [%d/%d]\n" passes (List.length tests)
+  Printf.printf "passed [%d/%d]\n" passes (List.length tests * 2)
