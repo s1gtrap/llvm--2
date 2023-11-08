@@ -644,6 +644,8 @@ let string_of_allocator = function
   | Greedy -> "greedy"
 
 module VS = Set.Make (Lva.G.V)
+module VT = Map.Make (Lva.G.V)
+module Ints = Set.Make (Int)
 
 type mark = Color of S.symbol * Lva.G.V.t | Spill of S.symbol * Lva.G.V.t
 
@@ -718,20 +720,34 @@ let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
               | Spill (k, _v) -> Printf.printf "spill %s, " (S.name k))
             markers;
           Printf.printf "\n";
-          let rec select assignments markers =
+          let indices = Ints.add 1 (Ints.add 0 Ints.empty) in
+          let rec select (assignments : int VT.t) markers =
             match markers with
-            | Color (k, _) :: tail -> (k, var 0) :: select assignments tail
+            | Color (k, v) :: tail ->
+                let neighbor_assignments =
+                  Lva.G.succ g v
+                  |> List.filter_map (fun v -> VT.find_opt v assignments)
+                  |> List.fold_left (fun s i -> Ints.add i s) Ints.empty
+                in
+                let avail_assignments =
+                  Ints.diff indices neighbor_assignments
+                in
+                let assignment = Ints.choose avail_assignments in
+                Printf.printf "coloring %s %d\n" (S.name k) assignment;
+                (k, var assignment)
+                :: select (VT.add v assignment assignments) tail
             | Spill (k, _) :: tail -> (k, var 0) :: select assignments tail
             | [] -> []
           in
-          let assignments = List.rev markers |> select S.empty in
+          let assignments = List.rev markers |> select VT.empty in
           Printf.printf "Assignments: ";
           List.iter
             (fun (k, v) ->
               Printf.printf "%s: %s, " (S.name k) (string_of_operand v))
             assignments;
           Printf.printf "\n";
-          failwith ""
+          let assignments = S.ST.of_list assignments in
+          S.ST.mapi (fun k _v -> S.ST.find k assignments) assignments
         in
         simplify S.empty
   in
