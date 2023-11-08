@@ -645,6 +645,8 @@ let string_of_allocator = function
 
 module VS = Set.Make (Lva.G.V)
 
+type mark = Color of S.symbol * Lva.G.V.t | Spill of S.symbol * Lva.G.V.t
+
 let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
   let var i =
     let j =
@@ -696,15 +698,38 @@ let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
               match S.ST.filter_map insig l |> S.ST.choose_opt with
               | Some (k, (v, deg)) ->
                   Printf.printf "removing %s (%d < %d)\n" (S.name k) deg c;
-                  k
+                  Color (k, v)
+                  :: remove_vertex (VS.add v removed_vertices) (S.ST.remove k l)
+              | None -> spill removed_vertices l
+            and spill (removed_vertices : VS.t) (l : Lva.G.V.t S.table) =
+              match S.ST.choose_opt l with
+              | Some (k, v) ->
+                  Spill (k, v)
                   :: remove_vertex (VS.add v removed_vertices) (S.ST.remove k l)
               | None -> []
             in
             remove_vertex VS.empty l
           in
-          let stack = simplify () in
+          let markers = simplify () in
           Printf.printf "Marked as colorable: ";
-          List.iter (fun k -> Printf.printf "%s " (S.name k)) stack;
+          List.iter
+            (function
+              | Color (k, _v) -> Printf.printf "color %s, " (S.name k)
+              | Spill (k, _v) -> Printf.printf "spill %s, " (S.name k))
+            markers;
+          Printf.printf "\n";
+          let rec select assignments markers =
+            match markers with
+            | Color (k, _) :: tail -> (k, var 0) :: select assignments tail
+            | Spill (k, _) :: tail -> (k, var 0) :: select assignments tail
+            | [] -> []
+          in
+          let assignments = List.rev markers |> select S.empty in
+          Printf.printf "Assignments: ";
+          List.iter
+            (fun (k, v) ->
+              Printf.printf "%s: %s, " (S.name k) (string_of_operand v))
+            assignments;
           Printf.printf "\n";
           failwith ""
         in
