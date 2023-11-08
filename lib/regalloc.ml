@@ -490,7 +490,8 @@ let compile_insn :
       let opins = (Idivq, [ Reg Rcx ]) in
       let storins = (Movq, [ Reg Rax; dst ]) in
       let popdx = (Popq, [ Reg Rdx ]) in
-      [ pushdx ] @ lins @ rins @ [ cqtoins; opins; storins; popdx ]
+      if dst = Reg Rdx then lins @ rins @ [ cqtoins; opins; storins ]
+      else [ pushdx ] @ lins @ rins @ [ cqtoins; opins; storins; popdx ]
   | Some dst, Binop (SRem, _, lop, rop) ->
       (* RAX and RCX are volatile, should be good? *)
       (* FIXME: %edx is overwritten *)
@@ -502,7 +503,8 @@ let compile_insn :
       let opins = (Idivq, [ Reg Rcx ]) in
       let storins = (Movq, [ Reg Rdx; dst ]) in
       let popdx = (Popq, [ Reg Rdx ]) in
-      [ pushdx ] @ lins @ rins @ [ cqtoins; opins; storins; popdx ]
+      if dst = Reg Rdx then lins @ rins @ [ cqtoins; opins; storins ]
+      else [ pushdx ] @ lins @ rins @ [ cqtoins; opins; storins; popdx ]
   | Some dst, Binop (bop, _, lop, rop) ->
       (* RAX and RCX are volatile, should be good? *)
       let dst = S.ST.find dst asn in
