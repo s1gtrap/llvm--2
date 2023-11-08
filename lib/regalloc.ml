@@ -736,7 +736,25 @@ let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
                 Printf.printf "coloring %s %d\n" (S.name k) assignment;
                 (k, var assignment)
                 :: select (VT.add v assignment assignments) tail
-            | Spill (k, _) :: tail -> (k, var 0) :: select assignments tail
+            | Spill (k, v) :: tail -> (
+                (* potential spill *)
+                let neighbor_assignments =
+                  Lva.G.succ g v
+                  |> List.filter_map (fun v -> VT.find_opt v assignments)
+                  |> List.fold_left (fun s i -> Ints.add i s) Ints.empty
+                in
+                let avail_assignments =
+                  Ints.diff indices neighbor_assignments
+                in
+                let assignment = Ints.choose_opt avail_assignments in
+                match assignment with
+                | Some assignment ->
+                    Printf.printf "coloring %s %d\n" (S.name k) assignment;
+                    (k, var assignment)
+                    :: select (VT.add v assignment assignments) tail
+                | None ->
+                    (* actual spill *)
+                    failwith "TODO: spill")
             | [] -> []
           in
           let assignments = List.rev markers |> select VT.empty in
