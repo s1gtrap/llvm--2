@@ -55,6 +55,7 @@ rule token = parse
   | "shl"              { SHL }
   | "srem"             { SREM }
   | "ret"              { RET }
+  | "unreachable"      { UNREACHABLE }
   | "getelementptr"    { GEP }
   | "zext"             { ZEXT }
   | "ptrtoint"         { PTRTOINT }

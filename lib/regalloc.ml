@@ -634,7 +634,9 @@ let compile_terminator :
       let jeq = (J Eq, [ Imm (Lbl (S.name els)) ]) in
       let jmp = (Jmp, [ Imm (Lbl (S.name thn)) ]) in
       operins @ [ zeroins; cmpins ] @ movs @ [ jeq; jmp ]
-  | _ -> failwith "")
+  | Unreachable ->
+      (* undefined, so do literally nothing *)
+      [])
 
 module C = Coloring.Mark (Lva.G)
 

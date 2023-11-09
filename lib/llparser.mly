@@ -8,7 +8,7 @@
 %token ADD SUB MUL SDIV
 %token EQ NE SLT SLE SGT SGE
 %token AND OR XOR SHL LSHR ASHR SREM
-%token RET BR TO NULL LABEL ENTRY GLOBAL DEFINE
+%token RET BR TO NULL LABEL ENTRY GLOBAL DEFINE UNREACHABLE
 %token CALL ICMP LOAD STORE ALLOCA BITCAST GEP ZEXT PTRTOINT PHI
 
 %token <int> INT        (* int64 values *)
@@ -91,6 +91,7 @@ terminator:
     { Br l }
   | BR I1 o=operand COMMA LABEL l1=UID COMMA LABEL l2=UID
     { Cbr (o, l1, l2) }
+  | UNREACHABLE { Unreachable }
 
 operand:
   | NULL            { Null }
