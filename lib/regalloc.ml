@@ -872,25 +872,6 @@ let compile_fdecl :
       (param @ names)
   in
   let ctxt = { tdecls; layout } in
-  let pro =
-    [
-      (Pushq, [ Reg Rbp ]);
-      (Pushq, [ Reg Rbx ]);
-      (Pushq, [ Reg R12 ]);
-      (Pushq, [ Reg R13 ]);
-      (Pushq, [ Reg R14 ]);
-      (Pushq, [ Reg R15 ]);
-      (Movq, [ Reg Rsp; Reg Rbp ]);
-      ( Subq,
-        [
-          Imm
-            (Lit
-               (Int64.of_int
-                  ((List.length named_insns + List.length param) * 8)));
-          Reg Rsp;
-        ] );
-    ]
-  in
   let ids, g = Cfg.graph cfg in
   let insns : Cfg.insn list = Cfg.flatten cfg in
   let in_, out = Lva.dataflow insns ids g in
@@ -913,6 +894,29 @@ let compile_fdecl :
     match S.ST.find_opt dst asn with
     | Some dst -> (Popq, [ dst ])
     | None -> failwith (Printf.sprintf "cannot pop %s" (S.name dst))
+  in
+  let min =
+    S.ST.fold
+      (fun k1 v1 min ->
+        match (v1, min) with
+        | Ind3 (Lit v1, _), Some (_, v2) when v1 < v2 -> Some (k1, v1)
+        | _, Some _ -> min
+        | _, None -> min)
+      asn None
+    |> Option.map snd
+  in
+
+  let pro =
+    [
+      (Pushq, [ Reg Rbp ]);
+      (Pushq, [ Reg Rbx ]);
+      (Pushq, [ Reg R12 ]);
+      (Pushq, [ Reg R13 ]);
+      (Pushq, [ Reg R14 ]);
+      (Pushq, [ Reg R15 ]);
+      (Movq, [ Reg Rsp; Reg Rbp ]);
+      (Subq, [ Imm (Lit (Option.value min ~default:0L)); Reg Rsp ]);
+    ]
   in
   let pro = pro @ List.mapi pusharg param @ List.mapi poparg (List.rev param) in
   let _var i =
