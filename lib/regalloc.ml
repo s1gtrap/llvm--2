@@ -905,12 +905,12 @@ let compile_fdecl :
       (fun k1 v1 min ->
         match (v1, min) with
         | Ind3 (Lit v1, _), Some (_, v2) when v1 < v2 -> Some (k1, v1)
-        | _, Some _ -> min
-        | _, None -> min)
+        | Ind3 (Lit v1, _), None -> Some (k1, v1)
+        | _ -> min)
       asn None
-    |> Option.map snd
+    |> Option.map snd |> Option.map Int64.neg
   in
-
+  let min = Option.value min ~default:0L in
   let pro =
     [
       (Pushq, [ Reg Rbp ]);
@@ -920,7 +920,7 @@ let compile_fdecl :
       (Pushq, [ Reg R14 ]);
       (Pushq, [ Reg R15 ]);
       (Movq, [ Reg Rsp; Reg Rbp ]);
-      (Subq, [ Imm (Lit (Option.value min ~default:0L)); Reg Rsp ]);
+      (Subq, [ Imm (Lit min); Reg Rsp ]);
     ]
   in
   let pro = pro @ List.mapi pusharg param @ List.mapi poparg (List.rev param) in
