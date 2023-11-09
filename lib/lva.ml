@@ -25,6 +25,7 @@ let use (insn : Cfg.insn) =
       List.fold_left (fun s o -> op o s) (op bop empty) ops
   | Insn (_, Zext (_, sop, _)) -> op sop empty
   | Insn (_, Ptrtoint (_, sop, _)) -> op sop empty
+  | Insn (_, Trunc (_, sop, _)) -> op sop empty
   | Insn (_, PhiNode (_, ops)) ->
       List.map fst ops |> List.fold_left (fun s e -> op e s) empty
   | Term (Ret (_, Some sop)) -> op sop empty

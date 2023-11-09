@@ -59,6 +59,7 @@ rule token = parse
   | "getelementptr"    { GEP }
   | "zext"             { ZEXT }
   | "ptrtoint"         { PTRTOINT }
+  | "trunc"            { TRUNC }
   | "type"             { TYPE }
   | "null"             { NULL }
   | "lshr"             { LSHR }

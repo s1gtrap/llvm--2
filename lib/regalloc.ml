@@ -592,6 +592,11 @@ let compile_insn :
       let opins = compile_operand ctxt asn (Reg Rax) src in
       let storins = (Movq, [ Reg Rax; dst ]) in
       opins @ [ storins ]
+  | Some dst, Trunc (_, src, _) ->
+      let dst = S.ST.find dst asn in
+      let opins = compile_operand ctxt asn (Reg Rax) src in
+      let storins = (Movq, [ Reg Rax; dst ]) in
+      opins @ [ storins ]
   | Some _dst, PhiNode _ -> []
   | insn -> failwith (Ll.string_of_named_insn insn))
 
