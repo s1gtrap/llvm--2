@@ -47,6 +47,22 @@ type reg =
   | R13
   | R14
   | R15
+  | Eax
+  | Ebx
+  | Ecx
+  | Edx
+  | Esi
+  | Edi
+  | Ebp
+  | Esp
+  | R08d
+  | R09d
+  | R10d
+  | R11d
+  | R12d
+  | R13d
+  | R14d
+  | R15d
   | Al
   | Cl
   | Dl
@@ -87,11 +103,29 @@ let byteofquad = function
   | Reg R15 -> Reg R15b
   | op -> op
 
+let longofquad = function
+  | Reg Rax -> Reg Eax
+  | Reg Rcx -> Reg Ecx
+  | Reg Rdx -> Reg Edx
+  | Reg Rbx -> Reg Ebx
+  | Reg Rsi -> Reg Esi
+  | Reg Rdi -> Reg Edi
+  | Reg R08 -> Reg R08d
+  | Reg R09 -> Reg R09d
+  | Reg R10 -> Reg R10d
+  | Reg R11 -> Reg R11d
+  | Reg R12 -> Reg R12d
+  | Reg R13 -> Reg R13d
+  | Reg R14 -> Reg R14d
+  | Reg R15 -> Reg R15d
+  | op -> op
+
 (* Condition Codes *)
 type cnd = Eq | Neq | Gt | Ge | Lt | Le
 
 type opcode =
   | Movq
+  | Movl
   | Movb
   | Pushq
   | Popq
@@ -113,6 +147,7 @@ type opcode =
   | Jmp
   | J of cnd
   | Cmpq
+  | Cmpl
   | Set of cnd
   | Callq
   | Retq
@@ -158,6 +193,22 @@ let string_of_reg (r : reg) : string =
   | R13 -> "%r13"
   | R14 -> "%r14"
   | R15 -> "%r15"
+  | Eax -> "%eax"
+  | Ebx -> "%ebx"
+  | Ecx -> "%ecx"
+  | Edx -> "%edx"
+  | Esi -> "%esi"
+  | Edi -> "%edi"
+  | Ebp -> "%ebp"
+  | Esp -> "%esp"
+  | R08d -> "%r8d"
+  | R09d -> "%r9d"
+  | R10d -> "%r10d"
+  | R11d -> "%r11d"
+  | R12d -> "%r12d"
+  | R13d -> "%r13d"
+  | R14d -> "%r14d"
+  | R15d -> "%r15d"
   | Al -> "%al"
   | Cl -> "%cl"
   | Dl -> "%dl"
@@ -207,6 +258,7 @@ let string_of_cnd (c : cnd) : string =
 let string_of_opcode (opc : opcode) : string =
   match opc with
   | Movq -> "movq"
+  | Movl -> "movl"
   | Movb -> "movb"
   | Pushq -> "pushq"
   | Popq -> "popq"
@@ -228,6 +280,7 @@ let string_of_opcode (opc : opcode) : string =
   | Jmp -> "jmp"
   | J c -> "j" ^ string_of_cnd c
   | Cmpq -> "cmpq"
+  | Cmpl -> "cmpl"
   | Set c -> "set" ^ string_of_cnd c
   | Callq -> "callq"
   | Retq -> "retq"
@@ -539,6 +592,16 @@ let compile_insn :
         (Subq, [ Imm (Lit (Int64.of_int size)); Reg Rsp ]);
         (Movq, [ Reg Rsp; dst ]);
       ]
+  | Some dst, Load (Ll.I8, src) -> (
+      (* if the variable is unassigned, it's not used so can be optimized away *)
+      match S.ST.find_opt dst asn with
+      | Some dst ->
+          let operins = compile_operand ctxt asn (Reg Rax) src in
+          let loadins = (Movb, [ Ind2 Rax; Reg Al ]) in
+          let zeroins = (Movq, [ Imm (Lit 0L); dst ]) in
+          let storins = (Movb, [ Reg Al; byteofquad dst ]) in
+          operins @ [ loadins; zeroins; storins ]
+      | None -> [])
   | Some dst, Load (_, src) -> (
       (* if the variable is unassigned, it's not used so can be optimized away *)
       match S.ST.find_opt dst asn with
@@ -548,6 +611,24 @@ let compile_insn :
           let storins = (Movq, [ Reg Rax; dst ]) in
           operins @ [ loadins; storins ]
       | None -> [])
+  | None, Store (Ll.I8, src, dst) ->
+      let sins = compile_operand ctxt asn (Reg Rax) src in
+      let dins = compile_operand ctxt asn (Reg Rcx) dst in
+      let storins =
+        match dst with
+        | Id _ -> (Movb, [ Reg Al; Ind2 Rcx ])
+        | _ -> raise BackendFatal
+      in
+      sins @ dins @ [ storins ]
+  | None, Store (Ll.I32, src, dst) ->
+      let sins = compile_operand ctxt asn (Reg Rax) src in
+      let dins = compile_operand ctxt asn (Reg Rcx) dst in
+      let storins =
+        match dst with
+        | Id _ -> (Movl, [ Reg Eax; Ind2 Rcx ])
+        | _ -> raise BackendFatal
+      in
+      sins @ dins @ [ storins ]
   | None, Store (_, src, dst) ->
       let sins = compile_operand ctxt asn (Reg Rax) src in
       let dins = compile_operand ctxt asn (Reg Rcx) dst in
@@ -557,6 +638,16 @@ let compile_insn :
         | _ -> raise BackendFatal
       in
       sins @ dins @ [ storins ]
+  | Some dst, Icmp (cnd, Ll.I32, l, r) ->
+      let lop = Reg Eax in
+      let rop = Reg Ecx in
+      let dst = S.ST.find dst asn in
+      let lins = compile_operand ctxt asn (Reg Rax) l in
+      let rins = compile_operand ctxt asn (Reg Rcx) r in
+      let setzins = (Movq, [ Imm (Lit 0L); dst ]) in
+      let cmpinsn = (Cmpl, [ rop; lop ]) in
+      let setinsn = (Set (compile_cnd cnd), [ byteofquad dst ]) in
+      lins @ rins @ [ cmpinsn; setzins; setinsn ]
   | Some dst, Icmp (cnd, _, l, r) ->
       let lop = Reg Rax in
       let rop = Reg Rcx in
@@ -589,6 +680,12 @@ let compile_insn :
       let opins = compile_operand ctxt asn (Reg Rax) src in
       let zeroins = (Movq, [ Imm (Lit 0L); dst ]) in
       let storins = (Movb, [ Reg Al; byteofquad dst ]) in
+      opins @ [ zeroins; storins ]
+  | Some dst, Zext (Ll.I32, src, _) ->
+      let dst = S.ST.find dst asn in
+      let opins = compile_operand ctxt asn (Reg Rax) src in
+      let zeroins = (Movq, [ Imm (Lit 0L); dst ]) in
+      let storins = (Movl, [ Reg Eax; longofquad dst ]) in
       opins @ [ zeroins; storins ]
   | Some dst, Zext (_, src, _) ->
       let dst = S.ST.find dst asn in

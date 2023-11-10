@@ -306,6 +306,8 @@ let () =
         [],
         [],
         [ Exit 255; Stdout "FFFFFFFF\n000000FF\n000000FF\n" ] );
+      ("tests/icmp0.ll", "", [], [], [ Exit 1 ]);
+      ("tests/icmp1.ll", "", [], [], [ Exit 0 ]);
       ("tests/atoi.ll", "", [], [ "1" ], [ Exit 1; Stdout "" ]);
       ("tests/atoi.ll", "", [], [ "255" ], [ Exit 255; Stdout "" ]);
       ("tests/atoi.ll", "", [], [ "0" ], [ Exit 0; Stdout "" ]);
