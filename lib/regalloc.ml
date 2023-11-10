@@ -479,7 +479,8 @@ let compile_call :
 
 let rec size_ty : (Ll.uid * Ll.ty) list -> Ll.ty -> int =
  fun tdecls -> function
-  | Void | I8 | Fun _ -> 0
+  | Void | Fun _ -> 0
+  | I8 -> 1
   | I1 | I32 | I64 | Ptr _ -> 8
   | Namedt ty ->
       let ty = List.assoc ty tdecls in
@@ -654,8 +655,8 @@ let compile_insn :
       let dst = S.ST.find dst asn in
       let lins = compile_operand ctxt asn lop l in
       let rins = compile_operand ctxt asn rop r in
-      let cmpinsn = (Cmpq, [ rop; lop ]) in
       let setzins = (Movq, [ Imm (Lit 0L); dst ]) in
+      let cmpinsn = (Cmpq, [ rop; lop ]) in
       let setinsn = (Set (compile_cnd cnd), [ byteofquad dst ]) in
       lins @ rins @ [ cmpinsn; setzins; setinsn ]
   | Some dst, Call (_, oper, args) ->
