@@ -70,11 +70,29 @@ type operand =
   | Ind3 of (imm * reg)
 (* indirect: displacement(%reg) *)
 
+let byteofquad = function
+  | Reg Rax -> Reg Al
+  | Reg Rcx -> Reg Cl
+  | Reg Rdx -> Reg Dl
+  | Reg Rbx -> Reg Bl
+  | Reg Rsi -> Reg Sil
+  | Reg Rdi -> Reg Dil
+  | Reg R08 -> Reg R08b
+  | Reg R09 -> Reg R09b
+  | Reg R10 -> Reg R10b
+  | Reg R11 -> Reg R11b
+  | Reg R12 -> Reg R12b
+  | Reg R13 -> Reg R13b
+  | Reg R14 -> Reg R14b
+  | Reg R15 -> Reg R15b
+  | op -> op
+
 (* Condition Codes *)
 type cnd = Eq | Neq | Gt | Ge | Lt | Le
 
 type opcode =
   | Movq
+  | Movb
   | Pushq
   | Popq
   | Leaq (* Load Effective Address *)
@@ -189,6 +207,7 @@ let string_of_cnd (c : cnd) : string =
 let string_of_opcode (opc : opcode) : string =
   match opc with
   | Movq -> "movq"
+  | Movb -> "movb"
   | Pushq -> "pushq"
   | Popq -> "popq"
   | Leaq -> "leaq"
@@ -546,23 +565,6 @@ let compile_insn :
       let rins = compile_operand ctxt asn rop r in
       let cmpinsn = (Cmpq, [ rop; lop ]) in
       let setzins = (Movq, [ Imm (Lit 0L); dst ]) in
-      let byteofquad = function
-        | Reg Rax -> Reg Al
-        | Reg Rcx -> Reg Cl
-        | Reg Rdx -> Reg Dl
-        | Reg Rbx -> Reg Bl
-        | Reg Rsi -> Reg Sil
-        | Reg Rdi -> Reg Dil
-        | Reg R08 -> Reg R08b
-        | Reg R09 -> Reg R09b
-        | Reg R10 -> Reg R10b
-        | Reg R11 -> Reg R11b
-        | Reg R12 -> Reg R12b
-        | Reg R13 -> Reg R13b
-        | Reg R14 -> Reg R14b
-        | Reg R15 -> Reg R15b
-        | op -> op
-      in
       let setinsn = (Set (compile_cnd cnd), [ byteofquad dst ]) in
       lins @ rins @ [ cmpinsn; setzins; setinsn ]
   | Some dst, Call (_, oper, args) ->
@@ -582,6 +584,12 @@ let compile_insn :
       let gepinsns = compile_gep ctxt asn (ty, src) operlist in
       let stored = (Movq, [ Reg Rcx; dst ]) in
       gepinsns @ [ stored ]
+  | Some dst, Zext (Ll.I8, src, _) ->
+      let dst = S.ST.find dst asn in
+      let opins = compile_operand ctxt asn (Reg Rax) src in
+      let zeroins = (Movq, [ Imm (Lit 0L); dst ]) in
+      let storins = (Movb, [ Reg Al; byteofquad dst ]) in
+      opins @ [ zeroins; storins ]
   | Some dst, Zext (_, src, _) ->
       let dst = S.ST.find dst asn in
       let opins = compile_operand ctxt asn (Reg Rax) src in
@@ -592,6 +600,12 @@ let compile_insn :
       let opins = compile_operand ctxt asn (Reg Rax) src in
       let storins = (Movq, [ Reg Rax; dst ]) in
       opins @ [ storins ]
+  | Some dst, Trunc (_, src, Ll.I8) ->
+      let dst = S.ST.find dst asn in
+      let opins = compile_operand ctxt asn (Reg Rax) src in
+      let zeroins = (Movq, [ Imm (Lit 0L); dst ]) in
+      let storins = (Movb, [ Reg Al; byteofquad dst ]) in
+      opins @ [ zeroins; storins ]
   | Some dst, Trunc (_, src, _) ->
       let dst = S.ST.find dst asn in
       let opins = compile_operand ctxt asn (Reg Rax) src in

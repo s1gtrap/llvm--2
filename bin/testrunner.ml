@@ -301,6 +301,11 @@ let () =
       ("tests/argv1.ll", "", [], [ "hello" ], [ Exit 2; Stdout "hello\n" ]);
       ("tests/add.ll", "", [], [ "1"; "2" ], [ Exit 3; Stdout "" ]);
       ("tests/add.ll", "", [], [ "-13"; "12" ], [ Exit 255; Stdout "" ]);
+      ( "tests/zext.ll",
+        "",
+        [],
+        [],
+        [ Exit 255; Stdout "FFFFFFFF\n000000FF\n000000FF\n" ] );
       ("tests/atoi.ll", "", [], [ "1" ], [ Exit 1; Stdout "" ]);
       ("tests/atoi.ll", "", [], [ "255" ], [ Exit 255; Stdout "" ]);
       ("tests/atoi.ll", "", [], [ "0" ], [ Exit 0; Stdout "" ]);
