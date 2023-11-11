@@ -432,13 +432,38 @@ let () =
              ~\n";
         ] );
       ( "tests/pipe0.ll",
-        " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_",
+        " \
+         !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
         [],
         [],
         [
           Exit 64;
           Stdout
             " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_";
+          Stderr "";
+        ] );
+      ( "tests/pipe1.ll",
+        " \
+         !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+        [],
+        [],
+        [
+          Exit 31;
+          Stdout
+            " \
+             !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+          Stderr "";
+        ] );
+      ( "tests/pipe2.ll",
+        " \
+         !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+        [],
+        [],
+        [
+          Exit 95;
+          Stdout
+            " \
+             !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
           Stderr "";
         ] );
       ( "tests/collatz-phi.ll",
