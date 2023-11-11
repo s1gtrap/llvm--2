@@ -328,6 +328,119 @@ let () =
         [ Exit 0; Stdout "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n" ] );
       ("tests/loop2.ll", "", [], [], [ Timeout ]);
       ("tests/alloca.ll", "", [], [], [ Exit 42; Stdout ""; Stderr "" ]);
+      ( "tests/printable.ll",
+        "",
+        [],
+        [],
+        [
+          Exit 127;
+          Stdout
+            " \n\
+             !\n\
+             \"\n\
+             #\n\
+             $\n\
+             %\n\
+             &\n\
+             '\n\
+             (\n\
+             )\n\
+             *\n\
+             +\n\
+             ,\n\
+             -\n\
+             .\n\
+             /\n\
+             0\n\
+             1\n\
+             2\n\
+             3\n\
+             4\n\
+             5\n\
+             6\n\
+             7\n\
+             8\n\
+             9\n\
+             :\n\
+             ;\n\
+             <\n\
+             =\n\
+             >\n\
+             ?\n\
+             @\n\
+             A\n\
+             B\n\
+             C\n\
+             D\n\
+             E\n\
+             F\n\
+             G\n\
+             H\n\
+             I\n\
+             J\n\
+             K\n\
+             L\n\
+             M\n\
+             N\n\
+             O\n\
+             P\n\
+             Q\n\
+             R\n\
+             S\n\
+             T\n\
+             U\n\
+             V\n\
+             W\n\
+             X\n\
+             Y\n\
+             Z\n\
+             [\n\
+             \\\n\
+             ]\n\
+             ^\n\
+             _\n\
+             `\n\
+             a\n\
+             b\n\
+             c\n\
+             d\n\
+             e\n\
+             f\n\
+             g\n\
+             h\n\
+             i\n\
+             j\n\
+             k\n\
+             l\n\
+             m\n\
+             n\n\
+             o\n\
+             p\n\
+             q\n\
+             r\n\
+             s\n\
+             t\n\
+             u\n\
+             v\n\
+             w\n\
+             x\n\
+             y\n\
+             z\n\
+             {\n\
+             |\n\
+             }\n\
+             ~\n";
+        ] );
+      ( "tests/pipe0.ll",
+        " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_",
+        [],
+        [],
+        [
+          Exit 64;
+          Stdout
+            " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_";
+          Stderr "";
+        ] );
       ( "tests/collatz-phi.ll",
         "",
         [],
