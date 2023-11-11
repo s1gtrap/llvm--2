@@ -1298,6 +1298,17 @@ let () =
              var14 = 00000000\n\
              var46 = CBF43926\n";
         ] );
+      ("tests/crc32b.ll", "", [], [ "" ], [ Exit 0; Stdout "00000000" ]);
+      ( "tests/crc32b.ll",
+        "",
+        [],
+        [ "Hello, world!" ],
+        [ Exit 0; Stdout "Hello, world!EBE6C6E6" ] );
+      ( "tests/crc32b.ll",
+        "",
+        [],
+        [ "Hello, world!\n" ],
+        [ Exit 0; Stdout "Hello, world!\n7B55A718" ] );
       ("tests/fib0.ll", "", [], [], [ Stdout ""; Stderr "" ]);
       ("tests/fib1.ll", "", [], [ "34" ], [ Stdout ""; Stderr "" ]);
       ( "dolphintests/_prog_01.ll",
