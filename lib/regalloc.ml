@@ -626,10 +626,13 @@ let compile_insn :
       let dins = compile_operand ctxt asn (Reg Rcx) dst in
       let storins =
         match dst with
-        | Id _ -> (Movl, [ Reg Eax; Ind2 Rcx ])
+        | Id _ ->
+            [
+              (Movq, [ Imm (Lit 0L); Ind2 Rcx ]); (Movl, [ Reg Eax; Ind2 Rcx ]);
+            ]
         | _ -> raise BackendFatal
       in
-      sins @ dins @ [ storins ]
+      sins @ dins @ storins
   | None, Store (_, src, dst) ->
       let sins = compile_operand ctxt asn (Reg Rax) src in
       let dins = compile_operand ctxt asn (Reg Rcx) dst in
