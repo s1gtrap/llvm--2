@@ -746,19 +746,16 @@ let compile_insn :
       let dins = compile_operand ctxt asn Ll.I64 (Reg Rcx) dst in
       let storins =
         match dst with
-        | Id _ -> (Movb, [ Reg Al; Ind2 Rcx ])
+        | Id _ -> [ (Movb, [ Reg Al; Ind2 Rcx ]) ]
         | _ -> raise BackendFatal
       in
-      sins @ dins @ [ storins ]
+      sins @ dins @ storins
   | None, Store (Ll.I32, src, dst) ->
       let sins = compile_operand ctxt asn Ll.I64 (Reg Rax) src in
       let dins = compile_operand ctxt asn Ll.I64 (Reg Rcx) dst in
       let storins =
         match dst with
-        | Id _ ->
-            [
-              (Movq, [ Imm (Lit 0L); Ind2 Rcx ]); (Movl, [ Reg Eax; Ind2 Rcx ]);
-            ]
+        | Id _ -> [ (Movl, [ Reg Eax; Ind2 Rcx ]) ]
         | _ -> raise BackendFatal
       in
       sins @ dins @ storins
