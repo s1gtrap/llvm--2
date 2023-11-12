@@ -217,6 +217,49 @@ let run tests =
 let () =
   let tests =
     [
+      ("tests/lshri32.ll", "", [], [], [ Exit 255; Stdout ""; Stderr "" ]);
+      ( "tests/lshri32.ll",
+        "",
+        [],
+        List.init 1 string_of_int,
+        [ Exit 255; Stdout ""; Stderr "" ] );
+      ( "tests/lshri32.ll",
+        "",
+        [],
+        List.init 27 string_of_int,
+        [ Exit 15; Stdout ""; Stderr "" ] );
+      ( "tests/lshri32.ll",
+        "",
+        [],
+        List.init 30 string_of_int,
+        [ Exit 1; Stdout ""; Stderr "" ] );
+      ( "tests/lshri32.ll",
+        "",
+        [],
+        List.init 31 string_of_int,
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "tests/lshri32.ll",
+        "",
+        [],
+        List.init 32 string_of_int,
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ("tests/lshri8.ll", "", [], [], [ Exit 127; Stdout ""; Stderr "" ]);
+      ( "tests/lshri8.ll",
+        "",
+        [],
+        List.init 1 string_of_int,
+        [ Exit 63; Stdout ""; Stderr "" ] );
+      ("tests/lshri8.ll", "", [], [], [ Exit 127; Stdout ""; Stderr "" ]);
+      ( "tests/lshri8.ll",
+        "",
+        [],
+        List.init 6 string_of_int,
+        [ Exit 1; Stdout ""; Stderr "" ] );
+      ( "tests/lshri8.ll",
+        "",
+        [],
+        List.init 7 (fun _ -> ""),
+        [ Exit 0; Stdout ""; Stderr "" ] );
       ("tests/void.ll", "", [], [], [ Stdout "" ]);
       ("tests/zero.ll", "", [], [], [ Exit 0; Stdout "" ]);
       ("tests/one.ll", "", [], [], [ Exit 1; Stdout "" ]);
