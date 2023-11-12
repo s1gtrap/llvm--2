@@ -153,6 +153,7 @@ type opcode =
   | Retq
   | Cqto
   | Idivq
+  | Idivl
   | Comment of string
 
 (* An instruction is an opcode plus its operands.
@@ -286,6 +287,7 @@ let string_of_opcode (opc : opcode) : string =
   | Retq -> "retq"
   | Cqto -> "cqto"
   | Idivq -> "idivq"
+  | Idivl -> "idivl"
   | Comment s -> "# " ^ String.escaped s
 
 let map_concat s f l = String.concat s (List.map f l)
@@ -646,6 +648,18 @@ let compile_insn :
   (Comment (Ll.string_of_named_insn insn), [])
   ::
   (match insn with
+  | Some dst, Binop (SDiv, Ll.I32, lop, rop) ->
+      (* RAX and RCX are volatile, should be good? *)
+      let dst = S.ST.find dst asn in
+      let pushdx = (Pushq, [ Reg Rdx ]) in
+      let lins = compile_operand ctxt asn Ll.I64 (Reg Rax) lop in
+      let rins = compile_operand ctxt asn Ll.I64 (Reg Rcx) rop in
+      let cqtoins = (Cqto, []) in
+      let opins = (Idivl, [ Reg Ecx ]) in
+      let storins = (Movq, [ Reg Rax; dst ]) in
+      let popdx = (Popq, [ Reg Rdx ]) in
+      if dst = Reg Rdx then lins @ rins @ [ cqtoins; opins; storins ]
+      else [ pushdx ] @ lins @ rins @ [ cqtoins; opins; storins; popdx ]
   | Some dst, Binop (SDiv, _, lop, rop) ->
       (* RAX and RCX are volatile, should be good? *)
       let dst = S.ST.find dst asn in
