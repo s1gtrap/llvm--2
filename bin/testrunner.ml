@@ -85,29 +85,45 @@ let compile_test (alc : Llvm__2.Regalloc.allocator) test cargs =
   | Some fn -> fn
   | None ->
       let fn : string = Filename.temp_file "" "" in
-      let prog : string =
-        try
-          In_channel.open_text test
-          |> Llvm__2.Parse.from_channel Llvm__2.Llparser.prog
-          |> Llvm__2.Regalloc.compile_prog alc
-          |> Llvm__2.Regalloc.string_of_prog
-        with _ -> raise CompileError
-      in
       let _ =
-        (match Llvm__2.Regalloc.os with
-        | Darwin ->
-            Llvm__2.Build.create_process_with_input "clang"
+        match alc with
+        | Llvm__2.Regalloc.Clang ->
+            Llvm__2.Build.create_process "clang"
               (Array.concat
                  [
-                   [| "clang"; "-target"; "x86_64-unknown-darwin" |];
+                   [|
+                     "clang";
+                     "-Wno-override-module";
+                     "-target";
+                     "x86_64-unknown-darwin";
+                   |];
                    cargs;
-                   [| "-x"; "assembler"; "-o"; fn |];
+                   [| "-o"; fn |];
                  ])
-        | Linux ->
-            Llvm__2.Build.create_process_with_input "clang"
-              (Array.concat
-                 [ [| "clang" |]; cargs; [| "-x"; "assembler"; "-o"; fn |] ]))
-          prog fn
+              test
+        | _ ->
+            let prog : string =
+              try
+                In_channel.open_text test
+                |> Llvm__2.Parse.from_channel Llvm__2.Llparser.prog
+                |> Llvm__2.Regalloc.compile_prog alc
+                |> Llvm__2.Regalloc.string_of_prog
+              with _ -> raise CompileError
+            in
+            (match Llvm__2.Regalloc.os with
+            | Darwin ->
+                Llvm__2.Build.create_process_with_input "clang"
+                  (Array.concat
+                     [
+                       [| "clang"; "-target"; "x86_64-unknown-darwin" |];
+                       cargs;
+                       [| "-x"; "assembler"; "-o"; fn |];
+                     ])
+            | Linux ->
+                Llvm__2.Build.create_process_with_input "clang"
+                  (Array.concat
+                     [ [| "clang" |]; cargs; [| "-x"; "assembler"; "-o"; fn |] ]))
+              prog fn
       in
       execs := S.add testname fn !execs;
       fn
@@ -219,6 +235,7 @@ let run tests filter =
                 nc exc
         with CompileError -> Printf.printf "%scompile error!%s\n" red nc)
     in
+    run_ Llvm__2.Regalloc.Clang;
     run_ Llvm__2.Regalloc.Greedy;
     run_ Llvm__2.Regalloc.Briggs
   in
