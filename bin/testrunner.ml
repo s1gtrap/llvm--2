@@ -265,12 +265,12 @@ let () =
         "",
         [],
         List.init 31 string_of_int,
-        [ Exit 0; Stdout ""; Stderr "" ] );
+        [ Exit 255; Stdout ""; Stderr "" ] );
       ( "tests/lshri32.ll",
         "",
         [],
         List.init 32 string_of_int,
-        [ Exit 0; Stdout ""; Stderr "" ] );
+        [ Exit 255; Stdout ""; Stderr "" ] );
       ("tests/lshri8.ll", "", [], [], [ Exit 127; Stdout ""; Stderr "" ]);
       ( "tests/lshri8.ll",
         "",
@@ -288,6 +288,21 @@ let () =
         [],
         List.init 7 (fun _ -> ""),
         [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "tests/lshri8.ll",
+        "",
+        [],
+        List.init 8 (fun _ -> ""),
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "tests/lshri8.ll",
+        "",
+        [],
+        List.init 30 (fun _ -> ""),
+        [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "tests/lshri8.ll",
+        "",
+        [],
+        List.init 31 (fun _ -> ""),
+        [ Exit 255; Stdout ""; Stderr "" ] );
       ( "tests/printle.ll",
         "",
         [],

@@ -142,6 +142,8 @@ type opcode =
   | Andq
   | Shlq
   | Sarq
+  | Shrb
+  | Shrl
   | Shrq
   | Srem
   | Jmp
@@ -276,6 +278,8 @@ let string_of_opcode (opc : opcode) : string =
   | Andq -> "andq"
   | Shlq -> "shlq"
   | Sarq -> "sarq"
+  | Shrb -> "shrb"
+  | Shrl -> "shrl"
   | Shrq -> "shrq"
   | Srem -> "srem"
   | Jmp -> "jmp"
@@ -614,6 +618,8 @@ let compile_bop : Ll.bop -> Ll.ty -> opcode =
   | SDiv, _ -> Idivq
   | SRem, _ -> Srem
   | Shl, _ -> Shlq
+  | Lshr, Ll.I8 -> Shrb
+  | Lshr, Ll.I32 -> Shrl
   | Lshr, _ -> Shrq
   | Ashr, _ -> Sarq
   | And, _ -> Andq
@@ -690,7 +696,7 @@ let compile_insn :
       let dst = S.ST.find dst asn in
       let lins = compile_operand ctxt asn Ll.I64 (Reg Rax) lop in
       let rins = compile_operand ctxt asn Ll.I64 (Reg Rcx) rop in
-      let opins = (compile_bop Lshr ty, [ Reg Cl; Reg Rax ]) in
+      let opins = (compile_bop Lshr ty, [ Reg Cl; ty_cast ty (Reg Rax) ]) in
       let storins = (Movq, [ Reg Rax; dst ]) in
       lins @ rins @ [ opins; storins ]
   | Some dst, Binop (Shl, ty, lop, rop) ->
