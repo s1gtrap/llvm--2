@@ -78,7 +78,10 @@ let execute command args (input : string) : status =
   | _, WSTOPPED code -> Error (WSTOPPED code, !stdout, !stderr)
 
 let compile_test (alc : Llvm__2.Regalloc.allocator) test cargs =
-  match S.find_opt test !execs with
+  let testname =
+    Printf.sprintf "%s$%s" (Llvm__2.Regalloc.string_of_allocator alc) test
+  in
+  match S.find_opt testname !execs with
   | Some fn -> fn
   | None ->
       let fn : string = Filename.temp_file "" "" in
@@ -106,12 +109,7 @@ let compile_test (alc : Llvm__2.Regalloc.allocator) test cargs =
                  [ [| "clang" |]; cargs; [| "-x"; "assembler"; "-o"; fn |] ]))
           prog fn
       in
-      execs :=
-        S.add
-          (Printf.sprintf "%s$%s"
-             (Llvm__2.Regalloc.string_of_allocator alc)
-             test)
-          fn !execs;
+      execs := S.add testname fn !execs;
       fn
 
 let run tests =
