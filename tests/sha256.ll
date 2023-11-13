@@ -951,6 +951,7 @@ define void @sha256_compress(i8*    %0, i8*    %1)  {
   %870 = or i32 %866, %869
   %871 = getelementptr  [64 x i32], i8* %5, i64 0, i64 10
   %872 = load i32, i8* %871
+  call void @printf(i8* @fmt, i32 872, i32 %872)
   %873 = add i32 0, %872
   %874 = shl i32 %873, 14
   %875 = getelementptr  [64 x i32], i8* %5, i64 0, i64 10
@@ -1047,45 +1048,55 @@ define void @sha256_compress(i8*    %0, i8*    %1)  {
   %964 = add i32 %961, %963
   %965 = getelementptr  [64 x i32], i8* %5, i64 0, i64 12
   %966 = load i32, i8* %965
+  call void @printf(i8* @fmt, i32 966, i32 %966)
   %967 = add i32 0, %966
   %968 = shl i32 %967, 25
   %969 = getelementptr  [64 x i32], i8* %5, i64 0, i64 12
   %970 = load i32, i8* %969
+  call void @printf(i8* @fmt, i32 970, i32 %970)
   %971 = lshr i32 %970, 7
   %972 = or i32 %968, %971
   %973 = getelementptr  [64 x i32], i8* %5, i64 0, i64 12
   %974 = load i32, i8* %973
+  call void @printf(i8* @fmt, i32 974, i32 %974)
   %975 = add i32 0, %974
   %976 = shl i32 %975, 14
   %977 = getelementptr  [64 x i32], i8* %5, i64 0, i64 12
   %978 = load i32, i8* %977
+  call void @printf(i8* @fmt, i32 978, i32 %978)
   %979 = lshr i32 %978, 18
   %980 = or i32 %976, %979
   %981 = xor i32 %972, %980
   %982 = getelementptr  [64 x i32], i8* %5, i64 0, i64 12
   %983 = load i32, i8* %982
+  call void @printf(i8* @fmt, i32 983, i32 %983)
   %984 = lshr i32 %983, 3
   %985 = xor i32 %981, %984
   %986 = add i32 %964, %985
   %987 = getelementptr  [64 x i32], i8* %5, i64 0, i64 25
   %988 = load i32, i8* %987
+  call void @printf(i8* @fmt, i32 988, i32 %988)
   %989 = add i32 0, %988
   %990 = shl i32 %989, 15
   %991 = getelementptr  [64 x i32], i8* %5, i64 0, i64 25
   %992 = load i32, i8* %991
+  call void @printf(i8* @fmt, i32 992, i32 %992)
   %993 = lshr i32 %992, 17
   %994 = or i32 %990, %993
   %995 = getelementptr  [64 x i32], i8* %5, i64 0, i64 25
   %996 = load i32, i8* %995
+  call void @printf(i8* @fmt, i32 996, i32 %996)
   %997 = add i32 0, %996
   %998 = shl i32 %997, 13
   %999 = getelementptr  [64 x i32], i8* %5, i64 0, i64 25
   %1000 = load i32, i8* %999
+  call void @printf(i8* @fmt, i32 1000, i32 %1000)
   %1001 = lshr i32 %1000, 19
   %1002 = or i32 %998, %1001
   %1003 = xor i32 %994, %1002
   %1004 = getelementptr  [64 x i32], i8* %5, i64 0, i64 25
   %1005 = load i32, i8* %1004
+  call void @printf(i8* @fmt, i32 1005, i32 %1005)
   %1006 = lshr i32 %1005, 10
   %1007 = xor i32 %1003, %1006
   %1008 = add i32 %986, %1007
@@ -1093,51 +1104,63 @@ define void @sha256_compress(i8*    %0, i8*    %1)  {
   store i32 %1008, i8* %1009
   %1010 = getelementptr  [64 x i32], i8* %5, i64 0, i64 12
   %1011 = load i32, i8* %1010
+  call void @printf(i8* @fmt, i32 1011, i32 %1011)
   %1012 = add i32 0, %1011
   %1013 = getelementptr  [64 x i32], i8* %5, i64 0, i64 21
   %1014 = load i32, i8* %1013
+  call void @printf(i8* @fmt, i32 1014, i32 %1014)
   %1015 = add i32 %1012, %1014
   %1016 = getelementptr  [64 x i32], i8* %5, i64 0, i64 13
   %1017 = load i32, i8* %1016
+  call void @printf(i8* @fmt, i32 1017, i32 %1017)
   %1018 = add i32 0, %1017
   %1019 = shl i32 %1018, 25
   %1020 = getelementptr  [64 x i32], i8* %5, i64 0, i64 13
   %1021 = load i32, i8* %1020
+  call void @printf(i8* @fmt, i32 1021, i32 %1021)
   %1022 = lshr i32 %1021, 7
   %1023 = or i32 %1019, %1022
   %1024 = getelementptr  [64 x i32], i8* %5, i64 0, i64 13
   %1025 = load i32, i8* %1024
+  call void @printf(i8* @fmt, i32 1025, i32 %1025)
   %1026 = add i32 0, %1025
   %1027 = shl i32 %1026, 14
   %1028 = getelementptr  [64 x i32], i8* %5, i64 0, i64 13
   %1029 = load i32, i8* %1028
+  call void @printf(i8* @fmt, i32 1029, i32 %1029)
   %1030 = lshr i32 %1029, 18
   %1031 = or i32 %1027, %1030
   %1032 = xor i32 %1023, %1031
   %1033 = getelementptr  [64 x i32], i8* %5, i64 0, i64 13
   %1034 = load i32, i8* %1033
+  call void @printf(i8* @fmt, i32 1034, i32 %1034)
   %1035 = lshr i32 %1034, 3
   %1036 = xor i32 %1032, %1035
   %1037 = add i32 %1015, %1036
   %1038 = getelementptr  [64 x i32], i8* %5, i64 0, i64 26
   %1039 = load i32, i8* %1038
+  call void @printf(i8* @fmt, i32 1039, i32 %1039)
   %1040 = add i32 0, %1039
   %1041 = shl i32 %1040, 15
   %1042 = getelementptr  [64 x i32], i8* %5, i64 0, i64 26
   %1043 = load i32, i8* %1042
+  call void @printf(i8* @fmt, i32 1043, i32 %1043)
   %1044 = lshr i32 %1043, 17
   %1045 = or i32 %1041, %1044
   %1046 = getelementptr  [64 x i32], i8* %5, i64 0, i64 26
   %1047 = load i32, i8* %1046
+  call void @printf(i8* @fmt, i32 1047, i32 %1047)
   %1048 = add i32 0, %1047
   %1049 = shl i32 %1048, 13
   %1050 = getelementptr  [64 x i32], i8* %5, i64 0, i64 26
   %1051 = load i32, i8* %1050
+  call void @printf(i8* @fmt, i32 1051, i32 %1051)
   %1052 = lshr i32 %1051, 19
   %1053 = or i32 %1049, %1052
   %1054 = xor i32 %1045, %1053
   %1055 = getelementptr  [64 x i32], i8* %5, i64 0, i64 26
   %1056 = load i32, i8* %1055
+  call void @printf(i8* @fmt, i32 1056, i32 %1056)
   %1057 = lshr i32 %1056, 10
   %1058 = xor i32 %1054, %1057
   %1059 = add i32 %1037, %1058
@@ -1145,51 +1168,63 @@ define void @sha256_compress(i8*    %0, i8*    %1)  {
   store i32 %1059, i8* %1060
   %1061 = getelementptr  [64 x i32], i8* %5, i64 0, i64 13
   %1062 = load i32, i8* %1061
+  call void @printf(i8* @fmt, i32 1062, i32 %1062)
   %1063 = add i32 0, %1062
   %1064 = getelementptr  [64 x i32], i8* %5, i64 0, i64 22
   %1065 = load i32, i8* %1064
+  call void @printf(i8* @fmt, i32 1065, i32 %1065)
   %1066 = add i32 %1063, %1065
   %1067 = getelementptr  [64 x i32], i8* %5, i64 0, i64 14
   %1068 = load i32, i8* %1067
+  call void @printf(i8* @fmt, i32 1068, i32 %1068)
   %1069 = add i32 0, %1068
   %1070 = shl i32 %1069, 25
   %1071 = getelementptr  [64 x i32], i8* %5, i64 0, i64 14
   %1072 = load i32, i8* %1071
+  call void @printf(i8* @fmt, i32 1072, i32 %1072)
   %1073 = lshr i32 %1072, 7
   %1074 = or i32 %1070, %1073
   %1075 = getelementptr  [64 x i32], i8* %5, i64 0, i64 14
   %1076 = load i32, i8* %1075
+  call void @printf(i8* @fmt, i32 1076, i32 %1076)
   %1077 = add i32 0, %1076
   %1078 = shl i32 %1077, 14
   %1079 = getelementptr  [64 x i32], i8* %5, i64 0, i64 14
   %1080 = load i32, i8* %1079
+  call void @printf(i8* @fmt, i32 1080, i32 %1080)
   %1081 = lshr i32 %1080, 18
   %1082 = or i32 %1078, %1081
   %1083 = xor i32 %1074, %1082
   %1084 = getelementptr  [64 x i32], i8* %5, i64 0, i64 14
   %1085 = load i32, i8* %1084
+  call void @printf(i8* @fmt, i32 1085, i32 %1085)
   %1086 = lshr i32 %1085, 3
   %1087 = xor i32 %1083, %1086
   %1088 = add i32 %1066, %1087
   %1089 = getelementptr  [64 x i32], i8* %5, i64 0, i64 27
   %1090 = load i32, i8* %1089
+  call void @printf(i8* @fmt, i32 1090, i32 %1090)
   %1091 = add i32 0, %1090
   %1092 = shl i32 %1091, 15
   %1093 = getelementptr  [64 x i32], i8* %5, i64 0, i64 27
   %1094 = load i32, i8* %1093
+  call void @printf(i8* @fmt, i32 1094, i32 %1094)
   %1095 = lshr i32 %1094, 17
   %1096 = or i32 %1092, %1095
   %1097 = getelementptr  [64 x i32], i8* %5, i64 0, i64 27
   %1098 = load i32, i8* %1097
+  call void @printf(i8* @fmt, i32 1098, i32 %1098)
   %1099 = add i32 0, %1098
   %1100 = shl i32 %1099, 13
   %1101 = getelementptr  [64 x i32], i8* %5, i64 0, i64 27
   %1102 = load i32, i8* %1101
+  call void @printf(i8* @fmt, i32 1102, i32 %1102)
   %1103 = lshr i32 %1102, 19
   %1104 = or i32 %1100, %1103
   %1105 = xor i32 %1096, %1104
   %1106 = getelementptr  [64 x i32], i8* %5, i64 0, i64 27
   %1107 = load i32, i8* %1106
+  call void @printf(i8* @fmt, i32 1107, i32 %1107)
   %1108 = lshr i32 %1107, 10
   %1109 = xor i32 %1105, %1108
   %1110 = add i32 %1088, %1109
@@ -1197,29 +1232,36 @@ define void @sha256_compress(i8*    %0, i8*    %1)  {
   store i32 %1110, i8* %1111
   %1112 = getelementptr  [64 x i32], i8* %5, i64 0, i64 14
   %1113 = load i32, i8* %1112
+  call void @printf(i8* @fmt, i32 1113, i32 %1113)
   %1114 = add i32 0, %1113
   %1115 = getelementptr  [64 x i32], i8* %5, i64 0, i64 23
   %1116 = load i32, i8* %1115
+  call void @printf(i8* @fmt, i32 1116, i32 %1116)
   %1117 = add i32 %1114, %1116
   %1118 = getelementptr  [64 x i32], i8* %5, i64 0, i64 15
   %1119 = load i32, i8* %1118
+  call void @printf(i8* @fmt, i32 1119, i32 %1119)
   %1120 = add i32 0, %1119
   %1121 = shl i32 %1120, 25
   %1122 = getelementptr  [64 x i32], i8* %5, i64 0, i64 15
   %1123 = load i32, i8* %1122
+  call void @printf(i8* @fmt, i32 1123, i32 %1123)
   %1124 = lshr i32 %1123, 7
   %1125 = or i32 %1121, %1124
   %1126 = getelementptr  [64 x i32], i8* %5, i64 0, i64 15
   %1127 = load i32, i8* %1126
+  call void @printf(i8* @fmt, i32 1127, i32 %1127)
   %1128 = add i32 0, %1127
   %1129 = shl i32 %1128, 14
   %1130 = getelementptr  [64 x i32], i8* %5, i64 0, i64 15
   %1131 = load i32, i8* %1130
+  call void @printf(i8* @fmt, i32 1131, i32 %1131)
   %1132 = lshr i32 %1131, 18
   %1133 = or i32 %1129, %1132
   %1134 = xor i32 %1125, %1133
   %1135 = getelementptr  [64 x i32], i8* %5, i64 0, i64 15
   %1136 = load i32, i8* %1135
+  call void @printf(i8* @fmt, i32 1136, i32 %1136)
   %1137 = lshr i32 %1136, 3
   %1138 = xor i32 %1134, %1137
   %1139 = add i32 %1117, %1138

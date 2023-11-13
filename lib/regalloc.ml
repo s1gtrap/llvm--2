@@ -746,6 +746,16 @@ let compile_insn :
           let storins = (Movb, [ Reg Al; byteofquad dst ]) in
           operins @ [ loadins; zeroins; storins ]
       | None -> [])
+  | Some dst, Load (Ll.I32, src) -> (
+      (* if the variable is unassigned, it's not used so can be optimized away *)
+      match S.ST.find_opt dst asn with
+      | Some dst ->
+          let operins = compile_operand ctxt asn Ll.I64 (Reg Rax) src in
+          let loadins = (Movl, [ Ind2 Rax; Reg Eax ]) in
+          let zeroins = (Movq, [ Imm (Lit 0L); dst ]) in
+          let storins = (Movl, [ Reg Eax; longofquad dst ]) in
+          operins @ [ loadins; zeroins; storins ]
+      | None -> [])
   | Some dst, Load (_, src) -> (
       (* if the variable is unassigned, it's not used so can be optimized away *)
       match S.ST.find_opt dst asn with
