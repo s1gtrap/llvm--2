@@ -31,7 +31,7 @@ RUN curl -sL https://github.com/ocaml/opam/releases/download/2.1.3/opam-2.1.3-x8
     && opam init --disable-sandboxing -a -y --bare \
     && opam update
 
-RUN opam switch create 4.14.0
+RUN opam switch create 5.1.0
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install these dependencies early to increase intermediate image reuse
@@ -42,3 +42,4 @@ RUN opam install .  --deps-only --locked && \
     eval $(opam env)
 
 RUN opam install menhir ocamlgraph ppx_inline_test
+RUN echo 'eval $(opam env)' >> ~/.bashrc
