@@ -1,4 +1,4 @@
-@msg = global [13 x i8] c"Hello world!\0A\00"
+@msg = global [14 x i8] c"Hello world!\0A\00"
 
 declare i32 @printf(i8*, ...)
 

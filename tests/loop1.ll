@@ -1,5 +1,7 @@
 @fmt = global [4 x i8] c"%i\0A\00"
 
+declare void @printf(i8*)
+
 define i32 @main() {
 entry:
   %c0 = add i32 0, 0
