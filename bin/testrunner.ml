@@ -1971,6 +1971,36 @@ let () =
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "" ] );
+      ( "tests/sha256.ll",
+        "",
+        [],
+        [ "" ],
+        [
+          Exit 0;
+          Stdout
+            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+          Stderr "";
+        ] );
+      ( "tests/sha256.ll",
+        "",
+        [],
+        [ "a" ],
+        [
+          Exit 0;
+          Stdout
+            "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb";
+          Stderr "";
+        ] );
+      ( "tests/sha256.ll",
+        "",
+        [],
+        [ "Hello, world!" ],
+        [
+          Exit 0;
+          Stdout
+            "315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3";
+          Stderr "";
+        ] );
     ]
   in
   let passes = run tests in
