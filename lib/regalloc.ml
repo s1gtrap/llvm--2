@@ -1263,7 +1263,7 @@ let compile_fdecl :
 let rec compile_ginit = function
   | Ll.GNull -> [ Quad (Lit 0L) ]
   | GGid gid -> [ Quad (Lbl (mangle gid)) ]
-  | GInt c -> [ Quad (Lit (Int64.of_int c)) ]
+  | GInt c -> [ Quad (Lit c) ]
   | GString s -> [ Asciz s ]
   | GArray gs -> List.concat (List.map compile_gdecl gs)
   | GStruct gs -> List.concat (List.map compile_gdecl gs)

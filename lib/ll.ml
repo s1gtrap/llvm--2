@@ -82,7 +82,7 @@ type fdecl = { fty : fty; param : uid list; cfg : cfg }
 type ginit =
   | GNull (* null literAL *)
   | GGid of gid (* reference to another global *)
-  | GInt of int (* global integer value        *)
+  | GInt of int64 (* global integer value        *)
   | GString of string (* constant global string      *)
   | GArray of gdecl list (* global array                *)
   | GStruct of gdecl list (* global struct               *)
@@ -268,7 +268,7 @@ let rec string_of_ginit (gi : ginit) : string =
   match gi with
   | GNull -> "null"
   | GGid g -> "@" ^ S.name g
-  | GInt i -> string_of_int i
+  | GInt i -> Int64.to_string i
   | GString s -> "c\"" ^ ll_encode s ^ "\""
   | GArray gis -> brackets (mapcat ", " string_of_gdecl gis)
   | GStruct gis -> braces (mapcat ", " string_of_gdecl gis)

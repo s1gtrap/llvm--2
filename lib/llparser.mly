@@ -11,7 +11,7 @@
 %token RET BR TO NULL LABEL ENTRY GLOBAL DEFINE UNREACHABLE
 %token CALL ICMP LOAD STORE ALLOCA BITCAST GEP ZEXT PTRTOINT PHI TRUNC
 
-%token <int> INT        (* int64 values *)
+%token <int64> INT        (* int64 values *)
 %token <Symbol.symbol> LBL   (* labels *)
 %token <Symbol.symbol> GID   (* global identifier *)
 %token <Symbol.symbol> UID   (* local identifier *)
@@ -95,7 +95,7 @@ terminator:
 
 operand:
   | NULL            { Null }
-  | i=INT           { IConst64 (Int64.of_int i) }
+  | i=INT           { IConst64 i }
   | g=GID           { Gid g }
   | u=UID           { Id u }
 
@@ -109,7 +109,7 @@ ty:
   | LBRACE ts=ty_list RBRACE
     { Struct ts }
   | LBRACKET i=INT CROSS t=ty RBRACKET
-    { Array (i,t) }
+    { Array (Int64.to_int i,t) }
   | rt=ty LPAREN ts=ty_list RPAREN
     { Fun (ts, rt) }
   | t=UID           { Namedt t }
