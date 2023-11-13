@@ -1,5 +1,5 @@
 (executables
  (package llvm__2)
  (names main testrunner)
- (public_names llvm__2 tests)
+ (public_names build tests)
  (libraries llvm__2))
