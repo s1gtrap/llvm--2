@@ -550,7 +550,8 @@ let rec size_ty : (Ll.uid * Ll.ty) list -> Ll.ty -> int =
  fun tdecls -> function
   | Void | Fun _ -> 0
   | I8 -> 1
-  | I1 | I32 | I64 | Ptr _ -> 8
+  | I32 -> 4
+  | I1 | I64 | Ptr _ -> 8 (* FIXME: should i1 be 1? *)
   | Namedt ty ->
       let ty = List.assoc ty tdecls in
       size_ty tdecls ty

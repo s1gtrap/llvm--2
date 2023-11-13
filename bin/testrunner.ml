@@ -260,6 +260,11 @@ let () =
         [],
         List.init 7 (fun _ -> ""),
         [ Exit 0; Stdout ""; Stderr "" ] );
+      ( "tests/printle.ll",
+        "",
+        [],
+        [],
+        [ Exit 0; Stdout "Hello, world!\nHello, world!\nHello, world!\n" ] );
       ("tests/void.ll", "", [], [], [ Stdout "" ]);
       ("tests/zero.ll", "", [], [], [ Exit 0; Stdout "" ]);
       ("tests/one.ll", "", [], [], [ Exit 1; Stdout "" ]);
