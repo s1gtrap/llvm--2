@@ -1,9 +1,7 @@
 let def t (ins : Cfg.insn) idx =
   match ins with
   | Label _ -> t
-  | Insn (Some dop, _) ->
-      Printf.printf "adding %s \n" (Symbol.name dop);
-      Symbol.ST.add dop idx t
+  | Insn (Some dop, _) -> Symbol.ST.add dop idx t
   | Insn (None, _) -> t
   | Term _ -> t
 
