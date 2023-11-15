@@ -237,7 +237,8 @@ let run tests filter =
     in
     run_ Llvm__2.Regalloc.Clang;
     run_ Llvm__2.Regalloc.Greedy;
-    run_ Llvm__2.Regalloc.Briggs
+    run_ Llvm__2.Regalloc.Briggs;
+    run_ Llvm__2.Regalloc.Linearscan
   in
   List.iter r tests;
   (!cases, !passes)

@@ -376,6 +376,8 @@ let compile_cnd (c : Ll.cnd) : cnd =
 
 type layout = (Ll.uid * operand) list
 
+let stack i = Ind3 (Lit (Int64.of_int ((i + 1) * -8)), Rbp)
+
 (* A context contains the global type declarations (needed for getelementptr
    calculations) and a stack layout. *)
 type ctxt = { tdecls : (Ll.tid * Ll.ty) list; layout : layout }
@@ -936,6 +938,12 @@ type mark =
 
 type assign = Color of S.symbol * int | ActualSpill of S.symbol
 
+module Regs = Set.Make (struct
+  type t = reg
+
+  let compare a b = if a = b then 0 else 1
+end)
+
 let alloc a param insns (in_, out) : operand S.table =
   let var i =
     let j =
@@ -976,8 +984,64 @@ let alloc a param insns (in_, out) : operand S.table =
           l
     | Clang -> failwith "unreachable"
     | Linearscan ->
-        let _intervals = Linear.intervals param insns (in_, out) in
-        failwith "unimplemented"
+        let insns =
+          List.filter (function Cfg.Label _ -> false | _ -> true) insns
+        in
+        let intervals = Linear.intervals param insns (in_, out) in
+        let avail = Regs.of_list [ Rdx; Rbx ] in
+        let scan (idx, avail, assigns, spills) _ins =
+          match
+            List.find_opt
+              (fun (k, _) -> fst (S.ST.find k intervals) = idx)
+              (S.ST.bindings intervals)
+          with
+          | Some (k, (livestart, liveend)) ->
+              if Regs.is_empty avail then (
+                (* spill the longest interval currently assigned *)
+                let longest =
+                  S.ST.fold
+                    (fun k r (k2, r2, len2) ->
+                      let nlivestart, nliveend = S.ST.find k intervals in
+                      let len = nliveend - nlivestart in
+                      if len > len2 then (k, Some r, len) else (k2, r2, len2))
+                    assigns
+                    (k, None, liveend - livestart)
+                in
+                match longest with
+                | k2, Some r, _ ->
+                    Printf.printf "spilling %s to assign %s = %s\n" (S.name k2)
+                      (S.name k) (string_of_reg r);
+                    ( idx + 1,
+                      avail,
+                      S.ST.add k r (S.ST.remove k2 assigns),
+                      S.SS.add k2 spills )
+                | _, None, _ ->
+                    Printf.printf "spilling %s\n" (S.name k);
+                    (idx + 1, avail, assigns, S.SS.add k spills))
+              else
+                (* otherwise assign to available register *)
+                let reg = Regs.choose avail in
+                Printf.printf "assigning %s = %s\n" (S.name k)
+                  (string_of_reg reg);
+                (idx + 1, Regs.remove reg avail, S.ST.add k reg assigns, spills)
+          | None -> (idx + 1, avail, assigns, spills)
+        in
+        let _, _, assigns, spills =
+          List.fold_left scan (0, avail, Symbol.empty, Symbol.SS.empty) insns
+        in
+        Linear.print_intervals insns intervals;
+        let assigns = S.ST.map (fun r -> Reg r) assigns in
+        let _, assigns =
+          S.SS.fold
+            (fun k (i, acc) -> (i + 1, S.ST.add k (stack i) acc))
+            spills (0, assigns)
+        in
+        Printf.printf "\n";
+        S.ST.iter
+          (fun k v -> Printf.printf "%s: %s\n" (S.name k) (string_of_operand v))
+          assigns;
+        Printf.printf "\n";
+        assigns
     | Briggs ->
         let l, g = Lva.interf param insns in_ out in
         let c = 2 in
@@ -998,7 +1062,6 @@ let alloc a param insns (in_, out) : operand S.table =
           | 11 -> Reg R15
           | _ -> failwith "unreachable"
         in
-        let stack i = Ind3 (Lit (Int64.of_int ((i + 1) * -8)), Rbp) in
         let count = ref 0 in
         let rec simp (spills : S.SS.t) =
           if !count >= 10 then failwith "error";
