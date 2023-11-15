@@ -412,6 +412,7 @@ let () =
         [ Exit 3; Stdout "hello\nworld\n" ] );
       ("tests/arith0.ll", "", [], [], [ Exit 6; Stdout "" ]);
       ("tests/arith1.ll", "", [], [], [ Exit 69; Stdout "" ]);
+      ("tests/arith2.ll", "", [], [], [ Exit 18; Stdout "" ]);
       ("tests/loop0.ll", "", [], [], [ Exit 0; Stdout "" ]);
       ( "tests/loop1.ll",
         "",

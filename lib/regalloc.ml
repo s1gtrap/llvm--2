@@ -996,39 +996,29 @@ let alloc a param insns (in_, out) : operand S.table =
               (S.ST.bindings intervals)
           with
           | Some (k, (livestart, liveend)) ->
-              if Regs.is_empty avail then (
+              if Regs.is_empty avail then
                 (* spill the longest interval currently assigned *)
                 let longest =
                   S.ST.fold
                     (fun k r (k2, r2, len2) ->
-                      Printf.printf "-> %s\n" (S.name k);
-                      Linear.print_intervals insns intervals;
-                      S.ST.iter
-                        (fun k _v -> Printf.printf "%s: %s\n" (S.name k) "")
-                        intervals;
-                      Printf.printf "%s\n" (S.name k);
-                      let nlivestart, nliveend = S.ST.find k intervals in
-                      let len = nliveend - nlivestart in
-                      if len > len2 then (k, Some r, len) else (k2, r2, len2))
+                      match S.ST.find_opt k intervals with
+                      | Some (nlivestart, nliveend) ->
+                          let len = nliveend - nlivestart in
+                          if len > len2 then (k, Some r, len) else (k2, r2, len2)
+                      | None -> (k2, r2, len2))
                     assigns
                     (k, None, liveend - livestart)
                 in
                 match longest with
                 | k2, Some r, _ ->
-                    Printf.printf "spilling %s to assign %s = %s\n" (S.name k2)
-                      (S.name k) (string_of_reg r);
                     ( idx + 1,
                       avail,
                       S.ST.add k r (S.ST.remove k2 assigns),
                       S.SS.add k2 spills )
-                | _, None, _ ->
-                    Printf.printf "spilling %s\n" (S.name k);
-                    (idx + 1, avail, assigns, S.SS.add k spills))
+                | _, None, _ -> (idx + 1, avail, assigns, S.SS.add k spills)
               else
                 (* otherwise assign to available register *)
                 let reg = Regs.choose avail in
-                Printf.printf "assigning %s = %s\n" (S.name k)
-                  (string_of_reg reg);
                 (idx + 1, Regs.remove reg avail, S.ST.add k reg assigns, spills)
           | None -> (idx + 1, avail, assigns, spills)
         in
@@ -1044,18 +1034,12 @@ let alloc a param insns (in_, out) : operand S.table =
         let _, _, assigns, spills =
           List.fold_left scan (0, avail, assigns, spills) insns
         in
-        Linear.print_intervals insns intervals;
         let assigns = S.ST.map (fun r -> Reg r) assigns in
         let _, assigns =
           S.SS.fold
             (fun k (i, acc) -> (i + 1, S.ST.add k (stack i) acc))
             spills (0, assigns)
         in
-        Printf.printf "\n";
-        S.ST.iter
-          (fun k v -> Printf.printf "%s: %s\n" (S.name k) (string_of_operand v))
-          assigns;
-        Printf.printf "\n";
         assigns
     | Briggs ->
         let l, g = Lva.interf param insns in_ out in
