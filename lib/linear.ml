@@ -1,7 +1,9 @@
 let def t (ins : Cfg.insn) idx =
   match ins with
   | Label _ -> t
-  | Insn (Some dop, _) -> Symbol.ST.add dop idx t
+  | Insn (Some dop, _) ->
+      Printf.printf "adding %s \n" (Symbol.name dop);
+      Symbol.ST.add dop idx t
   | Insn (None, _) -> t
   | Term _ -> t
 
@@ -47,6 +49,7 @@ let print_intervals insns intervals =
     insns
 
 let intervals params insns (_livein, _liveout) =
+  let insns = List.filter (function Cfg.Label _ -> false | _ -> true) insns in
   let param t k = Symbol.ST.add k (-1) t in
   let defs = List.fold_left param Symbol.empty params in
   let uses = Symbol.empty in

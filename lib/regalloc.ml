@@ -821,11 +821,15 @@ let compile_insn :
       let cmpinsn = (Cmpq, [ rop; lop ]) in
       let setinsn = (Set (compile_cnd cnd), [ byteofquad dst ]) in
       lins @ rins @ [ cmpinsn; setzins; setinsn ]
-  | Some dst, Call (_, oper, args) ->
-      let dst = S.ST.find dst asn in
-      let callins : ins list = compile_call ctxt asn oper args in
-      let storins : ins = (Movq, [ Reg Rax; dst ]) in
-      callins @ [ storins ]
+  | Some dst, Call (_, oper, args) -> (
+      match S.ST.find_opt dst asn with
+      | Some dst ->
+          let callins = compile_call ctxt asn oper args in
+          let storins = (Movq, [ Reg Rax; dst ]) in
+          callins @ [ storins ]
+      | None ->
+          let callins = compile_call ctxt asn oper args in
+          callins)
   | None, Call (_, oper, args) -> compile_call ctxt asn oper args
   | Some dst, Bitcast (_, src, _) ->
       (*Printf.printf "%s\n" (S.name dst);*)
@@ -926,7 +930,7 @@ let string_of_allocator = function
   | Briggs -> "briggs"
   | Greedy -> "greedy"
   | Clang -> "clangc"
-  | Linearscan -> "linearscan"
+  | Linearscan -> "linear"
 
 module VS = Set.Make (Lva.G.V)
 module VT = Map.Make (Lva.G.V)
