@@ -1001,6 +1001,12 @@ let alloc a param insns (in_, out) : operand S.table =
                 let longest =
                   S.ST.fold
                     (fun k r (k2, r2, len2) ->
+                      Printf.printf "-> %s\n" (S.name k);
+                      Linear.print_intervals insns intervals;
+                      S.ST.iter
+                        (fun k _v -> Printf.printf "%s: %s\n" (S.name k) "")
+                        intervals;
+                      Printf.printf "%s\n" (S.name k);
                       let nlivestart, nliveend = S.ST.find k intervals in
                       let len = nliveend - nlivestart in
                       if len > len2 then (k, Some r, len) else (k2, r2, len2))
@@ -1026,8 +1032,17 @@ let alloc a param insns (in_, out) : operand S.table =
                 (idx + 1, Regs.remove reg avail, S.ST.add k reg assigns, spills)
           | None -> (idx + 1, avail, assigns, spills)
         in
+        let avail, assigns, spills =
+          List.fold_left
+            (fun (avail, assigns, spills) k ->
+              match Regs.choose_opt avail with
+              | Some r -> (Regs.remove r avail, S.ST.add k r assigns, spills)
+              | None -> (avail, assigns, S.SS.add k spills))
+            (avail, Symbol.empty, S.SS.empty)
+            param
+        in
         let _, _, assigns, spills =
-          List.fold_left scan (0, avail, Symbol.empty, Symbol.SS.empty) insns
+          List.fold_left scan (0, avail, assigns, spills) insns
         in
         Linear.print_intervals insns intervals;
         let assigns = S.ST.map (fun r -> Reg r) assigns in
