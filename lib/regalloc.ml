@@ -936,7 +936,7 @@ type mark =
 
 type assign = Color of S.symbol * int | ActualSpill of S.symbol
 
-let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
+let alloc a param insns (in_, out) : operand S.table =
   let var i =
     let j =
       match i with
@@ -962,9 +962,11 @@ let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
   let l =
     match a with
     | Ocamlgraph ->
+        let l, g = Lva.interf param insns in_ out in
         C.coloring g 12;
         S.ST.mapi (fun _k v -> Lva.G.Mark.get v) l |> S.ST.map var
     | Greedy ->
+        let l, _g = Lva.interf param insns in_ out in
         let c = ref 0 in
         S.ST.map
           (fun _v ->
@@ -973,8 +975,11 @@ let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
             v)
           l
     | Clang -> failwith "unreachable"
-    | Linearscan -> failwith "unimplemented"
+    | Linearscan ->
+        ignore ();
+        failwith "unimplemented"
     | Briggs ->
+        let l, g = Lva.interf param insns in_ out in
         let c = 2 in
         let register = function
           (*| 0 -> Reg Rax
@@ -1155,9 +1160,8 @@ let compile_fdecl :
   let ctxt = { tdecls; layout } in
   let ids, g = Cfg.graph cfg in
   let insns : Cfg.insn list = Cfg.flatten cfg in
-  let in_, out = Lva.dataflow insns ids g in
-  let lbl, itf = Lva.interf param insns in_ out in
-  let asn = alloc alc lbl itf in
+  let df = Lva.dataflow insns ids g in
+  let asn = alloc alc param insns df in
   let pusharg i _ =
     ( Pushq,
       [

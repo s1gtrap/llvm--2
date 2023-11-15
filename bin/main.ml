@@ -41,9 +41,8 @@ let cfgx86 parser input =
   let cfg = Parse.from_channel parser input in
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
-  let in_, out = Lva.dataflow insns ids g in
-  let lbls, itf = Lva.interf [] insns in_ out in
-  let _asn = Regalloc.alloc Regalloc.Ocamlgraph lbls itf in
+  let df = Lva.dataflow insns ids g in
+  let _asn = Regalloc.alloc Regalloc.Ocamlgraph [] insns df in
   ()
 
 let fdeclcfg input =
@@ -142,9 +141,8 @@ let progasn (alloc_ : Regalloc.allocator) input =
     Printf.printf "%s:\n" (Symbol.name name);
     let ids, g = Cfg.graph fdecl.cfg in
     let insns = Cfg.flatten fdecl.cfg in
-    let in_, out = Lva.dataflow insns ids g in
-    let lbl, itf = Lva.interf fdecl.param insns in_ out in
-    let asn = Regalloc.alloc alloc_ lbl itf in
+    let df = Lva.dataflow insns ids g in
+    let asn = Regalloc.alloc alloc_ [] insns df in
     Symbol.ST.iter
       (fun k v ->
         Printf.printf "%s: %s\n" (Symbol.name k) (Regalloc.string_of_operand v))
@@ -209,7 +207,7 @@ let () =
     match !alloc with
     | "ocamlgraph" -> Regalloc.Ocamlgraph
     | "greedy" -> Regalloc.Greedy
-    | "briggs" | _ -> Regalloc.Briggs
+    | "briggs" -> Regalloc.Briggs
     | "liscan" | _ -> Regalloc.Linearscan
   in
 
