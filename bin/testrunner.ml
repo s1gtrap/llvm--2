@@ -101,6 +101,16 @@ let compile_test (alc : Llvm__2.Regalloc.allocator) test cargs =
                    [| "-o"; fn |];
                  ])
               test
+        | Llvm__2.Regalloc.Tiger ->
+            Tiger.a ();
+            (*let prog : string =
+                try
+                  In_channel.open_text test
+                  |> Llvm__2.Parse.from_channel Llvm__2.Llparser.prog
+                  |> Llvm__2.Tiger.Backend.compile_prog
+                with _ -> raise CompileError
+              in*)
+            failwith ""
         | _ ->
             let prog : string =
               try
@@ -236,6 +246,7 @@ let run tests filter =
         with CompileError -> Printf.printf "%scompile error!%s\n" red nc)
     in
     run_ Llvm__2.Regalloc.Clang;
+    run_ Llvm__2.Regalloc.Tiger;
     run_ Llvm__2.Regalloc.Greedy;
     run_ Llvm__2.Regalloc.Briggs;
     run_ Llvm__2.Regalloc.Linearscan

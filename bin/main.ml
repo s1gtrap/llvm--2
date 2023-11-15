@@ -207,8 +207,10 @@ let () =
     match !alloc with
     | "ocamlgraph" -> Regalloc.Ocamlgraph
     | "greedy" -> Regalloc.Greedy
-    | "briggs" -> Regalloc.Briggs
-    | "liscan" | _ -> Regalloc.Linearscan
+    | "clangc" -> Regalloc.Clang
+    | "tigerc" -> Regalloc.Tiger
+    | "liscan" -> Regalloc.Linearscan
+    | "briggs" | _ -> Regalloc.Briggs
   in
 
   match !parser with

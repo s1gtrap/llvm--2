@@ -923,13 +923,14 @@ let compile_terminator :
 
 module C = Coloring.Mark (Lva.G)
 
-type allocator = Ocamlgraph | Briggs | Greedy | Clang | Linearscan
+type allocator = Ocamlgraph | Briggs | Greedy | Linearscan | Clang | Tiger
 
 let string_of_allocator = function
   | Ocamlgraph -> "ocamlgraph"
   | Briggs -> "briggs"
   | Greedy -> "greedy"
   | Clang -> "clangc"
+  | Tiger -> "tigerc"
   | Linearscan -> "linear"
 
 module VS = Set.Make (Lva.G.V)
@@ -986,7 +987,7 @@ let alloc a param insns (in_, out) : operand S.table =
             c := !c + 1;
             v)
           l
-    | Clang -> failwith "unreachable"
+    | Clang | Tiger -> failwith "unreachable"
     | Linearscan ->
         let insns =
           List.filter (function Cfg.Label _ -> false | _ -> true) insns
