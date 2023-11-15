@@ -976,7 +976,7 @@ let alloc a param insns (in_, out) : operand S.table =
           l
     | Clang -> failwith "unreachable"
     | Linearscan ->
-        ignore ();
+        let _intervals = Linear.intervals param insns (in_, out) in
         failwith "unimplemented"
     | Briggs ->
         let l, g = Lva.interf param insns in_ out in
