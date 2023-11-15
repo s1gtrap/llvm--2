@@ -917,13 +917,14 @@ let compile_terminator :
 
 module C = Coloring.Mark (Lva.G)
 
-type allocator = Ocamlgraph | Briggs | Greedy | Clang
+type allocator = Ocamlgraph | Briggs | Greedy | Clang | Linearscan
 
 let string_of_allocator = function
   | Ocamlgraph -> "ocamlgraph"
   | Briggs -> "briggs"
   | Greedy -> "greedy"
   | Clang -> "clangc"
+  | Linearscan -> "linearscan"
 
 module VS = Set.Make (Lva.G.V)
 module VT = Map.Make (Lva.G.V)
@@ -972,6 +973,7 @@ let alloc a (l : Lva.G.V.t S.table) (g : Lva.G.t) : operand S.table =
             v)
           l
     | Clang -> failwith "unreachable"
+    | Linearscan -> failwith "unimplemented"
     | Briggs ->
         let c = 2 in
         let register = function

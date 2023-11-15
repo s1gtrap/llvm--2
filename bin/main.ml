@@ -210,6 +210,7 @@ let () =
     | "ocamlgraph" -> Regalloc.Ocamlgraph
     | "greedy" -> Regalloc.Greedy
     | "briggs" | _ -> Regalloc.Briggs
+    | "liscan" | _ -> Regalloc.Linearscan
   in
 
   match !parser with
