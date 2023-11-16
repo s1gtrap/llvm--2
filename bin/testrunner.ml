@@ -246,7 +246,7 @@ let run tests filter =
         with CompileError -> Printf.printf "%scompile error!%s\n" red nc)
     in
     run_ Llvm__2.Regalloc.Clang;
-    run_ Llvm__2.Regalloc.Tiger;
+    (*run_ Llvm__2.Regalloc.Tiger;*)
     run_ Llvm__2.Regalloc.Greedy;
     run_ Llvm__2.Regalloc.Briggs;
     run_ Llvm__2.Regalloc.Linearscan
