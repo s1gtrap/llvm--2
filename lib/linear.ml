@@ -66,4 +66,5 @@ let intervals params insns (_livein, _liveout) =
         |> Option.map (fun liveend -> (livestart, liveend)))
       defs
   in
+  (*print_intervals insns intervals;*)
   intervals

@@ -956,7 +956,7 @@ type assign = Color of S.symbol * int | ActualSpill of S.symbol
 module Regs = Set.Make (struct
   type t = reg
 
-  let compare a b = if a = b then 0 else 1
+  let compare a b = compare a b
 end)
 
 let alloc a param insns (in_, out) : operand S.table =
@@ -1003,7 +1003,7 @@ let alloc a param insns (in_, out) : operand S.table =
           List.filter (function Cfg.Label _ -> false | _ -> true) insns
         in
         let intervals = Linear.intervals param insns (in_, out) in
-        let avail = Regs.of_list [ Rdx; Rbx ] in
+        let avail = Regs.of_list [ Rdx; Rbx; Rsi; Rdi ] in
         let scan (idx, avail, assigns, spills) _ins =
           match
             List.find_opt
@@ -1026,14 +1026,20 @@ let alloc a param insns (in_, out) : operand S.table =
                 in
                 match longest with
                 | k2, Some r, _ ->
+                    (*Printf.printf "spilling %s to assign %s = %s\n" (S.name k2)
+                      (S.name k) (string_of_reg r);*)
                     ( idx + 1,
                       avail,
                       S.ST.add k r (S.ST.remove k2 assigns),
                       S.SS.add k2 spills )
-                | _, None, _ -> (idx + 1, avail, assigns, S.SS.add k spills)
+                | _, None, _ ->
+                    (*Printf.printf "spilling %s\n" (S.name k);*)
+                    (idx + 1, avail, assigns, S.SS.add k spills)
               else
                 (* otherwise assign to available register *)
                 let reg = Regs.choose avail in
+                (*Printf.printf "assigning %s = %s\n" (S.name k)
+                  (string_of_reg reg);*)
                 (idx + 1, Regs.remove reg avail, S.ST.add k reg assigns, spills)
           | None -> (idx + 1, avail, assigns, spills)
         in
@@ -1041,8 +1047,17 @@ let alloc a param insns (in_, out) : operand S.table =
           List.fold_left
             (fun (avail, assigns, spills) k ->
               match Regs.choose_opt avail with
-              | Some r -> (Regs.remove r avail, S.ST.add k r assigns, spills)
-              | None -> (avail, assigns, S.SS.add k spills))
+              | Some r ->
+                  (*Printf.printf "assigning %s = %s, regs is now" (S.name k)
+                      (string_of_reg r);
+                    Regs.iter
+                      (fun r -> Printf.printf " %s" (string_of_reg r))
+                      (Regs.remove r avail);
+                    Printf.printf "\n";*)
+                  (Regs.remove r avail, S.ST.add k r assigns, spills)
+              | None ->
+                  Printf.printf "spilling %s\n" (S.name k);
+                  (avail, assigns, S.SS.add k spills))
             (avail, Symbol.empty, S.SS.empty)
             param
         in
