@@ -203,15 +203,7 @@ let () =
 
   Arg.parse speclist anon_fun usage_msg;
 
-  let alc =
-    match !alloc with
-    | "ocamlgraph" -> Regalloc.Ocamlgraph
-    | "greedy" -> Regalloc.Greedy
-    | "clangc" -> Regalloc.Clang
-    | "tigerc" -> Regalloc.Tiger
-    | "liscan" -> Regalloc.Linearscan
-    | "briggs" | _ -> Regalloc.Briggs
-  in
+  let alc = Regalloc.allocator_of_string !alloc in
 
   match !parser with
   | "cfg" ->

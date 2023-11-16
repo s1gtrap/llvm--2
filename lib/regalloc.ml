@@ -926,6 +926,15 @@ module C = Coloring.Mark (Lva.G)
 
 type allocator = Ocamlgraph | Briggs | Greedy | Linearscan | Clang | Tiger
 
+let allocator_of_string = function
+  | "ocamlgraph" -> Ocamlgraph
+  | "briggs" -> Briggs
+  | "greedy" -> Greedy
+  | "clangc" -> Clang
+  | "tigerc" -> Tiger
+  | "linear" | "linearscan" -> Linearscan
+  | s -> failwith ("invalid allocator: " ^ s)
+
 let string_of_allocator = function
   | Ocamlgraph -> "ocamlgraph"
   | Briggs -> "briggs"
