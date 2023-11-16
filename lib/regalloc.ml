@@ -1003,7 +1003,10 @@ let alloc a param insns (in_, out) : operand S.table =
           List.filter (function Cfg.Label _ -> false | _ -> true) insns
         in
         let intervals = Linear.intervals param insns (in_, out) in
-        let avail = Regs.of_list [ Rdx; Rbx; Rsi; Rdi ] in
+        let avail =
+          Regs.of_list
+            [ Rdx; Rbx; Rsi; Rdi; R08; R09; R10; R11; R12; R13; R14; R15 ]
+        in
         let scan (idx, avail, assigns, spills) _ins =
           match
             List.find_opt
