@@ -657,6 +657,16 @@ let compile_insn :
   (Comment (Ll.string_of_named_insn insn), [])
   ::
   (match insn with
+  | Some dst, Call (_, oper, args) -> (
+      match S.ST.find_opt dst asn with
+      | Some dst ->
+          let callins = compile_call ctxt asn oper args in
+          let storins = (Movq, [ Reg Rax; dst ]) in
+          callins @ [ storins ]
+      | None ->
+          let callins = compile_call ctxt asn oper args in
+          callins)
+  | Some dst, _ when Option.is_none (S.ST.find_opt dst asn) -> []
   | Some dst, Binop (SDiv, Ll.I32, lop, rop) ->
       (* RAX and RCX are volatile, should be good? *)
       let dst = S.ST.find dst asn in
@@ -821,15 +831,6 @@ let compile_insn :
       let cmpinsn = (Cmpq, [ rop; lop ]) in
       let setinsn = (Set (compile_cnd cnd), [ byteofquad dst ]) in
       lins @ rins @ [ cmpinsn; setzins; setinsn ]
-  | Some dst, Call (_, oper, args) -> (
-      match S.ST.find_opt dst asn with
-      | Some dst ->
-          let callins = compile_call ctxt asn oper args in
-          let storins = (Movq, [ Reg Rax; dst ]) in
-          callins @ [ storins ]
-      | None ->
-          let callins = compile_call ctxt asn oper args in
-          callins)
   | None, Call (_, oper, args) -> compile_call ctxt asn oper args
   | Some dst, Bitcast (_, src, _) ->
       (*Printf.printf "%s\n" (S.name dst);*)
