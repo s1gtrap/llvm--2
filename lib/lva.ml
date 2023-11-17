@@ -53,39 +53,26 @@ let print (insns : Cfg.insn list) (_ids : Cfg.G.V.t array) (_g : Cfg.G.t)
   ()
 
 let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
+  let insns = List.mapi (fun i v -> (i, v)) insns in
   let rec dataflow (in_ : S.SS.t array) (out : S.SS.t array) =
-    (*print insns ids g in_ out;
-      Printf.printf "\n";*)
-    let in' = Array.copy in_ in
-    let out' = Array.copy out in
-    let (in_, out) : S.set array * S.set array =
+    let changed, in_, out =
       List.fold_left
-        (fun (in_, out) (i, insn) ->
-          (*Printf.printf " def=%s, use=%s\n"
-            (printset (def insn))
-            (printset (use insn));*)
-          (*Printf.printf "  in[%d] = %s, " i (printset in_.(i));*)
-          in_.(i) <- S.SS.union (use insn) (S.SS.diff out.(i) (def insn));
-          (*Printf.printf "in[%d] = %s\n" i (printset in_.(i));
-            Printf.printf "  out[%d] = %s,\n" i (printset in_.(i));*)
-          out.(i) <-
-            (let succ = Cfg.G.succ g ids.(i) in
-             List.fold_left
-               (fun s v ->
-                 (*Printf.printf "    adding succ[%d] %s to %d\n"
-                   (Cfg.G.V.label v)
-                   (printset in_.(Cfg.G.V.label v))
-                   i;*)
-                 S.SS.union s in_.(Cfg.G.V.label v))
-               S.SS.empty succ);
-          (*Printf.printf "  out[%d] = %s\n" i (printset out.(i));*)
-          (in_, out))
-        (in_, out)
-        (List.mapi (fun i v -> (i, v)) insns)
+        (fun (changed, in_, out) (i, insn) ->
+          let newin = S.SS.union (use insn) (S.SS.diff out.(i) (def insn)) in
+          let changed = changed || Bool.not (S.SS.equal newin in_.(i)) in
+          in_.(i) <- newin;
+          let newout =
+            let succ = Cfg.G.succ g ids.(i) in
+            List.fold_left
+              (fun s v -> S.SS.union s in_.(Cfg.G.V.label v))
+              S.SS.empty succ
+          in
+          let changed = changed || Bool.not (S.SS.equal newout out.(i)) in
+          out.(i) <- newout;
+          (changed, in_, out))
+        (false, in_, out) insns
     in
-    if Array.for_all2 S.SS.equal in_ in' && Array.for_all2 S.SS.equal out out'
-    then (in', out')
-    else dataflow in_ out
+    if changed then dataflow in_ out else (in_, out)
   in
   dataflow
     (Array.init (List.length insns) (fun _ -> S.SS.empty))
