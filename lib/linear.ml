@@ -20,6 +20,7 @@ let use t (insn : Cfg.insn) idx =
   | Insn (_, Gep (_, bop, ops)) ->
       List.fold_left (fun s o -> op o s) (op bop t) ops
   | Insn (_, Zext (_, sop, _)) -> op sop t
+  | Insn (_, Sext (_, sop, _)) -> op sop t
   | Insn (_, Ptrtoint (_, sop, _)) -> op sop t
   | Insn (_, Trunc (_, sop, _)) -> op sop t
   | Insn (_, PhiNode (_, ops)) ->
