@@ -81,6 +81,8 @@ block:
     { { insns = is; terminator=t }  }
 
 labeled_block:
+  | l=INT COLON b=block
+    { (S.symbol (Int64.to_string l),b) }
   | l=LBL COLON b=block
     { (l,b) }
 
