@@ -902,8 +902,9 @@ let compile_insn :
   | insn -> failwith (Ll.string_of_named_insn insn))
 
 let compile_terminator :
-    ctxt -> operand S.table -> ins list -> Ll.terminator -> ins list =
- fun ctxt asn movs term ->
+    ctxt -> S.symbol -> operand S.table -> ins list -> Ll.terminator -> ins list
+    =
+ fun ctxt fname asn movs term ->
   (Comment (Ll.string_of_terminator term), [])
   ::
   (match term with
@@ -932,13 +933,13 @@ let compile_terminator :
         (Popq, [ Reg Rbp ]);
         (Retq, []);
       ]
-  | Br lbl -> movs @ [ (Jmp, [ Imm (Lbl (S.name lbl)) ]) ]
+  | Br lbl -> movs @ [ (Jmp, [ Imm (Lbl (S.name fname ^ S.name lbl)) ]) ]
   | Cbr (oper, thn, els) ->
       let operins = compile_operand ctxt asn Ll.I64 (Reg Rax) oper in
       let zeroins = (Movq, [ Imm (Lit 0L); Reg Rcx ]) in
       let cmpins : ins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
-      let jeq = (J Eq, [ Imm (Lbl (S.name els)) ]) in
-      let jmp = (Jmp, [ Imm (Lbl (S.name thn)) ]) in
+      let jeq = (J Eq, [ Imm (Lbl (S.name fname ^ S.name els)) ]) in
+      let jmp = (Jmp, [ Imm (Lbl (S.name fname ^ S.name thn)) ]) in
       operins @ [ zeroins; cmpins ] @ movs @ [ jeq; jmp ]
   | Unreachable ->
       (* undefined, so do literally nothing *)
@@ -1262,6 +1263,7 @@ let insns (_insns : Cfg.insn list) (_l : Lva.G.V.t S.table) (_g : Lva.G.t) :
 let compile_fdecl :
     allocator -> (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
  fun (alc : allocator) tdecls name { param; cfg; _ } ->
+  let fname = name in
   (* move out of pre-assigned parameter registers (rsi, rdi, .. r9) *)
   let head, tail = cfg in
   let _, blocks = List.split tail in
@@ -1389,8 +1391,12 @@ let compile_fdecl :
          in
          let head : ins list = pro @ head in
          let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
-         let tail = compile_terminator ctxt asn movs term in
-         { lbl = S.name name; global; asm = Text (head @ tail) })
+         let tail = compile_terminator ctxt fname asn movs term in
+         {
+           lbl = (if global then S.name fname else S.name fname ^ S.name name);
+           global;
+           asm = Text (head @ tail);
+         })
 
 let rec compile_ginit = function
   | Ll.GNull -> [ Quad (Lit 0L) ]

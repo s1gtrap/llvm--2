@@ -258,6 +258,8 @@ let () =
   let tests =
     [
       ("tests/lshri32.ll", "", [], [], [ Exit 255; Stdout ""; Stderr "" ]);
+      ("tests/literal-labels0.ll", "", [], [], [ Exit 42; Stdout ""; Stderr "" ]);
+      ("tests/literal-labels1.ll", "", [], [], [ Exit 0; Stdout ""; Stderr "" ]);
       ( "tests/lshri32.ll",
         "",
         [],
