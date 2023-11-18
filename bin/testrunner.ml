@@ -1555,6 +1555,66 @@ let () =
         [ Exit 0; Stdout "Hello, world!\n7B55A718" ] );
       ("tests/fib0.ll", "", [], [], [ Stdout ""; Stderr "" ]);
       ("tests/fib1.ll", "", [], [ "34" ], [ Stdout ""; Stderr "" ]);
+      ( "tests/sha256.ll",
+        "",
+        [],
+        [ "" ],
+        [
+          Exit 0;
+          Stdout
+            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+          Stderr "";
+        ] );
+      ( "tests/sha256.ll",
+        "",
+        [],
+        [ "a" ],
+        [
+          Exit 0;
+          Stdout
+            "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb";
+          Stderr "";
+        ] );
+      ( "tests/sha256.ll",
+        "",
+        [],
+        [ "Hello, world!" ],
+        [
+          Exit 0;
+          Stdout
+            "315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3";
+          Stderr "";
+        ] );
+      ( "tests/sha256-stdin.ll",
+        "",
+        [],
+        [],
+        [
+          Exit 0;
+          Stdout
+            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+          Stderr "";
+        ] );
+      ( "tests/sha256-stdin.ll",
+        "a",
+        [],
+        [],
+        [
+          Exit 0;
+          Stdout
+            "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb";
+          Stderr "";
+        ] );
+      ( "tests/sha256-stdin.ll",
+        "Hello, world!",
+        [],
+        [],
+        [
+          Exit 0;
+          Stdout
+            "315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3";
+          Stderr "";
+        ] );
       ( "dolphintests/_prog_01.ll",
         "",
         [ "dolphin.c" ],
@@ -2029,36 +2089,6 @@ let () =
         [ "tiger.c" ],
         [],
         [ Stdout ""; Stderr "" ] );
-      ( "tests/sha256.ll",
-        "",
-        [],
-        [ "" ],
-        [
-          Exit 0;
-          Stdout
-            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
-          Stderr "";
-        ] );
-      ( "tests/sha256.ll",
-        "",
-        [],
-        [ "a" ],
-        [
-          Exit 0;
-          Stdout
-            "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb";
-          Stderr "";
-        ] );
-      ( "tests/sha256.ll",
-        "",
-        [],
-        [ "Hello, world!" ],
-        [
-          Exit 0;
-          Stdout
-            "315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3";
-          Stderr "";
-        ] );
     ]
   in
   let cases, passes =
