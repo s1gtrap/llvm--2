@@ -36,7 +36,7 @@ type operand =
 type bop = Add | Sub | Mul | SDiv | SRem | Shl | Lshr | Ashr | And | Or | Xor
 
 (* Comparison operators *)
-type cnd = Eq | Ne | Slt | Sle | Sgt | Sge
+type cnd = Eq | Ne | Slt | Sle | Sgt | Sge | Ult | Ule | Ugt | Uge
 
 (* Instructions *)
 type insn =
@@ -158,6 +158,10 @@ let string_of_cnd (c : cnd) : string =
   | Sle -> "sle"
   | Sgt -> "sgt"
   | Sge -> "sge"
+  | Ult -> "ult" (* FIXME: test signedness of comparison operators *)
+  | Ule -> "ule"
+  | Ugt -> "ugt"
+  | Uge -> "uge"
 
 let string_of_gep_index (opr : operand) : string =
   match opr with

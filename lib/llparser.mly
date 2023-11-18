@@ -6,7 +6,7 @@
 %token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET
 %token TYPE CROSS I1 I8 I32 I64 VOID
 %token ADD SUB MUL SDIV
-%token EQ NE SLT SLE SGT SGE
+%token EQ NE SLT SLE SGT SGE ULT ULE UGT UGE
 %token AND OR XOR SHL LSHR ASHR SREM
 %token RET BR TO NULL LABEL ENTRY GLOBAL DEFINE UNREACHABLE
 %token CALL ICMP LOAD STORE ALLOCA BITCAST GEP ZEXT PTRTOINT PHI TRUNC
@@ -142,6 +142,10 @@ cnd:
   | SLE { Sle }
   | SGT { Sgt }
   | SGE { Sge }
+  | ULT { Ult }
+  | ULE { Ule }
+  | UGT { Ugt }
+  | UGE { Uge }
 
 named_insn:
 | u_opt=terminated(UID,EQUALS)? i=insn

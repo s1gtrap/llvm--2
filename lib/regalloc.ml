@@ -373,6 +373,10 @@ let compile_cnd (c : Ll.cnd) : cnd =
   | Ll.Sle -> Le
   | Ll.Sgt -> Gt
   | Ll.Sge -> Ge
+  | Ll.Ult -> Lt (* FIXME: this doesn't work for edge cases *)
+  | Ll.Ule -> Le
+  | Ll.Ugt -> Gt
+  | Ll.Uge -> Ge
 
 type layout = (Ll.uid * operand) list
 

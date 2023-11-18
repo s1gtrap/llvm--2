@@ -52,6 +52,10 @@ rule token = parse
   | "sle"              { SLE }
   | "sgt"              { SGT }
   | "sge"              { SGE }
+  | "ult"              { ULT }
+  | "ule"              { ULE }
+  | "ugt"              { UGT }
+  | "uge"              { UGE }
   | "shl"              { SHL }
   | "srem"             { SREM }
   | "ret"              { RET }
