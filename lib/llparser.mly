@@ -9,7 +9,7 @@
 %token EQ NE SLT SLE SGT SGE ULT ULE UGT UGE
 %token AND OR XOR SHL LSHR ASHR SREM
 %token RET BR TO NULL LABEL ENTRY GLOBAL DEFINE UNREACHABLE
-%token CALL ICMP LOAD STORE ALLOCA BITCAST GEP ZEXT PTRTOINT PHI TRUNC
+%token CALL ICMP LOAD STORE ALLOCA BITCAST GEP ZEXT SEXT PTRTOINT PHI TRUNC
 
 %token <int64> INT        (* int64 values *)
 %token <Symbol.symbol> LBL   (* labels *)
@@ -173,6 +173,8 @@ insn:
     { Gep (t, List.hd path, List.tl path) }
   | ZEXT t1=ty o=operand TO t2=ty
      { Zext (t1,o,t2) }
+  | SEXT t1=ty o=operand TO t2=ty
+     { Sext (t1,o,t2) }
   | TRUNC t1=ty o=operand TO t2=ty
      { Trunc (t1,o,t2) }
   | PTRTOINT t1=ty STAR o=operand TO t2=ty

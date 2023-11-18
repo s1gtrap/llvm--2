@@ -24,6 +24,7 @@ let use (insn : Cfg.insn) =
   | Insn (_, Gep (_, bop, ops)) ->
       List.fold_left (fun s o -> op o s) (op bop empty) ops
   | Insn (_, Zext (_, sop, _)) -> op sop empty
+  | Insn (_, Sext (_, sop, _)) -> op sop empty
   | Insn (_, Ptrtoint (_, sop, _)) -> op sop empty
   | Insn (_, Trunc (_, sop, _)) -> op sop empty
   | Insn (_, PhiNode (_, ops)) ->

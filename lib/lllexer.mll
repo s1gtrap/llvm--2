@@ -62,6 +62,7 @@ rule token = parse
   | "unreachable"      { UNREACHABLE }
   | "getelementptr"    { GEP }
   | "zext"             { ZEXT }
+  | "sext"             { SEXT }
   | "ptrtoint"         { PTRTOINT }
   | "trunc"            { TRUNC }
   | "type"             { TYPE }

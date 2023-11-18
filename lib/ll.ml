@@ -54,6 +54,9 @@ type insn =
   | Bitcast of ty * operand * ty (* bitcast ty1 %u to ty2              *)
   | Gep of ty * operand * operand list (* getelementptr ty* %u, i64 %vi, ... *)
   | Zext of ty * operand * ty (* zext ty1 %o to ty2                 *)
+  | Sext of ty * operand * ty
+  (* sext ty1 %o to ty2                 *)
+  (* FIXME: test this *)
   | Ptrtoint of ty * operand * ty (* ptrtoint ty1 %o to ty2             *)
   | Trunc of ty * operand * ty (* trunc ty1 %o to ty2                 *)
   | PhiNode of
@@ -193,6 +196,7 @@ let string_of_insn (ins : insn) : string =
           mapcat ", " string_of_gep_index oi;
         ]
   | Zext (t, o1, t2) -> concwsp [ "zext"; sot t; soo o1; "to"; sot t2 ]
+  | Sext (t, o1, t2) -> concwsp [ "sext"; sot t; soo o1; "to"; sot t2 ]
   | Ptrtoint (t, o1, t2) ->
       concwsp [ "ptrtoint"; sot (Ptr t); soo o1; "to"; sot t2 ]
   | Trunc (t, o1, t2) -> concwsp [ "trunc"; sot t; soo o1; "to"; sot t2 ]

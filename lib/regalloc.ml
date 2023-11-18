@@ -864,6 +864,24 @@ let compile_insn :
       let opins = compile_operand ctxt asn Ll.I64 (Reg Rax) src in
       let storins = (Movq, [ Reg Rax; dst ]) in
       opins @ [ storins ]
+  | Some dst, Sext (Ll.I8, src, _) ->
+      (* FIXME: test all of these sexts *)
+      let dst = S.ST.find dst asn in
+      let opins = compile_operand ctxt asn Ll.I64 (Reg Rax) src in
+      let zeroins = (Movq, [ Imm (Lit 0L); dst ]) in
+      let storins = (Movb, [ Reg Al; byteofquad dst ]) in
+      opins @ [ zeroins; storins ]
+  | Some dst, Sext (Ll.I32, src, _) ->
+      let dst = S.ST.find dst asn in
+      let opins = compile_operand ctxt asn Ll.I64 (Reg Rax) src in
+      let zeroins = (Movq, [ Imm (Lit 0L); dst ]) in
+      let storins = (Movl, [ Reg Eax; longofquad dst ]) in
+      opins @ [ zeroins; storins ]
+  | Some dst, Sext (_, src, _) ->
+      let dst = S.ST.find dst asn in
+      let opins = compile_operand ctxt asn Ll.I64 (Reg Rax) src in
+      let storins = (Movq, [ Reg Rax; dst ]) in
+      opins @ [ storins ]
   | Some dst, Ptrtoint (_, src, _) ->
       let dst = S.ST.find dst asn in
       let opins = compile_operand ctxt asn Ll.I64 (Reg Rax) src in
