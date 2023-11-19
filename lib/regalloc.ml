@@ -1235,7 +1235,7 @@ let alloc a param insns (in_, out) : operand S.table =
               (function Color _ -> None | ActualSpill k -> Some k)
               assignments
           in
-          if List.is_empty spills2 then
+          if List.length spills2 = 0 then
             snd
               (S.SS.fold
                  (fun k (i, a) -> (i + 1, S.ST.add k (stack i) a))
