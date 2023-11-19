@@ -3,7 +3,7 @@
  (libraries stdio ocamlgraph unix str tiger)
  (inline_tests)
  (preprocess
-  (pps ppx_inline_test)))
+  (pps ppx_inline_test landmarks-ppx --auto)))
 
 (ocamllex lllexer)
 
