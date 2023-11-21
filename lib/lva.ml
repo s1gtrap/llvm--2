@@ -60,7 +60,7 @@ let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
       List.fold_left
         (fun (changed, in_, out) (i, insn) ->
           let newin = S.SS.union (use insn) (S.SS.diff out.(i) (def insn)) in
-          let inchanged = S.SS.cardinal newin > S.SS.cardinal in_.(i) in
+          let inchanged = not (S.SS.equal newin in_.(i)) in
           if inchanged then in_.(i) <- newin;
           let newout =
             let succ = Cfg.G.succ g ids.(i) in
@@ -68,7 +68,7 @@ let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
               (fun s v -> S.SS.union s in_.(Cfg.G.V.label v))
               S.SS.empty succ
           in
-          let outchanged = S.SS.cardinal newout > S.SS.cardinal out.(i) in
+          let outchanged = not (S.SS.equal newout out.(i)) in
           if outchanged then out.(i) <- newout;
           (changed || inchanged || outchanged, in_, out))
         (false, in_, out) (List.rev insns)
