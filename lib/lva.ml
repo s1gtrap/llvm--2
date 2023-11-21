@@ -54,11 +54,13 @@ let print (insns : Cfg.insn list) (_ids : Cfg.G.V.t array) (_g : Cfg.G.t)
   ()
 
 let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
-  let insns = List.mapi (fun i v -> (i, v)) insns in
-  let rec dataflow (in_ : S.SS.t array) (out : S.SS.t array) =
-    let changed, in_, out =
+  let numinsns = List.mapi (fun i v -> (i, v)) insns in
+  let in_ = Array.init (List.length insns) (fun _ -> S.SS.empty) in
+  let out = Array.init (List.length insns) (fun _ -> S.SS.empty) in
+  let rec dataflow () =
+    let changed =
       List.fold_left
-        (fun (changed, in_, out) (i, insn) ->
+        (fun changed (i, insn) ->
           let newin = S.SS.union (use insn) (S.SS.diff out.(i) (def insn)) in
           let inchanged = not (S.SS.equal newin in_.(i)) in
           if inchanged then in_.(i) <- newin;
@@ -70,14 +72,12 @@ let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
           in
           let outchanged = not (S.SS.equal newout out.(i)) in
           if outchanged then out.(i) <- newout;
-          (changed || inchanged || outchanged, in_, out))
-        (false, in_, out) (List.rev insns)
+          changed || inchanged || outchanged)
+        false (List.rev numinsns)
     in
-    if changed then dataflow in_ out else (in_, out)
+    if changed then dataflow () else (in_, out)
   in
-  dataflow
-    (Array.init (List.length insns) (fun _ -> S.SS.empty))
-    (Array.init (List.length insns) (fun _ -> S.SS.empty))
+  dataflow ()
 
 open Graph
 
