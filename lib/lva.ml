@@ -71,7 +71,7 @@ let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
           let outchanged = S.SS.cardinal newout > S.SS.cardinal out.(i) in
           if outchanged then out.(i) <- newout;
           (changed || inchanged || outchanged, in_, out))
-        (false, in_, out) insns
+        (false, in_, out) (List.rev insns)
     in
     if changed then dataflow in_ out else (in_, out)
   in
