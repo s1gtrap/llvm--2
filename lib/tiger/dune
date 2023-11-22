@@ -1,1 +1,2 @@
-(library (name tiger))
+(library
+ (name tiger))
