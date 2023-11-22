@@ -553,6 +553,7 @@ let compile_call :
   List.map (fun r -> (Pushq, [ Reg r ])) crsaved
   @ List.flatten (List.mapi pusharg args)
   @ List.rev (List.mapi poparg args)
+  @ [ (Xorq, [ Reg Rax; Reg Rax ]) ]
   @ [ callins; freeins ]
   @ List.map (fun r -> (Popq, [ Reg r ])) (List.rev crsaved)
 
