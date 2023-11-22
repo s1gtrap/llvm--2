@@ -1,3 +1,5 @@
+open Common
+
 type status =
   | Exit of int * string * string
   | Error of Unix.process_status * string * string
@@ -77,10 +79,8 @@ let execute command args (input : string) : status =
   | _, WSIGNALED code -> Error (WSIGNALED code, !stdout, !stderr)
   | _, WSTOPPED code -> Error (WSTOPPED code, !stdout, !stderr)
 
-let compile_test (alc : Llvm__2.Regalloc.allocator) test cargs =
-  let testname =
-    Printf.sprintf "%s$%s" (Llvm__2.Regalloc.string_of_allocator alc) test
-  in
+let compile_test c test cargs =
+  let testname = string_of_compiler c ^ test in
   match S.find_opt testname !execs with
   | Some fn -> fn
   | None ->
@@ -97,22 +97,40 @@ let compile_test (alc : Llvm__2.Regalloc.allocator) test cargs =
             |]
       in
       let _ =
-        match alc with
-        | Llvm__2.Regalloc.Clang ->
+        match c with
+        | Clang ->
             Llvm__2.Build.create_process "clang"
               (Array.concat [ clangcmd; cargs; [| "-o"; fn |] ])
               test
-        | Llvm__2.Regalloc.Tiger ->
-            Tiger.a ();
-            (*let prog : string =
-                try
-                  In_channel.open_text test
-                  |> Llvm__2.Parse.from_channel Llvm__2.Llparser.prog
-                  |> Llvm__2.Tiger.Backend.compile_prog
-                with _ -> raise CompileError
-              in*)
-            failwith ""
-        | _ ->
+        | Tiger -> (
+            (*Llvm__2.Build.create_process "tigerc"
+              (Array.concat [ [| "tigerc" |]; [| "-o"; fn |] ])
+              test;*)
+            let outsfile : string = Filename.temp_file "" ".s" in
+            let pid =
+              Unix.create_process "/Users/s1g/Workspaces/BSc/llvm--2/tigerc"
+                [|
+                  "/Users/s1g/Workspaces/BSc/llvm--2/tigerc";
+                  "-l";
+                  "ll";
+                  test;
+                  "-o";
+                  outsfile;
+                |]
+                Unix.stdin Unix.stdout Unix.stderr
+            in
+            let _, status = Unix.waitpid [] pid in
+            match status with
+            | WEXITED 0 -> (
+                let pid =
+                  Unix.create_process "clang"
+                    (Array.concat [ clangcmd; cargs; [| outsfile; "-o"; fn |] ])
+                    Unix.stdin Unix.stdout Unix.stderr
+                in
+                let _, status = Unix.waitpid [] pid in
+                match status with WEXITED 0 -> () | _ -> raise CompileError)
+            | _ -> raise CompileError)
+        | Llvm__2 alc ->
             let prog : string =
               try
                 In_channel.open_text test
@@ -156,14 +174,14 @@ let run tests filter =
         true
       with _ -> false
     in
-    let run_ a =
-      let alc = Llvm__2.Regalloc.string_of_allocator a in
+    let run_ c =
+      let alc = string_of_compiler c in
       if matches alc || matches file then (
         Printf.printf "%s[%s]%s %s ... " muted alc nc file;
         flush stdout;
         cases := !cases + 1;
         try
-          let exc = compile_test a file cargs in
+          let exc = compile_test c file cargs in
           match execute exc args stdin with
           | Exit (exit, stdout, stderr) ->
               let rec assert_ = function
@@ -175,7 +193,7 @@ let run tests filter =
               in
               if assert_ asserts then (
                 passes := !passes + 1;
-                Printf.printf " %sok!\n%s" green nc)
+                Printf.printf "%sok!\n%s" green nc)
               else
                 let print_diff s1 s2 =
                   let s1 = String.split_on_char '\n' s1 in
@@ -246,11 +264,11 @@ let run tests filter =
                 nc exc
         with CompileError -> Printf.printf "%scompile error!%s\n" red nc)
     in
-    run_ Llvm__2.Regalloc.Clang;
-    (*run_ Llvm__2.Regalloc.Tiger;*)
-    run_ Llvm__2.Regalloc.Greedy;
-    run_ Llvm__2.Regalloc.Briggs;
-    run_ Llvm__2.Regalloc.Linearscan
+    run_ Clang;
+    run_ Tiger;
+    run_ (Llvm__2 Llvm__2.Regalloc.Greedy);
+    run_ (Llvm__2 Llvm__2.Regalloc.Briggs);
+    run_ (Llvm__2 Llvm__2.Regalloc.Linearscan)
   in
   List.iter r tests;
   (!cases, !passes)
