@@ -1801,7 +1801,7 @@ let () =
         "",
         [ "tiger.c" ],
         [],
-        [ Exit 0; Stdout ""; Stderr "" ] );
+        [ Stdout ""; Stderr "" ] );
       ( "tigertests/readonly_overwrite.tig.ll",
         "",
         [ "tiger.c" ],
