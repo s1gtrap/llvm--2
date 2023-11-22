@@ -6,6 +6,12 @@ Builds a subset of LLVM IR referred to as LLVM-- in our compilers cource.
 
 Built with OCaml 4.14.1
 
+```bash
+opam switch create 4.14.1
+eval $(opam env --switch=4.14.1)
+opam install dune ocamlgraph stdio ppx_inline_test landmarks-ppx menhir -y
+```
+
 ## Usage
 
 To build one or more `.ll` files seperately:
