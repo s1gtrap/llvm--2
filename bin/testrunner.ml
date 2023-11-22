@@ -85,21 +85,22 @@ let compile_test (alc : Llvm__2.Regalloc.allocator) test cargs =
   | Some fn -> fn
   | None ->
       let fn : string = Filename.temp_file "" "" in
+      let clangcmd =
+        match Llvm__2.Regalloc.os with
+        | Linux -> [| "clang"; "-Wno-override-module" |]
+        | Darwin ->
+            [|
+              "clang";
+              "-Wno-override-module";
+              "-target";
+              "x86_64-unknown-darwin";
+            |]
+      in
       let _ =
         match alc with
         | Llvm__2.Regalloc.Clang ->
             Llvm__2.Build.create_process "clang"
-              (Array.concat
-                 [
-                   [|
-                     "clang";
-                     "-Wno-override-module";
-                     "-target";
-                     "x86_64-unknown-darwin";
-                   |];
-                   cargs;
-                   [| "-o"; fn |];
-                 ])
+              (Array.concat [ clangcmd; cargs; [| "-o"; fn |] ])
               test
         | Llvm__2.Regalloc.Tiger ->
             Tiger.a ();
