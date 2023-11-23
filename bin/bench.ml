@@ -1,4 +1,5 @@
 open Common
+open Unix
 
 let read_all chan =
   let buf_size = 4096 in
@@ -13,27 +14,45 @@ let read_all chan =
   loop ();
   Buffer.contents buf
 
-let bench f a c =
+  let create_process_and_read_stdout command args =
+  let (in_fd, out_fd) = pipe () in
+  let pid = create_process command args  in_fd out_fd out_fd in
+  close out_fd;
+  let out_channel = in_channel_of_descr in_fd in
+  let output = read_all out_channel in
+  close in_fd;
+  ignore (waitpid [] pid);
+  output
+
+  let bench f a c =
   let e = compile_test c f [||] in
-  Printf.printf "%s" f;
-  Array.iter (Printf.printf " %s") a;
-  Printf.printf "\n";
-  flush stdout;
-  let read, write = Unix.pipe () in
-  let pid =
-    Unix.create_process "perf"
-      (Array.concat [ [| "perf"; "stat"; "-e"; "cycles"; e |]; a ])
-      Unix.stdin Unix.stdout write
-  in
-  Unix.close write;
-  let oc = Unix.in_channel_of_descr read in
-  let s = read_all oc in
-  Unix.close read;
-  Printf.printf "'%s'" s;
-  let _, _status = Unix.waitpid [] pid in
-  ()
+  let command = "perf" in
+  let arguments = Array.concat [ [| command; "stat"; "-e"; "cycles"; "-x"; ",";  e |]; a] in
+  let output = create_process_and_read_stdout command arguments in
+  Printf.printf "out: %s" output;
+  flush Stdlib.stdout
 
 let bench_all f a =
-  List.iter (bench f a) [ Clang; Llvm__2 Llvm__2.Regalloc.Briggs ]
+  List.iter (bench f a) [ Clang; (Llvm__2 Llvm__2.Regalloc.Greedy); Llvm__2 Llvm__2.Regalloc.Briggs ]
 
-let () = bench_all "benches/sha256.ll" [| "100000" |]
+
+let () =
+  let command = "echo" in
+  let arguments = [| command; "Hello, OCaml!" |] in
+  let output = create_process_and_read_stdout command arguments in
+  print_endline output;
+  let command = "echo" in
+  let arguments = [| command; "Hello, ahgt!" |] in
+  let output = create_process_and_read_stdout command arguments in
+  print_endline output;
+  let command = compile_test Clang "benches/sha256.ll" [||] in
+  let arguments = [| command; "Hello, ahgt!" |] in
+  let output = create_process_and_read_stdout command arguments in
+  print_endline output;
+  print_endline output;
+  bench_all "benches/sha256.ll" [| "100000" |] ;
+  bench_all "benches/sha256.ll" [| "1000000" |] ;
+  bench_all "benches/sha256.ll" [| "10000000" |] ;
+  bench_all "benches/sha256.ll" [| "100000000" |] ;
+  ()
+
