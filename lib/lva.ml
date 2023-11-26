@@ -54,7 +54,7 @@ let print (insns : Cfg.insn list) (_ids : Cfg.G.V.t array) (_g : Cfg.G.t)
   ()
 
 let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
-  let numinsns = List.mapi (fun i v -> (i, v)) insns in
+  let numinsns = List.mapi (fun i v -> (i, v)) insns |> List.rev in
   let in_ = Array.init (List.length insns) (fun _ -> S.SS.empty) in
   let out = Array.init (List.length insns) (fun _ -> S.SS.empty) in
   let rec dataflow () =
@@ -73,7 +73,7 @@ let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
           let inchanged = not (S.SS.equal newin in_.(i)) in
           if inchanged then in_.(i) <- newin;
           changed || inchanged || outchanged)
-        false (List.rev numinsns)
+        false numinsns
     in
     if changed then dataflow () else (in_, out)
   in
