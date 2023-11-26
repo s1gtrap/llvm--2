@@ -89,15 +89,45 @@ let _print (f, a, min, avg, max) =
   Printf.printf "avg=%Ld " avg;
   Printf.printf "max=%Ld\n" max
 
+let reset = "\x1b[0m"
+
+let color r g b =
+  "\x1b[38;2;" ^ string_of_int r ^ ";" ^ string_of_int g ^ ";" ^ string_of_int b
+  ^ "m"
+
+let clamp v min max = Float.min (Float.max v min) max
+
+let grad r =
+  let red = clamp r 10.0 100.0 -. 10.0 in
+  let red = int_of_float red in
+  let _red = red in
+  let red = (clamp r 1.0 10.0 -. 1.0) *. (255.0 /. 9.0) in
+
+  let red = int_of_float red in
+  let red = red in
+  let green = (100.0 -. clamp r 10.0 100.0) *. (255.0 /. 90.0) in
+  let green = int_of_float green in
+  let green = green in
+  (*let green = clamp r 1.0 10.0 *. 25.0 in
+    Printf.printf "%f " green;
+    let green = int_of_float green in
+    Printf.printf "%d " green;
+    let green = 255 - green in
+    Printf.printf "%d\n" green;*)
+  color red green 0
+(*^ "[ " ^ string_of_float r ^ ": " ^ string_of_int red ^ ", "
+  ^ string_of_int green ^ "] "*)
+
 let print2 (f, a, c, min, avg, max, minr, avgr) =
   Printf.printf "bench %s\t%s " (string_of_compiler c) f;
   Array.iter (fun a -> Printf.printf "%s " a) a;
-  Printf.printf "\tmin=%Ld (%f)\t" min minr;
-  Printf.printf "avg=%Ld (%f)\t" avg avgr;
+  Printf.printf "\tmin=%Ld (%s%f%s)\t" min (grad minr) minr reset;
+  Printf.printf "avg=%Ld (%s%f%s)\t" avg (grad avgr) avgr reset;
   Printf.printf "max=%Ld\n" max
 
 let () =
   let n = 10 in
+  flush Stdlib.stdout;
   bench_all_n "benches/fib.ll" [| "40" |] n |> List.iter print2;
   bench_all_n "benches/fib.ll" [| "41" |] n |> List.iter print2;
   bench_all_n "benches/fib.ll" [| "42" |] n |> List.iter print2;
