@@ -25,20 +25,25 @@ let create_process_and_read_stdout command args =
   output
 
 let bench f a c =
-  flush Stdlib.stdout;
   let e = compile_test c f [||] in
-  let command = "perf" in
-  let arguments =
-    Array.concat [ [| command; "stat"; "-e"; "cycles"; "-x"; ","; e |]; a ]
-  in
-  let output = create_process_and_read_stdout command arguments in
-  let cycles =
-    match String.split_on_char ',' output with
-    | cycles :: _ -> Int64.of_string cycles
-    | _ -> failwith ("illegal perf output: " ^ output)
-  in
-  flush Stdlib.stdout;
-  cycles
+  match Llvm__2.Regalloc.os with
+  | Darwin ->
+      let command = "/usr/bin/time" in
+      let arguments = Array.concat [ [| command; "-al"; e |]; a ] in
+      let output = create_process_and_read_stdout command arguments in
+      let regex = Str.regexp "\\([0-9]+\\)  cycles elapsed" in
+      if Str.search_forward regex output 0 >= 0 then
+        Str.matched_group 1 output |> Int64.of_string
+      else failwith ("illegal time output: " ^ output)
+  | Linux -> (
+      let command = "perf" in
+      let arguments =
+        Array.concat [ [| command; "stat"; "-e"; "cycles"; "-x"; ","; e |]; a ]
+      in
+      let output = create_process_and_read_stdout command arguments in
+      match String.split_on_char ',' output with
+      | cycles :: _ -> Int64.of_string cycles
+      | _ -> failwith ("illegal perf output: " ^ output))
 
 let bench_n f a n c =
   let rec iter mi sum ma = function
