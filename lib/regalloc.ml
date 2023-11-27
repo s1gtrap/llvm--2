@@ -948,18 +948,18 @@ let compile_terminator :
 
 module C = Coloring.Mark (Lva.G)
 
-type allocator = Ocamlgraph | Briggs | Greedy | Linearscan
+type allocator = Ocamlgraph | Briggs of int | Greedy | Linearscan
 
 let allocator_of_string = function
   | "ocamlgraph" -> Ocamlgraph
-  | "briggs" -> Briggs
+  | "briggs" -> Briggs 12
   | "greedy" -> Greedy
   | "linear" | "linearscan" -> Linearscan
   | s -> failwith ("invalid allocator: " ^ s)
 
 let string_of_allocator = function
   | Ocamlgraph -> "ocamlgraph"
-  | Briggs -> "briggs"
+  | Briggs k -> "briggs k=" ^ (string_of_int k)
   | Greedy -> "greedy"
   | Linearscan -> "linear"
 
@@ -1093,9 +1093,8 @@ let alloc a param insns (in_, out) : operand S.table =
             spills (0, assigns)
         in
         assigns
-    | Briggs ->
+    | Briggs c ->
         let l, g = Lva.interf param insns in_ out in
-        let c = 2 in
         let register = function
           (*| 0 -> Reg Rax
             | 1 -> Reg Rcx (* NOTE: %rax and %rcx are scratch registers *)*)
@@ -1158,7 +1157,10 @@ let alloc a param insns (in_, out) : operand S.table =
                  | PotentialSpill (k, _v) -> Printf.printf "spill %s, " (S.name k))
                markers;
              Printf.printf "\n";*)
-          let indices = Ints.add 1 (Ints.add 0 Ints.empty) in
+                let rec add = function 
+                  | 0 -> Ints.empty
+                  | i -> Ints.add (i - 1) (add (i-1)) in
+          let indices = add c in
           let rec select (assignments : int VT.t) (markers : mark list) :
               assign list =
             match markers with
