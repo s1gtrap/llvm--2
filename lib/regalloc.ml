@@ -965,7 +965,7 @@ let allocator_of_string = function
 
 let string_of_allocator = function
   | Ocamlgraph -> "ocamlgraph"
-  | Briggs k -> "briggs k=" ^ (string_of_int k)
+  | Briggs k -> "briggs k=" ^ string_of_int k
   | Greedy -> "greedy"
   | Linearscan -> "linear"
 
@@ -1163,9 +1163,10 @@ let alloc a param insns (in_, out) : operand S.table =
                  | PotentialSpill (k, _v) -> Printf.printf "spill %s, " (S.name k))
                markers;
              Printf.printf "\n";*)
-                let rec add = function 
-                  | 0 -> Ints.empty
-                  | i -> Ints.add (i - 1) (add (i-1)) in
+          let rec add = function
+            | 0 -> Ints.empty
+            | i -> Ints.add (i - 1) (add (i - 1))
+          in
           let indices = add c in
           let rec select (assignments : int VT.t) (markers : mark list) :
               assign list =
