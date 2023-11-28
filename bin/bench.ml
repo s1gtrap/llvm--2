@@ -64,9 +64,15 @@ let bench_n f a n c =
 
 let _bench_all f a =
   List.map (bench f a)
-    [ Clang; Llvm__2 Llvm__2.Regalloc.Greedy; Llvm__2 (Llvm__2.Regalloc.Briggs 2); Llvm__2 Llvm__2.Regalloc.Linearscan ]
+    [
+      Clang;
+      Llvm__2 Llvm__2.Regalloc.Greedy;
+      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
+      Llvm__2 Llvm__2.Regalloc.Linearscan;
+    ]
 
 let bench_all_n f a n =
+  flush Stdlib.stdout;
   let cf, ca, cmin, cavg, cmax = bench_n f a n Clang in
   (cf, ca, Clang, cmin, cavg, cmax, 1.0, 1.0)
   :: List.map
@@ -80,7 +86,12 @@ let bench_all_n f a n =
            max,
            Int64.to_float min /. Int64.to_float cmin,
            Int64.to_float avg /. Int64.to_float cavg ))
-       [ Llvm__2 (Llvm__2.Regalloc.Briggs 12);Llvm__2 (Llvm__2.Regalloc.Briggs 2); Llvm__2 Llvm__2.Regalloc.Greedy; Llvm__2 Llvm__2.Regalloc.Linearscan ]
+       [
+         Llvm__2 (Llvm__2.Regalloc.Briggs 12);
+         Llvm__2 (Llvm__2.Regalloc.Briggs 2);
+         Llvm__2 Llvm__2.Regalloc.Greedy;
+         Llvm__2 Llvm__2.Regalloc.Linearscan;
+       ]
 
 let _print (f, a, min, avg, max) =
   Printf.printf "bench %s " f;
@@ -97,7 +108,7 @@ let grad r =
     "\x1b[38;2;" ^ string_of_int r ^ ";" ^ string_of_int g ^ ";"
     ^ string_of_int b ^ "m"
   in
-  let redlimit = 5.0 in
+  let redlimit = 2.0 in
   let greenlimit = 10.0 in
   let red =
     (clamp r 1.0 redlimit -. 1.0) *. (255.0 /. (redlimit -. 1.0))
