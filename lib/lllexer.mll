@@ -21,7 +21,14 @@ let idchar = letter | digit | ['.' '_' '-' '$']
 
 rule token = parse
   | eof                { EOF }
-  | ['\t' ' ']+        { token lexbuf }
+  | ['\t' ' ']+
+  | "nsw"
+  | "noundef"
+  | "inbounds"
+  | ',' ['\t' ' ']+ "..."
+  | '#' digit+         { token lexbuf } (* ignored *)
+  | ','? ['\t' ' ']+ "align" ['\t' ' ']+ digit+ { token lexbuf }
+  | "dereferenceable(" digit+ ')' { token lexbuf }
   | '\n'               { Lexing.new_line lexbuf; token lexbuf }
   | '*'                { STAR }
   | ','                { COMMA }
@@ -33,6 +40,8 @@ rule token = parse
   | '}'                { RBRACE }
   | '['                { LBRACKET }
   | ']'                { RBRACKET }
+  | "true"             { TRUE }
+  | "false"            { FALSE }
   | "i1"               { I1 }
   | "i8"               { I8 }
   | "i32"              { I32 }
@@ -57,6 +66,7 @@ rule token = parse
   | "ugt"              { UGT }
   | "uge"              { UGE }
   | "shl"              { SHL }
+  | "ptr"              { PTR }
   | "srem"             { SREM }
   | "ret"              { RET }
   | "unreachable"      { UNREACHABLE }
@@ -76,6 +86,7 @@ rule token = parse
   | "entry"            { ENTRY }
   | "store"            { STORE }
   | "label"            { LABEL }
+  | "private unnamed_addr constant"
   | "global"           { GLOBAL }
   | "define"           { DEFINE }
   | "alloca"           { ALLOCA }
@@ -86,9 +97,10 @@ rule token = parse
   | "x"                           { CROSS } (* for Array types *)
   | '-'? digit+ as d              { INT (Int64.of_string d) }
   | idchar+ as i                  { LBL (S.symbol i) }
-  | ";" ([^'\n']*) '\n'           { token lexbuf } (* ignored *)
-  | "declare" [^'\n']* '\n'       { token lexbuf } (* ignored *)
-  | "target"  [^'\n']* '\n'       { token lexbuf } (* ignored *)
+  | ";" ([^'\n']*) '\n'
+  | ("declare" | "target" | "attributes" | "source_filename" | "declare") [^'\n']* '\n'
+  | ',' ['\t' ' ']+ '!' [^'\n']* '\n'
+  |  '!' [^'\n']* '\n'            { Lexing.new_line lexbuf; token lexbuf } (* ignored *)
   | "c\""                         { string "" lexbuf }
   | _ as c                        { error lexbuf @@ "Unexpected character: " ^ Char.escaped c }
 

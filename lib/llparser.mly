@@ -4,7 +4,7 @@
 
 %token STAR COMMA COLON EQUALS EOF
 %token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET
-%token TYPE CROSS I1 I8 I32 I64 VOID
+%token TYPE CROSS I1 I8 I32 I64 VOID PTR TRUE FALSE
 %token ADD SUB MUL SDIV
 %token EQ NE SLT SLE SGT SGE ULT ULE UGT UGE
 %token AND OR XOR SHL LSHR ASHR SREM
@@ -97,12 +97,15 @@ terminator:
 
 operand:
   | NULL            { Null }
+  | TRUE            { IConst64 1L }
+  | FALSE           { IConst64 0L }
   | i=INT           { IConst64 i }
   | g=GID           { Gid g }
   | u=UID           { Id u }
 
 ty:
   | t=ty STAR       { Ptr t }
+  | PTR             { Ptr Void }
   | VOID            { Void }
   | I1              { I1 }
   | I8              { I8 }
