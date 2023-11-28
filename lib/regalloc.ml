@@ -520,11 +520,17 @@ let compile_call :
     (Ll.ty * Ll.operand) list ->
     ins list =
  fun ctxt asn oper args ->
+  let replace =
+    S.ST.add (S.symbol "llvm.memset.p0.i64") (S.symbol "memset") S.empty
+  in
   let args = List.map snd args in
   let crsaved = [ Rcx; Rdx; Rsi; Rdi; R08; R09; R10; R11 ] in
   let callins =
     match oper with
-    | Gid id -> (Callq, [ Imm (Lbl (mangle id)) ])
+    | Gid id -> (
+        match S.ST.find_opt id replace with
+        | Some id -> (Callq, [ Imm (Lbl (mangle id)) ])
+        | None -> (Callq, [ Imm (Lbl (mangle id)) ]))
     | _ -> raise BackendFatal
   in
   let pusharg _i dst : ins list =
