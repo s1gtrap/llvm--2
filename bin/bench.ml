@@ -129,7 +129,10 @@ let print2 (f, a, c, min, avg, max, minr, avgr) =
   Printf.printf "max=%Ld\n" max
 
 let () =
-  let n = 10 in
+  let n = ref 10 in
+  let speclist = [ ("-n", Arg.Set_int n, "Output debug information") ] in
+  Arg.parse speclist (fun _ -> ()) "append [-r n]";
+  let n = !n in
   flush Stdlib.stdout;
   bench_all_n "benches/fib.ll" [| "40" |] n |> List.iter print2;
   bench_all_n "benches/fib.ll" [| "41" |] n |> List.iter print2;
