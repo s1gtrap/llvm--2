@@ -1490,6 +1490,16 @@ let () =
         [],
         [ "Hello, world!\n" ],
         [ Exit 0; Stdout "Hello, world!\n7B55A718" ] );
+      ("tests/fib.ll", "", [], ["0"], [ Exit 0 ; Stdout ""; Stderr "" ]);
+      ("tests/fib.ll", "", [], ["1"], [ Exit 1 ; Stdout ""; Stderr "" ]);
+      ("tests/fib.ll", "", [], ["2"], [ Exit 1 ; Stdout ""; Stderr "" ]);
+      ("tests/fib.ll", "", [], ["3"], [ Exit 2 ; Stdout ""; Stderr "" ]);
+      ("tests/fib.ll", "", [], ["4"], [ Exit 3 ; Stdout ""; Stderr "" ]);
+      ("tests/fib.ll", "", [], ["5"], [ Exit 5 ; Stdout ""; Stderr "" ]);
+      ("tests/fib.ll", "", [], ["6"], [ Exit 8 ; Stdout ""; Stderr "" ]);
+      ("tests/fib.ll", "", [], ["7"], [ Exit 13 ; Stdout ""; Stderr "" ]);
+      ("tests/fib.ll", "", [], ["8"], [ Exit 21 ; Stdout ""; Stderr "" ]);
+      ("tests/fib.ll", "", [], ["9"], [ Exit 34 ; Stdout ""; Stderr "" ]);
       ("tests/fib0.ll", "", [], [], [ Stdout ""; Stderr "" ]);
       ("tests/fib1.ll", "", [], [ "34" ], [ Stdout ""; Stderr "" ]);
       ( "tests/sha256.ll",

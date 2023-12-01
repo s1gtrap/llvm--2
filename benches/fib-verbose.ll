@@ -1,5 +1,8 @@
 declare i32 @atoi(i8*)
+declare void @printf(i8*, i32)
+@msg = global [4 x i8] c"%i\0A\00"
 define i32 @fib(i32 %n0) {
+  call void @printf(i8* @msg, i32 %n0)
   %cn =  icmp sle i32 %n0, 1
   br i1 %cn, label %base, label %step
 base:
