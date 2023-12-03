@@ -57,6 +57,9 @@ rule token = parse
   | "sub"              { SUB }
   | "mul"              { MUL }
   | "sdiv"             { SDIV }
+  | "srem"             { SREM }
+  | "udiv"             { UDIV }
+  | "urem"             { UREM }
   | "xor"              { XOR }
   | "slt"              { SLT }
   | "sle"              { SLE }
@@ -68,7 +71,6 @@ rule token = parse
   | "uge"              { UGE }
   | "shl"              { SHL }
   | "ptr"              { PTR }
-  | "srem"             { SREM }
   | "ret"              { RET }
   | "unreachable"      { UNREACHABLE }
   | "getelementptr"    { GEP }

@@ -147,6 +147,7 @@ type opcode =
   | Shrl
   | Shrq
   | Srem
+  | Urem
   | Jmp
   | J of cnd
   | Cmpq
@@ -157,6 +158,8 @@ type opcode =
   | Cqto
   | Idivq
   | Idivl
+  | Divq
+  | Divl
   | Comment of string
 
 (* An instruction is an opcode plus its operands.
@@ -284,6 +287,7 @@ let string_of_opcode (opc : opcode) : string =
   | Shrl -> "shrl"
   | Shrq -> "shrq"
   | Srem -> "srem"
+  | Urem -> "urem"
   | Jmp -> "jmp"
   | J c -> "j" ^ string_of_cnd c
   | Cmpq -> "cmpq"
@@ -294,6 +298,8 @@ let string_of_opcode (opc : opcode) : string =
   | Cqto -> "cqto"
   | Idivq -> "idivq"
   | Idivl -> "idivl"
+  | Divq -> "divq"
+  | Divl -> "divl"
   | Comment s -> "# " ^ String.escaped s
 
 let map_concat s f l = String.concat s (List.map f l)
@@ -632,6 +638,8 @@ let compile_bop : Ll.bop -> Ll.ty -> opcode =
   | Mul, _ -> Imulq
   | SDiv, _ -> Idivq
   | SRem, _ -> Srem
+  | UDiv, _ -> Divq
+  | URem, _ -> Urem
   | Shl, _ -> Shlq
   | Lshr, Ll.I8 -> Shrb
   | Lshr, Ll.I32 -> Shrl
@@ -821,7 +829,7 @@ let compile_insn :
       let storins =
         match dst with
         | Id _ -> (Movq, [ Reg Rax; Ind2 Rcx ])
-        | _ -> raise BackendFatal
+        | _ -> failwith (Ll.string_of_operand dst)
       in
       sins @ dins @ [ storins ]
   | Some dst, Icmp (cnd, Ll.I32, l, r) ->

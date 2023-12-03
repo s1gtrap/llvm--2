@@ -33,7 +33,20 @@ type operand =
   | Id of uid (* A local identifier  *)
 
 (* Binary operations *)
-type bop = Add | Sub | Mul | SDiv | SRem | Shl | Lshr | Ashr | And | Or | Xor
+type bop =
+  | Add
+  | Sub
+  | Mul
+  | SDiv
+  | SRem
+  | UDiv
+  | URem
+  | Shl
+  | Lshr
+  | Ashr
+  | And
+  | Or
+  | Xor
 
 (* Comparison operators *)
 type cnd = Eq | Ne | Slt | Sle | Sgt | Sge | Ult | Ule | Ugt | Uge
@@ -153,6 +166,8 @@ let string_of_bop (b : bop) : string =
   | Xor -> "xor"
   | SDiv -> "sdiv"
   | SRem -> "srem"
+  | UDiv -> "udiv"
+  | URem -> "urem"
 
 let string_of_cnd (c : cnd) : string =
   match c with
