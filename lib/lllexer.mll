@@ -25,6 +25,7 @@ rule token = parse
   | "nsw"
   | "noundef"
   | "inbounds"
+  | "internal"
   | ',' ['\t' ' ']+ "..."
   | '#' digit+         { token lexbuf } (* ignored *)
   | ','? ['\t' ' ']+ "align" ['\t' ' ']+ digit+ { token lexbuf }
@@ -86,7 +87,11 @@ rule token = parse
   | "entry"            { ENTRY }
   | "store"            { STORE }
   | "label"            { LABEL }
+  | "external global"  { EXTGLOBAL }
   | "private unnamed_addr constant"
+  | "internal global"
+  | "internal constant"
+  | "constant"
   | "global"           { GLOBAL }
   | "define"           { DEFINE }
   | "alloca"           { ALLOCA }
@@ -98,7 +103,7 @@ rule token = parse
   | '-'? digit+ as d              { INT (Int64.of_string d) }
   | idchar+ as i                  { LBL (S.symbol i) }
   | ";" ([^'\n']*) '\n'
-  | ("declare" | "target" | "attributes" | "source_filename" | "declare") [^'\n']* '\n'
+  | ("declare" | "target" | "attributes" | "source_filename") [^'\n']* '\n'
   | ',' ['\t' ' ']+ '!' [^'\n']* '\n'
   |  '!' [^'\n']* '\n'            { Lexing.new_line lexbuf; token lexbuf } (* ignored *)
   | "c\""                         { string "" lexbuf }

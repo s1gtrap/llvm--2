@@ -8,7 +8,7 @@
 %token ADD SUB MUL SDIV
 %token EQ NE SLT SLE SGT SGE ULT ULE UGT UGE
 %token AND OR XOR SHL LSHR ASHR SREM
-%token RET BR TO NULL LABEL ENTRY GLOBAL DEFINE UNREACHABLE
+%token RET BR TO NULL LABEL ENTRY GLOBAL EXTGLOBAL DEFINE UNREACHABLE
 %token CALL ICMP LOAD STORE ALLOCA BITCAST GEP ZEXT SEXT PTRTOINT PHI TRUNC
 
 %token <int64> INT        (* int64 values *)
@@ -33,7 +33,7 @@ decls:
     { { tdecls = List.rev ds.tdecls
       ; gdecls = List.rev ds.gdecls
       ; fdecls = List.rev ds.fdecls
-      ; extgdecls = []
+      ; extgdecls = List.rev ds.extgdecls
       ; extfuns = []
     } }
 
@@ -44,6 +44,8 @@ decls_rev:
     { { ds with fdecls = f :: ds.fdecls }  }
   | ds=decls_rev g=gdecl
     { { ds with gdecls = g :: ds.gdecls }  }
+  | ds=decls_rev g=extgdecl
+    { { ds with extgdecls = g :: ds.extgdecls }  }
   | ds=decls_rev t=tdecl
     { { ds with tdecls = t :: ds.tdecls }  }
 
@@ -67,6 +69,10 @@ fdecleof:
 gdecl:
   | g=GID EQUALS GLOBAL tgi=typed(ginit)
     { (g, tgi) }
+
+extgdecl:
+  | g=GID EQUALS EXTGLOBAL t=ty
+    { (g, t) }
 
 tdecl:
   | tid=UID EQUALS TYPE t=ty
