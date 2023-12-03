@@ -61,6 +61,7 @@ type insn =
   | Trunc of ty * operand * ty (* trunc ty1 %o to ty2                 *)
   | PhiNode of
       ty * (operand * lbl) list (* phi ty [op1, br1], ... [opn, brn]  *)
+  | Select of operand * (ty * operand) * (ty * operand)
   | Comment of string (* ; %s                               *)
 
 (* Block terminators *)
@@ -200,6 +201,14 @@ let string_of_insn (ins : insn) : string =
   | Ptrtoint (t, o1, t2) ->
       concwsp [ "ptrtoint"; sot (Ptr t); soo o1; "to"; sot t2 ]
   | Trunc (t, o1, t2) -> concwsp [ "trunc"; sot t; soo o1; "to"; sot t2 ]
+  | Select (o, o1, o2) ->
+      concwsp
+        [
+          "select";
+          "i1";
+          soo o ^ ",";
+          mapcat ", " (fun (t, o) -> sot t ^ " " ^ soo o) [ o1; o2 ];
+        ]
   | PhiNode (t, opbrs) ->
       concwsp
         [

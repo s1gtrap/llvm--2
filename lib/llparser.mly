@@ -9,7 +9,7 @@
 %token EQ NE SLT SLE SGT SGE ULT ULE UGT UGE
 %token AND OR XOR SHL LSHR ASHR SREM
 %token RET BR TO NULL LABEL ENTRY GLOBAL EXTGLOBAL DEFINE UNREACHABLE
-%token CALL ICMP LOAD STORE ALLOCA BITCAST GEP ZEXT SEXT PTRTOINT PHI TRUNC
+%token CALL ICMP LOAD STORE ALLOCA BITCAST GEP ZEXT SEXT PTRTOINT PHI TRUNC SELECT
 
 %token <int64> INT        (* int64 values *)
 %token <Symbol.symbol> LBL   (* labels *)
@@ -192,6 +192,8 @@ insn:
     { Ptrtoint (t1,o,t2) }
   | PHI t=ty ops=separated_list(COMMA,bracket)
     { PhiNode (t,ops) }
+  | SELECT I1 o=operand COMMA o1=typed(operand) COMMA o2=typed(operand)
+    { Select (o,o1,o2) }
 
 ty_ginit_list:
   | gs=separated_list(COMMA,typed(ginit))

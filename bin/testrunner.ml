@@ -509,6 +509,45 @@ let () =
              !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
           Stderr "";
         ] );
+      ("tests/select0.ll", "", [], [], [ Exit 1; Stdout "odd"; Stderr "" ]);
+      ("tests/select0.ll", "", [], [ "2" ], [ Exit 0; Stdout "even"; Stderr "" ]);
+      ( "tests/select0.ll",
+        "",
+        [],
+        [ "2"; "3" ],
+        [ Exit 1; Stdout "odd"; Stderr "" ] );
+      ( "tests/select0.ll",
+        "",
+        [],
+        [ "2"; "3"; "4" ],
+        [ Exit 0; Stdout "even"; Stderr "" ] );
+      ( "tests/select0.ll",
+        "",
+        [],
+        [ "2"; "3"; "4"; "5" ],
+        [ Exit 1; Stdout "odd"; Stderr "" ] );
+      ( "tests/collatz-phi.ll",
+        "",
+        [],
+        [],
+        [ Exit 1; Stdout "invalid arguments\n" ] );
+      ("tests/select1.ll", "", [], [], [ Exit 1; Stdout "odd"; Stderr "" ]);
+      ("tests/select1.ll", "", [], [ "2" ], [ Exit 0; Stdout "even"; Stderr "" ]);
+      ( "tests/select1.ll",
+        "",
+        [],
+        [ "2"; "3" ],
+        [ Exit 1; Stdout "odd"; Stderr "" ] );
+      ( "tests/select1.ll",
+        "",
+        [],
+        [ "2"; "3"; "4" ],
+        [ Exit 0; Stdout "even"; Stderr "" ] );
+      ( "tests/select1.ll",
+        "",
+        [],
+        [ "2"; "3"; "4"; "5" ],
+        [ Exit 1; Stdout "odd"; Stderr "" ] );
       ( "tests/collatz-phi.ll",
         "",
         [],

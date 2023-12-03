@@ -6,6 +6,7 @@ let def t (ins : Cfg.insn) idx =
   | Term _ -> t
 
 let use t (insn : Cfg.insn) idx =
+  (* FIXME: combine with use in lva.ml *)
   let op o s = match o with Ll.Id i -> Symbol.ST.add i idx s | _ -> s in
   match insn with
   | Label _ -> t
@@ -25,6 +26,7 @@ let use t (insn : Cfg.insn) idx =
   | Insn (_, Trunc (_, sop, _)) -> op sop t
   | Insn (_, PhiNode (_, ops)) ->
       List.map fst ops |> List.fold_left (fun s e -> op e s) t
+  | Insn (_, Select (o, (_, o1), (_, o2))) -> op o t |> op o1 |> op o2
   | Term (Ret (_, Some sop)) -> op sop t
   | Term (Ret (_, None)) -> t
   | Term (Br _) -> t

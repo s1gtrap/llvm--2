@@ -76,6 +76,7 @@ rule token = parse
   | "sext"             { SEXT }
   | "ptrtoint"         { PTRTOINT }
   | "trunc"            { TRUNC }
+  | "select"           { SELECT }
   | "type"             { TYPE }
   | "null"             { NULL }
   | "lshr"             { LSHR }

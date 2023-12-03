@@ -29,6 +29,7 @@ let use (insn : Cfg.insn) =
   | Insn (_, Trunc (_, sop, _)) -> op sop empty
   | Insn (_, PhiNode (_, ops)) ->
       List.map fst ops |> List.fold_left (fun s e -> op e s) empty
+  | Insn (_, Select (o, (_, o1), (_, o2))) -> op o empty |> op o1 |> op o2
   | Term (Ret (_, Some sop)) -> op sop empty
   | Term (Ret (_, None)) -> empty
   | Term (Br _) -> empty

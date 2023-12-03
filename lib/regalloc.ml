@@ -127,6 +127,7 @@ type opcode =
   | Movq
   | Movl
   | Movb
+  | Cmoveq
   | Pushq
   | Popq
   | Leaq (* Load Effective Address *)
@@ -263,6 +264,7 @@ let string_of_opcode (opc : opcode) : string =
   | Movq -> "movq"
   | Movl -> "movl"
   | Movb -> "movb"
+  | Cmoveq -> "cmoveq"
   | Pushq -> "pushq"
   | Popq -> "popq"
   | Leaq -> "leaq"
@@ -894,17 +896,26 @@ let compile_insn :
       let opins = compile_operand ctxt asn Ll.I64 (Reg Rax) src in
       let storins = (Movq, [ Reg Rax; dst ]) in
       opins @ [ storins ]
-  | Some dst, Trunc (_, src, Ll.I8) ->
+  | Some dst, Trunc (_, src, Ll.I1) | Some dst, Trunc (_, src, Ll.I8) ->
       let dst = S.ST.find dst asn in
       let opins = compile_operand ctxt asn Ll.I64 (Reg Rax) src in
       let zeroins = (Movq, [ Imm (Lit 0L); dst ]) in
       let storins = (Movb, [ Reg Al; byteofquad dst ]) in
       opins @ [ zeroins; storins ]
-  | Some dst, Trunc (_, src, _) ->
+  | Some dst, Select (o, (_, o1), (_, o2)) ->
       let dst = S.ST.find dst asn in
-      let opins = compile_operand ctxt asn Ll.I64 (Reg Rax) src in
-      let storins = (Movq, [ Reg Rax; dst ]) in
-      opins @ [ storins ]
+      let pushdx = (Pushq, [ Reg Rdx ]) in
+      let oins = compile_operand ctxt asn Ll.I64 (Reg Rcx) o in
+      let o1ins = compile_operand ctxt asn Ll.I64 (Reg Rax) o1 in
+      let o2ins = compile_operand ctxt asn Ll.I64 (Reg Rdx) o2 in
+      let cmpins = (Cmpq, [ Imm (Lit 0L); Reg Rcx ]) in
+      let storins = (Cmoveq, [ Reg Rdx; Reg Rax ]) in
+      let finins = (Movq, [ Reg Rax; dst ]) in
+      let popins = (Popq, [ Reg Rdx ]) in
+      (*oins @ o1ins @ o2ins @ [ cmpins ] @ [ storins ]*)
+      if dst = Reg Rdx then oins @ o1ins @ o2ins @ [ cmpins; storins; finins ]
+      else
+        [ pushdx ] @ oins @ o1ins @ o2ins @ [ cmpins; storins; finins; popins ]
   | Some _dst, PhiNode _ -> []
   | insn -> failwith (Ll.string_of_named_insn insn))
 
