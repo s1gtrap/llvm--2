@@ -564,6 +564,49 @@ let () =
           Stdout
             "{ }\n{ 1 }\n{ 2 }\n{ 1 2 }\n{ 3 }\n{ 1 3 }\n{ 2 3 }\n{ 1 2 3 }\n";
         ] );
+      ("tests/factor0.ll", "", [], [ "2" ], [ Exit 1; Stdout "2 " ]);
+      ("tests/factor0.ll", "", [], [ "3" ], [ Exit 1; Stdout "3 " ]);
+      ("tests/factor0.ll", "", [], [ "4" ], [ Exit 2; Stdout "2 2 " ]);
+      ("tests/factor0.ll", "", [], [ "5" ], [ Exit 1; Stdout "5 " ]);
+      ( "tests/factor0.ll",
+        "",
+        [],
+        [ "5040" ],
+        [ Exit 8; Stdout "2 2 2 2 3 3 5 7 " ] );
+      ( "tests/factor0.ll",
+        "",
+        [],
+        [ "5040" ],
+        [ Exit 8; Stdout "2 2 2 2 3 3 5 7 " ] );
+      ( "tests/factor0.ll",
+        "",
+        [],
+        [ "2147483647" ],
+        [ Exit 1; Stdout "2147483647 " ] );
+      ("tests/factor1.ll", "", [], [ "2" ], [ Exit 1; Stdout "2 " ]);
+      ("tests/factor1.ll", "", [], [ "3" ], [ Exit 1; Stdout "3 " ]);
+      ("tests/factor1.ll", "", [], [ "4" ], [ Exit 2; Stdout "2 2 " ]);
+      ("tests/factor1.ll", "", [], [ "5" ], [ Exit 1; Stdout "5 " ]);
+      ( "tests/factor1.ll",
+        "",
+        [],
+        [ "5040" ],
+        [ Exit 8; Stdout "2 2 2 2 3 3 5 7 " ] );
+      ( "tests/factor1.ll",
+        "",
+        [],
+        [ "5040" ],
+        [ Exit 8; Stdout "2 2 2 2 3 3 5 7 " ] );
+      ( "tests/factor1.ll",
+        "",
+        [],
+        [ "2147483647" ],
+        [ Exit 1; Stdout "2147483647 " ] );
+      ( "tests/factor1.ll",
+        "",
+        [],
+        [ "18446744073709551615" ],
+        [ Exit 7; Stdout "3 5 17 257 641 65537 6700417 " ] );
       ( "tests/collatz-phi.ll",
         "",
         [],
