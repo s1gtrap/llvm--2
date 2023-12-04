@@ -12,6 +12,7 @@ let use t (insn : Cfg.insn) idx =
   | Label _ -> t
   | Insn (_, Binop (_, _, lop, rop)) -> op lop t |> op rop
   | Insn (_, Alloca _) -> t
+  | Insn (_, AllocaN (_, (_, o))) -> op o t
   | Insn (_, Load (_, o)) -> op o t
   | Insn (_, Store (_, sop, dop)) -> op sop t |> op dop
   | Insn (_, Icmp (_, _, lop, rop)) -> op lop t |> op rop

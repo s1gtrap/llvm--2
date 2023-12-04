@@ -813,6 +813,13 @@ let compile_insn :
         (Subq, [ Imm (Lit (Int64.of_int size)); Reg Rsp ]);
         (Movq, [ Reg Rsp; dst ]);
       ]
+  | Some dst, AllocaN (ty, (oty, o)) ->
+      let dst = S.ST.find dst asn in
+      let oins = compile_operand ctxt asn oty (Reg Rax) o in
+      let size = size_ty ctxt.tdecls ty in
+      let offsins = (Imulq, [ Imm (Lit (Int64.of_int size)); Reg Rax ]) in
+      oins @ [ offsins ]
+      @ [ (Subq, [ Reg Rax; Reg Rsp ]); (Movq, [ Reg Rsp; dst ]) ]
   | Some dst, Load (Ll.I8, src) -> (
       (* if the variable is unassigned, it's not used so can be optimized away *)
       match S.ST.find_opt dst asn with

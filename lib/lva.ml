@@ -15,6 +15,7 @@ let use (insn : Cfg.insn) =
   | Label _ -> empty
   | Insn (_, Binop (_, _, lop, rop)) -> op lop empty |> op rop
   | Insn (_, Alloca _) -> empty
+  | Insn (_, AllocaN (_, (_, o))) -> op o empty
   | Insn (_, Load (_, o)) -> op o empty
   | Insn (_, Store (_, sop, dop)) -> op sop empty |> op dop
   | Insn (_, Icmp (_, _, lop, rop)) -> op lop empty |> op rop

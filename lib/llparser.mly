@@ -170,6 +170,8 @@ bracket:
 insn:
   | b=bop t=ty o1=operand COMMA o2=operand
     { Binop (b,t,o1,o2) }
+  | ALLOCA t=ty COMMA n=typed(operand)
+    { AllocaN (t, n) }
   | ALLOCA t=ty
     { Alloca t }
   | LOAD t=ty COMMA ty o=operand

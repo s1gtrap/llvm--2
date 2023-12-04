@@ -56,6 +56,7 @@ type insn =
   | Binop of
       bop * ty * operand * operand (* bop ty %o1, o2                     *)
   | Alloca of ty (* alloca ty                          *)
+  | AllocaN of (ty * (ty * operand)) (* alloca ty, oty %o                *)
   | Load of ty * operand (* load ty %u                         *)
   | Store of ty * operand * operand (* store ty %t, ty* %u                *)
   | Icmp of
@@ -193,6 +194,7 @@ let string_of_insn (ins : insn) : string =
   | Binop (b, t, o1, o2) ->
       concwsp [ string_of_bop b; sot t; soo o1 ^ ","; soo o2 ]
   | Alloca t -> "alloca " ^ sot t
+  | AllocaN (t, (nt, n)) -> "alloca " ^ sot t ^ ", " ^ sot nt ^ " " ^ soo n
   | Load (t, opr) -> concwsp [ "load"; sot t ^ ","; sot (Ptr t); soo opr ]
   | Store (t, os, od) ->
       concwsp [ "store"; sot t; soo os ^ ","; sot (Ptr t); soo od ]
