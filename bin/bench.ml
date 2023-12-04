@@ -14,9 +14,11 @@ let read_all chan =
   loop ();
   Buffer.contents buf
 
+let null = open_out "/dev/null" |> Unix.descr_of_out_channel
+
 let create_process_and_read_stdout command args =
   let in_fd, out_fd = pipe () in
-  let pid = create_process command args in_fd out_fd out_fd in
+  let pid = create_process command args in_fd null out_fd in
   close out_fd;
   let out_channel = in_channel_of_descr in_fd in
   let output = read_all out_channel in
@@ -42,7 +44,8 @@ let bench f a c =
       in
       let output = create_process_and_read_stdout command arguments in
       match String.split_on_char ',' output with
-      | cycles :: _ -> Int64.of_string cycles
+      | cycles :: _ ->
+          Int64.of_string cycles
       | _ -> failwith ("illegal perf output: " ^ output))
 
 let bench_n f a n c =
