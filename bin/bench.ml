@@ -134,6 +134,19 @@ let () =
   Arg.parse speclist (fun _ -> ()) "append [-r n]";
   let n = !n in
   flush Stdlib.stdout;
+  bench_all_n "benches/subset.ll" (Array.init 15 string_of_int) n
+  |> List.iter print2;
+  bench_all_n "benches/subset.ll" (Array.init 16 string_of_int) n
+  |> List.iter print2;
+  bench_all_n "benches/subset.ll" (Array.init 17 string_of_int) n
+  |> List.iter print2;
+  bench_all_n "benches/subset.ll" (Array.init 18 string_of_int) n
+  |> List.iter print2;
+  bench_all_n "benches/subset.ll" (Array.init 19 string_of_int) n
+  |> List.iter print2;
+  bench_all_n "benches/subset.ll" (Array.init 20 string_of_int) n
+  |> List.iter print2;
+  print_newline ();
   bench_all_n "benches/fib.ll" [| "40" |] n |> List.iter print2;
   bench_all_n "benches/fib.ll" [| "41" |] n |> List.iter print2;
   bench_all_n "benches/fib.ll" [| "42" |] n |> List.iter print2;

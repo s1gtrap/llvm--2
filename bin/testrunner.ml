@@ -548,6 +548,22 @@ let () =
         [],
         [ "2"; "3"; "4"; "5" ],
         [ Exit 1; Stdout "odd"; Stderr "" ] );
+      ("tests/subset.ll", "", [], [], [ Exit 1; Stdout "{ }\n" ]);
+      ("tests/subset.ll", "", [], [ "1" ], [ Exit 2; Stdout "{ }\n{ 1 }\n" ]);
+      ( "tests/subset.ll",
+        "",
+        [],
+        [ "1"; "2" ],
+        [ Exit 4; Stdout "{ }\n{ 1 }\n{ 2 }\n{ 1 2 }\n" ] );
+      ( "tests/subset.ll",
+        "",
+        [],
+        [ "1"; "2"; "3" ],
+        [
+          Exit 8;
+          Stdout
+            "{ }\n{ 1 }\n{ 2 }\n{ 1 2 }\n{ 3 }\n{ 1 3 }\n{ 2 3 }\n{ 1 2 3 }\n";
+        ] );
       ( "tests/collatz-phi.ll",
         "",
         [],
