@@ -564,6 +564,38 @@ let () =
           Stdout
             "{ }\n{ 1 }\n{ 2 }\n{ 1 2 }\n{ 3 }\n{ 1 3 }\n{ 2 3 }\n{ 1 2 3 }\n";
         ] );
+      ("tests/sieven.ll", "", [], [ "1" ], [ Exit 0; Stdout "0" ]);
+      ("tests/sieven.ll", "", [], [ "10" ], [ Exit 0; Stdout "4" ]);
+      ("tests/sieven.ll", "", [], [ "100" ], [ Exit 0; Stdout "25" ]);
+      ("tests/sieven.ll", "", [], [ "1000" ], [ Exit 0; Stdout "168" ]);
+      ("tests/sieven.ll", "", [], [ "10000" ], [ Exit 0; Stdout "1229" ]);
+      ("tests/sieven.ll", "", [], [ "100000" ], [ Exit 0; Stdout "9592" ]);
+      ("tests/sieven.ll", "", [], [ "1000000" ], [ Exit 0; Stdout "78498" ]);
+      ("tests/sieven.ll", "", [], [ "10000000" ], [ Exit 0; Stdout "664579" ]);
+      ("tests/sieve-stack.ll", "", [], [ "1" ], [ Exit 0; Stdout "" ]);
+      ("tests/sieve-stack.ll", "", [], [ "10" ], [ Exit 0; Stdout "2 3 5 7 " ]);
+      ( "tests/sieve-stack.ll",
+        "",
+        [],
+        [ "100" ],
+        [
+          Exit 0;
+          Stdout
+            "2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 \
+             89 97 ";
+        ] );
+      ("tests/sieve-heap.ll", "", [], [ "1" ], [ Exit 0; Stdout "" ]);
+      ("tests/sieve-heap.ll", "", [], [ "10" ], [ Exit 0; Stdout "2 3 5 7 " ]);
+      ( "tests/sieve-heap.ll",
+        "",
+        [],
+        [ "100" ],
+        [
+          Exit 0;
+          Stdout
+            "2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 \
+             89 97 ";
+        ] );
       ("tests/factor0.ll", "", [], [ "2" ], [ Exit 1; Stdout "2 " ]);
       ("tests/factor0.ll", "", [], [ "3" ], [ Exit 1; Stdout "3 " ]);
       ("tests/factor0.ll", "", [], [ "4" ], [ Exit 2; Stdout "2 2 " ]);
