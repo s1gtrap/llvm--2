@@ -28,8 +28,10 @@ define i32 @main(i32 noundef %0, ptr noundef %1) #0 {
   %17 = load i32, ptr %6, align 4
   %18 = add nsw i32 %17, 1
   %19 = zext i32 %18 to i64
-  %20 = call ptr @llvm.stacksave()
-  store ptr %20, ptr %7, align 8
+  ;%20 = call ptr @llvm.stacksave()
+  %20 = add i32 0, 0
+  ;call i32 @printf(i8* @fmt, %20)
+  ;store ptr %20, ptr %7, align 8
   %21 = alloca i8, i64 %19, align 16
   store i64 %19, ptr %8, align 8
   store i32 2, ptr %9, align 4
@@ -147,8 +149,9 @@ define i32 @main(i32 noundef %0, ptr noundef %1) #0 {
 
 85:                                               ; preds = %68
   store i32 0, ptr %3, align 4
-  %86 = load ptr, ptr %7, align 8
-  call void @llvm.stackrestore(ptr %86)
+  ;%86 = load ptr, ptr %7, align 8 ; FIXME
+  %86 = add i32 0, 0
+  ;call void @llvm.stackrestore(ptr %86)
   %87 = load i32, ptr %3, align 4
   ret i32 %87
 }
@@ -156,7 +159,7 @@ define i32 @main(i32 noundef %0, ptr noundef %1) #0 {
 declare i32 @atoi(ptr noundef) #1
 
 ; Function Attrs: nocallback nofree nosync nounwind willreturn
-declare ptr @llvm.stacksave() #2
+;declare ptr @llvm.stacksave() #2
 
 declare i32 @printf(ptr noundef, ...) #1
 
