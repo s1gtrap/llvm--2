@@ -725,6 +725,43 @@ let compile_insn :
       let popdx = (Popq, [ Reg Rdx ]) in
       if dst = Reg Rdx then lins @ rins @ [ cqtoins; opins; storins ]
       else [ pushdx ] @ lins @ rins @ [ cqtoins; opins; storins; popdx ]
+  | Some dst, Binop (UDiv, Ll.I32, lop, rop) ->
+      (* RAX and RCX are volatile, should be good? *)
+      let dst = S.ST.find dst asn in
+      let pushdx = (Pushq, [ Reg Rdx ]) in
+      let lins = compile_operand ctxt asn Ll.I64 (Reg Rax) lop in
+      let rins = compile_operand ctxt asn Ll.I64 (Reg Rcx) rop in
+      let cqtoins = (Cqto, []) in
+      let opins = (Divl, [ Reg Ecx ]) in
+      let storins = (Movq, [ Reg Rax; dst ]) in
+      let popdx = (Popq, [ Reg Rdx ]) in
+      if dst = Reg Rdx then lins @ rins @ [ cqtoins; opins; storins ]
+      else [ pushdx ] @ lins @ rins @ [ cqtoins; opins; storins; popdx ]
+  | Some dst, Binop (UDiv, _, lop, rop) ->
+      (* RAX and RCX are volatile, should be good? *)
+      let dst = S.ST.find dst asn in
+      let pushdx = (Pushq, [ Reg Rdx ]) in
+      let lins = compile_operand ctxt asn Ll.I64 (Reg Rax) lop in
+      let rins = compile_operand ctxt asn Ll.I64 (Reg Rcx) rop in
+      let cqtoins = (Cqto, []) in
+      let opins = (Divq, [ Reg Rcx ]) in
+      let storins = (Movq, [ Reg Rax; dst ]) in
+      let popdx = (Popq, [ Reg Rdx ]) in
+      if dst = Reg Rdx then lins @ rins @ [ cqtoins; opins; storins ]
+      else [ pushdx ] @ lins @ rins @ [ cqtoins; opins; storins; popdx ]
+  | Some dst, Binop (URem, _, lop, rop) ->
+      (* RAX and RCX are volatile, should be good? *)
+      (* FIXME: %edx is overwritten *)
+      let dst = S.ST.find dst asn in
+      let pushdx = (Pushq, [ Reg Rdx ]) in
+      let lins = compile_operand ctxt asn Ll.I64 (Reg Rax) lop in
+      let rins = compile_operand ctxt asn Ll.I64 (Reg Rcx) rop in
+      let cqtoins = (Cqto, []) in
+      let opins = (Divq, [ Reg Rcx ]) in
+      let storins = (Movq, [ Reg Rdx; dst ]) in
+      let popdx = (Popq, [ Reg Rdx ]) in
+      if dst = Reg Rdx then lins @ rins @ [ cqtoins; opins; storins ]
+      else [ pushdx ] @ lins @ rins @ [ cqtoins; opins; storins; popdx ]
   | Some dst, Binop (Lshr, ty, lop, rop) ->
       let dst = S.ST.find dst asn in
       let lins = compile_operand ctxt asn Ll.I64 (Reg Rax) lop in
@@ -909,6 +946,12 @@ let compile_insn :
       let opins = compile_operand ctxt asn Ll.I64 (Reg Rax) src in
       let zeroins = (Movq, [ Imm (Lit 0L); dst ]) in
       let storins = (Movb, [ Reg Al; byteofquad dst ]) in
+      opins @ [ zeroins; storins ]
+  | Some dst, Trunc (_, src, Ll.I32) ->
+      let dst = S.ST.find dst asn in
+      let opins = compile_operand ctxt asn Ll.I64 (Reg Rax) src in
+      let zeroins = (Movq, [ Imm (Lit 0L); dst ]) in
+      let storins = (Movl, [ Reg Eax; longofquad dst ]) in
       opins @ [ zeroins; storins ]
   | Some dst, Select (o, (_, o1), (_, o2)) ->
       let dst = S.ST.find dst asn in
