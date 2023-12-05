@@ -1027,10 +1027,11 @@ module C = Coloring.Mark (Lva.G)
 type allocator = Simple of int | Briggs of int | Greedy | Linearscan
 
 let allocator_of_string = function
-  | "simple" -> Simple 12
-  | "briggs" -> Briggs 12
-  | "greedy" -> Greedy
-  | "linear" | "linearscan" -> Linearscan
+  | s when String.starts_with ~prefix:s "simple" -> Simple 12
+  | s when String.starts_with ~prefix:s "briggs" -> Briggs 12
+  | s when String.starts_with ~prefix:s "greedy" -> Greedy
+  | s when String.starts_with ~prefix:s "linearscan" -> Linearscan
+  | "" -> Greedy (* NOTE: default allocator *)
   | s -> failwith ("invalid allocator: " ^ s)
 
 let string_of_allocator = function

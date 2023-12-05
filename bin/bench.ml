@@ -44,8 +44,7 @@ let bench f a c =
       in
       let output = create_process_and_read_stdout command arguments in
       match String.split_on_char ',' output with
-      | cycles :: _ ->
-          Int64.of_string cycles
+      | cycles :: _ -> Int64.of_string cycles
       | _ -> failwith ("illegal perf output: " ^ output))
 
 let bench_n f a n c =
@@ -138,10 +137,10 @@ let () =
   |> List.iter print2;
   bench_all_n "benches/subset.ll" (Array.init 18 string_of_int) n
   |> List.iter print2;
-  bench_all_n "benches/subset.ll" (Array.init 19 string_of_int) n
-  |> List.iter print2;
-  bench_all_n "benches/subset.ll" (Array.init 20 string_of_int) n
-  |> List.iter print2;
+  (*bench_all_n "benches/subset.ll" (Array.init 19 string_of_int) n
+    |> List.iter print2;
+    bench_all_n "benches/subset.ll" (Array.init 20 string_of_int) n
+    |> List.iter print2;*)
   print_newline ();
   bench_all_n "benches/fib.ll" [| "40" |] n |> List.iter print2;
   bench_all_n "benches/fib.ll" [| "41" |] n |> List.iter print2;
