@@ -509,6 +509,7 @@ let compile_operand :
       match (dst, S.ST.find_opt id asn) with
       | Ind3 dst, Some (Ind3 src) ->
           [ (Movq, [ Ind3 src; Reg Rcx ]); (Movq, [ Reg Rcx; Ind3 dst ]) ]
+      | dst, Some i when dst = i -> [] (* NOTE: don't comppile noop movs *)
       | dst, Some i -> [ (Movq, [ i; dst ]) ]
       | _, None -> failwith (Printf.sprintf "%s" (S.name id)))
 
@@ -1023,16 +1024,18 @@ let compile_terminator :
 
 module C = Coloring.Mark (Lva.G)
 
-type allocator = Simple of int | Greedy | Linearscan
+type allocator = Simple of int | Briggs of int | Greedy | Linearscan
 
 let allocator_of_string = function
   | "simple" -> Simple 12
+  | "briggs" -> Briggs 12
   | "greedy" -> Greedy
   | "linear" | "linearscan" -> Linearscan
   | s -> failwith ("invalid allocator: " ^ s)
 
 let string_of_allocator = function
   | Simple k -> "simple " ^ string_of_int k
+  | Briggs k -> "briggs " ^ string_of_int k
   | Greedy -> "greedy"
   | Linearscan -> "linear"
 
@@ -1086,82 +1089,6 @@ let alloc a param insns (in_, out) : operand S.table =
             c := !c + 1;
             v)
           l
-    | Linearscan ->
-        let insns =
-          List.filter (function Cfg.Label _ -> false | _ -> true) insns
-        in
-        let intervals = Linear.intervals param insns (in_, out) in
-        let avail =
-          Regs.of_list
-            [ Rdx; Rbx; Rsi; Rdi; R08; R09; R10; R11; R12; R13; R14; R15 ]
-        in
-        let scan (idx, avail, assigns, spills) _ins =
-          match
-            List.find_opt
-              (fun (k, _) -> fst (S.ST.find k intervals) = idx)
-              (S.ST.bindings intervals)
-          with
-          | Some (k, (livestart, liveend)) ->
-              if Regs.is_empty avail then
-                (* spill the longest interval currently assigned *)
-                let longest =
-                  S.ST.fold
-                    (fun k r (k2, r2, len2) ->
-                      match S.ST.find_opt k intervals with
-                      | Some (nlivestart, nliveend) ->
-                          let len = nliveend - nlivestart in
-                          if len > len2 then (k, Some r, len) else (k2, r2, len2)
-                      | None -> (k2, r2, len2))
-                    assigns
-                    (k, None, liveend - livestart)
-                in
-                match longest with
-                | k2, Some r, _ ->
-                    (*Printf.printf "spilling %s to assign %s = %s\n" (S.name k2)
-                      (S.name k) (string_of_reg r);*)
-                    ( idx + 1,
-                      avail,
-                      S.ST.add k r (S.ST.remove k2 assigns),
-                      S.SS.add k2 spills )
-                | _, None, _ ->
-                    (*Printf.printf "spilling %s\n" (S.name k);*)
-                    (idx + 1, avail, assigns, S.SS.add k spills)
-              else
-                (* otherwise assign to available register *)
-                let reg = Regs.choose avail in
-                (*Printf.printf "assigning %s = %s\n" (S.name k)
-                  (string_of_reg reg);*)
-                (idx + 1, Regs.remove reg avail, S.ST.add k reg assigns, spills)
-          | None -> (idx + 1, avail, assigns, spills)
-        in
-        let avail, assigns, spills =
-          List.fold_left
-            (fun (avail, assigns, spills) k ->
-              match Regs.choose_opt avail with
-              | Some r ->
-                  (*Printf.printf "assigning %s = %s, regs is now" (S.name k)
-                      (string_of_reg r);
-                    Regs.iter
-                      (fun r -> Printf.printf " %s" (string_of_reg r))
-                      (Regs.remove r avail);
-                    Printf.printf "\n";*)
-                  (Regs.remove r avail, S.ST.add k r assigns, spills)
-              | None ->
-                  Printf.printf "spilling %s\n" (S.name k);
-                  (avail, assigns, S.SS.add k spills))
-            (avail, Symbol.empty, S.SS.empty)
-            param
-        in
-        let _, _, assigns, spills =
-          List.fold_left scan (0, avail, assigns, spills) insns
-        in
-        let assigns = S.ST.map (fun r -> Reg r) assigns in
-        let _, assigns =
-          S.SS.fold
-            (fun k (i, acc) -> (i + 1, S.ST.add k (stack i) acc))
-            spills (0, assigns)
-        in
-        assigns
     | Simple c ->
         let l, g = Lva.interf param insns in_ out in
         let register = function
@@ -1320,6 +1247,242 @@ let alloc a param insns (in_, out) : operand S.table =
           else simp (S.SS.union (S.SS.of_list spills2) spills)
         in
         simp S.SS.empty
+    | Briggs c ->
+        let prefs = Lva.prefer insns in
+        let l, g = Lva.interf param insns in_ out in
+        let l, g = Lva.coalesce_briggs prefs (l, g) in
+        let register = function
+          (*| 0 -> Reg Rax
+            | 1 -> Reg Rcx (* NOTE: %rax and %rcx are scratch registers *)*)
+          | 0 -> Reg Rdx
+          | 1 -> Reg Rbx
+          | 2 -> Reg Rsi
+          | 3 -> Reg Rdi
+          | 4 -> Reg R08
+          | 5 -> Reg R09
+          | 6 -> Reg R10
+          | 7 -> Reg R11
+          | 8 -> Reg R12
+          | 9 -> Reg R13
+          | 10 -> Reg R14
+          | 11 -> Reg R15
+          | _ -> failwith "unreachable"
+        in
+        let count = ref 0 in
+        let rec simp (spills : S.SS.t) =
+          if !count >= 10 then failwith "error";
+          count := !count + 1;
+
+          (* Printf.printf "Spills: ";
+             S.SS.iter (fun k -> Printf.printf "%s, " (S.name k)) spills;
+             Printf.printf "\n";*)
+          let spilled k _v = not (S.SS.mem k spills) in
+          let simplify () =
+            (* mark nodes as colorables *)
+            let rec remove_vertex (removed_vertices : VS.t)
+                (l : Lva.G.V.t S.table) : mark list =
+              let insig _k v =
+                let mem k = not (VS.mem k removed_vertices) in
+                let degree = Lva.G.succ g v |> List.filter mem |> List.length in
+                if degree < c then Some (v, degree) else None
+              in
+              match
+                S.ST.filter spilled l |> S.ST.filter_map insig
+                |> S.ST.choose_opt
+              with
+              | Some (k, (v, _deg)) ->
+                  (* Printf.printf "removing %s (%d < %d)\n" (S.name k) deg c;*)
+                  Color (k, v)
+                  :: remove_vertex (VS.add v removed_vertices) (S.ST.remove k l)
+              | None -> spill removed_vertices l
+            and spill (removed_vertices : VS.t) (l : Lva.G.V.t S.table) =
+              match S.ST.filter spilled l |> S.ST.choose_opt with
+              | Some (k, v) ->
+                  PotentialSpill (k, v)
+                  :: remove_vertex (VS.add v removed_vertices) (S.ST.remove k l)
+              | None -> []
+            in
+            remove_vertex VS.empty l
+          in
+          let markers = simplify () in
+          (* Printf.printf "Marked as colorable: ";
+             List.iter
+               (fun (m : mark) ->
+                 match m with
+                 | Color (k, _v) -> Printf.printf "color %s, " (S.name k)
+                 | PotentialSpill (k, _v) -> Printf.printf "spill %s, " (S.name k))
+               markers;
+             Printf.printf "\n";*)
+          let rec add = function
+            | 0 -> Ints.empty
+            | i -> Ints.add (i - 1) (add (i - 1))
+          in
+          let indices = add c in
+          let rec select (assignments : int VT.t) (markers : mark list) :
+              assign list =
+            match markers with
+            | Color (k, v) :: tail ->
+                let neighbor_assignments =
+                  Lva.G.succ g v
+                  |> List.filter_map (fun v -> VT.find_opt v assignments)
+                  |> List.fold_left (fun s i -> Ints.add i s) Ints.empty
+                in
+                let avail_assignments =
+                  Ints.diff indices neighbor_assignments
+                in
+                let assignment = Ints.choose avail_assignments in
+                (* Printf.printf "coloring %s %d\n" (S.name k) assignment;*)
+                Color (k, assignment)
+                :: select (VT.add v assignment assignments) tail
+            | PotentialSpill (k, v) :: tail -> (
+                (* potential spill *)
+                let neighbor_assignments =
+                  Lva.G.succ g v
+                  |> List.filter_map (fun v -> VT.find_opt v assignments)
+                  |> List.fold_left (fun s i -> Ints.add i s) Ints.empty
+                in
+                let avail_assignments =
+                  Ints.diff indices neighbor_assignments
+                in
+                let assignment = Ints.choose_opt avail_assignments in
+                match assignment with
+                | Some assignment ->
+                    (* Printf.printf "coloring %s %d\n" (S.name k) assignment;*)
+                    Color (k, assignment)
+                    :: select (VT.add v assignment assignments) tail
+                | None ->
+                    (* actual spill *)
+                    let actual_spills = actual_spill assignments markers in
+                    let assignments = List.map (fun a -> a) actual_spills in
+                    assignments)
+            | [] -> []
+          and actual_spill (assignments : int VT.t) markers : assign list =
+            match markers with
+            | PotentialSpill (k, v) :: tail -> (
+                let neighbor_assignments =
+                  Lva.G.succ g v
+                  |> List.filter_map (fun v -> VT.find_opt v assignments)
+                  |> List.fold_left (fun s i -> Ints.add i s) Ints.empty
+                in
+                let avail_assignments =
+                  Ints.diff indices neighbor_assignments
+                in
+                let assignment = Ints.choose_opt avail_assignments in
+                match assignment with
+                | Some assignment ->
+                    actual_spill (VT.add v assignment assignments) tail
+                | None ->
+                    (* push actual spill *)
+                    ActualSpill k :: actual_spill assignments tail)
+            | _ :: tail -> actual_spill assignments tail
+            | [] -> []
+          in
+          let assignments : assign list = List.rev markers |> select VT.empty in
+          (* Printf.printf "Assignments: ";
+             List.iter
+               (function
+                 | Color (k, _v) -> Printf.printf "color %s, " (S.name k)
+                 | ActualSpill k -> Printf.printf "actual spill %s, " (S.name k))
+               assignments;
+             Printf.printf "\n";*)
+          let spills2 =
+            List.filter_map
+              (function Color _ -> None | ActualSpill k -> Some k)
+              assignments
+          in
+          if List.length spills2 = 0 then
+            snd
+              (S.SS.fold
+                 (fun k (i, a) -> (i + 1, S.ST.add k (stack i) a))
+                 spills
+                 ( 0,
+                   List.fold_left
+                     (fun t v ->
+                       match v with
+                       | Color (k, c) ->
+                           (* Printf.printf "assigning %s %d\n" (S.name k) c;*)
+                           S.ST.add k (register c) t
+                       | ActualSpill _k -> failwith "unreachable")
+                     S.ST.empty assignments ))
+          else simp (S.SS.union (S.SS.of_list spills2) spills)
+        in
+        simp S.SS.empty
+    | Linearscan ->
+        let insns =
+          List.filter (function Cfg.Label _ -> false | _ -> true) insns
+        in
+        let intervals = Linear.intervals param insns (in_, out) in
+        let avail =
+          Regs.of_list
+            [ Rdx; Rbx; Rsi; Rdi; R08; R09; R10; R11; R12; R13; R14; R15 ]
+        in
+        let scan (idx, avail, assigns, spills) _ins =
+          match
+            List.find_opt
+              (fun (k, _) -> fst (S.ST.find k intervals) = idx)
+              (S.ST.bindings intervals)
+          with
+          | Some (k, (livestart, liveend)) ->
+              if Regs.is_empty avail then
+                (* spill the longest interval currently assigned *)
+                let longest =
+                  S.ST.fold
+                    (fun k r (k2, r2, len2) ->
+                      match S.ST.find_opt k intervals with
+                      | Some (nlivestart, nliveend) ->
+                          let len = nliveend - nlivestart in
+                          if len > len2 then (k, Some r, len) else (k2, r2, len2)
+                      | None -> (k2, r2, len2))
+                    assigns
+                    (k, None, liveend - livestart)
+                in
+                match longest with
+                | k2, Some r, _ ->
+                    (*Printf.printf "spilling %s to assign %s = %s\n" (S.name k2)
+                      (S.name k) (string_of_reg r);*)
+                    ( idx + 1,
+                      avail,
+                      S.ST.add k r (S.ST.remove k2 assigns),
+                      S.SS.add k2 spills )
+                | _, None, _ ->
+                    (*Printf.printf "spilling %s\n" (S.name k);*)
+                    (idx + 1, avail, assigns, S.SS.add k spills)
+              else
+                (* otherwise assign to available register *)
+                let reg = Regs.choose avail in
+                (*Printf.printf "assigning %s = %s\n" (S.name k)
+                  (string_of_reg reg);*)
+                (idx + 1, Regs.remove reg avail, S.ST.add k reg assigns, spills)
+          | None -> (idx + 1, avail, assigns, spills)
+        in
+        let avail, assigns, spills =
+          List.fold_left
+            (fun (avail, assigns, spills) k ->
+              match Regs.choose_opt avail with
+              | Some r ->
+                  (*Printf.printf "assigning %s = %s, regs is now" (S.name k)
+                      (string_of_reg r);
+                    Regs.iter
+                      (fun r -> Printf.printf " %s" (string_of_reg r))
+                      (Regs.remove r avail);
+                    Printf.printf "\n";*)
+                  (Regs.remove r avail, S.ST.add k r assigns, spills)
+              | None ->
+                  Printf.printf "spilling %s\n" (S.name k);
+                  (avail, assigns, S.SS.add k spills))
+            (avail, Symbol.empty, S.SS.empty)
+            param
+        in
+        let _, _, assigns, spills =
+          List.fold_left scan (0, avail, assigns, spills) insns
+        in
+        let assigns = S.ST.map (fun r -> Reg r) assigns in
+        let _, assigns =
+          S.SS.fold
+            (fun k (i, acc) -> (i + 1, S.ST.add k (stack i) acc))
+            spills (0, assigns)
+        in
+        assigns
   in
   l
 

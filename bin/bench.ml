@@ -83,6 +83,8 @@ let bench_all_n f a n =
        [
          Llvm__2 (Llvm__2.Regalloc.Simple 12);
          Llvm__2 (Llvm__2.Regalloc.Simple 2);
+         Llvm__2 (Llvm__2.Regalloc.Briggs 12);
+         Llvm__2 (Llvm__2.Regalloc.Briggs 2);
          Llvm__2 Llvm__2.Regalloc.Greedy;
          Llvm__2 Llvm__2.Regalloc.Linearscan;
        ]

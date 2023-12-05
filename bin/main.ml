@@ -128,7 +128,9 @@ let progitf input =
     let ids, g = Cfg.graph fdecl.cfg in
     let insns = Cfg.flatten fdecl.cfg in
     let in_, out = Lva.dataflow insns ids g in
-    let _, itf = Lva.interf fdecl.param insns in_ out in
+    let prefs = Lva.prefer insns in
+    let l, itf = Lva.interf fdecl.param insns in_ out in
+    let _, itf = Lva.coalesce_briggs prefs (l, itf) in
     Printf.printf "%s\n" (Lva.dot itf);
     ()
   in

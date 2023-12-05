@@ -186,6 +186,7 @@ let run tests filter =
     (*run_ Tiger;*)
     run_ (Llvm__2 Llvm__2.Regalloc.Greedy);
     run_ (Llvm__2 (Llvm__2.Regalloc.Simple 12));
+    run_ (Llvm__2 (Llvm__2.Regalloc.Briggs 12));
     run_ (Llvm__2 Llvm__2.Regalloc.Linearscan)
   in
   List.iter r tests;
