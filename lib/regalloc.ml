@@ -1023,16 +1023,16 @@ let compile_terminator :
 
 module C = Coloring.Mark (Lva.G)
 
-type allocator = Briggs of int | Greedy | Linearscan
+type allocator = Simple of int | Greedy | Linearscan
 
 let allocator_of_string = function
-  | "briggs" -> Briggs 12
+  | "simple" -> Simple 12
   | "greedy" -> Greedy
   | "linear" | "linearscan" -> Linearscan
   | s -> failwith ("invalid allocator: " ^ s)
 
 let string_of_allocator = function
-  | Briggs k -> "briggs k=" ^ string_of_int k
+  | Simple k -> "simple " ^ string_of_int k
   | Greedy -> "greedy"
   | Linearscan -> "linear"
 
@@ -1162,7 +1162,7 @@ let alloc a param insns (in_, out) : operand S.table =
             spills (0, assigns)
         in
         assigns
-    | Briggs c ->
+    | Simple c ->
         let l, g = Lva.interf param insns in_ out in
         let register = function
           (*| 0 -> Reg Rax

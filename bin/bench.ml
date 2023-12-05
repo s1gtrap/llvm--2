@@ -65,15 +65,6 @@ let bench_n f a n c =
   let min, avg, max = iter Int64.max_int 0L Int64.min_int n in
   (f, a, min, Int64.div avg (Int64.of_int n), max)
 
-let _bench_all f a =
-  List.map (bench f a)
-    [
-      Clang;
-      Llvm__2 Llvm__2.Regalloc.Greedy;
-      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
-      Llvm__2 Llvm__2.Regalloc.Linearscan;
-    ]
-
 let bench_all_n f a n =
   flush Stdlib.stdout;
   let cf, ca, cmin, cavg, cmax = bench_n f a n Clang in
@@ -90,8 +81,8 @@ let bench_all_n f a n =
            Int64.to_float min /. Int64.to_float cmin,
            Int64.to_float avg /. Int64.to_float cavg ))
        [
-         Llvm__2 (Llvm__2.Regalloc.Briggs 12);
-         Llvm__2 (Llvm__2.Regalloc.Briggs 2);
+         Llvm__2 (Llvm__2.Regalloc.Simple 12);
+         Llvm__2 (Llvm__2.Regalloc.Simple 2);
          Llvm__2 Llvm__2.Regalloc.Greedy;
          Llvm__2 Llvm__2.Regalloc.Linearscan;
        ]
