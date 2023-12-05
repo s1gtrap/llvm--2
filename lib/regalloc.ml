@@ -1023,17 +1023,15 @@ let compile_terminator :
 
 module C = Coloring.Mark (Lva.G)
 
-type allocator = Ocamlgraph | Briggs of int | Greedy | Linearscan
+type allocator = Briggs of int | Greedy | Linearscan
 
 let allocator_of_string = function
-  | "ocamlgraph" -> Ocamlgraph
   | "briggs" -> Briggs 12
   | "greedy" -> Greedy
   | "linear" | "linearscan" -> Linearscan
   | s -> failwith ("invalid allocator: " ^ s)
 
 let string_of_allocator = function
-  | Ocamlgraph -> "ocamlgraph"
   | Briggs k -> "briggs k=" ^ string_of_int k
   | Greedy -> "greedy"
   | Linearscan -> "linear"
@@ -1079,10 +1077,6 @@ let alloc a param insns (in_, out) : operand S.table =
   in
   let l =
     match a with
-    | Ocamlgraph ->
-        let l, g = Lva.interf param insns in_ out in
-        C.coloring g 12;
-        S.ST.mapi (fun _k v -> Lva.G.Mark.get v) l |> S.ST.map var
     | Greedy ->
         let l, _g = Lva.interf param insns in_ out in
         let c = ref 0 in

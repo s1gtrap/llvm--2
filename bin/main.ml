@@ -42,7 +42,7 @@ let cfgx86 parser input =
   let ids, g = Cfg.graph cfg in
   let insns = Cfg.flatten cfg in
   let df = Lva.dataflow insns ids g in
-  let _asn = Regalloc.alloc Regalloc.Ocamlgraph [] insns df in
+  let _asn = Regalloc.alloc Regalloc.Greedy [] insns df in
   ()
 
 let fdeclcfg input =
