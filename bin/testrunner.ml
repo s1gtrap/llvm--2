@@ -597,45 +597,75 @@ let () =
             "2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 \
              89 97 ";
         ] );
-      ("tests/factor0.ll", "", [], [ "2" ], [ Exit 1; Stdout "2 " ]);
-      ("tests/factor0.ll", "", [], [ "3" ], [ Exit 1; Stdout "3 " ]);
-      ("tests/factor0.ll", "", [], [ "4" ], [ Exit 2; Stdout "2 2 " ]);
-      ("tests/factor0.ll", "", [], [ "5" ], [ Exit 1; Stdout "5 " ]);
-      ( "tests/factor0.ll",
+      ("tests/factori32.ll", "", [], [ "2" ], [ Exit 1; Stdout "2 " ]);
+      ("tests/factori32.ll", "", [], [ "3" ], [ Exit 1; Stdout "3 " ]);
+      ("tests/factori32.ll", "", [], [ "4" ], [ Exit 2; Stdout "2 2 " ]);
+      ("tests/factori32.ll", "", [], [ "5" ], [ Exit 1; Stdout "5 " ]);
+      ( "tests/factori32.ll",
         "",
         [],
         [ "5040" ],
         [ Exit 8; Stdout "2 2 2 2 3 3 5 7 " ] );
-      ( "tests/factor0.ll",
+      ( "tests/factori32.ll",
         "",
         [],
         [ "5040" ],
         [ Exit 8; Stdout "2 2 2 2 3 3 5 7 " ] );
-      ( "tests/factor0.ll",
+      ( "tests/factori32.ll",
+        "",
+        [],
+        [ "268435399" ],
+        [ Exit 1; Stdout "268435399 " ] );
+      ( "tests/factori32.ll",
+        "",
+        [],
+        [ "536870909" ],
+        [ Exit 1; Stdout "536870909 " ] );
+      ( "tests/factori32.ll",
+        "",
+        [],
+        [ "1073741789" ],
+        [ Exit 1; Stdout "1073741789 " ] );
+      ( "tests/factori32.ll",
         "",
         [],
         [ "2147483647" ],
         [ Exit 1; Stdout "2147483647 " ] );
-      ("tests/factor1.ll", "", [], [ "2" ], [ Exit 1; Stdout "2 " ]);
-      ("tests/factor1.ll", "", [], [ "3" ], [ Exit 1; Stdout "3 " ]);
-      ("tests/factor1.ll", "", [], [ "4" ], [ Exit 2; Stdout "2 2 " ]);
-      ("tests/factor1.ll", "", [], [ "5" ], [ Exit 1; Stdout "5 " ]);
-      ( "tests/factor1.ll",
+      ("tests/factori64.ll", "", [], [ "2" ], [ Exit 1; Stdout "2 " ]);
+      ("tests/factori64.ll", "", [], [ "3" ], [ Exit 1; Stdout "3 " ]);
+      ("tests/factori64.ll", "", [], [ "4" ], [ Exit 2; Stdout "2 2 " ]);
+      ("tests/factori64.ll", "", [], [ "5" ], [ Exit 1; Stdout "5 " ]);
+      ( "tests/factori64.ll",
         "",
         [],
         [ "5040" ],
         [ Exit 8; Stdout "2 2 2 2 3 3 5 7 " ] );
-      ( "tests/factor1.ll",
+      ( "tests/factori64.ll",
         "",
         [],
         [ "5040" ],
         [ Exit 8; Stdout "2 2 2 2 3 3 5 7 " ] );
-      ( "tests/factor1.ll",
+      ( "tests/factori64.ll",
+        "",
+        [],
+        [ "268435399" ],
+        [ Exit 1; Stdout "268435399 " ] );
+      ( "tests/factori64.ll",
+        "",
+        [],
+        [ "536870909" ],
+        [ Exit 1; Stdout "536870909 " ] );
+      ( "tests/factori64.ll",
+        "",
+        [],
+        [ "1073741789" ],
+        [ Exit 1; Stdout "1073741789 " ] );
+      ( "tests/factori64.ll",
         "",
         [],
         [ "2147483647" ],
         [ Exit 1; Stdout "2147483647 " ] );
-      ( "tests/factor1.ll",
+      ( "tests/factori64.ll",
         "",
         [],
         [ "18446744073709551615" ],

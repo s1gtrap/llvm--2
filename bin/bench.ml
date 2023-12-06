@@ -124,11 +124,35 @@ let print2 (f, a, c, min, avg, max, minr, avgr) =
   Printf.printf "max=%Ld\n" max
 
 let () =
+  let newline () =
+    print_newline ();
+    flush Stdlib.stdout
+  in
   let n = ref 10 in
   let speclist = [ ("-n", Arg.Set_int n, "Output debug information") ] in
   Arg.parse speclist (fun _ -> ()) "append [-r n]";
   let n = !n in
   flush Stdlib.stdout;
+
+  bench_all_n "benches/factori32.ll" [| "268435399" |] n |> List.iter print2;
+  bench_all_n "benches/factori32.ll" [| "536870909" |] n |> List.iter print2;
+  bench_all_n "benches/factori32.ll" [| "1073741789" |] n |> List.iter print2;
+  bench_all_n "benches/factori32.ll" [| "2147483647" |] n |> List.iter print2;
+  newline ();
+  bench_all_n "benches/factori64.ll" [| "268435399" |] n |> List.iter print2;
+  bench_all_n "benches/factori64.ll" [| "536870909" |] n |> List.iter print2;
+  bench_all_n "benches/factori64.ll" [| "1073741789" |] n |> List.iter print2;
+  bench_all_n "benches/factori64.ll" [| "2147483647" |] n |> List.iter print2;
+  bench_all_n "benches/factori64.ll" [| "4294967291" |] n |> List.iter print2;
+  bench_all_n "benches/factori64.ll" [| "8589934583" |] n |> List.iter print2;
+  bench_all_n "benches/factori64.ll" [| "17179869143" |] n |> List.iter print2;
+  newline ();
+  bench_all_n "benches/sieven.ll" [| "1000" |] n |> List.iter print2;
+  bench_all_n "benches/sieven.ll" [| "10000" |] n |> List.iter print2;
+  bench_all_n "benches/sieven.ll" [| "100000" |] n |> List.iter print2;
+  bench_all_n "benches/sieven.ll" [| "1000000" |] n |> List.iter print2;
+  bench_all_n "benches/sieven.ll" [| "10000000" |] n |> List.iter print2;
+  newline ();
   bench_all_n "benches/subset.ll" (Array.init 15 string_of_int) n
   |> List.iter print2;
   bench_all_n "benches/subset.ll" (Array.init 16 string_of_int) n
@@ -141,11 +165,11 @@ let () =
     |> List.iter print2;
     bench_all_n "benches/subset.ll" (Array.init 20 string_of_int) n
     |> List.iter print2;*)
-  print_newline ();
+  newline ();
   bench_all_n "benches/fib.ll" [| "40" |] n |> List.iter print2;
   bench_all_n "benches/fib.ll" [| "41" |] n |> List.iter print2;
   bench_all_n "benches/fib.ll" [| "42" |] n |> List.iter print2;
-  print_newline ();
+  newline ();
   bench_all_n "benches/sha256.ll" [| "100" |] n |> List.iter print2;
   bench_all_n "benches/sha256.ll" [| "1000" |] n |> List.iter print2;
   bench_all_n "benches/sha256.ll" [| "10000" |] n |> List.iter print2;
