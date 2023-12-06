@@ -121,7 +121,7 @@ let longofquad = function
   | op -> op
 
 (* Condition Codes *)
-type cnd = Eq | Neq | Gt | Ge | Lt | Le
+type cnd = Eq | Neq | Gt | Ge | Lt | Le | Ult | Ule | Ugt | Uge
 
 type opcode =
   | Movq
@@ -261,6 +261,10 @@ let string_of_cnd (c : cnd) : string =
   | Ge -> "ge"
   | Lt -> "l"
   | Le -> "le"
+  | Ugt -> "a" (* FIXME: test *)
+  | Uge -> "nb" (* FIXME: test *)
+  | Ult -> "b" (* FIXME: test *)
+  | Ule -> "be" (* FIXME: test *)
 
 let string_of_opcode (opc : opcode) : string =
   match opc with
@@ -381,10 +385,10 @@ let compile_cnd (c : Ll.cnd) : cnd =
   | Ll.Sle -> Le
   | Ll.Sgt -> Gt
   | Ll.Sge -> Ge
-  | Ll.Ult -> Lt (* FIXME: this doesn't work for edge cases *)
-  | Ll.Ule -> Le
-  | Ll.Ugt -> Gt
-  | Ll.Uge -> Ge
+  | Ll.Ult -> Ult (* FIXME: this doesn't work for edge cases *)
+  | Ll.Ule -> Ule
+  | Ll.Ugt -> Ugt
+  | Ll.Uge -> Uge
 
 type layout = (Ll.uid * operand) list
 
