@@ -1116,23 +1116,7 @@ let alloc a param insns (in_, out) : operand S.table =
           l
     | Simple c ->
         let l, g = Lva.interf param insns in_ out in
-        let register = function
-          (*| 0 -> Reg Rax
-            | 1 -> Reg Rcx (* NOTE: %rax and %rcx are scratch registers *)*)
-          | 0 -> Reg Rdx
-          | 1 -> Reg Rbx
-          | 2 -> Reg Rsi
-          | 3 -> Reg Rdi
-          | 4 -> Reg R08
-          | 5 -> Reg R09
-          | 6 -> Reg R10
-          | 7 -> Reg R11
-          | 8 -> Reg R12
-          | 9 -> Reg R13
-          | 10 -> Reg R14
-          | 11 -> Reg R15
-          | _ -> failwith "unreachable"
-        in
+        let register i = Reg (reg_of_int i) in
         let count = ref 0 in
         let rec simp (spills : S.SS.t) =
           if !count >= 10 then failwith "error";

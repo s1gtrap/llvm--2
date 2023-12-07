@@ -9,6 +9,8 @@ type asserts = Exit of int | Stdout of string | Stderr of string | Timeout
 
 module S = Map.Make (String)
 
+let n = ref 12
+
 let string_of_process_status (s : Unix.process_status) =
   match s with
   | WEXITED code -> Printf.sprintf "WEXITED %d" code
@@ -184,17 +186,23 @@ let run tests filter =
     in
     run_ Clang;
     (*run_ Tiger;*)
-    run_ (Llvm__2 (Llvm__2.Regalloc.Greedy 12));
-    run_ (Llvm__2 (Llvm__2.Regalloc.Simple 12));
-    run_ (Llvm__2 (Llvm__2.Regalloc.Briggs 12));
+    run_ (Llvm__2 (Llvm__2.Regalloc.Greedy !n));
+    run_ (Llvm__2 (Llvm__2.Regalloc.Simple !n));
+    run_ (Llvm__2 (Llvm__2.Regalloc.Briggs !n));
     run_ (Llvm__2 Llvm__2.Regalloc.Linearscan)
   in
   List.iter r tests;
   (!cases, !passes)
 
 let () =
+  let speclist = [ ("-n", Arg.Set_int n, "Output debug information") ] in
+  let filter = ref "" in
+  Arg.parse speclist (fun f -> filter := f) "tests [-n <n-regs>]";
   let tests =
     [
+      ("tests/livechain.ll", "", [], [], [ Exit 20; Stdout ""; Stderr "" ]);
+      ("tests/live20.ll", "", [], [], [ Exit 65; Stdout ""; Stderr "" ]);
+      ("tests/live25.ll", "", [], [], [ Exit 91; Stdout ""; Stderr "" ]);
       ("tests/lshri32.ll", "", [], [], [ Exit 255; Stdout ""; Stderr "" ]);
       ("tests/literal-labels0.ll", "", [], [], [ Exit 42; Stdout ""; Stderr "" ]);
       ("tests/literal-labels1.ll", "", [], [], [ Exit 0; Stdout ""; Stderr "" ]);
@@ -2199,7 +2207,5 @@ let () =
         [ Stdout ""; Stderr "" ] );
     ]
   in
-  let cases, passes =
-    run tests (try Array.get Sys.argv 1 with Invalid_argument _ -> "")
-  in
+  let cases, passes = run tests !filter in
   Printf.printf "passed [%d/%d]\n" passes cases
