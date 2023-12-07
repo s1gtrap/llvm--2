@@ -103,6 +103,7 @@ let () =
   let out = ref "" in
   let clang = ref "" in
   let alloc = ref "" in
+  let n = ref 12 in
   let anon_fun filename = input_files := filename :: !input_files in
 
   let speclist =
@@ -112,12 +113,13 @@ let () =
       ("-o", Arg.Set_string out, "Set output file");
       ("-c", Arg.Set_string clang, "Set clang parameters");
       ("-a", Arg.Set_string alloc, "Set register allocator");
+      ("-n", Arg.Set_int n, "Set number of working registers");
     ]
   in
 
   Arg.parse speclist anon_fun usage_msg;
 
-  let alc = Regalloc.allocator_of_string !alloc in
+  let alc = Regalloc.allocator_of_string !n !alloc in
 
   let oper =
     match !oper with

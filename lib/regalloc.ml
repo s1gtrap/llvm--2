@@ -1028,20 +1028,20 @@ let compile_terminator :
 
 module C = Coloring.Mark (Lva.G)
 
-type allocator = Simple of int | Briggs of int | Greedy | Linearscan
+type allocator = Simple of int | Briggs of int | Greedy of int | Linearscan
 
-let allocator_of_string = function
-  | s when String.starts_with ~prefix:s "simple" -> Simple 12
-  | s when String.starts_with ~prefix:s "briggs" -> Briggs 12
-  | s when String.starts_with ~prefix:s "greedy" -> Greedy
+let allocator_of_string n = function
+  | s when String.starts_with ~prefix:s "simple" -> Simple n
+  | s when String.starts_with ~prefix:s "briggs" -> Briggs n
+  | s when String.starts_with ~prefix:s "greedy" -> Greedy n
   | s when String.starts_with ~prefix:s "linearscan" -> Linearscan
-  | "" -> Greedy (* NOTE: default allocator *)
+  | "" -> Greedy 0 (* NOTE: default allocator *)
   | s -> failwith ("invalid allocator: " ^ s)
 
 let string_of_allocator = function
   | Simple k -> "simple " ^ string_of_int k
   | Briggs k -> "briggs " ^ string_of_int k
-  | Greedy -> "greedy"
+  | Greedy k -> "greedy " ^ string_of_int k
   | Linearscan -> "linear"
 
 module VS = Set.Make (Lva.G.V)
@@ -1061,31 +1061,51 @@ module Regs = Set.Make (struct
 end)
 
 let alloc a param insns (in_, out) : operand S.table =
-  let var i =
-    let j =
-      match i with
-      (*| 0 -> Reg Rax
-        | 1 -> Reg Rcx (* NOTE: %rax and %rcx are scratch registers *)*)
-      | 0 -> Reg Rdx
-      | 1 -> Reg Rbx
-      | 2 -> Reg Rsi
-      | 3 -> Reg Rdi
-      | 4 -> Reg R08
-      | 5 -> Reg R09
-      | 6 -> Reg R10
-      | 7 -> Reg R11
-      | 8 -> Reg R12
-      | 9 -> Reg R13
-      | 10 -> Reg R14
-      | 11 -> Reg R15
-      | i -> Ind3 (Lit (Int64.of_int ((i - 11) * -8)), Rbp)
-    in
-    flush stdout;
-    j
+  (*let var i =
+      let j =
+        match i with
+        (*| 0 -> Reg Rax
+          | 1 -> Reg Rcx (* NOTE: %rax and %rcx are scratch registers *)*)
+        | 0 -> Reg Rdx
+        | 1 -> Reg Rbx
+        | 2 -> Reg Rsi
+        | 3 -> Reg Rdi
+        | 4 -> Reg R08
+        | 5 -> Reg R09
+        | 6 -> Reg R10
+        | 7 -> Reg R11
+        | 8 -> Reg R12
+        | 9 -> Reg R13
+        | 10 -> Reg R14
+        | 11 -> Reg R15
+        | i -> Ind3 (Lit (Int64.of_int ((i - 11) * -8)), Rbp)
+      in
+      flush stdout;
+      j
+    in*)
+  let reg_of_int = function
+    | 0 -> Rdx
+    | 1 -> Rbx
+    | 2 -> Rsi
+    | 3 -> Rdi
+    | 4 -> R08
+    | 5 -> R09
+    | 6 -> R10
+    | 7 -> R11
+    | 8 -> R12
+    | 9 -> R13
+    | 10 -> R14
+    | 11 -> R15
+    | i -> failwith ("out of bounds: " ^ string_of_int i)
   in
   let l =
     match a with
-    | Greedy ->
+    | Greedy k ->
+        let var i =
+          match i with
+          | i when i >= k -> Ind3 (Lit (Int64.of_int ((i - (k - 1)) * -8)), Rbp)
+          | i -> Reg (reg_of_int i)
+        in
         let l, _g = Lva.interf param insns in_ out in
         let c = ref 0 in
         S.ST.map
