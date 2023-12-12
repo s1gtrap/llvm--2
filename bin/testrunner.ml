@@ -605,6 +605,18 @@ let () =
             "2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 \
              89 97 ";
         ] );
+      ("tests/square0.ll", "", [], [], [ Exit 1; Stdout ""; Stderr "" ]);
+      ("tests/square0.ll", "", [], [ "2" ], [ Exit 4; Stdout ""; Stderr "" ]);
+      ( "tests/square0.ll",
+        "",
+        [],
+        [ "2"; "3" ],
+        [ Exit 9; Stdout ""; Stderr "" ] );
+      ( "tests/square0.ll",
+        "",
+        [],
+        [ "2"; "3"; "4" ],
+        [ Exit 16; Stdout ""; Stderr "" ] );
       ("tests/factori32.ll", "", [], [ "2" ], [ Exit 1; Stdout "2 " ]);
       ("tests/factori32.ll", "", [], [ "3" ], [ Exit 1; Stdout "3 " ]);
       ("tests/factori32.ll", "", [], [ "4" ], [ Exit 2; Stdout "2 2 " ]);
