@@ -535,6 +535,7 @@ let compile_call :
  fun ctxt asn oper args ->
   let replace =
     S.ST.add (S.symbol "llvm.memset.p0.i64") (S.symbol "memset") S.empty
+    |> S.ST.add (S.symbol "llvm.memcpy.p0.p0.i64") (S.symbol "memcpy")
   in
   let args = List.map snd args in
   let crsaved = [ Rcx; Rdx; Rsi; Rdi; R08; R09; R10; R11 ] in
