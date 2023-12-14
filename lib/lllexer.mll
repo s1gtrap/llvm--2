@@ -25,6 +25,8 @@ rule token = parse
   | "nsw"
   | "noundef"
   | "inbounds"
+  | "signext"
+  | "zeroext"
   | "internal"
   | ',' ['\t' ' ']+ "..."
   | '#' digit+         { token lexbuf } (* ignored *)

@@ -1743,6 +1743,21 @@ let () =
             "315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3";
           Stderr "";
         ] );
+      ("tests/sudoku-stack.ll", "4 2  1         3", [], [ "2" ], [ Exit 0 ]);
+      ( "tests/sudoku-stack.ll",
+        "745 9     3215  46   28 5 32      6 98 6  351   54 2 73 8     2 2 76  \
+         1  6 9 8 34",
+        [],
+        [ "3" ],
+        [ Exit 0 ] );
+      (*( "tests/sudoku-stack.ll",
+        "  c  b3        73ed46 g c 9f2 15fa 897 2   5 c g 5b      28 3e 9  8b \
+         9f 2ca 67g   a e2 8  f  3  e 4f7 6g   98   21  c3bd 6g  a9 a2  f15b \
+         94  g8 5 fcg 23   ad     9 8c 7  1  2    71 e9 d85 c4f  fe      42 96 \
+         847 526 1   b d ec61a3 7 g d8b 42  2  fe        c                    ",
+        [],
+        [ "4" ],
+        [ Exit 0; Stdout "" ] );*)
       ( "dolphintests/_prog_01.ll",
         "",
         [ "dolphin.c" ],
