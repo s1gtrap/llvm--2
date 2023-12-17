@@ -35,7 +35,7 @@ let dot g =
   Dot_.fprint_graph Format.str_formatter g;
   Format.flush_str_formatter ()
 
-let indices ((head, tail) : Ll.cfg) : G.V.t array =
+let indices (((_, head), tail) : Ll.cfg) : G.V.t array =
   let off = List.length head.insns + 1 in
   let insns (b : Ll.block) = b.insns in
   let tail = List.map snd tail |> List.map insns |> List.map List.length in
@@ -43,16 +43,16 @@ let indices ((head, tail) : Ll.cfg) : G.V.t array =
   let len = len + (2 * List.length tail) in
   Array.init len G.V.create
 
-let blocks ids ((head, tail) : Ll.cfg) : G.V.t S.table =
+let blocks ids (((_, head), tail) : Ll.cfg) : G.V.t S.table =
   let f (i, t) ((n, b) : _ * Ll.block) =
     (i + List.length b.insns + 2, S.enter (t, n, ids.(i)))
   in
   snd (List.fold_left f (List.length head.insns + 1, S.empty) tail)
 
-let graph ((head, tail) : Ll.cfg) : G.V.t array * G.t =
+let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
   let g = G.create () in
-  let ids = indices (head, tail) in
-  let blk = blocks ids (head, tail) in
+  let ids = indices ((l, head), tail) in
+  let blk = blocks ids ((l, head), tail) in
   let blk l =
     match S.ST.find_opt l blk with
     | Some i -> i
@@ -109,7 +109,7 @@ let%test "graph" =
   let _ids, g = graph cfg in
   dot g = "digraph G {\n  0;\n  1;\n  2;\n  3;\n  \n  \n  1 -> 3;\n  \n  }\n"
 
-let flatten ((head, tail) : Ll.cfg) : insn list =
+let flatten (((_, head), tail) : Ll.cfg) : insn list =
   let insn i = Insn i in
   let named_block ((n, b) : _ * Ll.block) =
     [ Label n ] @ List.map insn b.insns @ [ Term b.terminator ]

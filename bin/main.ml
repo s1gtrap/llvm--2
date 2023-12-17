@@ -95,6 +95,22 @@ let progexe output cargs (alloc_ : Regalloc.allocator) input =
   in
   ()
 
+let progprefs input =
+  let input = open_ input in
+  let prog = Parse.from_channel Llparser.prog input in
+  let fdecl ((name, fdecl) : _ * Ll.fdecl) =
+    Printf.printf "%s:\n" (Symbol.name name);
+    let insns = Cfg.flatten fdecl.cfg in
+    let prefs = Lva.prefer insns in
+    List.iter
+      (fun v ->
+        Printf.printf "{ ";
+        Symbol.SS.iter (fun v -> Printf.printf "%s " (Symbol.name v)) v;
+        Printf.printf "}\n")
+      prefs
+  in
+  List.iter fdecl prog.fdecls
+
 let () =
   let usage_msg = "llvm__2 [-v] -p <parser> <file1> [<file2>] ..." in
   let verbose = ref false in
@@ -128,6 +144,7 @@ let () =
     | "itf" -> progitf
     | "asn" -> progasn alc
     | "x86" -> progx86 alc
+    | "prefs" -> progprefs
     | _ ->
         fun input ->
           let out =

@@ -8,7 +8,7 @@
 %token ADD SUB MUL SDIV SREM UDIV UREM
 %token EQ NE SLT SLE SGT SGE ULT ULE UGT UGE
 %token AND OR XOR SHL LSHR ASHR
-%token RET BR TO NULL LABEL ENTRY GLOBAL EXTGLOBAL DEFINE UNREACHABLE
+%token RET BR TO NULL LABEL GLOBAL EXTGLOBAL DEFINE UNREACHABLE
 %token CALL ICMP LOAD STORE ALLOCA BITCAST GEP ZEXT SEXT PTRTOINT PHI TRUNC SELECT
 
 %token <int64> INT        (* int64 values *)
@@ -79,8 +79,11 @@ tdecl:
     { (tid, t) }
 
 entry_block:
-  | ENTRY COLON b=block     { b }
-  | b=block                 { b }
+  | l=INT COLON b=block
+    { (Some (S.symbol (Int64.to_string l)),b) }
+  | l=LBL COLON b=block
+    { (Some l,b) }
+  | b=block                 { (None, b) }
 
 block:
   | is=list(named_insn) t=terminator

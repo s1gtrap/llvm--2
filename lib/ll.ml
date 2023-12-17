@@ -91,7 +91,7 @@ type terminator =
 type block = { insns : (uid option * insn) list; terminator : terminator }
 
 (* Control Flow Graph: a pair of an entry block and a set of labeled blocks *)
-type cfg = block * (lbl * block) list
+type cfg = (lbl option * block) * (lbl * block) list
 
 (* Function declarations *)
 type fdecl = { fty : fty; param : uid list; cfg : cfg }
@@ -260,12 +260,18 @@ let string_of_terminator (tr : terminator) : string =
         ]
   | Unreachable -> "unreachable"
 
-let string_of_block (b : block) : string =
-  (mapcat "\n" (prefix " " string_of_named_insn) b.insns ^^ "\n")
-  ^ (prefix " " string_of_terminator) b.terminator
+let string_of_block ((l, b) : S.symbol option * block) : string =
+  match l with
+  | Some l ->
+      S.name l ^ ":\n"
+      ^ (mapcat "\n" (prefix " " string_of_named_insn) b.insns ^^ "\n")
+      ^ (prefix " " string_of_terminator) b.terminator
+  | None ->
+      (mapcat "\n" (prefix " " string_of_named_insn) b.insns ^^ "\n")
+      ^ (prefix " " string_of_terminator) b.terminator
 
 let string_of_cfg ((e, bs) : cfg) : string =
-  let string_of_named_block (l, b) = S.name l ^ ":\n" ^ string_of_block b in
+  let string_of_named_block (l, b) = string_of_block (Some l, b) in
   string_of_block e ^ "\n" ^ mapcat "\n" string_of_named_block bs ^^ "\n"
 
 let string_of_named_fdecl ((g, f) : gid * fdecl) : string =

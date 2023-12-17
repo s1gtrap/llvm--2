@@ -179,12 +179,21 @@ let coalesce_briggs (prefs : S.SS.t list) ((l, g) : G.V.t S.ST.t * G.t) :
   let _str v =
     "\"{ " ^ Ll.mapcat ", " S.name (G.V.label v |> S.SS.elements) ^ " }\""
   in
+  let print s =
+    S.SS.iter (fun e -> Printf.printf "%s " (S.name e)) s;
+    Printf.printf "\n"
+  in
+  List.iter print prefs;
   let coalesce ops (ol, g) =
     let g' = G.create () in
     let _, l' =
       G.fold_vertex
         (fun v (added, l) ->
           if S.SS.inter ops (G.V.label v) |> S.SS.is_empty then (
+            Printf.printf "before add: ";
+            S.SS.iter (fun o -> Printf.printf "%s " (S.name o)) (G.V.label v);
+            Printf.printf "\n";
+
             let v' = G.V.create (G.V.label v) in
             G.add_vertex g' v';
             G.iter_succ
@@ -193,7 +202,12 @@ let coalesce_briggs (prefs : S.SS.t list) ((l, g) : G.V.t S.ST.t * G.t) :
                 | Some v2' -> G.add_edge g' v' v2'
                 | None -> ())
               g v;
-            (added, S.SS.fold (fun o a -> S.ST.add o v' a) (G.V.label v') l))
+            ( added,
+              S.SS.fold
+                (fun o a ->
+                  Printf.printf "adding %s\n" (S.name o);
+                  S.ST.add o v' a)
+                (G.V.label v') l ))
           else if not added then (
             let v' = G.V.create ops in
             G.add_vertex g' v';

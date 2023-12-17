@@ -1506,7 +1506,7 @@ let compile_fdecl :
  fun (alc : allocator) tdecls name { param; cfg; _ } ->
   let fname = name in
   (* move out of pre-assigned parameter registers (rsi, rdi, .. r9) *)
-  let head, tail = cfg in
+  let (entryl, head), tail = cfg in
   let _, blocks = List.split tail in
   let named_insns =
     head.insns @ List.concat (List.map (fun (b : Ll.block) -> b.insns) blocks)
@@ -1564,24 +1564,6 @@ let compile_fdecl :
     ]
   in
   let pro = pro @ List.mapi pusharg param @ List.mapi poparg (List.rev param) in
-  let _var i =
-    match i + 2 with
-    | 0 -> Reg Rax
-    | 1 -> Reg Rcx
-    | 2 -> Reg Rdx
-    | 3 -> Reg Rbx
-    | 4 -> Reg Rsi
-    | 5 -> Reg Rdi
-    | 6 -> Reg R08
-    | 7 -> Reg R09
-    | 8 -> Reg Rax
-    | 9 -> Reg Rcx
-    | 10 -> Reg R12
-    | 11 -> Reg R13
-    | 12 -> Reg R14
-    | 13 -> Reg R15
-    | _i -> Ind3 (Lit 0L, Rbp)
-  in
   let phis =
     List.filter_map
       (function
@@ -1594,9 +1576,13 @@ let compile_fdecl :
       (fun t ((dst, ops) : S.symbol * _) ->
         List.fold_left
           (fun t ((src, lbl) : Ll.operand * _) ->
+            let lbl =
+              match entryl with Some l when l = lbl -> name | _ -> lbl
+            in
             S.ST.update lbl
               (function
                 | Some movs ->
+                    Printf.printf "name=%s\n" (S.name dst);
                     Some
                       (movs
                       @ compile_operand ctxt asn Ll.I64 (S.ST.find dst asn) src

@@ -89,7 +89,6 @@ rule token = parse
   | "icmp"             { ICMP }
   | "void"             { VOID }
   | "load"             { LOAD }
-  | "entry"            { ENTRY }
   | "store"            { STORE }
   | "label"            { LABEL }
   | "external global"  { EXTGLOBAL }
