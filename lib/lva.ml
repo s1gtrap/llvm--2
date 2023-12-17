@@ -1,41 +1,39 @@
 module S = Symbol
 
-let def (insn : Cfg.insn) =
-  let empty = S.SS.empty in
+let def (s : S.SS.t) (insn : Cfg.insn) =
   match insn with
-  | Label _ -> empty
-  | Insn (Some dop, _) -> S.SS.add dop empty
-  | Insn (None, _) -> empty
-  | Term _ -> empty
+  | Label _ -> s
+  | Insn (Some dop, _) -> S.SS.add dop s
+  | Insn (None, _) -> s
+  | Term _ -> s
 
-let use (insn : Cfg.insn) =
-  let empty = S.SS.empty in
+let use (s : S.SS.t) (insn : Cfg.insn) =
   let op o s = match o with Ll.Id i -> S.SS.add i s | _ -> s in
   match insn with
-  | Label _ -> empty
-  | Insn (_, Binop (_, _, lop, rop)) -> op lop empty |> op rop
-  | Insn (_, Alloca _) -> empty
-  | Insn (_, AllocaN (_, (_, o))) -> op o empty
-  | Insn (_, Load (_, o)) -> op o empty
-  | Insn (_, Store (_, sop, dop)) -> op sop empty |> op dop
-  | Insn (_, Icmp (_, _, lop, rop)) -> op lop empty |> op rop
+  | Label _ -> s
+  | Insn (_, Binop (_, _, lop, rop)) -> op lop s |> op rop
+  | Insn (_, Alloca _) -> s
+  | Insn (_, AllocaN (_, (_, o))) -> op o s
+  | Insn (_, Load (_, o)) -> op o s
+  | Insn (_, Store (_, sop, dop)) -> op sop s |> op dop
+  | Insn (_, Icmp (_, _, lop, rop)) -> op lop s |> op rop
   | Insn (_, Call (_, _, args)) ->
-      List.map snd args |> List.fold_left (fun s e -> op e s) empty
-  | Insn (_, Bitcast (_, sop, _)) -> op sop empty
+      List.map snd args |> List.fold_left (fun s e -> op e s) s
+  | Insn (_, Bitcast (_, sop, _)) -> op sop s
   | Insn (_, Gep (_, bop, ops)) ->
-      List.fold_left (fun s o -> op o s) (op bop empty) ops
-  | Insn (_, Zext (_, sop, _)) -> op sop empty
-  | Insn (_, Sext (_, sop, _)) -> op sop empty
-  | Insn (_, Ptrtoint (_, sop, _)) -> op sop empty
-  | Insn (_, Trunc (_, sop, _)) -> op sop empty
+      List.fold_left (fun s o -> op o s) (op bop s) ops
+  | Insn (_, Zext (_, sop, _)) -> op sop s
+  | Insn (_, Sext (_, sop, _)) -> op sop s
+  | Insn (_, Ptrtoint (_, sop, _)) -> op sop s
+  | Insn (_, Trunc (_, sop, _)) -> op sop s
   | Insn (_, PhiNode (_, ops)) ->
-      List.map fst ops |> List.fold_left (fun s e -> op e s) empty
-  | Insn (_, Select (o, (_, o1), (_, o2))) -> op o empty |> op o1 |> op o2
-  | Term (Ret (_, Some sop)) -> op sop empty
-  | Term (Ret (_, None)) -> empty
-  | Term (Br _) -> empty
-  | Term (Cbr (c, _, _)) -> op c empty
-  | Term Unreachable -> empty
+      List.map fst ops |> List.fold_left (fun s e -> op e s) s
+  | Insn (_, Select (o, (_, o1), (_, o2))) -> op o s |> op o1 |> op o2
+  | Term (Ret (_, Some sop)) -> op sop s
+  | Term (Ret (_, None)) -> s
+  | Term (Br _) -> s
+  | Term (Cbr (c, _, _)) -> op c s
+  | Term Unreachable -> s
   | _ -> failwith (Cfg.string_of_insn insn)
 
 let printset s =
@@ -72,7 +70,10 @@ let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
       changed
     in
     let flowin (i, insn) =
-      let newin = S.SS.union (use insn) (S.SS.diff out.(i) (def insn)) in
+      let newin =
+        S.SS.union (use S.SS.empty insn)
+          (S.SS.diff out.(i) (def S.SS.empty insn))
+      in
       let changed = not (S.SS.equal newin in_.(i)) in
       if changed then in_.(i) <- newin;
       changed
@@ -139,10 +140,11 @@ let interf (param : Ll.uid list) (insns : Cfg.insn list) (_in_ : S.SS.t array)
         param)
     param;
   (* add all defs *)
-  List.map def insns |> List.iter (S.SS.iter (fun v -> ignore (vert v)));
+  List.map (def S.SS.empty) insns
+  |> List.iter (S.SS.iter (fun v -> ignore (vert v)));
   List.iteri
     (fun i n ->
-      let d = def n in
+      let d = def S.SS.empty n in
       S.SS.iter
         (fun e1 ->
           S.SS.iter
