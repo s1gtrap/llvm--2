@@ -1143,8 +1143,9 @@ let coalesce_briggs k (prefs : S.SS.t S.ST.t)
             (fun e1 ->
               S.SS.iter
                 (fun e2 ->
-                  if e1 <> e2 then
-                    Lva.G.add_edge g' (S.ST.find e1 l') (S.ST.find e2 l'))
+                  let v1 = S.ST.find e1 l' in
+                  let v2 = S.ST.find e2 l' in
+                  if v1 <> v2 then Lva.G.add_edge g' v1 v2)
                 s2)
             s1)
         g;
@@ -1681,7 +1682,6 @@ let compile_fdecl :
             S.ST.update lbl
               (function
                 | Some movs ->
-                    Printf.printf "name=%s\n" (S.name dst);
                     Some
                       (movs
                       @ compile_operand ctxt asn Ll.I64 (S.ST.find dst asn) src
