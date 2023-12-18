@@ -158,39 +158,137 @@ let interf (param : Ll.uid list) (insns : Cfg.insn list) (_in_ : S.SS.t array)
     insns;
   (!verts, g)
 
-let prefer (insns : Cfg.insn list) : S.SS.t list =
-  let l : S.SS.t list =
-    let func = function
-      | Cfg.Insn (Some o1, Ll.PhiNode (_, ops)) ->
-          Some
-            (List.map fst ops
-            |> List.fold_left
-                 (fun set ins ->
-                   match ins with Ll.Id op -> S.SS.add op set | _ -> set)
-                 (S.SS.add o1 S.SS.empty))
-      | _ -> None
+let prefer (insns : Cfg.insn list) : S.SS.t S.ST.t =
+  (* FIXME: test phi nodes > 4 *)
+  let l =
+    let add (t : S.SS.t S.ST.t) ops =
+      List.map (fun a -> List.map (fun b -> (a, b)) ops) ops
+      |> List.flatten
+      |> List.filter (fun ((_, n1), (_, n2)) -> n1 <> n2)
+      |> List.fold_left
+           (fun t (a, b) ->
+             S.ST.update a
+               (function
+                 | Some s -> Some (S.SS.add b s)
+                 | None -> Some (S.SS.add b S.SS.empty))
+               t)
+           t
     in
-    List.filter_map func insns
+    let func (t : S.SS.t S.ST.t) = function
+      | Cfg.Insn (Some o1, Ll.PhiNode (_, ops)) ->
+          let ops =
+            List.filter_map (function Ll.Id op, _ -> Some op | _ -> None) ops
+          in
+          add t (o1 :: ops)
+      | Cfg.Insn (Some op, _) -> add t [ op ]
+      | _ -> t
+    in
+    List.fold_left func S.ST.empty insns
   in
   l
 
-let coalesce_briggs (prefs : S.SS.t list) ((l, g) : G.V.t S.ST.t * G.t) :
+let coalesce _k (_prefs : S.SS.t S.ST.t) : G.V.t S.table * G.t = failwith ""
+
+let coalesce_briggs k (prefs : S.SS.t S.ST.t) ((l, g) : G.V.t S.ST.t * G.t) :
     G.V.t S.table * G.t =
   let _str v =
     "\"{ " ^ Ll.mapcat ", " S.name (G.V.label v |> S.SS.elements) ^ " }\""
   in
-  let print s =
-    S.SS.iter (fun e -> Printf.printf "%s " (S.name e)) s;
-    Printf.printf "\n"
+  let try_coalesce ops (ol, g) =
+    (*Printf.printf "trying to coalesce: ";
+      S.SS.iter (fun e -> Printf.printf "%s " (S.name e)) ops;
+      Printf.printf "\n";
+
+      Printf.printf "%s\n" (dot g);*)
+
+    (* step 1) check if degree of coalesced node <= k *)
+    let neighs =
+      S.SS.fold
+        (fun e acc ->
+          let v = S.ST.find e ol in
+          (*Printf.printf "%s\n" (S.name e);*)
+          G.succ g v |> List.map G.V.label |> List.fold_left S.SS.union acc)
+        ops S.SS.empty
+    in
+    let neighs = S.SS.diff neighs ops in
+
+    (*Printf.printf "resulting neighs: ";
+      S.SS.iter (fun e -> Printf.printf "%s " (S.name e)) neighs;
+      Printf.printf "\n";*)
+
+    (* FIXME: check corner case = k *)
+    if S.SS.cardinal neighs < k then (
+      (*Printf.printf "neighbors < k, proceeding..\n";*)
+      let g' = G.create () in
+
+      let tocoalesce, l' =
+        G.fold_vertex
+          (fun v (tocoalese, l') ->
+            let s = G.V.label v in
+            if S.SS.is_empty (S.SS.inter s ops) then (
+              (* nothing in common, add it with no changes *)
+              let v' = G.V.create s in
+              G.add_vertex g' v';
+              let l' =
+                S.SS.fold
+                  (fun e t ->
+                    (*Printf.printf "Setting %s to new ..\n" (S.name e);*)
+                    S.ST.add e v' t)
+                  s l'
+              in
+              (tocoalese, l'))
+            else
+              (* something in common, add them to coalesced node *)
+              (S.SS.union tocoalese s, l'))
+          g (S.SS.empty, S.ST.empty)
+      in
+
+      let v' = G.V.create tocoalesce in
+      G.add_vertex g' v';
+
+      let l' =
+        S.SS.fold
+          (fun e t ->
+            (*Printf.printf "Setting %s to lst ..\n" (S.name e);*)
+            S.ST.add e v' t)
+          tocoalesce l'
+      in
+
+      (*S.ST.iter
+          (fun k v ->
+            Printf.printf "kk: %s\n" (S.name k);
+            let _ = G.succ g' v in
+            ())
+          l';
+
+        S.ST.iter (fun k _ -> Printf.printf "k: %s\n" (S.name k)) l';*)
+      G.iter_edges
+        (fun v1 v2 ->
+          let s1 = G.V.label v1 in
+          let s2 = G.V.label v2 in
+          S.SS.iter
+            (fun e1 ->
+              S.SS.iter
+                (fun e2 ->
+                  if e1 <> e2 then
+                    G.add_edge g' (S.ST.find e1 l') (S.ST.find e2 l'))
+                s2)
+            s1)
+        g;
+
+      (*Printf.printf "%s\n" (dot g');*)
+      (l', g'))
+    else ((*Printf.printf "returning same %s\n" (dot g);*)
+          ol, g)
   in
-  List.iter print prefs;
-  let coalesce ops (ol, g) =
+  S.ST.fold (fun k prefs acc -> try_coalesce (S.SS.add k prefs) acc) prefs (l, g)
+
+(*let coalesce _k ops (ol, g) =
     let g' = G.create () in
     let _, l' =
       G.fold_vertex
         (fun v (added, l) ->
           if S.SS.inter ops (G.V.label v) |> S.SS.is_empty then (
-            Printf.printf "before add: ";
             S.SS.iter (fun o -> Printf.printf "%s " (S.name o)) (G.V.label v);
             Printf.printf "\n";
 
@@ -226,9 +324,8 @@ let coalesce_briggs (prefs : S.SS.t list) ((l, g) : G.V.t S.ST.t * G.t) :
         g (false, S.ST.empty)
     in
     (l', g')
-  in
-  (* FIXME: check if degree is < k *)
-  List.fold_left (fun acc ops -> coalesce ops acc) (l, g) prefs
+  in*)
+(* FIXME: check if degree is < k *)
 
 (*module GC = Imperative.Graph.Abstract (struct
     type t = S.SS.t

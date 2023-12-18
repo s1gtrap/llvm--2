@@ -1260,7 +1260,7 @@ let alloc a param insns (in_, out) : operand S.table =
     | Briggs c ->
         let prefs = Lva.prefer insns in
         let l, g = Lva.interf param insns in_ out in
-        let l, g = Lva.coalesce_briggs prefs (l, g) in
+        let l, g = Lva.coalesce_briggs 12 prefs (l, g) in
         let register = function
           (*| 0 -> Reg Rax
             | 1 -> Reg Rcx (* NOTE: %rax and %rcx are scratch registers *)*)

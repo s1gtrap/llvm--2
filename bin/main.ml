@@ -44,7 +44,8 @@ let progitf input =
     let in_, out = Lva.dataflow insns ids g in
     let prefs = Lva.prefer insns in
     let l, itf = Lva.interf fdecl.param insns in_ out in
-    let _, itf = Lva.coalesce_briggs prefs (l, itf) in
+    (* FIXME: harcoded k *)
+    let _, itf = Lva.coalesce_briggs 12 prefs (l, itf) in
     Printf.printf "%s\n" (Lva.dot itf);
     ()
   in
@@ -102,11 +103,11 @@ let progprefs input =
     Printf.printf "%s:\n" (Symbol.name name);
     let insns = Cfg.flatten fdecl.cfg in
     let prefs = Lva.prefer insns in
-    List.iter
-      (fun v ->
-        Printf.printf "{ ";
+    Symbol.ST.iter
+      (fun k v ->
+        Printf.printf "%s: " (Symbol.name k);
         Symbol.SS.iter (fun v -> Printf.printf "%s " (Symbol.name v)) v;
-        Printf.printf "}\n")
+        Printf.printf "\n")
       prefs
   in
   List.iter fdecl prog.fdecls
