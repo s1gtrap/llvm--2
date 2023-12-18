@@ -141,8 +141,8 @@ let () =
   let oper =
     match !oper with
     | "cfg" -> progcfg
-    | "lva" -> proglva
-    | "itf" -> progitf alc
+    | "lva" | "dataflow" -> proglva
+    | "itf" | "interf" | "dot" -> progitf alc
     | "asn" -> progasn alc
     | "x86" -> progx86 alc
     | "prefs" -> progprefs
