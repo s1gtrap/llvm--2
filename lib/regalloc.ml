@@ -1061,6 +1061,105 @@ module Regs = Set.Make (struct
   let compare a b = compare a b
 end)
 
+let coalesce_briggs k (prefs : S.SS.t S.ST.t)
+    ((l, g) : Lva.G.V.t S.ST.t * Lva.G.t) : Lva.G.V.t S.table * Lva.G.t =
+  let _str v =
+    "\"{ " ^ Ll.mapcat ", " S.name (Lva.G.V.label v |> S.SS.elements) ^ " }\""
+  in
+  let try_coalesce ops (ol, g) =
+    (*Printf.printf "trying to coalesce: ";
+      S.SS.iter (fun e -> Printf.printf "%s " (S.name e)) ops;
+      Printf.printf "\n";
+
+      Printf.printf "%s\n" (dot g);*)
+
+    (* step 1) check if degree of coalesced node <= k *)
+    let neighs =
+      S.SS.fold
+        (fun e acc ->
+          let v = S.ST.find e ol in
+          (*Printf.printf "%s\n" (S.name e);*)
+          Lva.G.succ g v |> List.map Lva.G.V.label
+          |> List.fold_left S.SS.union acc)
+        ops S.SS.empty
+    in
+    let neighs = S.SS.diff neighs ops in
+
+    (*Printf.printf "resulting neighs: ";
+      S.SS.iter (fun e -> Printf.printf "%s " (S.name e)) neighs;
+      Printf.printf "\n";*)
+
+    (* FIXME: check corner case = k *)
+    if S.SS.cardinal neighs < k then (
+      (*Printf.printf "neighbors < k, proceeding..\n";*)
+      let g' = Lva.G.create () in
+
+      let tocoalesce, l' =
+        Lva.G.fold_vertex
+          (fun v (tocoalese, l') ->
+            let s = Lva.G.V.label v in
+            if S.SS.is_empty (S.SS.inter s ops) then (
+              (* nothing in common, add it with no changes *)
+              let v' = Lva.G.V.create s in
+              Lva.G.add_vertex g' v';
+              let l' =
+                S.SS.fold
+                  (fun e t ->
+                    (*Printf.printf "Setting %s to new ..\n" (S.name e);*)
+                    S.ST.add e v' t)
+                  s l'
+              in
+              (tocoalese, l'))
+            else
+              (* something in common, add them to coalesced node *)
+              (S.SS.union tocoalese s, l'))
+          g (S.SS.empty, S.ST.empty)
+      in
+
+      let v' = Lva.G.V.create tocoalesce in
+      Lva.G.add_vertex g' v';
+
+      let l' =
+        S.SS.fold
+          (fun e t ->
+            (*Printf.printf "Setting %s to lst ..\n" (S.name e);*)
+            S.ST.add e v' t)
+          tocoalesce l'
+      in
+
+      (*S.ST.iter
+          (fun k v ->
+            Printf.printf "kk: %s\n" (S.name k);
+            let _ = G.succ g' v in
+            ())
+          l';
+
+        S.ST.iter (fun k _ -> Printf.printf "k: %s\n" (S.name k)) l';*)
+      Lva.G.iter_edges
+        (fun v1 v2 ->
+          let s1 = Lva.G.V.label v1 in
+          let s2 = Lva.G.V.label v2 in
+          S.SS.iter
+            (fun e1 ->
+              S.SS.iter
+                (fun e2 ->
+                  if e1 <> e2 then
+                    Lva.G.add_edge g' (S.ST.find e1 l') (S.ST.find e2 l'))
+                s2)
+            s1)
+        g;
+
+      (*Printf.printf "%s\n" (dot g');*)
+      (l', g'))
+    else ((*Printf.printf "returning same %s\n" (dot g);*)
+          ol, g)
+  in
+  S.ST.fold (fun k prefs acc -> try_coalesce (S.SS.add k prefs) acc) prefs (l, g)
+
+let coalesce (alc : allocator) (prefs : S.SS.t S.ST.t)
+    ((l, g) : Lva.G.V.t S.ST.t * Lva.G.t) : Lva.G.V.t S.table * Lva.G.t =
+  match alc with Briggs k -> coalesce_briggs k prefs (l, g) | _ -> (l, g)
+
 let alloc a param insns (in_, out) : operand S.table =
   (*let var i =
       let j =
@@ -1260,7 +1359,7 @@ let alloc a param insns (in_, out) : operand S.table =
     | Briggs c ->
         let prefs = Lva.prefer insns in
         let l, g = Lva.interf param insns in_ out in
-        let l, g = Lva.coalesce_briggs 12 prefs (l, g) in
+        let l, g = coalesce_briggs c prefs (l, g) in
         let register = function
           (*| 0 -> Reg Rax
             | 1 -> Reg Rcx (* NOTE: %rax and %rcx are scratch registers *)*)

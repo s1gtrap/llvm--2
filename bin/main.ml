@@ -34,7 +34,7 @@ let proglva input =
   in
   List.iter fdecl prog.fdecls
 
-let progitf input =
+let progitf (alc : Regalloc.allocator) input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
@@ -45,7 +45,7 @@ let progitf input =
     let prefs = Lva.prefer insns in
     let l, itf = Lva.interf fdecl.param insns in_ out in
     (* FIXME: harcoded k *)
-    let _, itf = Lva.coalesce_briggs 12 prefs (l, itf) in
+    let _, itf = Regalloc.coalesce alc prefs (l, itf) in
     Printf.printf "%s\n" (Lva.dot itf);
     ()
   in
@@ -142,7 +142,7 @@ let () =
     match !oper with
     | "cfg" -> progcfg
     | "lva" -> proglva
-    | "itf" -> progitf
+    | "itf" -> progitf alc
     | "asn" -> progasn alc
     | "x86" -> progx86 alc
     | "prefs" -> progprefs
