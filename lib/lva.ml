@@ -6,31 +6,32 @@ let def (s : S.SS.t) (insn : Cfg.insn) =
 let use (s : S.SS.t) (insn : Cfg.insn) =
   let op o s = match o with Ll.Id i -> S.SS.add i s | _ -> s in
   match insn with
-  | Label _ -> s
-  | Insn (_, Binop (_, _, lop, rop)) -> op lop s |> op rop
-  | Insn (_, Alloca _) -> s
-  | Insn (_, AllocaN (_, (_, o))) -> op o s
-  | Insn (_, Load (_, o)) -> op o s
-  | Insn (_, Store (_, sop, dop)) -> op sop s |> op dop
-  | Insn (_, Icmp (_, _, lop, rop)) -> op lop s |> op rop
+  | Term (Ret (_, Some o)) | Term (Cbr (o, _, _)) -> op o s
+  | Insn (_, Binop (_, _, l, r))
+  | Insn (_, Icmp (_, _, l, r))
+  | Insn (_, Store (_, l, r)) ->
+      op l s |> op r
+  | Insn (_, AllocaN (_, (_, o)))
+  | Insn (_, Bitcast (_, o, _))
+  | Insn (_, Load (_, o))
+  | Insn (_, Ptrtoint (_, o, _))
+  | Insn (_, Sext (_, o, _))
+  | Insn (_, Trunc (_, o, _))
+  | Insn (_, Zext (_, o, _)) ->
+      op o s
   | Insn (_, Call (_, _, args)) ->
       List.map snd args |> List.fold_left (fun s e -> op e s) s
-  | Insn (_, Bitcast (_, sop, _)) -> op sop s
   | Insn (_, Gep (_, bop, ops)) ->
       List.fold_left (fun s o -> op o s) (op bop s) ops
-  | Insn (_, Zext (_, sop, _)) -> op sop s
-  | Insn (_, Sext (_, sop, _)) -> op sop s
-  | Insn (_, Ptrtoint (_, sop, _)) -> op sop s
-  | Insn (_, Trunc (_, sop, _)) -> op sop s
   | Insn (_, PhiNode (_, ops)) ->
       List.map fst ops |> List.fold_left (fun s e -> op e s) s
   | Insn (_, Select (o, (_, o1), (_, o2))) -> op o s |> op o1 |> op o2
-  | Term (Ret (_, Some sop)) -> op sop s
-  | Term (Ret (_, None)) -> s
+  | Label _ -> s
+  | Insn (_, Alloca _) -> s
+  | Insn (_, Comment _) -> s
   | Term (Br _) -> s
-  | Term (Cbr (c, _, _)) -> op c s
+  | Term (Ret (_, None)) -> s
   | Term Unreachable -> s
-  | _ -> failwith (Cfg.string_of_insn insn)
 
 let printset s =
   let sos s = Ll.mapcat "," S.name (S.SS.elements s) in
