@@ -6,11 +6,6 @@ let def (s : S.SS.t) (insn : Cfg.insn) =
 let use (s : S.SS.t) (insn : Cfg.insn) =
   let op o s = match o with Ll.Id i -> S.SS.add i s | _ -> s in
   match insn with
-  | Term (Ret (_, Some o)) | Term (Cbr (o, _, _)) -> op o s
-  | Insn (_, Binop (_, _, l, r))
-  | Insn (_, Icmp (_, _, l, r))
-  | Insn (_, Store (_, l, r)) ->
-      op l s |> op r
   | Insn (_, AllocaN (_, (_, o)))
   | Insn (_, Bitcast (_, o, _))
   | Insn (_, Load (_, o))
@@ -19,13 +14,18 @@ let use (s : S.SS.t) (insn : Cfg.insn) =
   | Insn (_, Trunc (_, o, _))
   | Insn (_, Zext (_, o, _)) ->
       op o s
+  | Insn (_, Binop (_, _, l, r))
+  | Insn (_, Icmp (_, _, l, r))
+  | Insn (_, Store (_, l, r)) ->
+      op l s |> op r
+  | Insn (_, Select (c, (_, l), (_, r))) -> op c s |> op l |> op r
   | Insn (_, Call (_, _, args)) ->
       List.map snd args |> List.fold_left (fun s e -> op e s) s
   | Insn (_, Gep (_, bop, ops)) ->
       List.fold_left (fun s o -> op o s) (op bop s) ops
   | Insn (_, PhiNode (_, ops)) ->
       List.map fst ops |> List.fold_left (fun s e -> op e s) s
-  | Insn (_, Select (o, (_, o1), (_, o2))) -> op o s |> op o1 |> op o2
+  | Term (Ret (_, Some o) | Cbr (o, _, _)) -> op o s
   | Label _ -> s
   | Insn (_, Alloca _) -> s
   | Insn (_, Comment _) -> s
