@@ -1,11 +1,7 @@
 module S = Symbol
 
 let def (s : S.SS.t) (insn : Cfg.insn) =
-  match insn with
-  | Label _ -> s
-  | Insn (Some dop, _) -> S.SS.add dop s
-  | Insn (None, _) -> s
-  | Term _ -> s
+  match insn with Insn (Some dop, _) -> S.SS.add dop s | _ -> s
 
 let use (s : S.SS.t) (insn : Cfg.insn) =
   let op o s = match o with Ll.Id i -> S.SS.add i s | _ -> s in
