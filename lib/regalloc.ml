@@ -1706,6 +1706,8 @@ let compile_fdecl :
                 | Some movs ->
                     Some
                       (movs
+                      (* FIXME: phi movs need to be placed between jumps *)
+                      @ [ (Comment ("phi mov for %" ^ S.name dst), []) ]
                       @ compile_operand ctxt asn Ll.I64 (S.ST.find dst asn) src
                       )
                 | None ->
