@@ -1155,7 +1155,29 @@ let coalesce_briggs k (prefs : S.SS.t S.ST.t)
     else ((*Printf.printf "returning same %s\n" (dot g);*)
           ol, g)
   in
-  S.ST.fold (fun k prefs acc -> try_coalesce (S.SS.add k prefs) acc) prefs (l, g)
+  let rec partition inset outsets =
+    match S.SS.choose_opt inset with
+    | Some e ->
+        let rec place outset =
+          match outset with
+          | ss :: tail
+            when S.SS.for_all
+                   (fun e2 -> Lva.G.mem_edge g (S.ST.find e l) (S.ST.find e2 l))
+                   ss ->
+              ss :: place tail
+          | ss :: tail -> S.SS.add e ss :: tail
+          | [] -> [ S.SS.add e S.SS.empty ]
+        in
+        let outsets = place outsets in
+        let inset = S.SS.remove e inset in
+        partition inset outsets
+    | None -> outsets
+  in
+  S.ST.fold
+    (fun k prefs acc ->
+      partition (S.SS.add k prefs) []
+      |> List.fold_left (fun acc ops -> try_coalesce ops acc) acc)
+    prefs (l, g)
 
 let coalesce (alc : allocator) (prefs : S.SS.t S.ST.t)
     ((l, g) : Lva.G.V.t S.ST.t * Lva.G.t) : Lva.G.V.t S.table * Lva.G.t =
