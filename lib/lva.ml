@@ -5,6 +5,7 @@ let def (s : S.SS.t) (insn : Cfg.insn) =
 
 let use (s : S.SS.t) (insn : Cfg.insn) =
   let op o s = match o with Ll.Id i -> S.SS.add i s | _ -> s in
+  let po s o = op o s in
   match insn with
   | Insn (_, AllocaN (_, (_, o)))
   | Insn (_, Bitcast (_, o, _))
@@ -18,20 +19,12 @@ let use (s : S.SS.t) (insn : Cfg.insn) =
   | Insn (_, Icmp (_, _, l, r))
   | Insn (_, Store (_, l, r)) ->
       op l s |> op r
+  | Insn (_, Call (_, _, args)) -> List.map snd args |> List.fold_left po s
+  | Insn (_, Gep (_, bop, ops)) -> List.fold_left po (op bop s) ops
   | Insn (_, Select (c, (_, l), (_, r))) -> op c s |> op l |> op r
-  | Insn (_, Call (_, _, args)) ->
-      List.map snd args |> List.fold_left (fun s e -> op e s) s
-  | Insn (_, Gep (_, bop, ops)) ->
-      List.fold_left (fun s o -> op o s) (op bop s) ops
-  | Insn (_, PhiNode (_, ops)) ->
-      List.map fst ops |> List.fold_left (fun s e -> op e s) s
+  | Insn (_, PhiNode (_, ops)) -> List.map fst ops |> List.fold_left po s
   | Term (Ret (_, Some o) | Cbr (o, _, _)) -> op o s
-  | Label _ -> s
-  | Insn (_, Alloca _) -> s
-  | Insn (_, Comment _) -> s
-  | Term (Br _) -> s
-  | Term (Ret (_, None)) -> s
-  | Term Unreachable -> s
+  | _ -> s
 
 let printset s =
   let sos s = Ll.mapcat "," S.name (S.SS.elements s) in
