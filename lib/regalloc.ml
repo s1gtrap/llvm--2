@@ -545,7 +545,8 @@ let compile_call :
         match S.ST.find_opt id replace with
         | Some id -> (Callq, [ Imm (Lbl (mangle id)) ])
         | None -> (Callq, [ Imm (Lbl (mangle id)) ]))
-    | _ -> raise BackendFatal
+    | Id id -> (Callq, [ S.ST.find id asn ])
+    | _ -> failwith (Ll.string_of_operand oper)
   in
   let pusharg _i dst : ins list =
     let ins = compile_operand ctxt asn Ll.I64 (Reg Rax) dst in
@@ -1155,28 +1156,29 @@ let coalesce_briggs k (prefs : S.SS.t S.ST.t)
     else ((*Printf.printf "returning same %s\n" (dot g);*)
           ol, g)
   in
-  let rec partition inset outsets =
-    match S.SS.choose_opt inset with
-    | Some e ->
-        let rec place outset =
-          match outset with
-          | ss :: tail
-            when S.SS.for_all
-                   (fun e2 -> Lva.G.mem_edge g (S.ST.find e l) (S.ST.find e2 l))
-                   ss ->
-              ss :: place tail
-          | ss :: tail -> S.SS.add e ss :: tail
-          | [] -> [ S.SS.add e S.SS.empty ]
-        in
-        let outsets = place outsets in
-        let inset = S.SS.remove e inset in
-        partition inset outsets
-    | None -> outsets
-  in
+  (*let rec partition inset outsets =
+      match S.SS.choose_opt inset with
+      | Some e ->
+          let rec place outset =
+            match outset with
+            | ss :: tail
+              when S.SS.for_all
+                     (fun e2 -> Lva.G.mem_edge g (S.ST.find e l) (S.ST.find e2 l))
+                     ss ->
+                ss :: place tail
+            | ss :: tail -> S.SS.add e ss :: tail
+            | [] -> [ S.SS.add e S.SS.empty ]
+          in
+          let outsets = place outsets in
+          let inset = S.SS.remove e inset in
+          partition inset outsets
+      | None -> outsets
+    in*)
   S.ST.fold
     (fun k prefs acc ->
-      partition (S.SS.add k prefs) []
-      |> List.fold_left (fun acc ops -> try_coalesce ops acc) acc)
+      let interf e = not (Lva.G.mem_edge g (S.ST.find k l) (S.ST.find e l)) in
+      let ops = S.SS.filter interf prefs |> S.SS.add k in
+      try_coalesce ops acc)
     prefs (l, g)
 
 let coalesce (alc : allocator) (prefs : S.SS.t S.ST.t)

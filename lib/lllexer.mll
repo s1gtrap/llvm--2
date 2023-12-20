@@ -28,6 +28,7 @@ rule token = parse
   | "signext"
   | "zeroext"
   | "internal"
+  | "exact"
   | ',' ['\t' ' ']+ "..."
   | '#' digit+         { token lexbuf } (* ignored *)
   | ','? ['\t' ' ']+ "align" ['\t' ' ']+ digit+ { token lexbuf }

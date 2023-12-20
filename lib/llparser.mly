@@ -195,7 +195,7 @@ insn:
      { Sext (t1,o,t2) }
   | TRUNC t1=ty o=operand TO t2=ty
      { Trunc (t1,o,t2) }
-  | PTRTOINT t1=ty STAR o=operand TO t2=ty
+  | PTRTOINT t1=ty o=operand TO t2=ty
     { Ptrtoint (t1,o,t2) }
   | PHI t=ty ops=separated_list(COMMA,bracket)
     { PhiNode (t,ops) }
