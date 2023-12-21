@@ -11,11 +11,6 @@
 
     let n = ref 12
 
-    let string_of_process_status (s : Unix.process_status) =
-      match s with
-      | WEXITED code -> Printf.sprintf "WEXITED %d" code
-      | WSIGNALED code -> Printf.sprintf "WSIGNALED %d" code
-      | WSTOPPED code -> Printf.sprintf "WSTOPPED %d" code
 
     let _string_of_status (s : status) =
       match s with
@@ -222,9 +217,19 @@ let _exec process args stdin stdout stderr =
   Unix.close stdin_out;
   exit
 
-type _assertion = Exit | Timeout
+let string_of_process_status (s : Unix.process_status) =
+  match s with
+  | WEXITED code -> Printf.sprintf "WEXITED %d" code
+  | WSIGNALED code -> Printf.sprintf "WSIGNALED %d" code
+  | WSTOPPED code -> Printf.sprintf "WSTOPPED %d" code
 
-let exec process args (input : string) stdout stderr =
+type status = Exit of Unix.process_status | Timeout
+
+let string_of_status = function
+  | Timeout -> "timeout"
+  | Exit c -> "exit" ^ string_of_process_status c
+
+let exec process args input stdout stderr =
   let args = Array.of_list args |> Array.append [| process |] in
   let env = Unix.environment () in
   let stdin_read, stdin_write = Unix.pipe () in
@@ -233,20 +238,51 @@ let exec process args (input : string) stdout stderr =
   close_out oc;
   let pid = Unix.create_process_env process args env stdin_read stdout stderr in
   Unix.close stdin_read;
-  Unix.waitpid [] pid
+  let _, stat = Unix.waitpid [] pid in
+  stat
 
-let _clang _t _args = exec "clang" [] "" Unix.stdout Unix.stderr
+let exec_with_timeout process args timeout input stdout stderr =
+  let args = [ string_of_int timeout; process ] @ args in
+  match exec "timeout" args input stdout stderr with
+  | WEXITED 124 -> Timeout
+  | stat -> Exit stat
 
-let _t _t _args ?(_stdin = "") ?(clang = []) ?(_timeout = 5) _exp =
-  let _ = clang in
-  ()
+let exec_with_timeout_and_capture process args timeout input =
+  (exec_with_timeout process args timeout input Unix.stdout Unix.stderr, "", "")
+
+let clang t args =
+  let outfile = Filename.temp_file "" "" in
+  exec "clang" ((t :: [ "-o"; outfile ]) @ args) "" Unix.stdout Unix.stderr
+  |> ignore;
+  outfile
+
+let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args =
+  let exe = clang t cargs in
+  let expexit, expout, experr =
+    exec_with_timeout_and_capture exe args timeout stdin
+  in
+  List.iter
+    (fun c ->
+      let exe = Common.compile_test c t (Array.of_list cargs) in
+      let gotexit, gotout, goterr =
+        exec_with_timeout_and_capture exe args timeout stdin
+      in
+      if expexit <> gotexit || expout <> gotout || experr <> goterr then (
+        Printf.printf "failed:\n";
+        if expexit <> gotexit then
+          Printf.printf " got %s, expected %s\n" (string_of_status gotexit)
+            (string_of_status expexit))
+      else Printf.printf "ok!\n";
+      flush stdout)
+    [ Common.Tiger; Common.Llvm__2 (Briggs 2) ]
 
 let () =
-  for i = 1 to 2000 do
-    let _ = exec "xxd" [] (string_of_int i) Unix.stdout Unix.stderr in
-    ()
-  done;
+  let _ = exec "xxd" [] "sdf" Unix.stdout Unix.stderr in
+  let f = clang "tests/add.ll" [] in
+  Printf.printf "%s\n" f;
+  t "tests/add.ll" [ "1"; "2" ];
+  t "tests/loop2.ll" [];
   ()
 (*t "tests/add.ll" [ "1"; "2" ] Exit;
   t "tests/loop2.ll" [] Timeout;
-  t "tests/dolphin/_f.ll" [] ~clang:[ "-c"; "tests/dolphin/runtime.c" ] Exit*)
+  t "tests/dolphin/_f.ll" [] ~cargs:[ "-c"; "tests/dolphin/runtime.c" ] Exit*)
