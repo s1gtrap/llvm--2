@@ -6,13 +6,9 @@
 
 open Tigercommon
 open Tigerx86
-open Phases
-open ExitCodes
 module A = Absyn
 module A' = Tabsyn
 module S = Symbol
-
-exception ExitMain of phase
 
 (** Open the file and initialize the lexer buffer. Observe that the input
     buffer must be closed by the caller. *)
@@ -31,21 +27,20 @@ let llvmparse file =
   let input, filebuf = initLexer file in
   let parseRes =
     try Llparser.prog Lllexer.token filebuf with
-    | Lllexer.Error msg ->
-        Printf.eprintf "%s%!" msg;
-        raise (ExitMain LEX)
+    | Lllexer.Error msg -> failwith (Printf.sprintf "%s%!" msg)
     | Llparser.Error ->
         let pos1 = Lexing.lexeme_start_p filebuf in
         let pos2 = Lexing.lexeme_end_p filebuf in
         let lexeme = Lexing.lexeme filebuf in
-        Printf.fprintf stderr "%s:%d:%d - %d:%d: syntax error '%s'\n"
-          pos1.pos_fname pos1.pos_lnum
-          (pos1.pos_cnum - pos1.pos_bol)
-          pos2.pos_lnum
-          (pos2.pos_cnum - pos2.pos_bol + 1)
-          lexeme;
-        raise (ExitMain PAR)
+        failwith
+          (Printf.sprintf "%s:%d:%d - %d:%d: syntax error '%s'\n" pos1.pos_fname
+             pos1.pos_lnum
+             (pos1.pos_cnum - pos1.pos_bol)
+             pos2.pos_lnum
+             (pos2.pos_cnum - pos2.pos_bol + 1)
+             lexeme)
   in
+
   close_in input;
   parseRes
 
@@ -56,10 +51,7 @@ let llvmparse file =
 (* --- command-line checking; dispatching to the right phase --- *)
 
 let llvm file out =
-  let exitCode = ref 0 in
-  (try
-     file |> llvmparse |> x86 |> X86.string_of_prog |> Format.fprintf out "%s\n"
-   with ExitMain p -> exitCode := error_code p);
+  file |> llvmparse |> x86 |> X86.string_of_prog |> Format.fprintf out "%s\n";
   Format.pp_print_flush out ();
   flush_all ();
   ()
