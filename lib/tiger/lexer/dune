@@ -1,0 +1,5 @@
+(library
+ (name tigerlexer)
+ (libraries tigerparser))
+
+(ocamllex lexer)

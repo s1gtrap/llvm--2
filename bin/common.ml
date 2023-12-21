@@ -1,3 +1,5 @@
+open Tigermain
+
 exception CompileError
 
 module S = Map.Make (String)
@@ -12,7 +14,6 @@ let string_of_compiler = function
 let execs = ref S.empty
 
 let compile_test c test cargs =
-  let cwd = Sys.getcwd () in
   let testname = string_of_compiler c ^ test in
   match S.find_opt testname !execs with
   | Some fn -> fn
@@ -35,28 +36,46 @@ let compile_test c test cargs =
             Llvm__2.Build.create_process "clang"
               (Array.concat [ clangcmd; cargs; [| "-o"; fn |] ])
               test
-        | Tiger -> (
-            (*Llvm__2.Build.create_process "tigerc"
-              (Array.concat [ [| "tigerc" |]; [| "-o"; fn |] ])
-              test;*)
-            let outsfile : string = Filename.temp_file "" ".s" in
-            let cmd = cwd ^ "/tigerc" in
-            let pid =
-              Unix.create_process cmd
-                [| cmd; "-l"; "ll"; test; "-o"; outsfile |]
-                Unix.stdin Unix.stdout Unix.stderr
-            in
-            let _, status = Unix.waitpid [] pid in
-            match status with
-            | WEXITED 0 -> (
-                let pid =
-                  Unix.create_process "clang"
-                    (Array.concat [ clangcmd; cargs; [| outsfile; "-o"; fn |] ])
-                    Unix.stdin Unix.stdout Unix.stderr
-                in
-                let _, status = Unix.waitpid [] pid in
-                match status with WEXITED 0 -> () | _ -> raise CompileError)
-            | _ -> raise CompileError)
+        | Tiger ->
+            let buf = Buffer.create 16 in
+            let fmt = Format.formatter_of_buffer buf in
+            let _ = Main.llvm test fmt in
+            let prog = Buffer.contents buf in
+            (match Llvm__2.Regalloc.os with
+            | Darwin ->
+                Llvm__2.Build.create_process_with_input "clang"
+                  (Array.concat
+                     [
+                       [| "clang"; "-target"; "x86_64-unknown-darwin" |];
+                       cargs;
+                       [| "-x"; "assembler"; "-o"; fn |];
+                     ])
+            | Linux ->
+                Llvm__2.Build.create_process_with_input "clang"
+                  (Array.concat
+                     [ [| "clang" |]; cargs; [| "-x"; "assembler"; "-o"; fn |] ]))
+              prog fn
+            (*(*Llvm__2.Build.create_process "tigerc"
+                (Array.concat [ [| "tigerc" |]; [| "-o"; fn |] ])
+                test;*)
+              let outsfile : string = Filename.temp_file "" ".s" in
+              let cmd = cwd ^ "/tigerc" in
+              let pid =
+                Unix.create_process cmd
+                  [| cmd; "-l"; "ll"; test; "-o"; outsfile |]
+                  Unix.stdin Unix.stdout Unix.stderr
+              in
+              let _, status = Unix.waitpid [] pid in
+              match status with
+              | WEXITED 0 -> (
+                  let pid =
+                    Unix.create_process "clang"
+                      (Array.concat [ clangcmd; cargs; [| outsfile; "-o"; fn |] ])
+                      Unix.stdin Unix.stdout Unix.stderr
+                  in
+                  let _, status = Unix.waitpid [] pid in
+                  match status with WEXITED 0 -> () | _ -> raise CompileError)
+              | _ -> raise CompileError)*)
         | Llvm__2 alc ->
             let prog : string =
               try

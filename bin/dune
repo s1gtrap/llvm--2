@@ -2,4 +2,4 @@
  (package llvm__2)
  (names main testrunner bench)
  (public_names build tests bench)
- (libraries llvm__2 tiger))
+ (libraries llvm__2 tigermain))

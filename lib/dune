@@ -1,6 +1,6 @@
 (library
  (name llvm__2)
- (libraries stdio ocamlgraph unix str tiger)
+ (libraries stdio ocamlgraph unix str tigermain)
  (inline_tests)
  (preprocess
   (pps ppx_inline_test landmarks-ppx --auto)))

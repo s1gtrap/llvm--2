@@ -185,7 +185,7 @@ let run tests filter =
         with CompileError -> Printf.printf "%scompile error!%s\n" red nc)
     in
     run_ Clang;
-    (*run_ Tiger;*)
+    run_ Tiger;
     run_ (Llvm__2 (Llvm__2.Regalloc.Greedy !n));
     run_ (Llvm__2 (Llvm__2.Regalloc.Simple !n));
     run_ (Llvm__2 (Llvm__2.Regalloc.Briggs !n));
