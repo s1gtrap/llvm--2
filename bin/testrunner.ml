@@ -256,33 +256,40 @@ let clang t args =
   |> ignore;
   outfile
 
-let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args =
+let compilers = [ Common.Tiger; Common.Llvm__2 (Briggs 2) ]
+
+let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args counts =
   let exe = clang t cargs in
   let expexit, expout, experr =
     exec_with_timeout_and_capture exe args timeout stdin
   in
-  List.iter
-    (fun c ->
-      let exe = Common.compile_test c t (Array.of_list cargs) in
-      let gotexit, gotout, goterr =
-        exec_with_timeout_and_capture exe args timeout stdin
-      in
-      if expexit <> gotexit || expout <> gotout || experr <> goterr then (
-        Printf.printf "failed:\n";
-        if expexit <> gotexit then
-          Printf.printf " got %s, expected %s\n" (string_of_status gotexit)
-            (string_of_status expexit))
-      else Printf.printf "ok!\n";
-      flush stdout)
-    [ Common.Tiger; Common.Llvm__2 (Briggs 2) ]
+  let test (total, passes) c =
+    Printf.printf "[%s] testing %s ... " (Common.string_of_compiler c) t;
+    let exe = Common.compile_test c t (Array.of_list cargs) in
+    let gotexit, gotout, goterr =
+      exec_with_timeout_and_capture exe args timeout stdin
+    in
+    if expexit <> gotexit || expout <> gotout || experr <> goterr then (
+      Printf.printf "failed:\n";
+      if expexit <> gotexit then
+        Printf.printf " got %s, expected %s\n" (string_of_status gotexit)
+          (string_of_status expexit);
+      (total + 1, passes))
+    else (
+      Printf.printf "ok!\n";
+      flush stdout;
+      (total + 1, passes + 1))
+  in
+  List.fold_left test counts compilers
 
 let () =
   let _ = exec "xxd" [] "sdf" Unix.stdout Unix.stderr in
   let f = clang "tests/add.ll" [] in
   Printf.printf "%s\n" f;
-  t "tests/add.ll" [ "1"; "2" ];
-  t "tests/loop2.ll" [];
-  ()
+  let total, passes =
+    t "tests/add.ll" [ "1"; "2" ] (0, 0) |> t "tests/loop2.ll" []
+  in
+  Printf.printf "[ %d / %d ]\n" passes total
 (*t "tests/add.ll" [ "1"; "2" ] Exit;
   t "tests/loop2.ll" [] Timeout;
   t "tests/dolphin/_f.ll" [] ~cargs:[ "-c"; "tests/dolphin/runtime.c" ] Exit*)
