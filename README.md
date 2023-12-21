@@ -1,5 +1,15 @@
 # llvm--2
 
+## Dependencies
+
+This has been using clang 17, available on Homebrew and AUR:
+```bash
+brew install llvm
+-- or --
+yay -S clang17
+```
+It might work for earlier releases as well.
+
 Builds a subset of LLVM IR referred to as LLVM-- in our compilers cource.
 
 ## Build
