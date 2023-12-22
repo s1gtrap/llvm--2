@@ -63,7 +63,7 @@ let clang t args =
   exec "clang" args "" Unix.stdout Unix.stderr |> ignore;
   outfile
 
-let _compilers =
+let compilers =
   [
     Common.Tiger;
     Common.Llvm__2 (Greedy 12);
@@ -71,8 +71,6 @@ let _compilers =
     Common.Llvm__2 (Briggs 12);
     Common.Llvm__2 Linearscan;
   ]
-
-let compilers = [ Common.Llvm__2 (Greedy 12) ]
 
 let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args counts =
   let exe = clang t cargs in
@@ -199,8 +197,8 @@ let () =
   |> t "tests/crc32b.ll" [ "Hello, world!" ]
   |> t "tests/crc32b.ll" [ "Hello, world!\n" ]
   |> t "tests/crc32b-debug.ll" [ "" ]
-  (*|> t "tests/crc32b-debug.ll" [ "Hello, world!" ]
-    |> t "tests/crc32b-debug.ll" [ "Hello, world!\n" ]*)
+  |> t "tests/crc32b-debug.ll" [ "Hello, world!" ]
+  |> t "tests/crc32b-debug.ll" [ "Hello, world!\n" ]
   |> t "tests/subset.ll" []
   |> t "tests/subset.ll" [ "1" ]
   |> t "tests/subset.ll" [ "1"; "2" ]
@@ -251,13 +249,18 @@ let () =
   |> t "tests/sha256-stdin.ll" [] ~stdin:""
   |> t "tests/sha256-stdin.ll" [] ~stdin:"a"
   |> t "tests/sha256-stdin.ll" [] ~stdin:"Hello, world!"
+  |> t "tests/sha256-debug.ll" [ "" ]
+  |> t "tests/sha256-debug.ll" [ "a" ]
+  |> t "tests/sha256-debug.ll" [ "Hello, world!" ]
   |> t "dolphintests/_prog_01.ll" [] ~cargs:[ "dolphin.c" ]
   |> t "dolphintests/_prog_02.ll" [] ~cargs:[ "dolphin.c" ]
   |> t "dolphintests/_prog_03.ll" [] ~cargs:[ "dolphin.c" ]
   |> t "dolphintests/_prog_04.ll" [] ~cargs:[ "dolphin.c" ] ~stdin:"0"
   |> t "dolphintests/_prog_04.ll" [] ~cargs:[ "dolphin.c" ] ~stdin:"1"
   |> t "dolphintests/_prog_04.ll" [] ~cargs:[ "dolphin.c" ] ~stdin:"42"
-  |> t "dolphintests/_prog_05.ll" [] ~cargs:[ "dolphin.c" ]
+  |> t "dolphintests/_prog_05.ll" [] ~cargs:[ "dolphin.c" ] ~stdin:"69"
+  |> t "dolphintests/_prog_05.ll" [] ~cargs:[ "dolphin.c" ] ~stdin:"100"
+  |> t "dolphintests/_prog_05.ll" [] ~cargs:[ "dolphin.c" ] ~stdin:"101"
   |> t "dolphintests/_prog_06.ll" [] ~cargs:[ "dolphin.c" ] ~stdin:"100"
   |> t "dolphintests/_prog_06.ll" [] ~cargs:[ "dolphin.c" ] ~stdin:"1337"
   |> t "dolphintests/_prog_09.ll" [] ~cargs:[ "dolphin.c" ]
@@ -348,6 +351,3 @@ let () =
   |> t "tigertests/test8.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/zero.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> print
-(*t "tests/add.ll" [ "1"; "2" ] Exit;
-  t "tests/loop2.ll" [] Timeout;
-  t "tests/dolphin/_f.ll" [] ~cargs:[ "-c"; "tests/dolphin/runtime.c" ] Exit*)
