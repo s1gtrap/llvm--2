@@ -1,221 +1,4 @@
-(*open Common
-
-  type status =
-      | Exit of int * string * string
-      | Error of Unix.process_status * string * string
-      | Timeout
-
-    type asserts = Exit of int | Stdout of string | Stderr of string | Timeout
-
-    module S = Map.Make (String)
-
-    let n = ref 12
-
-
-    let _string_of_status (s : status) =
-      match s with
-      | Exit (code, stdout, stderr) ->
-          Printf.sprintf "Exit (%d, \"%s\", \"%s\")" code (String.escaped stdout)
-            (String.escaped stderr)
-      | Error (code, stdout, stderr) ->
-          Printf.sprintf "Error (%s, \"%s\", \"%s\")"
-            (string_of_process_status code)
-            (String.escaped stdout) (String.escaped stderr)
-      | Timeout -> "Timeout"
-
-    let execute command args (input : string) : status =
-      let stdin_read, stdin_write = Unix.pipe () in
-      let stdout_read, stdout_write = Unix.pipe () in
-      let stderr_read, stderr_write = Unix.pipe () in
-
-      let oc = Unix.out_channel_of_descr stdin_write in
-      output_string oc input;
-      close_out oc;
-      let pid =
-        Unix.create_process_env "timeout"
-          (Array.concat [ [| "timeout"; "5" |]; [| command |]; args ])
-          (Unix.environment ()) stdin_read stdout_write stderr_write
-      in
-      Unix.close stdin_read;
-
-      let status = Unix.waitpid [] pid in
-
-      Unix.close stdout_write;
-      let stdout = ref "" in
-      let buffer = Bytes.create 1024 in
-      let rec read_output () =
-        let len = Unix.read stdout_read buffer 0 1024 in
-        if len > 0 then (
-          stdout := !stdout ^ Bytes.sub_string buffer 0 len;
-          read_output ())
-      in
-      (try read_output () with _ -> ());
-      Unix.close stdout_read;
-
-      Unix.close stderr_write;
-      let stderr = ref "" in
-      let buffer = Bytes.create 1024 in
-      let rec read_output () =
-        let len = Unix.read stderr_read buffer 0 1024 in
-        if len > 0 then (
-          stderr := !stderr ^ Bytes.sub_string buffer 0 len;
-          read_output ())
-      in
-      (try read_output () with _ -> ());
-      Unix.close stderr_read;
-
-      match status with
-      | _, WEXITED 124 ->
-          (* timeout *)
-          Timeout
-      | _, WEXITED code -> Exit (code, !stdout, !stderr)
-      | _, WSIGNALED code -> Error (WSIGNALED code, !stdout, !stderr)
-      | _, WSTOPPED code -> Error (WSTOPPED code, !stdout, !stderr)
-
-    let run tests filter =
-      let cases = ref 0 in
-      let passes = ref 0 in
-      let r (file, stdin, cargs, args, asserts) =
-        let cargs = Array.of_list cargs in
-        let args = Array.of_list args in
-        let red = "\027[0;31m" in
-        let green = "\027[1;32m" in
-        let muted = "\027[1;39m" in
-        let nc = "\027[0m" in
-        let filter = Str.regexp_string filter in
-        let matches s =
-          try
-            let _ = Str.search_forward filter s 0 in
-            true
-          with _ -> false
-        in
-        let run_ c =
-          let alc = string_of_compiler c in
-          if matches alc || matches file then (
-            Printf.printf "%s[%s]%s %s ... " muted alc nc file;
-            flush stdout;
-            cases := !cases + 1;
-            try
-              let exc = compile_test c file cargs in
-              match execute exc args stdin with
-              | Exit (exit, stdout, stderr) ->
-                  let rec assert_ = function
-                    | Exit code :: tail -> exit = code && assert_ tail
-                    | Stdout s :: tail -> s = stdout && assert_ tail
-                    | Stderr s :: tail -> s = stderr && assert_ tail
-                    | Timeout :: tail -> false && assert_ tail
-                    | [] -> true
-                  in
-                  if assert_ asserts then (
-                    passes := !passes + 1;
-                    Printf.printf "%sok!\n%s" green nc)
-                  else
-                    let print_diff s1 s2 =
-                      let s1 = String.split_on_char '\n' s1 in
-                      let s2 = String.split_on_char '\n' s2 in
-                      let rec diff s1 s2 =
-                        match (s1, s2) with
-                        | l1 :: t1, l2 :: t2 when l1 = l2 ->
-                            Printf.printf "    %s\n" (String.escaped l1);
-                            diff t1 t2
-                        | l1 :: t1, l2 :: t2 ->
-                            Printf.printf "%s   +%s\n%s   -%s%s\n" green
-                              (String.escaped l1) red (String.escaped l2) nc;
-                            diff t1 t2
-                        | l1 :: t1, [] ->
-                            Printf.printf "%s   +%s%s\n" green (String.escaped l1)
-                              nc;
-                            diff t1 []
-                        | [], l2 :: t2 ->
-                            Printf.printf "%s   -%s%s\n" red (String.escaped l2) nc;
-                            diff [] t2
-                        | [], [] -> ()
-                      in
-                      diff s1 s2
-                    in
-                    let rec assert_ = function
-                      | Exit code :: tail ->
-                          if exit <> code then
-                            Printf.printf "  exit failed: %d != %d\n" exit code;
-                          assert_ tail
-                      | Stdout s :: tail ->
-                          if s <> stdout then (
-                            Printf.printf "  stdout failed:\n";
-                            print_diff stdout s);
-                          assert_ tail
-                      | Stderr s :: tail ->
-                          if s <> stderr then (
-                            Printf.printf "  stderr failed:\n";
-                            print_diff stderr s);
-                          assert_ tail
-                      | Timeout :: tail ->
-                          Printf.printf "  finished before timeout!\n";
-                          assert_ tail
-                      | [] -> ()
-                    in
-                    Printf.printf " %sfailed!%s %s\n" red nc exc;
-                    assert_ asserts
-              | Error (s, _, "") ->
-                  Printf.printf "%sruntime error!%s %s\n  exit code: %s\n" red nc
-                    exc
-                    (string_of_process_status s)
-              | Error (s, _, stderr) ->
-                  Printf.printf
-                    "%sruntime error!%s %s\n  exit code: %s\n  stdout: %s\n" red nc
-                    exc
-                    (string_of_process_status s)
-                    stderr
-              | Timeout ->
-                  Printf.printf "%stimeout!%s %s\n"
-                    (match
-                       List.find_opt
-                         (function Timeout -> true | _ -> false)
-                         asserts
-                     with
-                    | Some _ ->
-                        passes := !passes + 1;
-                        green
-                    | None -> red)
-                    nc exc
-            with CompileError -> Printf.printf "%scompile error!%s\n" red nc)
-        in
-        run_ Clang;
-        run_ Tiger;
-        run_ (Llvm__2 (Llvm__2.Regalloc.Greedy !n));
-        run_ (Llvm__2 (Llvm__2.Regalloc.Simple !n));
-        run_ (Llvm__2 (Llvm__2.Regalloc.Briggs !n));
-        run_ (Llvm__2 Llvm__2.Regalloc.Linearscan)
-      in
-      List.iter r tests;
-      (!cases, !passes)*)
-
-let _exec process args stdin stdout stderr =
-  (*
-      let stdin_read, stdin_write = Unix.pipe () in
-      let stdout_read, stdout_write = Unix.pipe () in
-      let stderr_read, stderr_write = Unix.pipe () in
-
-      let oc = Unix.out_channel_of_descr stdin_write in
-      output_string oc input;
-      close_out oc;
-      let pid =
-        Unix.create_process_env "timeout"
-          (Array.concat [ [| "timeout"; "5" |]; [| command |]; args ])
-          (Unix.environment ()) stdin_read stdout_write stderr_write
-      in
-      Unix.close stdin_read;
-      *)
-  let stdin_in, stdin_out = Unix.pipe () in
-  let stdin_out_chan = Unix.out_channel_of_descr stdin_out in
-  Out_channel.output_string stdin_out_chan stdin;
-  let pid =
-    Unix.create_process_env process (Array.of_list args) (Unix.environment ())
-      stdin_in stdout stderr
-  in
-  Unix.close stdin_in;
-  let exit = Unix.waitpid [] pid in
-  Unix.close stdin_out;
-  exit
+open Common
 
 let string_of_process_status (s : Unix.process_status) =
   match s with
@@ -227,7 +10,7 @@ type status = Exit of Unix.process_status | Timeout
 
 let string_of_status = function
   | Timeout -> "timeout"
-  | Exit c -> "exit" ^ string_of_process_status c
+  | Exit c -> string_of_process_status c
 
 let exec process args input stdout stderr =
   let args = Array.of_list args |> Array.append [| process |] in
@@ -248,15 +31,17 @@ let exec_with_timeout process args timeout input stdout stderr =
   | stat -> Exit stat
 
 let exec_with_timeout_and_capture process args timeout input =
-  let stdout_read, stdout_write = Unix.pipe () in
-  let ic = Unix.in_channel_of_descr stdout_read in
-  let exit =
-    exec_with_timeout process args timeout input stdout_write Unix.stderr
-  in
-  Unix.close stdout_write;
-  let stdout = In_channel.input_all ic in
-  close_in ic;
-  (exit, stdout, "")
+  let stdout_ic, stdout_oc = Unix.pipe () in
+  let stdout_ic = Unix.in_channel_of_descr stdout_ic in
+  let stderr_ic, stderr_oc = Unix.pipe () in
+  let stderr_ic = Unix.in_channel_of_descr stderr_ic in
+  let exit = exec_with_timeout process args timeout input stdout_oc stderr_oc in
+  Unix.close stdout_oc;
+  let stdout = In_channel.input_all stdout_ic in
+  Unix.close stderr_oc;
+  let stderr = In_channel.input_all stderr_ic in
+  close_in stdout_ic;
+  (exit, stdout, stderr)
 
 let clang t args =
   let outfile = Filename.temp_file "" "" in
@@ -278,7 +63,15 @@ let clang t args =
   exec "clang" args "" Unix.stdout Unix.stderr |> ignore;
   outfile
 
-let _compilers = [ Common.Tiger; Common.Llvm__2 (Briggs 2) ]
+let _compilers =
+  [
+    Common.Tiger;
+    Common.Llvm__2 (Greedy 12);
+    Common.Llvm__2 (Simple 12);
+    Common.Llvm__2 (Briggs 12);
+    Common.Llvm__2 Linearscan;
+  ]
+
 let compilers = [ Common.Llvm__2 (Greedy 12) ]
 
 let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args counts =
@@ -287,29 +80,37 @@ let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args counts =
     exec_with_timeout_and_capture exe args timeout stdin
   in
   let test (total, passes) c =
-    Printf.printf "[%s] testing %s ... " (Common.string_of_compiler c) t;
+    Printf.printf "%s[%s]%s %s ... " muted (Common.string_of_compiler c) nc t;
     flush stdout;
-    let exe = Common.compile_test c t (Array.of_list cargs) in
-    let gotexit, gotout, goterr =
-      exec_with_timeout_and_capture exe args timeout stdin
-    in
-    if expexit <> gotexit || expout <> gotout || experr <> goterr then (
-      Printf.printf "failed!\n";
-      if expexit <> gotexit then
-        Printf.printf " got %s, expected %s\n" (string_of_status gotexit)
-          (string_of_status expexit);
-      (total + 1, passes))
-    else (
-      Printf.printf "ok!\n";
-      flush stdout;
-      (total + 1, passes + 1))
+    try
+      let exe = Common.compile_test c t (Array.of_list cargs) in
+      let gotexit, gotout, goterr =
+        exec_with_timeout_and_capture exe args timeout stdin
+      in
+      if expexit <> gotexit || expout <> gotout || experr <> goterr then (
+        Printf.printf "%sfailed!%s\n" red nc;
+        if expexit <> gotexit then
+          Printf.printf "  exit:\n    got %s, expected %s\n"
+            (string_of_status gotexit) (string_of_status expexit);
+        if expout <> gotout then (
+          Printf.printf "  stdout:\n";
+          Common.print_diff expout gotout);
+        (total + 1, passes))
+      else (
+        Printf.printf "%sok!%s\n" green nc;
+        flush stdout;
+        (total + 1, passes + 1))
+    with e ->
+      Printf.printf "%sfailed compilation!%s\n" red nc;
+      Printf.printf "%s\n" (Printexc.to_string e);
+      (total + 1, passes)
   in
   List.fold_left test counts compilers
 
 let () =
   let print (t, p) = Printf.printf "[ %d / %d ]\n" p t in
-  (0, 0) |> t "tests/void.ll" [] |> t "tests/zero.ll" [] |> t "tests/one.ll" []
-  |> t "tests/simplest.ll" []
+  t "tests/void.ll" [] (0, 0)
+  |> t "tests/zero.ll" [] |> t "tests/one.ll" [] |> t "tests/simplest.ll" []
   |> t "tests/add.ll" [ "1"; "2" ]
   |> t "tests/add.ll" [ "-13"; "12" ]
   |> t "tests/argc.ll" []
@@ -325,12 +126,12 @@ let () =
   |> t "tests/lshri8.ll" (List.init 7 string_of_int)
   |> t "tests/lshri8.ll" (List.init 8 string_of_int)
   |> t "tests/lshri8.ll" (List.init 30 string_of_int)
+  |> t "tests/lshri8.ll" (List.init 31 string_of_int)
   |> t "tests/lshri32.ll" []
   |> t "tests/lshri32.ll" (List.init 1 string_of_int)
   |> t "tests/lshri32.ll" (List.init 7 string_of_int)
   |> t "tests/lshri32.ll" (List.init 27 string_of_int)
   |> t "tests/lshri32.ll" (List.init 30 string_of_int)
-  |> t "tests/lshri32.ll" (List.init 31 string_of_int)
   |> t "tests/lshri32.ll" (List.init 31 string_of_int)
   |> t "tests/alloca.ll" [] (* FIXME: allocan *)
   |> t "tests/loop0.ll" [] |> t "tests/loop1.ll" [] |> t "tests/loop2.ll" []
@@ -383,11 +184,13 @@ let () =
   |> t "tests/fib.ll" [ "7" ] |> t "tests/fib.ll" [ "8" ]
   |> t "tests/fib.ll" [ "9" ] |> t "tests/fib0.ll" [] |> t "tests/fib1.ll" []
   |> t "tests/printable.ll" [] |> t "tests/live20.ll" []
-  |> t "tests/live25.ll" []
+  |> t "tests/live25.ll" [] |> t "tests/livechain.ll" []
+  |> t "tests/collatz-phi.ll" []
   |> t "tests/collatz-phi.ll" [ "1" ]
   |> t "tests/collatz-phi.ll" [ "2" ]
   |> t "tests/collatz-phi.ll" [ "3" ]
   |> t "tests/collatz-phi.ll" [ "1312" ]
+  |> t "tests/collatz-mut.ll" []
   |> t "tests/collatz-mut.ll" [ "1" ]
   |> t "tests/collatz-mut.ll" [ "2" ]
   |> t "tests/collatz-mut.ll" [ "3" ]
@@ -451,9 +254,12 @@ let () =
   |> t "dolphintests/_prog_01.ll" [] ~cargs:[ "dolphin.c" ]
   |> t "dolphintests/_prog_02.ll" [] ~cargs:[ "dolphin.c" ]
   |> t "dolphintests/_prog_03.ll" [] ~cargs:[ "dolphin.c" ]
-  |> t "dolphintests/_prog_04.ll" [] ~cargs:[ "dolphin.c" ]
+  |> t "dolphintests/_prog_04.ll" [] ~cargs:[ "dolphin.c" ] ~stdin:"0"
+  |> t "dolphintests/_prog_04.ll" [] ~cargs:[ "dolphin.c" ] ~stdin:"1"
+  |> t "dolphintests/_prog_04.ll" [] ~cargs:[ "dolphin.c" ] ~stdin:"42"
   |> t "dolphintests/_prog_05.ll" [] ~cargs:[ "dolphin.c" ]
-  |> t "dolphintests/_prog_06.ll" [] ~cargs:[ "dolphin.c" ]
+  |> t "dolphintests/_prog_06.ll" [] ~cargs:[ "dolphin.c" ] ~stdin:"100"
+  |> t "dolphintests/_prog_06.ll" [] ~cargs:[ "dolphin.c" ] ~stdin:"1337"
   |> t "dolphintests/_prog_09.ll" [] ~cargs:[ "dolphin.c" ]
   |> t "dolphintests/_prog_15.ll" [] ~cargs:[ "dolphin.c" ]
   |> t "dolphintests/_prog_16.ll" [] ~cargs:[ "dolphin.c" ]
