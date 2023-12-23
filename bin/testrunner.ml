@@ -33,19 +33,28 @@ let exec_with_timeout process args timeout input stdout stderr =
 let exec_with_timeout_and_capture process args timeout input =
   let stdout_ic, stdout_oc = Unix.pipe () in
   let stdout_ic = Unix.in_channel_of_descr stdout_ic in
-  let stderr_ic, stderr_oc = Unix.pipe () in
-  let stderr_ic = Unix.in_channel_of_descr stderr_ic in
-  let exit = exec_with_timeout process args timeout input stdout_oc stderr_oc in
+  (*let stderr_ic, stderr_oc = Unix.pipe () in
+  let stderr_ic = Unix.in_channel_of_descr stderr_ic in*)
+  let exit = exec_with_timeout process args timeout input stdout_oc Unix.stderr in
   Unix.close stdout_oc;
   let stdout = In_channel.input_all stdout_ic in
-  Unix.close stderr_oc;
-  let stderr = In_channel.input_all stderr_ic in
+  (*Unix.close stderr_oc;
+  let stderr = In_channel.input_all stderr_ic in*)
   close_in stdout_ic;
-  (exit, stdout, stderr)
+  (exit, stdout, "")
+
+let compilers = [
+
+    Common.Tiger;
+    Common.Llvm__2 (Greedy 12);
+    Common.Llvm__2 (Simple 12);
+    Common.Llvm__2 (Briggs 12);
+    Common.Llvm__2 Linearscan;
+
+  ]
 
 let clang t args =
   let outfile = Filename.temp_file "" "" in
-
   let args =
     match Llvm__2.Regalloc.os with
     | Linux -> [ t; "-o"; outfile ] @ args
@@ -63,20 +72,20 @@ let clang t args =
   exec "clang" args "" Unix.stdout Unix.stderr |> ignore;
   outfile
 
-let compilers =
-  [
-    Common.Tiger;
-    Common.Llvm__2 (Greedy 12);
-    Common.Llvm__2 (Simple 12);
-    Common.Llvm__2 (Briggs 12);
-    Common.Llvm__2 Linearscan;
-  ]
-
 let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args counts =
+  (*let _ = stdin in
+  let _ = cargs in
+  let _ = timeout in
+  Printf.printf "%s\n" t;
+  let _, out, _ = exec_with_timeout_and_capture "cat" [t] 5 "" in
+  Printf.printf "%s\n" out;*)
   let exe = clang t cargs in
   let expexit, expout, experr =
     exec_with_timeout_and_capture exe args timeout stdin
   in
+  (*Printf.printf "%s\n" expout;*)
+  flush stdout;
+
   let test (total, passes) c =
     Printf.printf "%s[%s]%s %s ... " muted (Common.string_of_compiler c) nc t;
     flush stdout;
