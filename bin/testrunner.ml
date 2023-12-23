@@ -33,17 +33,16 @@ let exec_with_timeout process args timeout input stdout stderr =
 let exec_with_timeout_and_capture process args timeout input =
   let stdout_ic, stdout_oc = Unix.pipe () in
   let stdout_ic = Unix.in_channel_of_descr stdout_ic in
-  (*let stderr_ic, stderr_oc = Unix.pipe () in
-    let stderr_ic = Unix.in_channel_of_descr stderr_ic in*)
-  let exit =
-    exec_with_timeout process args timeout input stdout_oc Unix.stderr
-  in
+  let stderr_ic, stderr_oc = Unix.pipe () in
+  let stderr_ic = Unix.in_channel_of_descr stderr_ic in
+  let exit = exec_with_timeout process args timeout input stdout_oc stderr_oc in
   Unix.close stdout_oc;
   let stdout = In_channel.input_all stdout_ic in
-  (*Unix.close stderr_oc;
-    let stderr = In_channel.input_all stderr_ic in*)
   close_in stdout_ic;
-  (exit, stdout, "")
+  Unix.close stderr_oc;
+  let stderr = In_channel.input_all stderr_ic in
+  close_in stderr_ic;
+  (exit, stdout, stderr)
 
 let compilers =
   [
