@@ -27,8 +27,11 @@ let llvmparse file =
   let input, filebuf = initLexer file in
   let parseRes =
     try Llparser.prog Lllexer.token filebuf with
-    | Lllexer.Error msg -> failwith (Printf.sprintf "%s%!" msg)
+    | Lllexer.Error msg ->
+        close_in input;
+        failwith (Printf.sprintf "%s%!" msg)
     | Llparser.Error ->
+        close_in input;
         let pos1 = Lexing.lexeme_start_p filebuf in
         let pos2 = Lexing.lexeme_end_p filebuf in
         let lexeme = Lexing.lexeme filebuf in
@@ -40,7 +43,6 @@ let llvmparse file =
              (pos2.pos_cnum - pos2.pos_bol + 1)
              lexeme)
   in
-
   close_in input;
   parseRes
 
