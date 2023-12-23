@@ -31,5 +31,5 @@ let from_channel input =
   close_in input;
   parseRes
 
-let () =
-  open_ Sys.argv.(1) |> from_channel |> Ll.string_of_prog |> Printf.printf "%s"
+let strip t = open_ t |> from_channel |> Ll.string_of_prog
+let () = strip Sys.argv.(1) |> Printf.printf "%s"

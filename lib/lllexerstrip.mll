@@ -28,6 +28,9 @@ rule token = parse
   | "signext"
   | "zeroext"
   | "internal"
+  | "nocapture"
+  | "local_unnamed_addr"
+  | "readonly"
   | ',' ['\t' ' ']+ "..."
   | '#' digit+         { token lexbuf } (* ignored *)
   | ','? ['\t' ' ']+ "align" ['\t' ' ']+ digit+ { token lexbuf }
