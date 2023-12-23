@@ -45,6 +45,8 @@ let from_channel f input =
           lexeme;
         failwith "par"
   in
+  (* XXX: might still leak on exception: *)
+  close_in input;
   parseRes
 
 let from_file filename =
