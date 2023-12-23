@@ -1,5 +1,5 @@
 (executables
  (package llvm__2)
- (names main testrunner bench)
- (public_names build tests bench)
+ (names main testrunner bench strip)
+ (public_names build tests bench strip)
  (libraries llvm__2 tigermain))
