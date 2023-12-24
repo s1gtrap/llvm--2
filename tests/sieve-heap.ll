@@ -2,7 +2,7 @@
 
 declare i32 @atoi(i8*)
 declare i8* @malloc(i64)
-declare i32 @printf(i8*)
+declare i32 @printf(i8*, ...)
 declare void @free(i8*)
 
 define i32 @main (i32 %0, i8* %1) {
@@ -117,7 +117,7 @@ define i32 @main (i32 %0, i8* %1) {
  br i1 %80, label %81, label %84
 81:
  %82 = load i32, i32* %11
- %83 = call i32( i8* ) @printf (i8* @.str, i32 %82)
+ %83 = call i32( i8*, ... ) @printf (i8* @.str, i32 %82)
  br label %84
 84:
  br label %85

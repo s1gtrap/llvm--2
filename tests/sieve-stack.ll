@@ -1,7 +1,7 @@
 @.str = global [4 x i8] c"%d \00"
 
 declare i32 @atoi(i8*)
-declare i32 @printf(i8*)
+declare i32 @printf(i8*, ...)
 declare void @llvm.stackrestore(i8*)
 
 define i32 @main (i32 %0, i8* %1) {
@@ -113,7 +113,7 @@ define i32 @main (i32 %0, i8* %1) {
  br i1 %77, label %78, label %81
 78:
  %79 = load i32, i32* %12
- %80 = call i32( i8* ) @printf (i8* @.str, i32 %79)
+ %80 = call i32( i8*, ... ) @printf (i8* @.str, i32 %79)
  br label %81
 81:
  br label %82
