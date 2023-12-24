@@ -7,22 +7,22 @@
 @.str.6 = global [3 x i8] c"  \00"
 @.str.7 = global [3 x i8] c"|\0A\00"
 
-declare i32 @printf(void*)
-declare void* @llvm.stacksave()
+declare i32 @printf(i8*)
+declare i8* @llvm.stacksave()
 declare i32 @getchar()
-declare void @llvm.stackrestore(void*)
-declare i32 @atoi(void*)
+declare i8 @llvm.stackrestore(i8*)
+declare i32 @atoi(i8*)
 
-define void @add_edge (i32 %0, i32 %1, i32 %2, void* %3) {
+define void @add_edge (i32 %0, i32 %1, i32 %2, i8* %3) {
  %5 = alloca i32
  %6 = alloca i32
  %7 = alloca i32
- %8 = alloca void*
+ %8 = alloca i8*
  store i32 %0, i32* %5
  store i32 %1, i32* %6
  store i32 %2, i32* %7
- store void* %3, void** %8
- %9 = load void*, void** %8
+ store i8* %3, i8** %8
+ %9 = load i8*, i8** %8
  %10 = load i32, i32* %6
  %11 = load i32, i32* %7
  %12 = load i32, i32* %5
@@ -37,7 +37,7 @@ define void @add_edge (i32 %0, i32 %1, i32 %2, void* %3) {
  %21 = sext i32 %20 to i64
  %22 = getelementptr i8, i8* %9, i64 %21
  store i8 1, i8* %22
- %23 = load void*, void** %8
+ %23 = load i8*, i8** %8
  %24 = load i32, i32* %7
  %25 = load i32, i32* %6
  %26 = load i32, i32* %5
@@ -55,10 +55,10 @@ define void @add_edge (i32 %0, i32 %1, i32 %2, void* %3) {
  ret void
 }
 
-define void @init_sudoku (i32 %0, void* %1, void* %2) {
+define void @init_sudoku (i32 %0, i8* %1, i8* %2) {
  %4 = alloca i32
- %5 = alloca void*
- %6 = alloca void*
+ %5 = alloca i8*
+ %6 = alloca i8*
  %7 = alloca i32
  %8 = alloca i32
  %9 = alloca i32
@@ -71,8 +71,8 @@ define void @init_sudoku (i32 %0, void* %1, void* %2) {
  %16 = alloca i32
  %17 = alloca i32
  store i32 %0, i32* %4
- store void* %1, void** %5
- store void* %2, void** %6
+ store i8* %1, i8** %5
+ store i8* %2, i8** %6
  store i32 0, i32* %7
  br label %18
 18:
@@ -87,7 +87,7 @@ define void @init_sudoku (i32 %0, void* %1, void* %2) {
  %27 = icmp slt i32 %19, %26
  br i1 %27, label %28, label %36
 28:
- %29 = load void*, void** %5
+ %29 = load i8*, i8** %5
  %30 = load i32, i32* %7
  %31 = sext i32 %30 to i64
  %32 = getelementptr i32, i32* %29, i64 %31
@@ -121,7 +121,7 @@ define void @init_sudoku (i32 %0, void* %1, void* %2) {
  %54 = icmp slt i32 %38, %53
  br i1 %54, label %55, label %63
 55:
- %56 = load void*, void** %6
+ %56 = load i8*, i8** %6
  %57 = load i32, i32* %8
  %58 = sext i32 %57 to i64
  %59 = getelementptr i8, i8* %56, i64 %58
@@ -183,8 +183,8 @@ define void @init_sudoku (i32 %0, void* %1, void* %2) {
  %101 = load i32, i32* %4
  %102 = mul i32 %100, %101
  %103 = add i32 %97, %102
- %104 = load void*, void** %6
- call void @add_edge (i32 %89, i32 %96, i32 %103, void* %104)
+ %104 = load i8*, i8** %6
+ call void @add_edge (i32 %89, i32 %96, i32 %103, i8* %104)
  br label %105
 105:
  %106 = load i32, i32* %11
@@ -207,8 +207,8 @@ define void @init_sudoku (i32 %0, void* %1, void* %2) {
  %122 = load i32, i32* %4
  %123 = mul i32 %121, %122
  %124 = add i32 %118, %123
- %125 = load void*, void** %6
- call void @add_edge (i32 %110, i32 %117, i32 %124, void* %125)
+ %125 = load i8*, i8** %6
+ call void @add_edge (i32 %110, i32 %117, i32 %124, i8* %125)
  br label %126
 126:
  %127 = load i32, i32* %9
@@ -272,8 +272,8 @@ define void @init_sudoku (i32 %0, void* %1, void* %2) {
  %173 = load i32, i32* %4
  %174 = mul i32 %172, %173
  %175 = add i32 %169, %174
- %176 = load void*, void** %6
- call void @add_edge (i32 %161, i32 %168, i32 %175, void* %176)
+ %176 = load i8*, i8** %6
+ call void @add_edge (i32 %161, i32 %168, i32 %175, i8* %176)
  br label %177
 177:
  br label %178
@@ -345,15 +345,15 @@ define i8 @toc (i32 %0) {
  ret i8 %20
 }
 
-define void @print_sudoku (i32 %0, void* %1) {
+define void @print_sudoku (i32 %0, i8* %1) {
  %3 = alloca i32
- %4 = alloca void*
+ %4 = alloca i8*
  %5 = alloca i32
  %6 = alloca i32
  %7 = alloca i32
  %8 = alloca i32
  store i32 %0, i32* %3
- store void* %1, void** %4
+ store i8* %1, i8** %4
  store i32 0, i32* %5
  br label %9
 9:
@@ -373,8 +373,8 @@ define void @print_sudoku (i32 %0, void* %1) {
  %22 = srem i32 %18, %21
  %23 = icmp eq i32 %22, 0
  %24 = zext i1 %23 to i64
- %25 = select i1 %23, void* @.str, void* @.str.1
- %26 = call i32( void* ) @printf (void* %25)
+ %25 = select i1 %23, i8* @.str, i8* @.str.1
+ %26 = call i32( i8* ) @printf (i8* %25)
  br label %27
 27:
  %28 = load i32, i32* %5
@@ -382,7 +382,7 @@ define void @print_sudoku (i32 %0, void* %1) {
  store i32 %29, i32* %5
  br label %9
 30:
- %31 = call i32( void* ) @printf (void* @.str.2)
+ %31 = call i32( i8* ) @printf (i8* @.str.2)
  store i32 0, i32* %6
  br label %32
 32:
@@ -411,7 +411,7 @@ define void @print_sudoku (i32 %0, void* %1) {
  %51 = icmp eq i32 %50, 0
  br i1 %51, label %52, label %83
 52:
- %53 = load void*, void** %4
+ %53 = load i8*, i8** %4
  %54 = load i32, i32* %7
  %55 = load i32, i32* %6
  %56 = load i32, i32* %3
@@ -425,7 +425,7 @@ define void @print_sudoku (i32 %0, void* %1) {
  %64 = icmp sgt i32 %63, 0
  br i1 %64, label %65, label %80
 65:
- %66 = load void*, void** %4
+ %66 = load i8*, i8** %4
  %67 = load i32, i32* %7
  %68 = load i32, i32* %6
  %69 = load i32, i32* %3
@@ -438,15 +438,15 @@ define void @print_sudoku (i32 %0, void* %1) {
  %76 = load i32, i32* %75
  %77 = call i8 @toc (i32 %76)
  %78 = sext i8 %77 to i32
- %79 = call i32( void* ) @printf (void* @.str.3, i32 %78)
+ %79 = call i32( i8* ) @printf (i8* @.str.3, i32 %78)
  br label %82
 80:
- %81 = call i32( void* ) @printf (void* @.str.4)
+ %81 = call i32( i8* ) @printf (i8* @.str.4)
  br label %82
 82:
  br label %114
 83:
- %84 = load void*, void** %4
+ %84 = load i8*, i8** %4
  %85 = load i32, i32* %7
  %86 = load i32, i32* %6
  %87 = load i32, i32* %3
@@ -460,7 +460,7 @@ define void @print_sudoku (i32 %0, void* %1) {
  %95 = icmp sgt i32 %94, 0
  br i1 %95, label %96, label %111
 96:
- %97 = load void*, void** %4
+ %97 = load i8*, i8** %4
  %98 = load i32, i32* %7
  %99 = load i32, i32* %6
  %100 = load i32, i32* %3
@@ -473,10 +473,10 @@ define void @print_sudoku (i32 %0, void* %1) {
  %107 = load i32, i32* %106
  %108 = call i8 @toc (i32 %107)
  %109 = sext i8 %108 to i32
- %110 = call i32( void* ) @printf (void* @.str.5, i32 %109)
+ %110 = call i32( i8* ) @printf (i8* @.str.5, i32 %109)
  br label %113
 111:
- %112 = call i32( void* ) @printf (void* @.str.6)
+ %112 = call i32( i8* ) @printf (i8* @.str.6)
  br label %113
 113:
  br label %114
@@ -488,7 +488,7 @@ define void @print_sudoku (i32 %0, void* %1) {
  store i32 %117, i32* %7
  br label %40
 118:
- %119 = call i32( void* ) @printf (void* @.str.7)
+ %119 = call i32( i8* ) @printf (i8* @.str.7)
  %120 = load i32, i32* %6
  %121 = load i32, i32* %3
  %122 = srem i32 %120, %121
@@ -516,8 +516,8 @@ define void @print_sudoku (i32 %0, void* %1) {
  %140 = srem i32 %136, %139
  %141 = icmp eq i32 %140, 0
  %142 = zext i1 %141 to i64
- %143 = select i1 %141, void* @.str, void* @.str.1
- %144 = call i32( void* ) @printf (void* %143)
+ %143 = select i1 %141, i8* @.str, i8* @.str.1
+ %144 = call i32( i8* ) @printf (i8* %143)
  br label %145
 145:
  %146 = load i32, i32* %8
@@ -525,7 +525,7 @@ define void @print_sudoku (i32 %0, void* %1) {
  store i32 %147, i32* %8
  br label %127
 148:
- %149 = call i32( void* ) @printf (void* @.str.2)
+ %149 = call i32( i8* ) @printf (i8* @.str.2)
  br label %150
 150:
  br label %151
@@ -538,14 +538,14 @@ define void @print_sudoku (i32 %0, void* %1) {
  ret void
 }
 
-define i32 @degree (i32 %0, i32 %1, void* %2) {
+define i32 @degree (i32 %0, i32 %1, i8* %2) {
  %4 = alloca i32
  %5 = alloca i32
- %6 = alloca void*
+ %6 = alloca i8*
  %7 = alloca i32
  store i32 %0, i32* %4
  store i32 %1, i32* %5
- store void* %2, void** %6
+ store i8* %2, i8** %6
  store i32 0, i32* %7
  br label %8
 8:
@@ -568,7 +568,7 @@ define i32 @degree (i32 %0, i32 %1, void* %2) {
  %25 = icmp slt i32 %9, %24
  br i1 %25, label %26, label %46
 26:
- %27 = load void*, void** %6
+ %27 = load i8*, i8** %6
  %28 = load i32, i32* %5
  %29 = sext i32 %28 to i64
  %30 = getelementptr i8, i8* %27, i64 %29
@@ -596,20 +596,20 @@ define i32 @degree (i32 %0, i32 %1, void* %2) {
  ret i32 %47
 }
 
-define i1 @coloring (i32 %0, i32 %1, void* %2, void* %3) {
+define i1 @coloring (i32 %0, i32 %1, i8* %2, i8* %3) {
  %5 = alloca i1
  %6 = alloca i32
  %7 = alloca i32
- %8 = alloca void*
- %9 = alloca void*
+ %8 = alloca i8*
+ %9 = alloca i8*
  %10 = alloca i32
  %11 = alloca i32
  %12 = alloca i32
  %13 = alloca i32
  store i32 %0, i32* %6
  store i32 %1, i32* %7
- store void* %2, void** %8
- store void* %3, void** %9
+ store i8* %2, i8** %8
+ store i8* %3, i8** %9
  store i32 0, i32* %10
  br label %14
 14:
@@ -624,7 +624,7 @@ define i1 @coloring (i32 %0, i32 %1, void* %2, void* %3) {
  %23 = icmp slt i32 %15, %22
  br i1 %23, label %24, label %127
 24:
- %25 = load void*, void** %8
+ %25 = load i8*, i8** %8
  %26 = load i32, i32* %10
  %27 = sext i32 %26 to i64
  %28 = getelementptr i32, i32* %25, i64 %27
@@ -663,7 +663,7 @@ define i1 @coloring (i32 %0, i32 %1, void* %2, void* %3) {
  %55 = icmp slt i32 %39, %54
  br i1 %55, label %56, label %99
 56:
- %57 = load void*, void** %9
+ %57 = load i8*, i8** %9
  %58 = load i32, i32* %12
  %59 = sext i32 %58 to i64
  %60 = getelementptr i8, i8* %57, i64 %59
@@ -673,7 +673,7 @@ define i1 @coloring (i32 %0, i32 %1, void* %2, void* %3) {
 63:
  br label %64
 64:
- %65 = load void*, void** %9
+ %65 = load i8*, i8** %9
  %66 = load i32, i32* %12
  %67 = sext i32 %66 to i64
  %68 = getelementptr i8, i8* %65, i64 %67
@@ -682,7 +682,7 @@ define i1 @coloring (i32 %0, i32 %1, void* %2, void* %3) {
  br i1 %70, label %71, label %88
 71:
  %72 = load i32, i32* %11
- %73 = load void*, void** %8
+ %73 = load i8*, i8** %8
  %74 = load i32, i32* %12
  %75 = load i32, i32* %6
  %76 = load i32, i32* %6
@@ -715,25 +715,25 @@ define i1 @coloring (i32 %0, i32 %1, void* %2, void* %3) {
  br label %38
 99:
  %100 = load i32, i32* %11
- %101 = load void*, void** %8
+ %101 = load i8*, i8** %8
  %102 = load i32, i32* %10
  %103 = sext i32 %102 to i64
  %104 = getelementptr i32, i32* %101, i64 %103
  store i32 %100, i32* %104
  %105 = load i32, i32* %6
- %106 = load void*, void** %8
- call void @print_sudoku (i32 %105, void* %106)
+ %106 = load i8*, i8** %8
+ call void @print_sudoku (i32 %105, i8* %106)
  %107 = load i32, i32* %6
  %108 = load i32, i32* %7
- %109 = load void*, void** %8
- %110 = load void*, void** %9
- %111 = call i1 @coloring (i32 %107, i32 %108, void* %109, void* %110)
+ %109 = load i8*, i8** %8
+ %110 = load i8*, i8** %9
+ %111 = call i1 @coloring (i32 %107, i32 %108, i8* %109, i8* %110)
  br i1 %111, label %112, label %113
 112:
  store i1 1, i1* %5
  br label %151
 113:
- %114 = load void*, void** %8
+ %114 = load i8*, i8** %8
  %115 = load i32, i32* %10
  %116 = sext i32 %115 to i64
  %117 = getelementptr i32, i32* %114, i64 %116
@@ -770,7 +770,7 @@ define i1 @coloring (i32 %0, i32 %1, void* %2, void* %3) {
  %137 = icmp slt i32 %129, %136
  br i1 %137, label %138, label %150
 138:
- %139 = load void*, void** %8
+ %139 = load i8*, i8** %8
  %140 = load i32, i32* %13
  %141 = sext i32 %140 to i64
  %142 = getelementptr i32, i32* %139, i64 %141
@@ -797,7 +797,7 @@ define i1 @coloring (i32 %0, i32 %1, void* %2, void* %3) {
 
 define i1 @test (i32 %0) {
  %2 = alloca i32
- %3 = alloca void*
+ %3 = alloca i8*
  %4 = alloca i64
  %5 = alloca i64
  %6 = alloca i32
@@ -835,7 +835,7 @@ define i1 @test (i32 %0) {
  %35 = alloca i8, i64 %34
  store i64 %34, i64* %5
  %36 = load i32, i32* %2
- call void @init_sudoku (i32 %36, void* %18, void* %35)
+ call void @init_sudoku (i32 %36, i8* %18, i8* %35)
  store i32 0, i32* %6
  br label %37
 37:
@@ -912,27 +912,27 @@ define i1 @test (i32 %0) {
  br label %37
 91:
  %92 = load i32, i32* %2
- call void @print_sudoku (i32 %92, void* %18)
+ call void @print_sudoku (i32 %92, i8* %18)
  %93 = load i32, i32* %2
  %94 = load i32, i32* %2
  %95 = load i32, i32* %2
  %96 = mul i32 %94, %95
- %97 = call i1 @coloring (i32 %93, i32 %96, void* %18, void* %35)
- %98 = load void*, void** %3
+ %97 = call i1 @coloring (i32 %93, i32 %96, i8* %18, i8* %35)
+ %98 = load i8*, i8** %3
  ret i1 %97
 }
 
-define i32 @main (i32 %0, void* %1) {
+define i32 @main (i32 %0, i8* %1) {
  %3 = alloca i32
  %4 = alloca i32
- %5 = alloca void*
+ %5 = alloca i8*
  store i32 0, i32* %3
  store i32 %0, i32* %4
- store void* %1, void** %5
- %6 = load void*, void** %5
- %7 = getelementptr void*, void** %6, i64 1
- %8 = load void*, void** %7
- %9 = call i32 @atoi (void* %8)
+ store i8* %1, i8** %5
+ %6 = load i8*, i8** %5
+ %7 = getelementptr i8*, i8** %6, i64 1
+ %8 = load i8*, i8** %7
+ %9 = call i32 @atoi (i8* %8)
  %10 = call i1 @test (i32 %9)
  %11 = xor i1 %10, 1
  %12 = zext i1 %11 to i32

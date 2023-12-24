@@ -1,8 +1,8 @@
 @.str = global [3 x i8] c"2 \00"
 @.str.1 = global [6 x i8] c"%llu \00"
 
-declare i32 @printf(void*)
-declare i64 @strtoull(void*, void*, i32)
+declare i32 @printf(i8*, ...)
+declare i64 @strtoull(i8*, i8*, i32)
 
 define i32 @fac (i64 %0) {
  %2 = alloca i64
@@ -17,7 +17,7 @@ define i32 @fac (i64 %0) {
  %8 = icmp eq i64 %7, 0
  br i1 %8, label %9, label %16
 9:
- %10 = call i32( void* ) @printf (void* @.str)
+ %10 = call i32( i8*, ... ) @printf (i8* @.str)
  br label %11
 11:
  %12 = load i64, i64* %2
@@ -47,7 +47,7 @@ define i32 @fac (i64 %0) {
  br i1 %28, label %29, label %38
 29:
  %30 = load i64, i64* %4
- %31 = call i32( void* ) @printf (void* @.str.1, i64 %30)
+ %31 = call i32( i8*, ... ) @printf (i8* @.str.1, i64 %30)
  br label %32
 32:
  %33 = load i64, i64* %4
@@ -71,7 +71,7 @@ define i32 @fac (i64 %0) {
  br i1 %44, label %45, label %50
 45:
  %46 = load i64, i64* %2
- %47 = call i32( void* ) @printf (void* @.str.1, i64 %46)
+ %47 = call i32( i8*, ... ) @printf (i8* @.str.1, i64 %46)
  %48 = load i32, i32* %3
  %49 = add i32 %48, 1
  store i32 %49, i32* %3
@@ -81,17 +81,17 @@ define i32 @fac (i64 %0) {
  ret i32 %51
 }
 
-define i32 @main (i32 %0, void* %1) {
+define i32 @main (i32 %0, i8* %1) {
  %3 = alloca i32
  %4 = alloca i32
- %5 = alloca void*
+ %5 = alloca i8*
  store i32 0, i32* %3
  store i32 %0, i32* %4
- store void* %1, void** %5
- %6 = load void*, void** %5
- %7 = getelementptr void*, void** %6, i64 1
- %8 = load void*, void** %7
- %9 = call i64 @strtoull (void* %8, void* null, i32 10)
+ store i8* %1, i8** %5
+ %6 = load i8*, i8** %5
+ %7 = getelementptr i8*, i8** %6, i64 1
+ %8 = load i8*, i8** %7
+ %9 = call i64 @strtoull (i8* %8, i8* null, i32 10)
  %10 = call i32 @fac (i64 %9)
  ret i32 %10
 }

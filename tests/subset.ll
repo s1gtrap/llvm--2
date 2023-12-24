@@ -2,15 +2,15 @@
 @.str.1 = global [4 x i8] c"%s \00"
 @.str.2 = global [3 x i8] c"}\0A\00"
 
-declare i32 @printf(void*)
+declare i32 @printf(i8*, ...)
 
-define i32 @subsets (i32 %0, void* %1) {
+define i32 @subsets (i32 %0, i8** %1) {
  %3 = alloca i32
- %4 = alloca void*
+ %4 = alloca i8*
  %5 = alloca i32
  %6 = alloca i32
  store i32 %0, i32* %3
- store void* %1, void** %4
+ store i8* %1, i8** %4
  store i32 0, i32* %5
  br label %7
 7:
@@ -20,7 +20,7 @@ define i32 @subsets (i32 %0, void* %1) {
  %11 = icmp slt i32 %8, %10
  br i1 %11, label %12, label %41
 12:
- %13 = call i32( void* ) @printf (void* @.str)
+ %13 = call i32( i8*, ... ) @printf (i8* @.str)
  store i32 0, i32* %6
  br label %14
 14:
@@ -36,13 +36,13 @@ define i32 @subsets (i32 %0, void* %1) {
  %23 = icmp ne i32 %22, 0
  br i1 %23, label %24, label %32
 24:
- %25 = load void*, void** %4
+ %25 = load i8*, i8** %4
  %26 = load i32, i32* %6
  %27 = add i32 %26, 1
  %28 = sext i32 %27 to i64
- %29 = getelementptr void*, void** %25, i64 %28
- %30 = load void*, void** %29
- %31 = call i32( void* ) @printf (void* @.str.1, void* %30)
+ %29 = getelementptr i8*, i8** %25, i64 %28
+ %30 = load i8*, i8** %29
+ %31 = call i32( i8*, ... ) @printf (i8* @.str.1, i8* %30)
  br label %32
 32:
  br label %33
@@ -52,7 +52,7 @@ define i32 @subsets (i32 %0, void* %1) {
  store i32 %35, i32* %6
  br label %14
 36:
- %37 = call i32( void* ) @printf (void* @.str.2)
+ %37 = call i32( i8*, ... ) @printf (i8* @.str.2)
  br label %38
 38:
  %39 = load i32, i32* %5
@@ -64,16 +64,16 @@ define i32 @subsets (i32 %0, void* %1) {
  ret i32 %42
 }
 
-define i32 @main (i32 %0, void* %1) {
+define i32 @main (i32 %0, i8* %1) {
  %3 = alloca i32
  %4 = alloca i32
- %5 = alloca void*
+ %5 = alloca i8*
  store i32 0, i32* %3
  store i32 %0, i32* %4
- store void* %1, void** %5
+ store i8* %1, i8** %5
  %6 = load i32, i32* %4
  %7 = sub i32 %6, 1
- %8 = load void*, void** %5
- %9 = call i32 @subsets (i32 %7, void* %8)
+ %8 = load i8*, i8** %5
+ %9 = call i32 @subsets (i32 %7, i8* %8)
  ret i32 %9
 }
