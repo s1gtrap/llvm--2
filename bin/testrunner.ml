@@ -80,7 +80,15 @@ let clang t args =
   exec "clang" args "" Unix.stdout Unix.stderr |> ignore;
   outfile
 
-let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args counts =
+type asserts = int
+
+let assert_exitcode : asserts = 0b1
+and assert_stdout : asserts = 0b10
+and assert_stderr : asserts = 0b100
+
+let t ?(stdin = "") ?(cargs = []) ?(timeout = 5)
+    ?(asserts = assert_exitcode lor assert_stdout lor assert_stderr) t args
+    counts =
   let regexp =
     Str.regexp_string (if Array.length Sys.argv >= 2 then Sys.argv.(1) else "")
   in
@@ -90,7 +98,6 @@ let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args counts =
       exec_with_timeout_and_capture exe args timeout stdin
     in
     flush stdout;
-
     (*let strip t =
         let initLexer (lexbuf : Lexing.lexbuf) =
           (* obs that we need to initialize the pos_fname field ourselves *)
@@ -157,14 +164,21 @@ let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args counts =
         let gotexit, gotout, goterr =
           exec_with_timeout_and_capture exe args timeout stdin
         in
-        if expexit <> gotexit || expout <> gotout || experr <> goterr then (
+        if
+          (asserts land assert_exitcode > 0 && expexit <> gotexit)
+          || (asserts land assert_stdout > 0 && expout <> gotout)
+          || (asserts land assert_stderr > 0 && experr <> goterr)
+        then (
           Printf.printf "%sfailed!%s\n" red nc;
-          if expexit <> gotexit then
+          if asserts land assert_exitcode > 0 && expexit <> gotexit then
             Printf.printf "  exit:\n    got %s, expected %s\n"
               (string_of_status gotexit) (string_of_status expexit);
-          if expout <> gotout then (
+          if asserts land assert_stdout > 0 && expout <> gotout then (
             Printf.printf "  stdout:\n";
             Common.print_diff expout gotout);
+          if asserts land assert_stderr > 0 && experr <> goterr then (
+            Printf.printf "  stderr:\n";
+            Common.print_diff experr goterr);
           (total + 1, passes))
         else (
           Printf.printf "%sok!%s\n" green nc;
@@ -209,7 +223,7 @@ let () =
   |> t "tests/lshri32.ll" (List.init 31 string_of_int)
   |> t "tests/alloca.ll" [] (* FIXME: allocan *)
   |> t "tests/loop0.ll" [] |> t "tests/loop1.ll" [] |> t "tests/loop2.ll" []
-  |> t "tests/argv0.ll" []
+  |> t "tests/argv0.ll" [] ~asserts:(assert_exitcode lor assert_stderr)
   |> t "tests/argv1.ll" [ "hello," ]
   |> t "tests/argv2.ll" [ "Hello,"; "world!" ]
   |> t "tests/atoi.ll" []
@@ -218,7 +232,7 @@ let () =
   |> t "tests/atoi.ll" [ "-2" ]
   |> t "tests/atoi.ll" [ "127" ]
   |> t "tests/atoi.ll" [ "255" ]
-  |> t "tests/helloworld0.ll" []
+  |> t "tests/helloworld0.ll" [] ~asserts:(assert_stdout lor assert_stderr)
   |> t "tests/icmp0.ll" [] |> t "tests/icmp1.ll" []
   |> t "tests/helloworld1.ll" []
   |> t "tests/pipe0.ll" []
@@ -383,6 +397,7 @@ let () =
   |> t "tigertests/recFieldError.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/seq_nested_empty.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/seqorder.tig.ll" [] ~cargs:[ "tiger.c" ]
+       ~asserts:(assert_stdout lor assert_stderr)
   |> t "tigertests/simplevar.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/split.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/test1.tig.ll" [] ~cargs:[ "tiger.c" ]
@@ -395,6 +410,7 @@ let () =
   |> t "tigertests/test4.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/test41.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/test42.tig.ll" [] ~cargs:[ "tiger.c" ]
+       ~asserts:(assert_stdout lor assert_stderr)
   |> t "tigertests/test44.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/test46.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/test47.tig.ll" [] ~cargs:[ "tiger.c" ]
@@ -408,6 +424,7 @@ let () =
   |> t "tigertests/test56.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/test57.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/test58.tig.ll" [] ~cargs:[ "tiger.c" ]
+       ~asserts:(assert_stdout lor assert_stderr)
   |> t "tigertests/test59.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/test60.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/test61.tig.ll" [] ~cargs:[ "tiger.c" ]
@@ -420,6 +437,7 @@ let () =
   |> t "tigertests/test68.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/test69.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/test72.tig.ll" [] ~cargs:[ "tiger.c" ]
+       ~asserts:(assert_stdout lor assert_stderr)
   |> t "tigertests/test73.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/test74.tig.ll" [] ~cargs:[ "tiger.c" ]
   |> t "tigertests/test75.tig.ll" [] ~cargs:[ "tiger.c" ]
