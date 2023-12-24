@@ -179,7 +179,10 @@ let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args counts =
   else counts
 
 let () =
-  let print (t, p) = Printf.printf "[ %d / %d ]\n" p t in
+  let print (t, p) =
+    let pct = Float.floor (float_of_int p /. float_of_int t *. 100.0) in
+    Printf.printf "Passed: %d / %d [%.0f%%]\n" p t pct
+  in
   t "tests/void.ll" [] (0, 0)
   |> t "tests/zero.ll" [] |> t "tests/one.ll" [] |> t "tests/simplest.ll" []
   |> t "tests/add.ll" [ "1"; "2" ]
