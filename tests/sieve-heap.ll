@@ -1,34 +1,34 @@
 @.str = global [4 x i8] c"%d \00"
 
-declare i32 @atoi(void*)
-declare void* @malloc(i64)
-declare i32 @printf(void*)
-declare void @free(void*)
+declare i32 @atoi(i8*)
+declare i8* @malloc(i64)
+declare i32 @printf(i8*)
+declare void @free(i8*)
 
-define i32 @main (i32 %0, void* %1) {
+define i32 @main (i32 %0, i8* %1) {
  %3 = alloca i32
  %4 = alloca i32
- %5 = alloca void*
+ %5 = alloca i8*
  %6 = alloca i32
- %7 = alloca void*
+ %7 = alloca i8*
  %8 = alloca i32
  %9 = alloca i32
  %10 = alloca i32
  %11 = alloca i32
  store i32 0, i32* %3
  store i32 %0, i32* %4
- store void* %1, void** %5
- %12 = load void*, void** %5
- %13 = getelementptr void*, void** %12, i64 1
- %14 = load void*, void** %13
- %15 = call i32 @atoi (void* %14)
+ store i8* %1, i8** %5
+ %12 = load i8*, i8** %5
+ %13 = getelementptr i8*, i8** %12, i64 1
+ %14 = load i8*, i8** %13
+ %15 = call i32 @atoi (i8* %14)
  store i32 %15, i32* %6
  %16 = load i32, i32* %6
  %17 = add i32 %16, 1
  %18 = sext i32 %17 to i64
  %19 = mul i64 1, %18
- %20 = call void* @malloc (i64 %19)
- store void* %20, void** %7
+ %20 = call i8* @malloc (i64 %19)
+ store i8* %20, i8** %7
  store i32 2, i32* %8
  br label %21
 21:
@@ -37,7 +37,7 @@ define i32 @main (i32 %0, void* %1) {
  %24 = icmp sle i32 %22, %23
  br i1 %24, label %25, label %33
 25:
- %26 = load void*, void** %7
+ %26 = load i8*, i8** %7
  %27 = load i32, i32* %8
  %28 = sext i32 %27 to i64
  %29 = getelementptr i8, i8* %26, i64 %28
@@ -59,7 +59,7 @@ define i32 @main (i32 %0, void* %1) {
  %39 = icmp sle i32 %37, %38
  br i1 %39, label %40, label %69
 40:
- %41 = load void*, void** %7
+ %41 = load i8*, i8** %7
  %42 = load i32, i32* %9
  %43 = sext i32 %42 to i64
  %44 = getelementptr i8, i8* %41, i64 %43
@@ -78,7 +78,7 @@ define i32 @main (i32 %0, void* %1) {
  %54 = icmp sle i32 %52, %53
  br i1 %54, label %55, label %64
 55:
- %56 = load void*, void** %7
+ %56 = load i8*, i8** %7
  %57 = load i32, i32* %10
  %58 = sext i32 %57 to i64
  %59 = getelementptr i8, i8* %56, i64 %58
@@ -108,7 +108,7 @@ define i32 @main (i32 %0, void* %1) {
  %73 = icmp sle i32 %71, %72
  br i1 %73, label %74, label %88
 74:
- %75 = load void*, void** %7
+ %75 = load i8*, i8** %7
  %76 = load i32, i32* %11
  %77 = sext i32 %76 to i64
  %78 = getelementptr i8, i8* %75, i64 %77
@@ -117,7 +117,7 @@ define i32 @main (i32 %0, void* %1) {
  br i1 %80, label %81, label %84
 81:
  %82 = load i32, i32* %11
- %83 = call i32( void* ) @printf (void* @.str, i32 %82)
+ %83 = call i32( i8* ) @printf (i8* @.str, i32 %82)
  br label %84
 84:
  br label %85
@@ -127,7 +127,7 @@ define i32 @main (i32 %0, void* %1) {
  store i32 %87, i32* %11
  br label %70
 88:
- %89 = load void*, void** %7
- call void @free (void* %89)
+ %89 = load i8*, i8** %7
+ call void @free (i8* %89)
  ret i32 0
 }

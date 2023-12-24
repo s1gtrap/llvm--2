@@ -1,15 +1,15 @@
 @.str = global [4 x i8] c"%d \00"
 
-declare i32 @atoi(void*)
-declare i32 @printf(void*)
-declare void @llvm.stackrestore(void*)
+declare i32 @atoi(i8*)
+declare i32 @printf(i8*)
+declare void @llvm.stackrestore(i8*)
 
-define i32 @main (i32 %0, void* %1) {
+define i32 @main (i32 %0, i8* %1) {
  %3 = alloca i32
  %4 = alloca i32
- %5 = alloca void*
+ %5 = alloca i8*
  %6 = alloca i32
- %7 = alloca void*
+ %7 = alloca i8*
  %8 = alloca i64
  %9 = alloca i32
  %10 = alloca i32
@@ -17,11 +17,11 @@ define i32 @main (i32 %0, void* %1) {
  %12 = alloca i32
  store i32 0, i32* %3
  store i32 %0, i32* %4
- store void* %1, void** %5
- %13 = load void*, void** %5
- %14 = getelementptr void*, void** %13, i64 1
- %15 = load void*, void** %14
- %16 = call i32 @atoi (void* %15)
+ store i8* %1, i8** %5
+ %13 = load i8*, i8** %5
+ %14 = getelementptr i8*, i8** %13, i64 1
+ %15 = load i8*, i8** %14
+ %16 = call i32 @atoi (i8* %15)
  store i32 %16, i32* %6
  %17 = load i32, i32* %6
  %18 = add i32 %17, 1
@@ -113,7 +113,7 @@ define i32 @main (i32 %0, void* %1) {
  br i1 %77, label %78, label %81
 78:
  %79 = load i32, i32* %12
- %80 = call i32( void* ) @printf (void* @.str, i32 %79)
+ %80 = call i32( i8* ) @printf (i8* @.str, i32 %79)
  br label %81
 81:
  br label %82
