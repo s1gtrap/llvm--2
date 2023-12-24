@@ -3,7 +3,6 @@
 (**************************************************************************)
 
 type pos = Lexing.position
-
 type symbol = Symbol.symbol
 
 include Oper (* note that this re-exports the definitions of operations *)
@@ -16,49 +15,56 @@ type var_base =
   | FieldVar of var * symbol
   | SubscriptVar of var * exp
 
-and var = Var of {var_base: var_base; pos: pos}
-
-and exp = Exp of {exp_base: exp_base; pos: pos}
+and var = Var of { var_base : var_base; pos : pos }
+and exp = Exp of { exp_base : exp_base; pos : pos }
 
 and exp_base =
   | VarExp of var
   | NilExp
   | IntExp of int64
   | StringExp of string
-  | CallExp of {func: symbol; args: exp list}
-  | OpExp of {left: exp; oper: oper; right: exp}
-  | RecordExp of {fields: (symbol * exp) list; typ: symbol}
+  | CallExp of { func : symbol; args : exp list }
+  | OpExp of { left : exp; oper : oper; right : exp }
+  | RecordExp of { fields : (symbol * exp) list; typ : symbol }
   | SeqExp of exp list
-  | AssignExp of {var: var; exp: exp}
-  | IfExp of {test: exp; thn: exp; els: exp option}
-  | WhileExp of {test: exp; body: exp}
-  | ForExp of {var: symbol; escape: bool ref; lo: exp; hi: exp; body: exp}
+  | AssignExp of { var : var; exp : exp }
+  | IfExp of { test : exp; thn : exp; els : exp option }
+  | WhileExp of { test : exp; body : exp }
+  | ForExp of {
+      var : symbol;
+      escape : bool ref;
+      lo : exp;
+      hi : exp;
+      body : exp;
+    }
   | BreakExp
-  | LetExp of {decls: decl list; body: exp}
-  | ArrayExp of {typ: symbol; size: exp; init: exp}
+  | LetExp of { decls : decl list; body : exp }
+  | ArrayExp of { typ : symbol; size : exp; init : exp }
 
 and decl =
   | FunctionDec of fundecldata list
-  | VarDec of
-      { name: symbol
-      ; escape: bool ref
-      ; typ: (symbol * pos) option
-      ; init: exp
-      ; pos: pos }
+  | VarDec of {
+      name : symbol;
+      escape : bool ref;
+      typ : (symbol * pos) option;
+      init : exp;
+      pos : pos;
+    }
   | TypeDec of tydecldata list
 
-and tydecldata = Tdecl of {name: symbol; ty: ty; pos: pos}
+and tydecldata = Tdecl of { name : symbol; ty : ty; pos : pos }
 
 and fundecldata =
-  | Fdecl of
-      { name: symbol
-      ; params: fielddata list
-      ; result: (symbol * pos) option
-      ; body: exp
-      ; pos: pos }
+  | Fdecl of {
+      name : symbol;
+      params : fielddata list;
+      result : (symbol * pos) option;
+      body : exp;
+      pos : pos;
+    }
 
 and fielddata =
-  | Field of {name: symbol; escape: bool ref; typ: symbol * pos; pos: pos}
+  | Field of { name : symbol; escape : bool ref; typ : symbol * pos; pos : pos }
 
 and ty =
   | NameTy of symbol * pos

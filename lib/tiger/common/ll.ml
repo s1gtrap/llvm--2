@@ -8,11 +8,8 @@
 module S = Symbol
 
 type uid = S.symbol (* Local identifiers  *)
-
 type gid = S.symbol (* Global identifiers *)
-
 type tid = S.symbol (* Named types        *)
-
 type lbl = S.symbol (* Labels             *)
 
 (* LLVM IR types *)
@@ -37,18 +34,7 @@ type operand =
   | Id of uid (* A local identifier  *)
 
 (* Binary operations *)
-type bop =
-  | Add
-  | Sub
-  | Mul
-  | SDiv
-  | Shl
-  | Lshr
-  | Ashr
-  | And
-  | Or
-  | Xor
-  | SRem
+type bop = Add | Sub | Mul | SDiv | Shl | Lshr | Ashr | And | Or | Xor | SRem
 
 (* Comparison operators *)
 type cnd = Eq | Ne | Slt | Sle | Sgt | Sge
@@ -67,8 +53,7 @@ type insn =
       * operand
       * (ty * operand) list (* fn (%1, %2, ...)                   *)
   | Bitcast of ty * operand * ty (* bitcast ty1 %u to ty2              *)
-  | Gep of
-      ty * operand * operand list (* getelementptr ty* %u, i64 %vi, ... *)
+  | Gep of ty * operand * operand list (* getelementptr ty* %u, i64 %vi, ... *)
   | Zext of ty * operand * ty (* zext ty1 %o to ty2                 *)
   | Ptrtoint of ty * operand * ty (* ptrtoint ty1 %o to ty2             *)
   | Trunc of ty * operand * ty (* trunc ty1 %o to ty2                 *)
@@ -82,13 +67,13 @@ type terminator =
 
 (* Basic blocks *)
 
-type block = {insns: (uid option * insn) list; terminator: terminator}
+type block = { insns : (uid option * insn) list; terminator : terminator }
 
 (* Control Flow Graph: a pair of an entry block and a set of labeled blocks *)
 type cfg = block * (lbl * block) list
 
 (* Function declarations *)
-type fdecl = {fty: fty; param: uid list; cfg: cfg}
+type fdecl = { fty : fty; param : uid list; cfg : cfg }
 
 (* Initializers for global data *)
 type ginit =
@@ -103,24 +88,19 @@ type ginit =
 and gdecl = ty * ginit
 
 (* LLVM-- programs *)
-type prog =
-  { tdecls: (tid * ty) list (* named types *)
-  ; gdecls: (gid * gdecl) list (* global data *)
-  ; fdecls: (gid * fdecl) list (* code        *) }
+type prog = {
+  tdecls : (tid * ty) list (* named types *);
+  gdecls : (gid * gdecl) list (* global data *);
+  fdecls : (gid * fdecl) list (* code        *);
+}
 
 (* --- Serialization ------------------------------------------------------ *)
 let mapcat s f l = (String.concat s) (List.map f l)
-
 let ( ^^ ) s t = if s = "" || t = "" then "" else s ^ t
-
 let prefix p f a = p ^ f a
-
 let concwsp = String.concat " "
-
 let parens s = "(" ^ s ^ ")"
-
 let brackets s = "[" ^ s ^ "]"
-
 let braces s = "{" ^ s ^ "}"
 
 let rec string_of_ty (t : ty) : string =
@@ -146,7 +126,6 @@ let string_of_operand (opr : operand) : string =
   | Id u -> "%" ^ S.name u
 
 let soo = string_of_operand
-
 let soop ((t, v) : ty * operand) : string = sot t ^ " " ^ soo v
 
 let string_of_bop (b : bop) : string =
@@ -180,28 +159,30 @@ let string_of_gep_index (opr : operand) : string =
 let string_of_insn (ins : insn) : string =
   match ins with
   | Binop (b, t, o1, o2) ->
-      concwsp [string_of_bop b; sot t; soo o1 ^ ","; soo o2]
+      concwsp [ string_of_bop b; sot t; soo o1 ^ ","; soo o2 ]
   | Alloca t -> "alloca " ^ sot t
-  | Load (t, opr) -> concwsp ["load"; sot t ^ ","; sot (Ptr t); soo opr]
+  | Load (t, opr) -> concwsp [ "load"; sot t ^ ","; sot (Ptr t); soo opr ]
   | Store (t, os, od) ->
-      concwsp ["store"; sot t; soo os ^ ","; sot (Ptr t); soo od]
+      concwsp [ "store"; sot t; soo os ^ ","; sot (Ptr t); soo od ]
   | Icmp (c, t, o1, o2) ->
-      concwsp ["icmp"; string_of_cnd c; sot t; soo o1 ^ ","; soo o2]
+      concwsp [ "icmp"; string_of_cnd c; sot t; soo o1 ^ ","; soo o2 ]
   | Call (t, opr, oa) ->
-      concwsp ["call"; sot t; soo opr; parens (mapcat ", " soop oa)]
+      concwsp [ "call"; sot t; soo opr; parens (mapcat ", " soop oa) ]
   | Bitcast (t1, opr, t2) ->
-      concwsp ["bitcast"; sot t1; soo opr; "to"; sot t2]
+      concwsp [ "bitcast"; sot t1; soo opr; "to"; sot t2 ]
   | Gep (t, opr, oi) ->
       concwsp
-        [ "getelementptr"
-        ; sot t ^ ","
-        ; sot (Ptr t)
-        ; soo opr ^ ","
-        ; mapcat ", " string_of_gep_index oi ]
-  | Zext (t, o1, t2) -> concwsp ["zext"; sot t; soo o1; "to"; sot t2]
-  | Trunc (t, o1, t2) -> concwsp ["trunc"; sot t; soo o1; "to"; sot t2]
+        [
+          "getelementptr";
+          sot t ^ ",";
+          sot (Ptr t);
+          soo opr ^ ",";
+          mapcat ", " string_of_gep_index oi;
+        ]
+  | Zext (t, o1, t2) -> concwsp [ "zext"; sot t; soo o1; "to"; sot t2 ]
+  | Trunc (t, o1, t2) -> concwsp [ "trunc"; sot t; soo o1; "to"; sot t2 ]
   | Ptrtoint (t, o1, t2) ->
-      concwsp ["ptrtoint"; sot (Ptr t); soo o1; "to"; sot t2]
+      concwsp [ "ptrtoint"; sot (Ptr t); soo o1; "to"; sot t2 ]
   | Comment s -> "; " ^ String.escaped s
 
 let string_of_named_insn ((u, i) : uid option * insn) : string =
@@ -212,17 +193,19 @@ let string_of_named_insn ((u, i) : uid option * insn) : string =
 let string_of_terminator (tr : terminator) : string =
   match tr with
   | Ret (_, None) -> "ret void"
-  | Ret (t, Some opr) -> concwsp ["ret"; sot t; soo opr]
-  | Br l -> concwsp ["br"; "label"; "%" ^ S.name l]
+  | Ret (t, Some opr) -> concwsp [ "ret"; sot t; soo opr ]
+  | Br l -> concwsp [ "br"; "label"; "%" ^ S.name l ]
   | Cbr (opr, l, m) ->
       concwsp
-        [ "br"
-        ; "i1"
-        ; soo opr ^ ","
-        ; "label"
-        ; "%" ^ S.name l ^ ","
-        ; "label"
-        ; "%" ^ S.name m ]
+        [
+          "br";
+          "i1";
+          soo opr ^ ",";
+          "label";
+          "%" ^ S.name l ^ ",";
+          "label";
+          "%" ^ S.name m;
+        ]
 
 let string_of_block (b : block) : string =
   (mapcat "\n" (prefix " " string_of_named_insn) b.insns ^^ "\n")
@@ -236,11 +219,13 @@ let string_of_named_fdecl ((g, f) : gid * fdecl) : string =
   let string_of_arg (t, u) = sot t ^ " %" ^ S.name u in
   let ts, t = f.fty in
   concwsp
-    [ "define"
-    ; sot t
-    ; "@" ^ S.name g
-    ; parens (mapcat ", " string_of_arg (List.combine ts f.param))
-    ; "{\n" ^ string_of_cfg f.cfg ^ "}\n" ]
+    [
+      "define";
+      sot t;
+      "@" ^ S.name g;
+      parens (mapcat ", " string_of_arg (List.combine ts f.param));
+      "{\n" ^ string_of_cfg f.cfg ^ "}\n";
+    ]
 
 let ll_encode s =
   let explode s = String.to_seq s |> List.of_seq in
@@ -270,7 +255,7 @@ let rec string_of_ginit (gi : ginit) : string =
   | GStruct gis -> braces (mapcat ", " string_of_gdecl gis)
 
 and string_of_gdecl ((t, gi) : gdecl) : string =
-  concwsp [sot t; string_of_ginit gi]
+  concwsp [ sot t; string_of_ginit gi ]
 
 let string_of_named_gdecl ((g, gd) : gid * gdecl) : string =
   "@" ^ S.name g ^ " = global " ^ string_of_gdecl gd
