@@ -17,4 +17,3 @@ merge186:
  store i1 %tmp189, i1* %a190
  ret i64 0
 }
-

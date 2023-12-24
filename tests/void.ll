@@ -1,3 +1,3 @@
-define void @main() {
-  ret void
+define void @main () {
+ ret void
 }

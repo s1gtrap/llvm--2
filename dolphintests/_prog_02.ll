@@ -6,4 +6,3 @@ define i64 @dolphin_main () {
  call void @print_integer (i64 %tmp6)
  ret i64 0
 }
-

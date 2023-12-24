@@ -22,4 +22,3 @@ for_update260:
 for_after262:
  ret i64 0
 }
-

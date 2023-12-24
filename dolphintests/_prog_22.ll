@@ -10,4 +10,3 @@ define i64 @dolphin_main () {
  %tmp173 = load i64, i64* %a170
  ret i64 0
 }
-

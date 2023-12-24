@@ -1,5 +1,5 @@
-define i8 @main() {
-  br label %1
+define i8 @main () {
+ br label %1
 1:
-  ret i8 42
+ ret i8 42
 }
