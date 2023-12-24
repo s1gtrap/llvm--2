@@ -46,6 +46,7 @@ let exec_with_timeout_and_capture process args timeout input =
 
 let compilers =
   [
+    Common.Tiger;
     Common.Llvm__2 (Greedy 12);
     Common.Llvm__2 (Simple 12);
     Common.Llvm__2 (Briggs 12);
