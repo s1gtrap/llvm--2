@@ -56,7 +56,16 @@ let clang t args =
   let outfile = Filename.temp_file "" "" in
   let args =
     match Llvm__2.Regalloc.os with
-    | Linux -> [ t; "-o"; outfile ] @ args
+    | Linux ->
+        [
+          "-Wno-override-module";
+          "-target";
+          "x86_64-unknown-linux-gnu";
+          t;
+          "-o";
+          outfile;
+        ]
+        @ args
     | Darwin ->
         [
           "-Wno-override-module";
