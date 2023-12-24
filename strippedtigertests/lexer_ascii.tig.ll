@@ -154,7 +154,7 @@
 @str_$_518 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"|"}
 @str_$_516 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"}"}
 @str_$_514 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"~"}
-@str_$_512 = global { i64, [1 x i8] } {i64 1, [1 x i8] c""}
+@str_$_512 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"\7F"}
 @str_$_510 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"\00"}
 @str_$_508 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"\01"}
 @str_$_506 = global { i64, [1 x i8] } {i64 1, [1 x i8] c"\02"}

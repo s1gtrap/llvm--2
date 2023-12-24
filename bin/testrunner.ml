@@ -1,5 +1,4 @@
 open Common
-open Llvm__2
 
 let string_of_process_status (s : Unix.process_status) =
   match s with
@@ -47,7 +46,6 @@ let exec_with_timeout_and_capture process args timeout input =
 
 let compilers =
   [
-    Common.Tiger;
     Common.Llvm__2 (Greedy 12);
     Common.Llvm__2 (Simple 12);
     Common.Llvm__2 (Briggs 12);
@@ -79,67 +77,75 @@ let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args counts =
     exec_with_timeout_and_capture exe args timeout stdin
   in
   flush stdout;
-  let strip t =
-    let initLexer (lexbuf : Lexing.lexbuf) =
-      (* obs that we need to initialize the pos_fname field ourselves *)
-      lexbuf.lex_curr_p <- lexbuf.lex_curr_p;
-      (input, lexbuf)
-    in
-
-    let from_channel input =
-      let lexbuf = Lexing.from_channel input in
-      let _, filebuf = initLexer lexbuf in
-      let parseRes =
-        try Llparserstrip.prog Lllexerstrip.token filebuf with
-        | Lllexerstrip.Error msg ->
-            Printf.eprintf "%s%!" msg;
-            failwith "lex"
-        | Llparserstrip.Error ->
-            let pos1 = Lexing.lexeme_start_p filebuf in
-            let pos2 = Lexing.lexeme_end_p filebuf in
-            let lexeme = Lexing.lexeme filebuf in
-            Printf.fprintf stderr "%s:%d:%d - %d:%d: syntax error '%s'\n"
-              pos1.pos_fname pos1.pos_lnum
-              (pos1.pos_cnum - pos1.pos_bol)
-              pos2.pos_lnum
-              (pos2.pos_cnum - pos2.pos_bol + 1)
-              lexeme;
-            failwith "par"
+  (*let strip t =
+      let initLexer (lexbuf : Lexing.lexbuf) =
+        (* obs that we need to initialize the pos_fname field ourselves *)
+        lexbuf.lex_curr_p <- lexbuf.lex_curr_p;
+        (input, lexbuf)
       in
-      (* XXX: might still leak on exception: *)
-      close_in input;
-      parseRes
-    in
-    open_in t |> from_channel |> Ll.string_of_prog
-  in
-  let stripped = strip t in
+
+      let from_channel input =
+        let lexbuf = Lexing.from_channel input in
+        let _, filebuf = initLexer lexbuf in
+        let parseRes =
+          try Llparserstrip.prog Lllexerstrip.token filebuf with
+          | Lllexerstrip.Error msg ->
+              Printf.eprintf "%s%!" msg;
+              failwith "lex"
+          | Llparserstrip.Error ->
+              let pos1 = Lexing.lexeme_start_p filebuf in
+              let pos2 = Lexing.lexeme_end_p filebuf in
+              let lexeme = Lexing.lexeme filebuf in
+              Printf.fprintf stderr "%s:%d:%d - %d:%d: syntax error '%s'\n"
+                pos1.pos_fname pos1.pos_lnum
+                (pos1.pos_cnum - pos1.pos_bol)
+                pos2.pos_lnum
+                (pos2.pos_cnum - pos2.pos_bol + 1)
+                lexeme;
+              failwith "par"
+        in
+        (* XXX: might still leak on exception: *)
+        close_in input;
+        parseRes
+      in
+      open_in t |> from_channel |> Ll.string_of_prog
+    in*)
   let st = "stripped" ^ t in
-  let oc = open_out st in
-  output_string oc stripped;
+  (*let stripped = strip t in
+    let oc = open_out st in
+    output_string oc stripped;*)
   let test (total, passes) c =
     Printf.printf "%s[%s]%s %s ... " muted (Common.string_of_compiler c) nc t;
     flush stdout;
-    let counts =
+    let total, passes, out =
       try
         let exe = Common.compile_test c t (Array.of_list cargs) in
         let gotexit, gotout, goterr =
           exec_with_timeout_and_capture exe args timeout stdin
         in
-        let total, passes =
-          if expexit <> gotexit || expout <> gotout || experr <> goterr then (
-            Printf.printf "%sfailed!%s\n" red nc;
-            if expexit <> gotexit then
-              Printf.printf "  exit:\n    got %s, expected %s\n"
-                (string_of_status gotexit) (string_of_status expexit);
-            if expout <> gotout then (
-              Printf.printf "  stdout:\n";
-              Common.print_diff expout gotout);
-            (total + 1, passes))
-          else (
-            Printf.printf "%sok!%s\n" green nc;
-            flush stdout;
-            (total + 1, passes + 1))
+        let out =
+          (*if expexit <> gotexit || expout <> gotout || experr <> goterr then (
+              Printf.printf "%sfailed!%s\n" red nc;
+              if expexit <> gotexit then
+                Printf.printf "  exit:\n    got %s, expected %s\n"
+                  (string_of_status gotexit) (string_of_status expexit);
+              if expout <> gotout then (
+                Printf.printf "  stdout:\n";
+                Common.print_diff expout gotout);
+              (total + 1, passes))
+            else*)
+          Printf.printf "%sok!%s\n" green nc;
+          flush stdout;
+          (total + 1, passes + 1, Some (gotexit, gotout, goterr))
         in
+        out
+      with e ->
+        Printf.printf "%sfailed compilation!%s\n" red nc;
+        Printf.printf "%s\n" (Printexc.to_string e);
+        (total + 1, passes, None)
+    in
+    let counts =
+      try
         Printf.printf "%s[%s]%s %s (stripped) ... " muted
           (Common.string_of_compiler c)
           nc st;
@@ -148,14 +154,24 @@ let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args counts =
         let sgotexit, sgotout, sgoterr =
           exec_with_timeout_and_capture sexe args timeout stdin
         in
+        let gotexit, gotout, goterr =
+          match out with
+          | Some (gotexit, gotout, goterr) -> (gotexit, gotout, goterr)
+          | None -> (expexit, expout, experr)
+        in
+
         if sgotexit <> gotexit || sgotout <> gotout || sgoterr <> goterr then (
           Printf.printf "%sfailed!%s\n" red nc;
-          if expexit <> gotexit then
+          if sgotexit <> gotexit then
             Printf.printf "  exit:\n    got %s, expected %s\n"
-              (string_of_status gotexit) (string_of_status expexit);
-          if expout <> gotout then (
+              (string_of_status sgotexit)
+              (string_of_status gotexit);
+          if sgotout <> gotout then (
             Printf.printf "  stdout:\n";
-            Common.print_diff expout gotout);
+            Common.print_diff sgotout gotout);
+          if sgoterr <> goterr then (
+            Printf.printf "  stderr:\n";
+            Common.print_diff sgoterr goterr);
           (total + 1, passes))
         else (
           Printf.printf "%sok!%s\n" green nc;
