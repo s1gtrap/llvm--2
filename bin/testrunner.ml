@@ -81,7 +81,9 @@ let clang t args =
   outfile
 
 let t ?(stdin = "") ?(cargs = []) ?(timeout = 5) t args counts =
-  let regexp = Str.regexp_string Sys.argv.(1) in
+  let regexp =
+    Str.regexp_string (if Array.length Sys.argv >= 2 then Sys.argv.(1) else "")
+  in
   if Str.string_partial_match regexp t 0 then (
     let exe = clang t cargs in
     let expexit, expout, experr =
