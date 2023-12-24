@@ -15,4 +15,3 @@ merge77:
  store i1 %tmp79, i1* %a80
  ret i64 0
 }
-

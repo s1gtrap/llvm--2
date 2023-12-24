@@ -6,11 +6,11 @@
 
 declare i32 @printf(i8*, ...)
 
-define i8 @main() {
-  call i32 (i8*) @printf(i8* @_1)
-  call i32 (i8*) @printf(i8* @_2)
-  call i32 (i8*) @printf(i8* @_3)
-  call i32 (i8*) @printf(i8* @_4)
-  call i32 (i8*) @printf(i8* @_5)
-  ret i8 0
+define i8 @main () {
+ call i32 (i8*) @printf (i8* @_1)
+ call i32 (i8*) @printf (i8* @_2)
+ call i32 (i8*) @printf (i8* @_3)
+ call i32 (i8*) @printf (i8* @_4)
+ call i32 (i8*) @printf (i8* @_5)
+ ret i8 0
 }

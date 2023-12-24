@@ -7,4 +7,3 @@ define i64 @dolphin_main () {
  store i64 %tmp59, i64* %a60
  ret i64 0
 }
-

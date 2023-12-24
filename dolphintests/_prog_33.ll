@@ -34,4 +34,3 @@ for_after294:
  call void @print_integer (i64 %temp312)
  ret i64 0
 }
-

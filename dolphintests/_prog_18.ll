@@ -15,4 +15,3 @@ merge97:
  store i1 %tmp99, i1* %a100
  ret i64 0
 }
-

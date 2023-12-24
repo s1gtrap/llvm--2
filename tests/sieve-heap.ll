@@ -1,182 +1,133 @@
-; ModuleID = 'tests/sieve-heap.c'
-source_filename = "tests/sieve-heap.c"
-target datalayout = "e-m:o-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
-target triple = "x86_64-unknown-macosx14.0.0"
+@.str = global [4 x i8] c"%d \00"
 
-@.str = private unnamed_addr constant [4 x i8] c"%d \00", align 1
+declare i32 @atoi(i8*)
+declare i8* @malloc(i64)
+declare i32 @printf(i8*, ...)
+declare void @free(i8*)
 
-; Function Attrs: noinline nounwind optnone ssp uwtable
-define i32 @main(i32 noundef %0, ptr noundef %1) #0 {
-  %3 = alloca i32, align 4
-  %4 = alloca i32, align 4
-  %5 = alloca ptr, align 8
-  %6 = alloca i32, align 4
-  %7 = alloca ptr, align 8
-  %8 = alloca i32, align 4
-  %9 = alloca i32, align 4
-  %10 = alloca i32, align 4
-  %11 = alloca i32, align 4
-  store i32 0, ptr %3, align 4
-  store i32 %0, ptr %4, align 4
-  store ptr %1, ptr %5, align 8
-  %12 = load ptr, ptr %5, align 8
-  %13 = getelementptr inbounds ptr, ptr %12, i64 1
-  %14 = load ptr, ptr %13, align 8
-  %15 = call i32 @atoi(ptr noundef %14)
-  store i32 %15, ptr %6, align 4
-  %16 = load i32, ptr %6, align 4
-  %17 = add nsw i32 %16, 1
-  %18 = sext i32 %17 to i64
-  %19 = mul i64 1, %18
-  %20 = call ptr @malloc(i64 noundef %19) #3
-  store ptr %20, ptr %7, align 8
-  store i32 2, ptr %8, align 4
-  br label %21
-
-21:                                               ; preds = %30, %2
-  %22 = load i32, ptr %8, align 4
-  %23 = load i32, ptr %6, align 4
-  %24 = icmp sle i32 %22, %23
-  br i1 %24, label %25, label %33
-
-25:                                               ; preds = %21
-  %26 = load ptr, ptr %7, align 8
-  %27 = load i32, ptr %8, align 4
-  %28 = sext i32 %27 to i64
-  %29 = getelementptr inbounds i8, ptr %26, i64 %28
-  store i8 1, ptr %29, align 1
-  br label %30
-
-30:                                               ; preds = %25
-  %31 = load i32, ptr %8, align 4
-  %32 = add nsw i32 %31, 1
-  store i32 %32, ptr %8, align 4
-  br label %21, !llvm.loop !5
-
-33:                                               ; preds = %21
-  store i32 2, ptr %9, align 4
-  br label %34
-
-34:                                               ; preds = %66, %33
-  %35 = load i32, ptr %9, align 4
-  %36 = load i32, ptr %9, align 4
-  %37 = mul nsw i32 %35, %36
-  %38 = load i32, ptr %6, align 4
-  %39 = icmp sle i32 %37, %38
-  br i1 %39, label %40, label %69
-
-40:                                               ; preds = %34
-  %41 = load ptr, ptr %7, align 8
-  %42 = load i32, ptr %9, align 4
-  %43 = sext i32 %42 to i64
-  %44 = getelementptr inbounds i8, ptr %41, i64 %43
-  %45 = load i8, ptr %44, align 1
-  %46 = trunc i8 %45 to i1
-  br i1 %46, label %47, label %65
-
-47:                                               ; preds = %40
-  %48 = load i32, ptr %9, align 4
-  %49 = load i32, ptr %9, align 4
-  %50 = mul nsw i32 %48, %49
-  store i32 %50, ptr %10, align 4
-  br label %51
-
-51:                                               ; preds = %60, %47
-  %52 = load i32, ptr %10, align 4
-  %53 = load i32, ptr %6, align 4
-  %54 = icmp sle i32 %52, %53
-  br i1 %54, label %55, label %64
-
-55:                                               ; preds = %51
-  %56 = load ptr, ptr %7, align 8
-  %57 = load i32, ptr %10, align 4
-  %58 = sext i32 %57 to i64
-  %59 = getelementptr inbounds i8, ptr %56, i64 %58
-  store i8 0, ptr %59, align 1
-  br label %60
-
-60:                                               ; preds = %55
-  %61 = load i32, ptr %9, align 4
-  %62 = load i32, ptr %10, align 4
-  %63 = add nsw i32 %62, %61
-  store i32 %63, ptr %10, align 4
-  br label %51, !llvm.loop !7
-
-64:                                               ; preds = %51
-  br label %65
-
-65:                                               ; preds = %64, %40
-  br label %66
-
-66:                                               ; preds = %65
-  %67 = load i32, ptr %9, align 4
-  %68 = add nsw i32 %67, 1
-  store i32 %68, ptr %9, align 4
-  br label %34, !llvm.loop !8
-
-69:                                               ; preds = %34
-  store i32 2, ptr %11, align 4
-  br label %70
-
-70:                                               ; preds = %85, %69
-  %71 = load i32, ptr %11, align 4
-  %72 = load i32, ptr %6, align 4
-  %73 = icmp sle i32 %71, %72
-  br i1 %73, label %74, label %88
-
-74:                                               ; preds = %70
-  %75 = load ptr, ptr %7, align 8
-  %76 = load i32, ptr %11, align 4
-  %77 = sext i32 %76 to i64
-  %78 = getelementptr inbounds i8, ptr %75, i64 %77
-  %79 = load i8, ptr %78, align 1
-  %80 = trunc i8 %79 to i1
-  br i1 %80, label %81, label %84
-
-81:                                               ; preds = %74
-  %82 = load i32, ptr %11, align 4
-  %83 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %82)
-  br label %84
-
-84:                                               ; preds = %81, %74
-  br label %85
-
-85:                                               ; preds = %84
-  %86 = load i32, ptr %11, align 4
-  %87 = add nsw i32 %86, 1
-  store i32 %87, ptr %11, align 4
-  br label %70, !llvm.loop !9
-
-88:                                               ; preds = %70
-  %89 = load ptr, ptr %7, align 8
-  call void @free(ptr noundef %89)
-  ret i32 0
+define i32 @main (i32 %0, i8* %1) {
+ %3 = alloca i32
+ %4 = alloca i32
+ %5 = alloca i8*
+ %6 = alloca i32
+ %7 = alloca i8*
+ %8 = alloca i32
+ %9 = alloca i32
+ %10 = alloca i32
+ %11 = alloca i32
+ store i32 0, i32* %3
+ store i32 %0, i32* %4
+ store i8* %1, i8** %5
+ %12 = load i8*, i8** %5
+ %13 = getelementptr i8*, i8** %12, i64 1
+ %14 = load i8*, i8** %13
+ %15 = call i32 @atoi (i8* %14)
+ store i32 %15, i32* %6
+ %16 = load i32, i32* %6
+ %17 = add i32 %16, 1
+ %18 = sext i32 %17 to i64
+ %19 = mul i64 1, %18
+ %20 = call i8* @malloc (i64 %19)
+ store i8* %20, i8** %7
+ store i32 2, i32* %8
+ br label %21
+21:
+ %22 = load i32, i32* %8
+ %23 = load i32, i32* %6
+ %24 = icmp sle i32 %22, %23
+ br i1 %24, label %25, label %33
+25:
+ %26 = load i8*, i8** %7
+ %27 = load i32, i32* %8
+ %28 = sext i32 %27 to i64
+ %29 = getelementptr i8, i8* %26, i64 %28
+ store i8 1, i8* %29
+ br label %30
+30:
+ %31 = load i32, i32* %8
+ %32 = add i32 %31, 1
+ store i32 %32, i32* %8
+ br label %21
+33:
+ store i32 2, i32* %9
+ br label %34
+34:
+ %35 = load i32, i32* %9
+ %36 = load i32, i32* %9
+ %37 = mul i32 %35, %36
+ %38 = load i32, i32* %6
+ %39 = icmp sle i32 %37, %38
+ br i1 %39, label %40, label %69
+40:
+ %41 = load i8*, i8** %7
+ %42 = load i32, i32* %9
+ %43 = sext i32 %42 to i64
+ %44 = getelementptr i8, i8* %41, i64 %43
+ %45 = load i8, i8* %44
+ %46 = trunc i8 %45 to i1
+ br i1 %46, label %47, label %65
+47:
+ %48 = load i32, i32* %9
+ %49 = load i32, i32* %9
+ %50 = mul i32 %48, %49
+ store i32 %50, i32* %10
+ br label %51
+51:
+ %52 = load i32, i32* %10
+ %53 = load i32, i32* %6
+ %54 = icmp sle i32 %52, %53
+ br i1 %54, label %55, label %64
+55:
+ %56 = load i8*, i8** %7
+ %57 = load i32, i32* %10
+ %58 = sext i32 %57 to i64
+ %59 = getelementptr i8, i8* %56, i64 %58
+ store i8 0, i8* %59
+ br label %60
+60:
+ %61 = load i32, i32* %9
+ %62 = load i32, i32* %10
+ %63 = add i32 %62, %61
+ store i32 %63, i32* %10
+ br label %51
+64:
+ br label %65
+65:
+ br label %66
+66:
+ %67 = load i32, i32* %9
+ %68 = add i32 %67, 1
+ store i32 %68, i32* %9
+ br label %34
+69:
+ store i32 2, i32* %11
+ br label %70
+70:
+ %71 = load i32, i32* %11
+ %72 = load i32, i32* %6
+ %73 = icmp sle i32 %71, %72
+ br i1 %73, label %74, label %88
+74:
+ %75 = load i8*, i8** %7
+ %76 = load i32, i32* %11
+ %77 = sext i32 %76 to i64
+ %78 = getelementptr i8, i8* %75, i64 %77
+ %79 = load i8, i8* %78
+ %80 = trunc i8 %79 to i1
+ br i1 %80, label %81, label %84
+81:
+ %82 = load i32, i32* %11
+ %83 = call i32 (i8*, ...) @printf (i8* @.str, i32 %82)
+ br label %84
+84:
+ br label %85
+85:
+ %86 = load i32, i32* %11
+ %87 = add i32 %86, 1
+ store i32 %87, i32* %11
+ br label %70
+88:
+ %89 = load i8*, i8** %7
+ call void @free (i8* %89)
+ ret i32 0
 }
-
-declare i32 @atoi(ptr noundef) #1
-
-; Function Attrs: allocsize(0)
-declare ptr @malloc(i64 noundef) #2
-
-declare i32 @printf(ptr noundef, ...) #1
-
-declare void @free(ptr noundef) #1
-
-attributes #0 = { noinline nounwind optnone ssp uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="penryn" "target-features"="+cmov,+cx16,+cx8,+fxsr,+mmx,+sahf,+sse,+sse2,+sse3,+sse4.1,+ssse3,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="penryn" "target-features"="+cmov,+cx16,+cx8,+fxsr,+mmx,+sahf,+sse,+sse2,+sse3,+sse4.1,+ssse3,+x87" "tune-cpu"="generic" }
-attributes #2 = { allocsize(0) "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="penryn" "target-features"="+cmov,+cx16,+cx8,+fxsr,+mmx,+sahf,+sse,+sse2,+sse3,+sse4.1,+ssse3,+x87" "tune-cpu"="generic" }
-attributes #3 = { allocsize(0) }
-
-!llvm.module.flags = !{!0, !1, !2, !3}
-!llvm.ident = !{!4}
-
-!0 = !{i32 1, !"wchar_size", i32 4}
-!1 = !{i32 8, !"PIC Level", i32 2}
-!2 = !{i32 7, !"uwtable", i32 2}
-!3 = !{i32 7, !"frame-pointer", i32 2}
-!4 = !{!"Homebrew clang version 17.0.6"}
-!5 = distinct !{!5, !6}
-!6 = !{!"llvm.loop.mustprogress"}
-!7 = distinct !{!7, !6}
-!8 = distinct !{!8, !6}
-!9 = distinct !{!9, !6}

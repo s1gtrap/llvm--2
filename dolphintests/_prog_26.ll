@@ -32,4 +32,3 @@ after220:
 while_after210:
  ret i64 0
 }
-

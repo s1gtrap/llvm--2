@@ -34,4 +34,3 @@ for_update232:
 for_after234:
  ret i64 0
 }
-

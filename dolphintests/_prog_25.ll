@@ -16,4 +16,3 @@ dead_code201:
 while_after198:
  ret i64 0
 }
-

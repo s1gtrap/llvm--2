@@ -14,4 +14,3 @@ for_update282:
 for_after284:
  ret i64 0
 }
-

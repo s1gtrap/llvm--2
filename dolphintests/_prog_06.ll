@@ -19,4 +19,3 @@ else49:
 after46:
  ret i64 0
 }
-

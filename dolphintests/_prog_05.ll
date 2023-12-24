@@ -16,4 +16,3 @@ then31:
 after32:
  ret i64 0
 }
-

@@ -2,7 +2,7 @@
 
 declare i32 @printf(i8*, ...)
 
-define void @main() {
-  call i32 (i8*) @printf(i8* @msg)
-  ret void
+define void @main () {
+ call i32 (i8*) @printf (i8* @msg)
+ ret void
 }
