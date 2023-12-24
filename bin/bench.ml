@@ -1,5 +1,6 @@
 open Common
 open Unix
+open Llvm__2
 
 let read_all chan =
   let buf_size = 4096 in
@@ -64,7 +65,7 @@ let bench_n f a n c =
   let min, avg, max = iter Int64.max_int 0L Int64.min_int n in
   (f, a, min, Int64.div avg (Int64.of_int n), max)
 
-let bench_all_n f a n =
+let bench_all_n f a n c =
   flush Stdlib.stdout;
   let cf, ca, cmin, cavg, cmax = bench_n f a n Clang in
   (cf, ca, Clang, cmin, cavg, cmax, 1.0, 1.0)
@@ -79,22 +80,7 @@ let bench_all_n f a n =
            max,
            Int64.to_float min /. Int64.to_float cmin,
            Int64.to_float avg /. Int64.to_float cavg ))
-       [
-         Llvm__2 (Llvm__2.Regalloc.Simple 12);
-         Llvm__2 (Llvm__2.Regalloc.Simple 2);
-         Llvm__2 (Llvm__2.Regalloc.Briggs 12);
-         Llvm__2 (Llvm__2.Regalloc.Briggs 2);
-         Llvm__2 Llvm__2.Regalloc.Linearscan;
-         Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-         Llvm__2 (Llvm__2.Regalloc.Greedy 0);
-       ]
-
-let _print (f, a, min, avg, max) =
-  Printf.printf "bench %s " f;
-  Array.iter (fun a -> Printf.printf "%s " a) a;
-  Printf.printf "min=%Ld " min;
-  Printf.printf "avg=%Ld " avg;
-  Printf.printf "max=%Ld\n" max
+       c
 
 let reset = "\x1b[0m"
 let clamp v min max = Float.min (Float.max v min) max
@@ -117,13 +103,6 @@ let grad r =
   in
   color red green 0
 
-let print2 (f, a, c, min, avg, max, minr, avgr) =
-  Printf.printf "bench %s\t%s " (string_of_compiler c) f;
-  Array.iter (fun a -> Printf.printf "%s " a) a;
-  Printf.printf "\tmin=%Ld (%s%f%s)\t" min (grad minr) minr reset;
-  Printf.printf "avg=%Ld (%s%f%s)\t" avg (grad avgr) avgr reset;
-  Printf.printf "max=%Ld\n" max
-
 let () =
   let newline () =
     print_newline ();
@@ -131,11 +110,22 @@ let () =
   in
   let filter = ref "" in
   let n = ref 10 in
+  let table = ref false in
   let speclist =
     [
       ("-n", Arg.Set_int n, "Number of samples");
       ("-f", Arg.Set_string filter, "Filter benches");
+      ("-t", Arg.Set table, "Output in latex format");
     ]
+  in
+  let print (f, a, c, min, avg, max, minr, avgr) =
+    if !table then Printf.printf "& %f" minr
+    else (
+      Printf.printf "bench %s\t%s " (string_of_compiler c) f;
+      Array.iter (fun a -> Printf.printf "%s " a) a;
+      Printf.printf "\tmin=%Ld (%s%f%s)\t" min (grad minr) minr reset;
+      Printf.printf "avg=%Ld (%s%f%s)\t" avg (grad avgr) avgr reset;
+      Printf.printf "max=%Ld\n" max)
   in
   let matches s =
     let re = Str.regexp_string !filter in
@@ -144,10 +134,15 @@ let () =
       true
     with Not_found -> false
   in
-  let b f args =
+  let b f c args =
     if matches f then (
+      if !table then (
+        List.iter (fun alc -> Printf.printf "& %s " (string_of_compiler alc)) c;
+        Printf.printf "\\\n");
       let f args =
-        bench_all_n f args !n |> List.iter print2;
+        Printf.printf "%s " (Ll.mapcat "\\\\" (fun s -> s) (Array.to_list args));
+        bench_all_n f args !n c |> List.iter print;
+        if !table then Printf.printf "\\\n";
         flush Stdlib.stdout
       in
       List.iter f args;
@@ -158,6 +153,15 @@ let () =
 
   b "benches/factori32.ll"
     [
+      Llvm__2 (Llvm__2.Regalloc.Simple 12);
+      Llvm__2 (Llvm__2.Regalloc.Simple 2);
+      Llvm__2 (Llvm__2.Regalloc.Briggs 12);
+      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
+      Llvm__2 Llvm__2.Regalloc.Linearscan;
+      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+    ]
+    [
       [| "268435399" |];
       [| "536870909" |];
       [| "1073741789" |];
@@ -165,6 +169,15 @@ let () =
     ];
 
   b "benches/factori64.ll"
+    [
+      Llvm__2 (Llvm__2.Regalloc.Simple 12);
+      Llvm__2 (Llvm__2.Regalloc.Simple 2);
+      Llvm__2 (Llvm__2.Regalloc.Briggs 12);
+      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
+      Llvm__2 Llvm__2.Regalloc.Linearscan;
+      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+    ]
     [
       [| "268435399" |];
       [| "536870909" |];
@@ -177,6 +190,15 @@ let () =
 
   b "benches/sieven.ll"
     [
+      Llvm__2 (Llvm__2.Regalloc.Simple 12);
+      Llvm__2 (Llvm__2.Regalloc.Simple 2);
+      Llvm__2 (Llvm__2.Regalloc.Briggs 12);
+      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
+      Llvm__2 Llvm__2.Regalloc.Linearscan;
+      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+    ]
+    [
       [| "1000" |];
       [| "10000" |];
       [| "100000" |];
@@ -186,6 +208,15 @@ let () =
 
   b "benches/subset.ll"
     [
+      Llvm__2 (Llvm__2.Regalloc.Simple 12);
+      Llvm__2 (Llvm__2.Regalloc.Simple 2);
+      Llvm__2 (Llvm__2.Regalloc.Briggs 12);
+      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
+      Llvm__2 Llvm__2.Regalloc.Linearscan;
+      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+    ]
+    [
       Array.init 15 string_of_int;
       Array.init 16 string_of_int;
       Array.init 17 string_of_int;
@@ -194,6 +225,39 @@ let () =
          (Array.init 20 string_of_int) n*)
     ];
 
-  b "benches/fib.ll" [ [| "40" |]; [| "41" |]; [| "42" |] ];
+  b "benches/fib.ll"
+    [
+      Llvm__2 (Llvm__2.Regalloc.Simple 12);
+      Llvm__2 (Llvm__2.Regalloc.Simple 2);
+      Llvm__2 (Llvm__2.Regalloc.Briggs 12);
+      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
+      Llvm__2 Llvm__2.Regalloc.Linearscan;
+      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 3);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 2);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 1);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+    ]
+    [
+      [| "34" |];
+      [| "35" |];
+      [| "36" |];
+      [| "37" |];
+      [| "38" |];
+      [| "39" |];
+      [| "40" |];
+      [| "41" |];
+      [| "42" |];
+    ];
 
-  b "benches/sha256.ll" [ [| "100" |]; [| "1000" |]; [| "10000" |] ]
+  b "benches/sha256.ll"
+    [
+      Llvm__2 (Llvm__2.Regalloc.Simple 12);
+      Llvm__2 (Llvm__2.Regalloc.Simple 2);
+      Llvm__2 (Llvm__2.Regalloc.Briggs 12);
+      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
+      Llvm__2 Llvm__2.Regalloc.Linearscan;
+      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+    ]
+    [ [| "100" |]; [| "1000" |]; [| "10000" |] ]
