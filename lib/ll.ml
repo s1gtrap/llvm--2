@@ -66,7 +66,10 @@ type insn =
       * operand
       * (ty * operand) list (* fn (%1, %2, ...)                   *)
   | Bitcast of ty * operand * ty (* bitcast ty1 %u to ty2              *)
-  | Gep of ty * operand * operand list (* getelementptr ty* %u, i64 %vi, ... *)
+  | Gep of
+      ty
+      * (ty * operand)
+      * (ty * operand) list (* getelementptr ty* %u, i64 %vi, ... *)
   | Zext of ty * operand * ty (* zext ty1 %o to ty2                 *)
   | Sext of ty * operand * ty
   (* sext ty1 %o to ty2                 *)
@@ -183,11 +186,8 @@ let string_of_cnd (c : cnd) : string =
   | Ugt -> "ugt"
   | Uge -> "uge"
 
-let string_of_gep_index (opr : operand) : string =
-  match opr with
-  | IConst64 i -> "i64 " ^ Int64.to_string i
-  | IConst32 i -> "i32 " ^ Int32.to_string i
-  | opr' -> "i64 " ^ soo opr'
+let string_of_gep_index ((ty, opr) : ty * operand) : string =
+  sot ty ^ " " ^ soo opr
 
 let string_of_insn (ins : insn) : string =
   match ins with
@@ -209,8 +209,8 @@ let string_of_insn (ins : insn) : string =
         [
           "getelementptr";
           sot t ^ ",";
-          sot (Ptr t);
-          soo opr ^ ",";
+          sot (fst opr);
+          soo (snd opr) ^ ",";
           mapcat ", " string_of_gep_index oi;
         ]
   | Zext (t, o1, t2) -> concwsp [ "zext"; sot t; soo o1; "to"; sot t2 ]

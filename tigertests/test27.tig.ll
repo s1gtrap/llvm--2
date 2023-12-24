@@ -26,20 +26,20 @@ declare void @tigerexit(i8*, i64)
 
 define i64 @g$1 (%$locals_tigermain* %$sl, i64 %a$2) {
  %locals_$_0 = alloca %$locals_g$1
- %arg_$_2 = getelementptr %$locals_g$1, %$locals_g$1* %locals_$_0, i64 0, i64 1
+ %arg_$_2 = getelementptr %$locals_g$1, %$locals_g$1* %locals_$_0, i32 0, i32 1
  store i64 %a$2, i64* %arg_$_2
- %arg_$_3 = getelementptr %$locals_g$1, %$locals_g$1* %locals_$_0, i64 0, i64 0
+ %arg_$_3 = getelementptr %$locals_g$1, %$locals_g$1* %locals_$_0, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_3
- %var_ptr_$_4 = getelementptr %$locals_g$1, %$locals_g$1* %locals_$_0, i64 0, i64 1
+ %var_ptr_$_4 = getelementptr %$locals_g$1, %$locals_g$1* %locals_$_0, i32 0, i32 1
  %res_$_5 = load i64, i64* %var_ptr_$_4
  ret i64 %res_$_5
 }
 
 define i64 @tigermain (i8* %$sl) {
  %locals_$_1 = alloca %$locals_tigermain
- %arg_$_6 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_1, i64 0, i64 0
+ %arg_$_6 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_1, i32 0, i32 0
  store i8* %$sl, i8** %arg_$_6
- %temp_$_7 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_1, i64 0, i64 2
+ %temp_$_7 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_1, i32 0, i32 2
  store i64 0, i64* %temp_$_7
  %ret_$_8 = call i64 @g$1 (%$locals_tigermain* %locals_$_1, i64 2)
  ret i64 %ret_$_8

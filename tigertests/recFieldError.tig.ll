@@ -26,11 +26,11 @@ declare void @tigerexit(i8*, i64)
 
 define i64 @tigermain (i8* %$sl) {
  %locals_$_0 = alloca %$locals_tigermain
- %arg_$_1 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 0
+ %arg_$_1 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 0
  store i8* %$sl, i8** %arg_$_1
- %temp_$_2 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 1
+ %temp_$_2 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 1
  store i8* null, i8** %temp_$_2
- %var_ptr_$_3 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 1
+ %var_ptr_$_3 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 1
  %load_$_4 = load i8*, i8** %var_ptr_$_3
  %record_ptr_$_5 = bitcast i8* %load_$_4 to %Loc$0*
  %int_of_ptr_$_8 = ptrtoint i8* %load_$_4 to i64
@@ -40,7 +40,7 @@ thn_$_6:
  call i64 @recFieldError ()
  br label %mrg_$_7
 mrg_$_7:
- %field_ptr_$_10 = getelementptr %Loc$0, %Loc$0* %record_ptr_$_5, i64 0, i64 0
+ %field_ptr_$_10 = getelementptr %Loc$0, %Loc$0* %record_ptr_$_5, i32 0, i32 0
  %res_$_11 = load i64, i64* %field_ptr_$_10
  ret i64 %res_$_11
 }

@@ -20,7 +20,8 @@ let use (s : S.SS.t) (insn : Cfg.insn) =
   | Insn (_, Store (_, l, r)) ->
       op l s |> op r
   | Insn (_, Call (_, _, args)) -> List.map snd args |> List.fold_left po s
-  | Insn (_, Gep (_, bop, ops)) -> List.fold_left po (op bop s) ops
+  | Insn (_, Gep (_, bop, ops)) ->
+      List.map snd ops |> List.fold_left po (op (snd bop) s)
   | Insn (_, Select (c, (_, l), (_, r))) -> op c s |> op l |> op r
   | Insn (_, PhiNode (_, ops)) -> List.map fst ops |> List.fold_left po s
   | Term (Ret (_, Some o) | Cbr (o, _, _)) -> op o s

@@ -27,17 +27,17 @@ declare void @tigerexit(i8*, i64)
 
 define i8* @tigermain (i8* %$sl) {
  %locals_$_0 = alloca %$locals_tigermain
- %arg_$_1 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 0
+ %arg_$_1 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 0
  store i8* %$sl, i8** %arg_$_1
  %init_ptr_$_2 = alloca i64
  store i64 0, i64* %init_ptr_$_2
  %init_ptr_$_3 = bitcast i64* %init_ptr_$_2 to i8*
- %init_size_ptr_$_4 = getelementptr i64, i64* null, i64 1
+ %init_size_ptr_$_4 = getelementptr i64, i64* null, i32 1
  %init_size_$_5 = ptrtoint i64* %init_size_ptr_$_4 to i64
  %array_ptr_$_6 = call i8* @initArray (i64 10, i64 %init_size_$_5, i8* %init_ptr_$_3)
- %temp_$_7 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 1
+ %temp_$_7 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 1
  store i8* %array_ptr_$_6, i8** %temp_$_7
- %var_ptr_$_8 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 1
+ %var_ptr_$_8 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 1
  %res_$_9 = load i8*, i8** %var_ptr_$_8
  ret i8* %res_$_9
 }

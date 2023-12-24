@@ -26,11 +26,11 @@ declare void @tigerexit(i8*, i64)
 
 define void @tigermain (i8* %$sl) {
  %locals_$_0 = alloca %$locals_tigermain
- %arg_$_1 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 0
+ %arg_$_1 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 0
  store i8* %$sl, i8** %arg_$_1
- %temp_$_2 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 1
+ %temp_$_2 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 1
  store i8* null, i8** %temp_$_2
- %var_ptr_$_3 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 1
+ %var_ptr_$_3 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 1
  store i8* null, i8** %var_ptr_$_3
  ret void
 }

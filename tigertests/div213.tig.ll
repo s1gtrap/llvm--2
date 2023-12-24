@@ -25,7 +25,7 @@ declare void @tigerexit(i8*, i64)
 
 define i64 @tigermain (i8* %$sl) {
  %locals_$_0 = alloca %$locals_tigermain
- %arg_$_1 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 0
+ %arg_$_1 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 0
  store i8* %$sl, i8** %arg_$_1
  %cnd_$_4 = icmp eq i64 3, 0
  br i1 %cnd_$_4, label %thn_$_2, label %mrg_$_3

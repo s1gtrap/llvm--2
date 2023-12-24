@@ -20,7 +20,7 @@ let use t (insn : Cfg.insn) idx =
       List.map snd args |> List.fold_left (fun s e -> op e s) t
   | Insn (_, Bitcast (_, sop, _)) -> op sop t
   | Insn (_, Gep (_, bop, ops)) ->
-      List.fold_left (fun s o -> op o s) (op bop t) ops
+      List.map snd ops |> List.fold_left (fun s o -> op o s) (op (snd bop) t)
   | Insn (_, Zext (_, sop, _)) -> op sop t
   | Insn (_, Sext (_, sop, _)) -> op sop t
   | Insn (_, Ptrtoint (_, sop, _)) -> op sop t

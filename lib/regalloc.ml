@@ -590,8 +590,11 @@ let rec size_ty : (Ll.uid * Ll.ty) list -> Ll.ty -> int =
   | Array (len, ty) -> len * size_ty tdecls ty
 
 let compile_gep :
-    ctxt -> operand S.table -> Ll.ty * Ll.operand -> Ll.operand list -> ins list
-    =
+    ctxt ->
+    operand S.table ->
+    Ll.ty * Ll.operand ->
+    (Ll.ty * Ll.operand) list ->
+    ins list =
  fun ctxt asn (ty, oper) ops ->
   let base = compile_operand ctxt asn Ll.I64 (Reg Rcx) oper in
   let rec gep : Ll.operand list -> Ll.ty -> ins list list -> ins list list =
@@ -634,7 +637,10 @@ let compile_gep :
         gep tail ty ((parins @ [ offsins; childins ]) :: insns)
     | _, [] -> List.rev insns
   in
-  base @ List.concat (gep ops (Array (0, ty)) [])
+  base
+  @ List.concat
+      (* FIXME: test if indices of varying types works: *)
+      (gep (List.map snd ops) (Array (0, ty)) [])
 
 let compile_bop : Ll.bop -> Ll.ty -> opcode =
  fun bop ty ->
@@ -911,7 +917,8 @@ let compile_insn :
       opins @ [ storins ]
   | Some dst, Gep (ty, src, operlist) ->
       let dst = S.ST.find dst asn in
-      let gepinsns = compile_gep ctxt asn (ty, src) operlist in
+      (* FIXME: don't discard the type of src: *)
+      let gepinsns = compile_gep ctxt asn (ty, snd src) operlist in
       let stored = (Movq, [ Reg Rcx; dst ]) in
       gepinsns @ [ stored ]
   | Some dst, Zext (Ll.I8, src, _) ->

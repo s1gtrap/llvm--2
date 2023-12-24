@@ -135,7 +135,7 @@ ty_list:
 
 gep_path:
   | path=separated_nonempty_list(COMMA,typed(operand))
-    { List.map snd path }
+    { path }
 
 bop:
   | OR { Or }

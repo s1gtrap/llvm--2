@@ -31,20 +31,20 @@ declare void @tigerexit(i8*, i64)
 
 define void @tigermain (i8* %$sl) {
  %locals_$_0 = alloca %$locals_tigermain
- %arg_$_1 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 0
+ %arg_$_1 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 0
  store i8* %$sl, i8** %arg_$_1
  %temp_$_3 = bitcast { i64, [5 x i8] }* @str_$_2 to i8*
- %temp_$_4 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 2
+ %temp_$_4 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 2
  store i8* %temp_$_3, i8** %temp_$_4
  %temp_$_6 = bitcast { i64, [4 x i8] }* @str_$_5 to i8*
- %temp_$_7 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 1
+ %temp_$_7 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 1
  store i8* %temp_$_6, i8** %temp_$_7
- %var_ptr_$_18 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 2
+ %var_ptr_$_18 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 2
  %res_$_19 = load i8*, i8** %var_ptr_$_18
  call void @print (i8* null, i8* %res_$_19)
  %temp_$_16 = bitcast { i64, [5 x i8] }* @str_$_15 to i8*
  call void @print (i8* null, i8* %temp_$_16)
- %var_ptr_$_12 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i64 0, i64 1
+ %var_ptr_$_12 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 1
  %res_$_13 = load i8*, i8** %var_ptr_$_12
  call void @print (i8* null, i8* %res_$_13)
  %temp_$_10 = bitcast { i64, [5 x i8] }* @str_$_9 to i8*

@@ -29,11 +29,11 @@ declare void @tigerexit(i8*, i64)
 
 define i64 @compare$1 (%$locals_tigermain* %$sl) {
  %locals_$_0 = alloca %$locals_compare$1
- %arg_$_2 = getelementptr %$locals_compare$1, %$locals_compare$1* %locals_$_0, i64 0, i64 0
+ %arg_$_2 = getelementptr %$locals_compare$1, %$locals_compare$1* %locals_$_0, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_2
- %lnk_$_3 = getelementptr %$locals_compare$1, %$locals_compare$1* %locals_$_0, i64 0, i64 0
+ %lnk_$_3 = getelementptr %$locals_compare$1, %$locals_compare$1* %locals_$_0, i32 0, i32 0
  %load_$_4 = load %$locals_tigermain*, %$locals_tigermain** %lnk_$_3
- %var_ptr_$_5 = getelementptr %$locals_tigermain, %$locals_tigermain* %load_$_4, i64 0, i64 1
+ %var_ptr_$_5 = getelementptr %$locals_tigermain, %$locals_tigermain* %load_$_4, i32 0, i32 1
  %res_$_6 = load i8*, i8** %var_ptr_$_5
  %temp_$_8 = bitcast { i64, [4 x i8] }* @str_$_7 to i8*
  %temp_$_9 = call i64 @stringGreater (i8* %res_$_6, i8* %temp_$_8)
@@ -42,10 +42,10 @@ define i64 @compare$1 (%$locals_tigermain* %$sl) {
 
 define i64 @tigermain (i8* %$sl) {
  %locals_$_1 = alloca %$locals_tigermain
- %arg_$_10 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_1, i64 0, i64 0
+ %arg_$_10 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_1, i32 0, i32 0
  store i8* %$sl, i8** %arg_$_10
  %temp_$_12 = bitcast { i64, [8 x i8] }* @str_$_11 to i8*
- %temp_$_13 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_1, i64 0, i64 1
+ %temp_$_13 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_1, i32 0, i32 1
  store i8* %temp_$_12, i8** %temp_$_13
  %ret_$_14 = call i64 @compare$1 (%$locals_tigermain* %locals_$_1)
  ret i64 %ret_$_14
