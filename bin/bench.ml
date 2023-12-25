@@ -103,6 +103,40 @@ let grad r =
   in
   color red green 0
 
+let cellcolor r =
+  let color r g b =
+    "\\cellcolor[rgb]{"
+    ^ string_of_float ((float_of_int r /. 1024.0) +. 0.75)
+    ^ ","
+    ^ string_of_float ((float_of_int g /. 1024.0) +. 0.75)
+    ^ ","
+    ^ string_of_float ((float_of_int b /. 1024.0) +. 0.75)
+    ^ "}"
+  in
+  let redlimit = 2.0 in
+  let greenlimit = 10.0 in
+  let red =
+    (clamp r 1.0 redlimit -. 1.0) *. (255.0 /. (redlimit -. 1.0))
+    |> int_of_float
+  in
+  let green =
+    (greenlimit -. clamp r redlimit greenlimit)
+    *. (255.0 /. (greenlimit -. redlimit))
+    |> int_of_float
+  in
+  color red green 0
+
+let default_compilers =
+  [
+    Llvm__2 (Llvm__2.Regalloc.Simple 12);
+    Llvm__2 (Llvm__2.Regalloc.Simple 2);
+    Llvm__2 (Llvm__2.Regalloc.Briggs 12);
+    Llvm__2 (Llvm__2.Regalloc.Briggs 2);
+    Llvm__2 Llvm__2.Regalloc.Linearscan;
+    Llvm__2 (Llvm__2.Regalloc.Greedy 12);
+    Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+  ]
+
 let () =
   let newline () =
     print_newline ();
@@ -119,7 +153,7 @@ let () =
     ]
   in
   let print (f, a, c, min, avg, max, minr, avgr) =
-    if !table then Printf.printf "& %.2f" minr
+    if !table then Printf.printf "& %s %.2f" (cellcolor minr) minr
     else (
       Printf.printf "bench %s\t%s " (string_of_compiler c) f;
       Array.iter (fun a -> Printf.printf "%s " a) a;
@@ -137,30 +171,27 @@ let () =
   let b f c args =
     if matches f then (
       if !table then (
-        List.iter (fun alc -> Printf.printf "& %s " (string_of_compiler alc)) ([Clang] @ c);
+        Printf.printf "\\begin{NiceTabular}{>{\\columncolor{gray!15}}c%s}\n"
+          (String.make (List.length c + 1) 'c');
+        List.iter
+          (fun alc -> Printf.printf "& %s " (string_of_compiler alc))
+          ([ Clang ] @ c);
         Printf.printf "\\\\\n");
       let f args =
-        Printf.printf "%s " (Ll.mapcat "\\\\\\" (fun s -> s) (Array.to_list args));
+        Printf.printf "%s "
+          (Ll.mapcat "\\\\\\" (fun s -> s) (Array.to_list args));
         bench_all_n f args !n c |> List.iter print;
         if !table then Printf.printf "\\\\\n";
         flush Stdlib.stdout
       in
       List.iter f args;
+      if !table then Printf.printf "\\end{NiceTabular}";
       newline ())
   in
   Arg.parse speclist (fun _ -> ()) "append [-r n]";
   flush Stdlib.stdout;
 
-  b "benches/factori32.ll"
-    [
-      Llvm__2 (Llvm__2.Regalloc.Simple 12);
-      Llvm__2 (Llvm__2.Regalloc.Simple 2);
-      Llvm__2 (Llvm__2.Regalloc.Briggs 12);
-      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
-      Llvm__2 Llvm__2.Regalloc.Linearscan;
-      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
-    ]
+  b "benches/factori32.ll" default_compilers
     [
       [| "268435399" |];
       [| "536870909" |];
@@ -168,16 +199,7 @@ let () =
       [| "2147483647" |];
     ];
 
-  b "benches/factori64.ll"
-    [
-      Llvm__2 (Llvm__2.Regalloc.Simple 12);
-      Llvm__2 (Llvm__2.Regalloc.Simple 2);
-      Llvm__2 (Llvm__2.Regalloc.Briggs 12);
-      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
-      Llvm__2 Llvm__2.Regalloc.Linearscan;
-      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
-    ]
+  b "benches/factori64.ll" default_compilers
     [
       [| "268435399" |];
       [| "536870909" |];
@@ -188,16 +210,7 @@ let () =
       [| "17179869143" |];
     ];
 
-  b "benches/sieven.ll"
-    [
-      Llvm__2 (Llvm__2.Regalloc.Simple 12);
-      Llvm__2 (Llvm__2.Regalloc.Simple 2);
-      Llvm__2 (Llvm__2.Regalloc.Briggs 12);
-      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
-      Llvm__2 Llvm__2.Regalloc.Linearscan;
-      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
-    ]
+  b "benches/sieven.ll" default_compilers
     [
       [| "1000" |];
       [| "10000" |];
@@ -206,16 +219,7 @@ let () =
       [| "10000000" |];
     ];
 
-  b "benches/subset.ll"
-    [
-      Llvm__2 (Llvm__2.Regalloc.Simple 12);
-      Llvm__2 (Llvm__2.Regalloc.Simple 2);
-      Llvm__2 (Llvm__2.Regalloc.Briggs 12);
-      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
-      Llvm__2 Llvm__2.Regalloc.Linearscan;
-      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
-    ]
+  b "benches/subset.ll" default_compilers
     [
       Array.init 15 string_of_int;
       Array.init 16 string_of_int;
@@ -225,17 +229,18 @@ let () =
          (Array.init 20 string_of_int) n*)
     ];
 
-  b "benches/fib.ll"
+  b "benches/fib.ll" default_compilers
     [
-      Llvm__2 (Llvm__2.Regalloc.Simple 12);
-      Llvm__2 (Llvm__2.Regalloc.Simple 2);
-      Llvm__2 (Llvm__2.Regalloc.Briggs 12);
-      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
-      Llvm__2 Llvm__2.Regalloc.Linearscan;
-      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
-    ]
-    [
+      [| "24" |];
+      [| "25" |];
+      [| "26" |];
+      [| "27" |];
+      [| "28" |];
+      [| "29" |];
+      [| "30" |];
+      [| "31" |];
+      [| "32" |];
+      [| "33" |];
       [| "34" |];
       [| "35" |];
       [| "36" |];
@@ -245,6 +250,9 @@ let () =
       [| "40" |];
       [| "41" |];
       [| "42" |];
+      [| "43" |];
+      [| "44" |];
+      [| "44" |];
     ];
 
   b "benches/fib.ll"
@@ -268,14 +276,5 @@ let () =
       [| "42" |];
     ];
 
-  b "benches/sha256.ll"
-    [
-      Llvm__2 (Llvm__2.Regalloc.Simple 12);
-      Llvm__2 (Llvm__2.Regalloc.Simple 2);
-      Llvm__2 (Llvm__2.Regalloc.Briggs 12);
-      Llvm__2 (Llvm__2.Regalloc.Briggs 2);
-      Llvm__2 Llvm__2.Regalloc.Linearscan;
-      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
-    ]
+  b "benches/sha256.ll" default_compilers
     [ [| "100" |]; [| "1000" |]; [| "10000" |] ]
