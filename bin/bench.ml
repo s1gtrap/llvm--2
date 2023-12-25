@@ -171,8 +171,9 @@ let () =
   let b f c args =
     if matches f then (
       if !table then (
-        Printf.printf "\\begin{NiceTabular}{>{\\columncolor{gray!15}}c%s}\n"
+        Printf.printf "\\begin{NiceTabular}{>{\\columncolor{gray!10}}c%s}\n"
           (String.make (List.length c + 1) 'c');
+        Printf.printf "\\rowcolor{gray!10}n ";
         List.iter
           (fun alc -> Printf.printf "& %s " (string_of_compiler alc))
           ([ Clang ] @ c);
@@ -231,6 +232,10 @@ let () =
 
   b "benches/fib.ll" default_compilers
     [
+      [| "20" |];
+      [| "21" |];
+      [| "22" |];
+      [| "23" |];
       [| "24" |];
       [| "25" |];
       [| "26" |];
@@ -244,36 +249,36 @@ let () =
       [| "34" |];
       [| "35" |];
       [| "36" |];
-      [| "37" |];
-      [| "38" |];
-      [| "39" |];
-      [| "40" |];
-      [| "41" |];
-      [| "42" |];
-      [| "43" |];
-      [| "44" |];
-      [| "44" |];
     ];
 
-  b "benches/fib.ll"
-    [
+
+  b "benches/fib.ll" [
       Llvm__2 (Llvm__2.Regalloc.Greedy 12);
       Llvm__2 (Llvm__2.Regalloc.Greedy 8);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 6);
       Llvm__2 (Llvm__2.Regalloc.Greedy 4);
       Llvm__2 (Llvm__2.Regalloc.Greedy 2);
       Llvm__2 (Llvm__2.Regalloc.Greedy 1);
       Llvm__2 (Llvm__2.Regalloc.Greedy 0);
     ]
     [
+      [| "20" |];
+      [| "21" |];
+      [| "22" |];
+      [| "23" |];
+      [| "24" |];
+      [| "25" |];
+      [| "26" |];
+      [| "27" |];
+      [| "28" |];
+      [| "29" |];
+      [| "30" |];
+      [| "31" |];
+      [| "32" |];
+      [| "33" |];
       [| "34" |];
       [| "35" |];
       [| "36" |];
-      [| "37" |];
-      [| "38" |];
-      [| "39" |];
-      [| "40" |];
-      [| "41" |];
-      [| "42" |];
     ];
 
   b "benches/sha256.ll" default_compilers
