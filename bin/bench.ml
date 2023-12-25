@@ -119,7 +119,7 @@ let () =
     ]
   in
   let print (f, a, c, min, avg, max, minr, avgr) =
-    if !table then Printf.printf "& %f" minr
+    if !table then Printf.printf "& %.2f" minr
     else (
       Printf.printf "bench %s\t%s " (string_of_compiler c) f;
       Array.iter (fun a -> Printf.printf "%s " a) a;
@@ -137,12 +137,12 @@ let () =
   let b f c args =
     if matches f then (
       if !table then (
-        List.iter (fun alc -> Printf.printf "& %s " (string_of_compiler alc)) c;
-        Printf.printf "\\\n");
+        List.iter (fun alc -> Printf.printf "& %s " (string_of_compiler alc)) ([Clang] @ c);
+        Printf.printf "\\\\\n");
       let f args =
-        Printf.printf "%s " (Ll.mapcat "\\\\" (fun s -> s) (Array.to_list args));
+        Printf.printf "%s " (Ll.mapcat "\\\\\\" (fun s -> s) (Array.to_list args));
         bench_all_n f args !n c |> List.iter print;
-        if !table then Printf.printf "\\\n";
+        if !table then Printf.printf "\\\\\n";
         flush Stdlib.stdout
       in
       List.iter f args;
@@ -233,7 +233,25 @@ let () =
       Llvm__2 (Llvm__2.Regalloc.Briggs 2);
       Llvm__2 Llvm__2.Regalloc.Linearscan;
       Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 3);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+    ]
+    [
+      [| "34" |];
+      [| "35" |];
+      [| "36" |];
+      [| "37" |];
+      [| "38" |];
+      [| "39" |];
+      [| "40" |];
+      [| "41" |];
+      [| "42" |];
+    ];
+
+  b "benches/fib.ll"
+    [
+      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 8);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 4);
       Llvm__2 (Llvm__2.Regalloc.Greedy 2);
       Llvm__2 (Llvm__2.Regalloc.Greedy 1);
       Llvm__2 (Llvm__2.Regalloc.Greedy 0);
