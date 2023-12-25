@@ -334,6 +334,19 @@ let () =
        ~stdin:
          "745 9     3215  46   28 5 32      6 98 6  351   54 2 73 8     2 2 \
           76  1  6 9 8 34"
+  |> t "tests/ackermann.ll" [ "0"; "0"; "0" ]
+  |> t "tests/ackermann.ll" [ "1"; "0"; "1" ]
+  |> t "tests/ackermann.ll" [ "2"; "0"; "1" ]
+  |> t "tests/ackermann.ll" [ "1"; "1"; "1" ]
+  |> t "tests/ackermann.ll" [ "2"; "1"; "1" ]
+  |> t "tests/ackermann.ll" [ "3"; "0"; "2" ]
+  |> t "tests/ackermann.ll" [ "42"; "0"; "2" ]
+  |> t "tests/ackermann.ll" [ "3"; "1"; "2" ]
+  |> t "tests/ackermann.ll" [ "42"; "1"; "2" ]
+  |> t "tests/ackermann.ll" [ "420"; "0"; "3" ]
+  |> t "tests/ackermann.ll" [ "1312"; "0"; "3" ]
+  |> t "tests/ackermann.ll" [ "31337"; "1"; "3" ]
+  |> t "tests/ackermann.ll" [ "2147483647"; "1"; "3" ]
   |> t "tests/sha256.ll" [ "" ]
   |> t "tests/sha256.ll" [ "a" ]
   |> t "tests/sha256.ll" [ "Hello, world!" ]
