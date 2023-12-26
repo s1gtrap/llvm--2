@@ -111,7 +111,7 @@ let compile_test c test cargs =
               try
                 In_channel.open_text test
                 |> Llvm__2.Parse.from_channel Llvm__2.Llparser.prog
-                |> Llvm__2.Regalloc.compile_prog alc
+                |> Llvm__2.Regalloc.compile_prog alc false
                 |> Llvm__2.Regalloc.string_of_prog
               with _ -> raise CompileError
             in

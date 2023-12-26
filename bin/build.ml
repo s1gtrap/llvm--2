@@ -67,16 +67,16 @@ let progasn (alloc_ : Regalloc.allocator) input =
   in
   List.iter fdecl prog.fdecls
 
-let progx86 (alloc_ : Regalloc.allocator) input =
+let progx86 (alloc_ : Regalloc.allocator) debug input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
-  let prog = Regalloc.compile_prog alloc_ prog in
+  let prog = Regalloc.compile_prog alloc_ debug prog in
   Printf.printf "%s\n" (Regalloc.string_of_prog prog)
 
-let progexe output cargs (alloc_ : Regalloc.allocator) input =
+let progexe output cargs (alloc_ : Regalloc.allocator) debug input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
-  let prog = Regalloc.compile_prog alloc_ prog in
+  let prog = Regalloc.compile_prog alloc_ debug prog in
   let prog = Regalloc.string_of_prog prog in
   let _ =
     (match Llvm__2.Regalloc.os with
@@ -121,6 +121,7 @@ let () =
   let clang = ref "" in
   let alloc = ref "" in
   let n = ref 12 in
+  let debug = ref false in
   let anon_fun filename = input_files := filename :: !input_files in
 
   let speclist =
@@ -131,6 +132,7 @@ let () =
       ("-c", Arg.Set_string clang, "Set clang parameters");
       ("-a", Arg.Set_string alloc, "Set register allocator");
       ("-n", Arg.Set_int n, "Set number of working registers");
+      ("-d", Arg.Set debug, "Debug symbols for LLVM-- instructions");
     ]
   in
 
@@ -144,7 +146,7 @@ let () =
     | "lva" | "dataflow" -> proglva
     | "itf" | "interf" | "dot" -> progitf alc
     | "asn" -> progasn alc
-    | "x86" -> progx86 alc
+    | "x86" -> progx86 alc !debug
     | "prefs" -> progprefs
     | _ ->
         fun input ->
@@ -153,6 +155,6 @@ let () =
             | "" -> Filename.basename (Filename.remove_extension input)
             | out -> out
           in
-          progexe out [| !clang |] alc input
+          progexe out [| !clang |] alc !debug input
   in
   List.iter oper !input_files

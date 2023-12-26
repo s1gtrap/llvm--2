@@ -161,6 +161,15 @@ type opcode =
   | Divq
   | Divl
   | Comment of string
+  | Breakpoint of string
+
+let breaks = ref 0
+let break i = "_$break_" ^ string_of_int i ^ "$"
+
+let newbreak () =
+  let b = !breaks in
+  breaks := b + 1;
+  (Breakpoint (break b), [])
 
 (* An instruction is an opcode plus its operands.
    Note that arity and other constraints about the operands
@@ -305,6 +314,7 @@ let string_of_opcode (opc : opcode) : string =
   | Divq -> "divq"
   | Divl -> "divl"
   | Comment s -> "# " ^ String.escaped s
+  | Breakpoint s -> s ^ ":"
 
 let map_concat s f l = String.concat s (List.map f l)
 
@@ -373,8 +383,12 @@ let string_of_elem { lbl; global; asm } : string =
   ^ (if global then string_of_lbl (mangle (S.symbol lbl)) else string_of_lbl lbl)
   ^ ":\n" ^ body
 
+let global s = "        .globl " ^ s
+
 let string_of_prog (p : prog) : string =
-  String.concat "\n" (List.map string_of_elem p)
+  String.concat "\n" (List.init !breaks break |> List.map global)
+  ^ "\n"
+  ^ String.concat "\n" (List.map string_of_elem p)
 
 (* Mapping ll comparison operations to X86 condition codes *)
 let compile_cnd (c : Ll.cnd) : cnd =
@@ -684,12 +698,11 @@ let compile_bop : Ll.bop -> Ll.ty -> opcode =
     | Xor, Ll.I8 -> Xorb
   | _ -> failwith "TODO"*)
 
-let compile_insn :
-    ctxt -> operand S.table -> Ll.uid option * Ll.insn -> ins list =
- fun ctxt asn insn ->
-  (Comment (Ll.string_of_named_insn insn), [])
-  ::
-  (match insn with
+let compile_insn ctxt debug asn insn =
+  (if debug then [ newbreak () ] else [])
+  @ [ (Comment (Ll.string_of_named_insn insn), []) ]
+  @
+  match insn with
   | Some dst, Call (_, oper, args) -> (
       match S.ST.find_opt dst asn with
       | Some dst ->
@@ -988,7 +1001,7 @@ let compile_insn :
       else
         [ pushdx ] @ oins @ o1ins @ o2ins @ [ cmpins; storins; finins; popins ]
   | Some _dst, PhiNode _ -> []
-  | insn -> failwith (Ll.string_of_named_insn insn))
+  | insn -> failwith (Ll.string_of_named_insn insn)
 
 let compile_terminator :
     ctxt -> S.symbol -> operand S.table -> ins list -> Ll.terminator -> ins list
@@ -1630,9 +1643,8 @@ let insns (_insns : Cfg.insn list) (_l : Lva.G.V.t S.table) (_g : Lva.G.t) :
   let _insn (_insns : Cfg.insn) (_l : Lva.G.V.t S.table) (_g : Lva.G.t) = 4 in
   S.empty
 
-let compile_fdecl :
-    allocator -> (Ll.uid * Ll.ty) list -> Ll.uid -> Ll.fdecl -> elem list =
- fun (alc : allocator) tdecls name { param; cfg; _ } ->
+let compile_fdecl (alc : allocator) debug tdecls name
+    ({ param; cfg; _ } : Ll.fdecl) =
   let fname = name in
   (* move out of pre-assigned parameter registers (rsi, rdi, .. r9) *)
   let (entryl, head), tail = cfg in
@@ -1744,7 +1756,7 @@ let compile_fdecl :
   |> List.map (fun (name, global, insns, term) ->
          let pro : ins list = if global then pro else [] in
          let head : ins list =
-           List.map (compile_insn ctxt asn) insns |> List.flatten
+           List.map (compile_insn ctxt debug asn) insns |> List.flatten
          in
          let head : ins list = pro @ head in
          let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
@@ -1776,7 +1788,7 @@ module Asm = struct
   let gtext l is = { lbl = l; global = true; asm = Text is }
 end
 
-let compile_prog alc ({ tdecls; gdecls; fdecls; _ } : Ll.prog) : prog =
+let compile_prog alc debug ({ tdecls; gdecls; fdecls; _ } : Ll.prog) : prog =
   let g (lbl, gdecl) = Asm.data (S.name lbl) (compile_gdecl gdecl) in
-  let f (name, fdecl) = compile_fdecl alc tdecls name fdecl in
+  let f (name, fdecl) = compile_fdecl alc debug tdecls name fdecl in
   List.map g gdecls @ List.concat (List.map f fdecls)
