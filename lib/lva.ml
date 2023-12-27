@@ -46,8 +46,8 @@ let print (insns : Cfg.insn list) (_ids : Cfg.G.V.t array) (_g : Cfg.G.t)
 
 let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
   let insns = List.mapi (fun i v -> (i, v)) insns |> List.rev in
-  let in_ = Array.init (List.length insns) (fun _ -> S.SS.empty) in
-  let out = Array.init (List.length insns) (fun _ -> S.SS.empty) in
+  let in_ = Array.init (List.length insns) (Fun.const S.SS.empty) in
+  let out = Array.init (List.length insns) (Fun.const S.SS.empty) in
   let rec dataflow () =
     let flowout (i, _) =
       let newout =
