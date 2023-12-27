@@ -1345,7 +1345,7 @@ let alloc a param insns (in_, out) : operand S.table =
                 | None ->
                     (* actual spill *)
                     let actual_spills = actual_spill assignments markers in
-                    let assignments = List.map (fun a -> a) actual_spills in
+                    let assignments = List.map Fun.id actual_spills in
                     assignments)
             | [] -> []
           and actual_spill (assignments : int VT.t) markers : assign list =
@@ -1505,7 +1505,7 @@ let alloc a param insns (in_, out) : operand S.table =
                 | None ->
                     (* actual spill *)
                     let actual_spills = actual_spill assignments markers in
-                    let assignments = List.map (fun a -> a) actual_spills in
+                    let assignments = List.map Fun.id actual_spills in
                     assignments)
             | [] -> []
           and actual_spill (assignments : int VT.t) markers : assign list =
@@ -1652,7 +1652,7 @@ let compile_fdecl (alc : allocator) debug tdecls name
   let named_insns =
     head.insns @ List.concat (List.map (fun (b : Ll.block) -> b.insns) blocks)
   in
-  let names = List.filter_map (fun x -> x) (List.map fst named_insns) in
+  let names = List.filter_map Fun.id (List.map fst named_insns) in
   let layout =
     List.mapi
       (fun idx uid -> (uid, Ind3 (Lit (Int64.of_int (-(8 * (idx + 1)))), Rbp)))
