@@ -5,7 +5,7 @@ let def (s : S.SS.t) (insn : Cfg.insn) =
 
 let use (s : S.SS.t) (insn : Cfg.insn) =
   let op o s = match o with Ll.Id i -> S.SS.add i s | _ -> s in
-  let po s o = op o s in
+  let po = Fun.flip op in
   match insn with
   | Insn (_, AllocaN (_, (_, o)))
   | Insn (_, Bitcast (_, o, _))
