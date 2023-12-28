@@ -251,8 +251,8 @@ let () =
       [| "36" |];
     ];
 
-
-  b "benches/fib.ll" [
+  b "benches/fib.ll"
+    [
       Llvm__2 (Llvm__2.Regalloc.Greedy 12);
       Llvm__2 (Llvm__2.Regalloc.Greedy 8);
       Llvm__2 (Llvm__2.Regalloc.Greedy 6);
@@ -282,4 +282,18 @@ let () =
     ];
 
   b "benches/sha256.ll" default_compilers
-    [ [| "100" |]; [| "1000" |]; [| "10000" |] ]
+    [ [| "100" |]; [| "1000" |]; [| "10000" |] ];
+
+  b "benches/fannkuch-redux.ll" default_compilers
+    [
+      [| "4" |];
+      [| "5" |];
+      [| "6" |];
+      [| "7" |];
+      [| "8" |];
+      [| "9" |];
+      [| "10" |];
+      [| "11" |];
+      [| "12" |];
+      [| "13" |];
+    ]
