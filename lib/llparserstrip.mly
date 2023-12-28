@@ -123,7 +123,7 @@ operand:
 
 ty:
   | t=ty STAR       { Ptr t }
-  | PTR             { Ptr Void }
+  | PTR             { Ptr I8 }
   | VOID            { Void }
   | I1              { I1 }
   | I8              { I8 }
