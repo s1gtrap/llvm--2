@@ -512,6 +512,31 @@ let ty_cast : Ll.ty -> operand -> operand =
   | Ll.I64, Reg (R15 | R15d | R15b) -> Reg R15
   | _, op -> op
 
+let compile_typed_operand _ctxt asn ty dst src =
+  let mov =
+    match ty with
+    | Ll.I1 | I8 -> Movb
+    | I16 -> failwith "TODO"
+    | I32 -> Movl
+    | I64 | Ptr _ -> Movq
+    | _ -> failwith "unhandled"
+  in
+  match src with
+  | Ll.Null -> [ (mov, [ Imm (Lit 0L); ty_cast ty dst ]) ]
+  | IConst64 i -> [ (mov, [ Imm (Lit i); ty_cast ty dst ]) ]
+  | IConst32 i -> [ (mov, [ Imm (Lit (Int64.of_int32 i)); ty_cast ty dst ]) ]
+  | IConst8 i ->
+      [ (mov, [ Imm (Lit (Int64.of_int (Char.code i))); ty_cast ty dst ]) ]
+  | BConst i -> [ (mov, [ Imm (Lit (if i then 1L else 0L)); ty_cast ty dst ]) ]
+  | Gid gid -> [ (Leaq, [ Ind3 (Lbl (mangle gid), Rip); ty_cast ty dst ]) ]
+  | Id id -> (
+      match (dst, S.ST.find_opt id asn) with
+      | Ind3 dst, Some (Ind3 src) ->
+          [ (mov, [ Ind3 src; Reg Rcx ]); (mov, [ Reg Rcx; Ind3 dst ]) ]
+      | dst, Some i when dst = i -> [] (* NOTE: don't comppile noop movs *)
+      | dst, Some i -> [ (mov, [ i; dst ]) ]
+      | _, None -> failwith (Printf.sprintf "%s" (S.name id)))
+
 let compile_operand :
     ctxt -> operand S.table -> Ll.ty -> operand -> Ll.operand -> ins list =
  fun _ctxt asn ty dst src ->
@@ -595,6 +620,7 @@ let rec size_ty : (Ll.uid * Ll.ty) list -> Ll.ty -> int =
  fun tdecls -> function
   | Void | Fun _ -> 0
   | I8 -> 1
+  | I16 -> 2
   | I32 -> 4
   | I1 | I64 | Ptr _ -> 8 (* FIXME: should i1 be 1? *)
   | Namedt ty ->
@@ -1003,49 +1029,84 @@ let compile_insn ctxt debug asn insn =
   | Some _dst, PhiNode _ -> []
   | insn -> failwith (Ll.string_of_named_insn insn)
 
+let switch_case = ref 0
+
+let nextcase () =
+  let c = !switch_case in
+  switch_case := c + 1;
+  c
+
 let compile_terminator :
-    ctxt -> S.symbol -> operand S.table -> ins list -> Ll.terminator -> ins list
-    =
+    ctxt ->
+    S.symbol ->
+    operand S.table ->
+    ins list ->
+    Ll.terminator ->
+    ins list * elem list =
  fun ctxt fname asn movs term ->
-  (Comment (Ll.string_of_terminator term), [])
-  ::
-  (match term with
-  | Ret (_, Some oper) ->
-      let operins = compile_operand ctxt asn Ll.I64 (Reg Rax) oper in
-      operins
-      @ [
-          (Movq, [ Reg Rbp; Reg Rsp ]);
-          (Popq, [ Reg R15 ]);
-          (Popq, [ Reg R14 ]);
-          (Popq, [ Reg R13 ]);
-          (Popq, [ Reg R12 ]);
-          (Popq, [ Reg Rbx ]);
-          (Popq, [ Reg Rbp ]);
-          (Retq, []);
-        ]
-  | Ret (_, None) ->
-      [
-        (*(Movq, [ Imm (Lit 0L); Reg Rax ]); (* FIXME *)*)
-        (Movq, [ Reg Rbp; Reg Rsp ]);
-        (Popq, [ Reg R15 ]);
-        (Popq, [ Reg R14 ]);
-        (Popq, [ Reg R13 ]);
-        (Popq, [ Reg R12 ]);
-        (Popq, [ Reg Rbx ]);
-        (Popq, [ Reg Rbp ]);
-        (Retq, []);
-      ]
-  | Br lbl -> movs @ [ (Jmp, [ Imm (Lbl (S.name fname ^ S.name lbl)) ]) ]
-  | Cbr (oper, thn, els) ->
-      let operins = compile_operand ctxt asn Ll.I64 (Reg Rax) oper in
-      let zeroins = (Movq, [ Imm (Lit 0L); Reg Rcx ]) in
-      let cmpins : ins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
-      let jeq = (J Eq, [ Imm (Lbl (S.name fname ^ S.name els)) ]) in
-      let jmp = (Jmp, [ Imm (Lbl (S.name fname ^ S.name thn)) ]) in
-      operins @ [ zeroins; cmpins ] @ movs @ [ jeq; jmp ]
-  | Unreachable ->
-      (* undefined, so do literally nothing *)
-      [])
+  let ins, elems =
+    match term with
+    | Ret (_, Some oper) ->
+        let operins = compile_operand ctxt asn Ll.I64 (Reg Rax) oper in
+        ( operins
+          @ [
+              (Movq, [ Reg Rbp; Reg Rsp ]);
+              (Popq, [ Reg R15 ]);
+              (Popq, [ Reg R14 ]);
+              (Popq, [ Reg R13 ]);
+              (Popq, [ Reg R12 ]);
+              (Popq, [ Reg Rbx ]);
+              (Popq, [ Reg Rbp ]);
+              (Retq, []);
+            ],
+          [] )
+    | Ret (_, None) ->
+        ( [
+            (*(Movq, [ Imm (Lit 0L); Reg Rax ]); (* FIXME *)*)
+            (Movq, [ Reg Rbp; Reg Rsp ]);
+            (Popq, [ Reg R15 ]);
+            (Popq, [ Reg R14 ]);
+            (Popq, [ Reg R13 ]);
+            (Popq, [ Reg R12 ]);
+            (Popq, [ Reg Rbx ]);
+            (Popq, [ Reg Rbp ]);
+            (Retq, []);
+          ],
+          [] )
+    | Br lbl -> (movs @ [ (Jmp, [ Imm (Lbl (S.name fname ^ S.name lbl)) ]) ], [])
+    | Cbr (oper, thn, els) ->
+        let operins = compile_operand ctxt asn Ll.I64 (Reg Rax) oper in
+        let zeroins = (Movq, [ Imm (Lit 0L); Reg Rcx ]) in
+        let cmpins : ins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
+        let jeq = (J Eq, [ Imm (Lbl (S.name fname ^ S.name els)) ]) in
+        let jmp = (Jmp, [ Imm (Lbl (S.name fname ^ S.name thn)) ]) in
+        (operins @ [ zeroins; cmpins ] @ movs @ [ jeq; jmp ], [])
+    | Unreachable ->
+        (* undefined, so do literally nothing *)
+        ([], [])
+    | Switch (ty, op, els, [ (o1, l1) ]) ->
+        let needins = compile_operand ctxt asn ty (Reg Rax) op in
+        let hay o l =
+          let hayins = compile_typed_operand ctxt asn ty (Reg Rcx) o in
+          let cmpins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
+          let jeq = (J Eq, [ Imm (Lbl (S.name fname ^ S.name l)) ]) in
+          hayins @ [ cmpins; jeq ]
+        in
+        let jmp = (Jmp, [ Imm (Lbl (S.name fname ^ S.name els)) ]) in
+        (needins @ hay o1 l1 @ [ jmp ], [])
+    | Switch (ty, op, els, [ (o1, l1); (o2, l2) ]) ->
+        let needins = compile_operand ctxt asn ty (Reg Rax) op in
+        let hay o l =
+          let hayins = compile_typed_operand ctxt asn ty (Reg Rcx) o in
+          let cmpins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
+          let jeq = (J Eq, [ Imm (Lbl (S.name fname ^ S.name l)) ]) in
+          hayins @ [ cmpins; jeq ]
+        in
+        let jmp = (Jmp, [ Imm (Lbl (S.name fname ^ S.name els)) ]) in
+        (needins @ hay o1 l1 @ hay o2 l2 @ [ jmp ], [])
+    | Switch _ -> failwith "TODO"
+  in
+  ((Comment (Ll.string_of_terminator term), []) :: ins, elems)
 
 module C = Coloring.Mark (Lva.G)
 
@@ -1760,12 +1821,16 @@ let compile_fdecl (alc : allocator) debug tdecls name
          in
          let head : ins list = pro @ head in
          let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
-         let tail = compile_terminator ctxt fname asn movs term in
-         {
-           lbl = (if global then S.name fname else S.name fname ^ S.name name);
-           global;
-           asm = Text (head @ tail);
-         })
+         let tail, elems = compile_terminator ctxt fname asn movs term in
+         [
+           {
+             lbl = (if global then S.name fname else S.name fname ^ S.name name);
+             global;
+             asm = Text (head @ tail);
+           };
+         ]
+         @ elems)
+  |> List.flatten
 
 let rec compile_ginit = function
   | Ll.GNull -> [ Quad (Lit 0L) ]

@@ -13,6 +13,7 @@ type ty =
   | Void (* void                *)
   | I1
   | I8
+  | I16
   | I32
   | I64 (* integer types       *)
   | Ptr of ty (* t*                  *)
@@ -87,6 +88,7 @@ type terminator =
   | Br of lbl (* br label %lbl                  *)
   | Cbr of operand * lbl * lbl (* br i1 %s, label %l1, label %l2 *)
   | Unreachable
+  | Switch of ty * operand * lbl * (operand * lbl) list
 (* unreachable -- this terminator should only be used in parts where the code should never reach, e.g., after calling a function that reports a runtime error and exits.*)
 
 (* Basic blocks *)
@@ -134,6 +136,7 @@ let rec string_of_ty (t : ty) : string =
   | Void -> "void"
   | I1 -> "i1"
   | I8 -> "i8"
+  | I16 -> "i16"
   | I32 -> "i32"
   | I64 -> "i64"
   | Ptr t' -> string_of_ty t' ^ "*"
@@ -259,6 +262,12 @@ let string_of_terminator (tr : terminator) : string =
           "%" ^ S.name m;
         ]
   | Unreachable -> "unreachable"
+  | Switch (t, o, e, cases) ->
+      "switch " ^ sot t ^ " " ^ soo o ^ ", label %" ^ S.name e ^ " [\n"
+      ^ mapcat "\n"
+          (fun (o, l) -> "    " ^ sot t ^ " " ^ soo o ^ ", label %" ^ S.name l)
+          cases
+      ^ "\n  ]"
 
 let string_of_block ((l, b) : S.symbol option * block) : string =
   match l with

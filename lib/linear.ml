@@ -32,6 +32,7 @@ let use t (insn : Cfg.insn) idx =
   | Term (Ret (_, None)) -> t
   | Term (Br _) -> t
   | Term (Cbr (c, _, _)) -> op c t
+  | Term (Switch (_, o, _, _)) -> op o t
   | Term Unreachable -> t
   | _ -> failwith (Cfg.string_of_insn insn)
 

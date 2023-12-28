@@ -79,6 +79,9 @@ let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
         add_edge i l;
         add_edge i r
     | { terminator = Unreachable; _ } -> ()
+    | { terminator = Switch (_, _, d, c); _ } ->
+        add_edge i d;
+        List.map snd c |> List.iter (add_edge i)
   in
   f (0, head);
   List.iter
@@ -95,7 +98,10 @@ let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
       | { terminator = Cbr (_, l, r); _ } ->
           add_edge i l;
           add_edge i r
-      | { terminator = Unreachable; _ } -> ())
+      | { terminator = Unreachable; _ } -> ()
+      | { terminator = Switch (_, _, d, c); _ } ->
+          add_edge i d;
+          List.map snd c |> List.iter (add_edge i))
     tail;
   (ids, g)
 

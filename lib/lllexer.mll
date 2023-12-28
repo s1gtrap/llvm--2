@@ -47,6 +47,7 @@ rule token = parse
   | "false"            { FALSE }
   | "i1"               { I1 }
   | "i8"               { I8 }
+  | "i16"              { I16 }
   | "i32"              { I32 }
   | "i64"              { I64 }
   | "to"               { TO }
@@ -90,6 +91,7 @@ rule token = parse
   | "void"             { VOID }
   | "load"             { LOAD }
   | "store"            { STORE }
+  | "switch"           { SWITCH }
   | "label"            { LABEL }
   | "external global"  { EXTGLOBAL }
   | "private unnamed_addr constant"

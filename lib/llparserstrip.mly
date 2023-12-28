@@ -4,11 +4,11 @@
 
 %token STAR COMMA COLON EQUALS EOF
 %token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET
-%token TYPE CROSS I1 I8 I32 I64 VOID PTR TRUE FALSE
+%token TYPE CROSS I1 I8 I16 I32 I64 VOID PTR TRUE FALSE
 %token ADD SUB MUL SDIV SREM UDIV UREM
 %token EQ NE SLT SLE SGT SGE ULT ULE UGT UGE
 %token AND OR XOR SHL LSHR ASHR
-%token RET BR TO NULL LABEL GLOBAL EXTGLOBAL DEFINE UNREACHABLE
+%token RET BR TO NULL LABEL GLOBAL EXTGLOBAL DEFINE UNREACHABLE SWITCH
 %token CALL ICMP LOAD STORE ALLOCA BITCAST GEP ZEXT SEXT PTRTOINT PHI TRUNC SELECT
 %token DECLARE
 
@@ -96,6 +96,12 @@ labeled_block:
   | l=LBL COLON b=block
     { (l,b) }
 
+switch_cases:
+  | (* empty *)
+    { [] }
+  | i=typed(operand) COMMA LABEL l=UID tail=switch_cases
+    { (snd i, l) :: tail }
+
 terminator:
   | RET t=ty o=operand?
     { Ret (t, o) }
@@ -104,6 +110,8 @@ terminator:
   | BR I1 o=operand COMMA LABEL l1=UID COMMA LABEL l2=UID
     { Cbr (o, l1, l2) }
   | UNREACHABLE { Unreachable }
+  | SWITCH t=ty o=operand COMMA LABEL l=UID LBRACKET cases=switch_cases RBRACKET
+    { Switch (t, o, l, cases) }
 
 operand:
   | NULL            { Null }
@@ -119,6 +127,7 @@ ty:
   | VOID            { Void }
   | I1              { I1 }
   | I8              { I8 }
+  | I16             { I16 }
   | I32             { I32 }
   | I64             { I64 }
   | LBRACE ts=ty_list RBRACE
@@ -196,7 +205,7 @@ insn:
      { Sext (t1,o,t2) }
   | TRUNC t1=ty o=operand TO t2=ty
      { Trunc (t1,o,t2) }
-  | PTRTOINT t1=ty STAR o=operand TO t2=ty
+  | PTRTOINT t1=ty  o=operand TO t2=ty
     { Ptrtoint (t1,o,t2) }
   | PHI t=ty ops=separated_list(COMMA,bracket)
     { PhiNode (t,ops) }
