@@ -584,7 +584,8 @@ let compile_call :
         match S.ST.find_opt id replace with
         | Some id -> (Callq, [ Imm (Lbl (mangle id)) ])
         | None -> (Callq, [ Imm (Lbl (mangle id)) ]))
-    | _ -> raise BackendFatal
+    | Id id -> (Callq, [ Imm (Lbl (mangle id)) ])
+    | _ -> failwith (Ll.string_of_operand oper)
   in
   let pusharg _i dst : ins list =
     let ins = compile_operand ctxt asn Ll.I64 (Reg Rax) dst in
@@ -1084,27 +1085,17 @@ let compile_terminator :
     | Unreachable ->
         (* undefined, so do literally nothing *)
         ([], [])
-    | Switch (ty, op, els, [ (o1, l1) ]) ->
+    | Switch (ty, op, els, cases) ->
         let needins = compile_operand ctxt asn ty (Reg Rax) op in
-        let hay o l =
+        let hay (o, l) =
           let hayins = compile_typed_operand ctxt asn ty (Reg Rcx) o in
           let cmpins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
           let jeq = (J Eq, [ Imm (Lbl (S.name fname ^ S.name l)) ]) in
           hayins @ [ cmpins; jeq ]
         in
+        let asd : ins list = List.map hay cases |> List.flatten in
         let jmp = (Jmp, [ Imm (Lbl (S.name fname ^ S.name els)) ]) in
-        (needins @ hay o1 l1 @ [ jmp ], [])
-    | Switch (ty, op, els, [ (o1, l1); (o2, l2) ]) ->
-        let needins = compile_operand ctxt asn ty (Reg Rax) op in
-        let hay o l =
-          let hayins = compile_typed_operand ctxt asn ty (Reg Rcx) o in
-          let cmpins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
-          let jeq = (J Eq, [ Imm (Lbl (S.name fname ^ S.name l)) ]) in
-          hayins @ [ cmpins; jeq ]
-        in
-        let jmp = (Jmp, [ Imm (Lbl (S.name fname ^ S.name els)) ]) in
-        (needins @ hay o1 l1 @ hay o2 l2 @ [ jmp ], [])
-    | Switch _ -> failwith "TODO"
+        (needins @ asd @ [ jmp ], [])
   in
   ((Comment (Ll.string_of_terminator term), []) :: ins, elems)
 
