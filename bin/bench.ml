@@ -152,8 +152,12 @@ let () =
       ("-t", Arg.Set table, "Output in latex format");
     ]
   in
-  let print (f, a, c, min, avg, max, minr, avgr) =
-    if !table then Printf.printf "& %s %.2f" (cellcolor minr) minr
+  let print i (f, a, c, min, avg, max, minr, avgr) =
+    if !table then 
+    if i = 0 then 
+      Printf.printf "& %s %s" (cellcolor minr) (Int64.to_string min)
+      else
+      Printf.printf "& %s %.5fx" (cellcolor minr) minr
     else (
       Printf.printf "bench %s\t%s " (string_of_compiler c) f;
       Array.iter (fun a -> Printf.printf "%s " a) a;
@@ -171,22 +175,22 @@ let () =
   let b f c args =
     if matches f then (
       if !table then (
-        Printf.printf "\\begin{NiceTabular}{>{\\columncolor{gray!10}}c%s}\n"
+        Printf.printf "\\begin{NiceTabular}{|c|%s|}\n\\hline\n"
           (String.make (List.length c + 1) 'c');
-        Printf.printf "\\rowcolor{gray!10}n ";
+        Printf.printf "arg(s) ";
         List.iter
           (fun alc -> Printf.printf "& %s " (string_of_compiler alc))
           ([ Clang ] @ c);
-        Printf.printf "\\\\\n");
+        Printf.printf "\\\\\n\\hline\n");
       let f args =
         Printf.printf "%s "
           (Ll.mapcat "\\\\\\" (fun s -> s) (Array.to_list args));
-        bench_all_n f args !n c |> List.iter print;
+        bench_all_n f args !n c |> List.iteri print;
         if !table then Printf.printf "\\\\\n";
         flush Stdlib.stdout
       in
       List.iter f args;
-      if !table then Printf.printf "\\end{NiceTabular}";
+      if !table then Printf.printf "\\hline\n\\end{NiceTabular}";
       newline ())
   in
   Arg.parse speclist (fun _ -> ()) "append [-r n]";
@@ -194,6 +198,10 @@ let () =
 
   b "benches/factori32.ll" default_compilers
     [
+      [| "16777213" |];
+      [| "33554393" |];
+      [| "67108859" |];
+      [| "134217689" |];
       [| "268435399" |];
       [| "536870909" |];
       [| "1073741789" |];
@@ -209,15 +217,19 @@ let () =
       [| "4294967291" |];
       [| "8589934583" |];
       [| "17179869143" |];
+      [| "34359738337" |];
     ];
 
   b "benches/sieven.ll" default_compilers
     [
-      [| "1000" |];
-      [| "10000" |];
-      [| "100000" |];
-      [| "1000000" |];
-      [| "10000000" |];
+      [| "128" |];
+      [| "256" |];
+      [| "512" |];
+      [| "1024" |];
+      [| "2048" |];
+      [| "4096" |];
+      [| "8192" |];
+      [| "16384" |];
     ];
 
   b "benches/subset.ll" default_compilers
@@ -232,23 +244,19 @@ let () =
 
   b "benches/fib.ll" default_compilers
     [
+      [| "8" |];
+      [| "10" |];
+      [| "12" |];
+      [| "14" |];
+      [| "16" |];
+      [| "18" |];
       [| "20" |];
-      [| "21" |];
       [| "22" |];
-      [| "23" |];
       [| "24" |];
-      [| "25" |];
       [| "26" |];
-      [| "27" |];
       [| "28" |];
-      [| "29" |];
       [| "30" |];
-      [| "31" |];
       [| "32" |];
-      [| "33" |];
-      [| "34" |];
-      [| "35" |];
-      [| "36" |];
     ];
 
   b "benches/fib.ll"
@@ -260,25 +268,22 @@ let () =
       Llvm__2 (Llvm__2.Regalloc.Greedy 2);
       Llvm__2 (Llvm__2.Regalloc.Greedy 1);
       Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+      Tiger;
     ]
     [
+      [| "8" |];
+      [| "10" |];
+      [| "12" |];
+      [| "14" |];
+      [| "16" |];
+      [| "18" |];
       [| "20" |];
-      [| "21" |];
       [| "22" |];
-      [| "23" |];
       [| "24" |];
-      [| "25" |];
       [| "26" |];
-      [| "27" |];
       [| "28" |];
-      [| "29" |];
       [| "30" |];
-      [| "31" |];
       [| "32" |];
-      [| "33" |];
-      [| "34" |];
-      [| "35" |];
-      [| "36" |];
     ];
 
   b "benches/sha256.ll" default_compilers
