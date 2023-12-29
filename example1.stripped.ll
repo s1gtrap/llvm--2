@@ -138,7 +138,6 @@ declare void @memset(i8*, i8, i64, i1)
 declare i8* @__memcpy_chk(i8*, i8*, i64, i64)
 declare i64 @llvm.objectsize.i64.p0(i8*, i1, i1, i1)
 declare i8* @__memset_chk(i8*, i32, i64, i64)
-declare void @__assert_rtn(i8*, i8*, i32, i8*)
 declare void @memcpy(i8*, i8*, i64, i1)
 declare i8* @fopen(i8*, i8*)
 declare i32 @fseeko(i8*, i64, i32)
@@ -158,6 +157,10 @@ declare i64 @fwrite(i8*, i64, i64, i8*)
 declare i32 @utime(i8*, i8*)
 declare i64 @mktime(i8*)
 declare i8* @localtime(i8*)
+
+define void @__assert_rtn(i8* %func, i8* %file, i32 %val, i8* %msg) {
+  ret void
+}
 
 define i64 @mz_adler32 (i64 %0, i8* %1, i64 %2) {
  %4 = alloca i64
