@@ -607,22 +607,12 @@ let arg = function
   | n -> Ind3 (Lit (Int64.of_int ((3 * 8) + ((n - 6) * 8))), Rbp)
 
 let compile_call asn oper args =
-  let replace =
-    S.ST.add (S.symbol "llvm.memset.p0.i64") (S.symbol "memset") S.empty
-    |> S.ST.add (S.symbol "llvm.memcpy.p0.p0.i64") (S.symbol "memcpy")
-  in
   let args = List.map snd args in
   let callersaved = [ Rcx; Rdx; Rsi; Rdi; R08; R09; R10; R11 ] in
   let funptr, callins =
     match oper with
-    | Ll.Gid id ->
-        ( [],
-          match S.ST.find_opt id replace with
-          | Some id -> (Callq, [ Imm (Lbl (mangle id)) ])
-          | None -> (Callq, [ Imm (Lbl (mangle id)) ]) )
-    | Id _ ->
-        (compile_operand asn Ll.I64 (Reg Rcx) oper, (Callq, [ Reg Rcx ]))
-        (* funptr is moved into %rax *)
+    | Ll.Gid id -> ([], (Callq, [ Imm (Lbl (mangle id)) ]))
+    | Id _ -> (compile_operand asn Ll.I64 (Reg Rcx) oper, (Callq, [ Reg Rcx ]))
     | _ -> failwith (Ll.string_of_operand oper)
   in
   let pusharg _i dst =
