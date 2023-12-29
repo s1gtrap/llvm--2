@@ -1909,7 +1909,7 @@ define i32 @mz_compress2(ptr noundef %0, ptr noundef %1, ptr noundef %2, i64 nou
 }
 
 ; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
-declare void @llvm.memset.p0.i64(ptr nocapture writeonly, i8, i64, i1 immarg) #4
+declare void @memset(ptr nocapture writeonly, i8, i64, i1 immarg) #4
 
 ; Function Attrs: noinline nounwind optnone ssp uwtable
 define i32 @mz_compress(ptr noundef %0, ptr noundef %1, ptr noundef %2, i64 noundef %3) #0 {

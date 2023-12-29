@@ -134,13 +134,29 @@ ty:
     { Struct ts }
   | LBRACKET i=INT CROSS t=ty RBRACKET
     { Array (Int64.to_int i,t) }
-  | rt=ty LPAREN ts=ty_list RPAREN
-    { Fun (ts, false, rt) }
+  | rt=ty LPAREN ts=ty_list_var RPAREN
+    { Fun (fst ts, snd ts, rt) }
   | t=UID           { Namedt t }
 
 ty_list:
   | ts=separated_list(COMMA,ty)
     { ts }
+
+ty_list_var_tail:
+  | COMMA ELLIPSIS
+    { ([], true) }
+  | COMMA t=ty tl=ty_list_var_tail
+    { (t :: fst tl, snd tl) }
+  | (* empty *)
+    { ([], false) }
+
+ty_list_var:
+  | ELLIPSIS
+    { ([], true) }
+  | t=ty tl=ty_list_var_tail
+    { (t :: fst tl, snd tl) }
+  | (* empty *)
+    { ([], false) }
 
 gep_path:
   | path=separated_nonempty_list(COMMA,typed(operand))
