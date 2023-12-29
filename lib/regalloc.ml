@@ -607,7 +607,6 @@ let arg = function
   | n -> Ind3 (Lit (Int64.of_int ((3 * 8) + ((n - 6) * 8))), Rbp)
 
 let compile_call asn oper args =
-  let args = List.map snd args in
   let callersaved = [ Rcx; Rdx; Rsi; Rdi; R08; R09; R10; R11 ] in
   let funptr, callins =
     match oper with
@@ -615,18 +614,16 @@ let compile_call asn oper args =
     | Id _ -> (compile_operand asn Ll.I64 (Reg Rcx) oper, (Callq, [ Reg Rcx ]))
     | _ -> failwith (Ll.string_of_operand oper)
   in
-  let pusharg _i dst =
+  let pusharg dst =
     compile_operand asn Ll.I64 (Reg Rax) dst @ [ (Pushq, [ Reg Rax ]) ]
   in
   let poparg i _ = (Popq, [ arg i ]) in
-  let freen =
-    match List.length args with
-    | len when len <= 6 -> 0L
-    | len -> Int64.of_int ((len - 6) * 8)
-  in
+  let args = List.map snd args in
+  let argslen = List.length args in
+  let freen = if argslen <= 6 then 0L else Int64.of_int ((argslen - 6) * 8) in
   let freeins = (Addq, [ Imm (Lit freen); Reg Rsp ]) in
   List.map (fun r -> (Pushq, [ Reg r ])) callersaved
-  @ List.flatten (List.mapi pusharg args)
+  @ List.flatten (List.map pusharg args)
   @ funptr
   @ List.rev (List.mapi poparg args)
   @ [ (Xorq, [ Reg Rax; Reg Rax ]) ]
