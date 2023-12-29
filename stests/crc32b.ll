@@ -73,6 +73,6 @@ define i32 @main (i32 %argc, i8** %argv) {
  %arg1str = load i8*, i8** %arg1ptr
  call i32 @printf (i8* %arg1str)
  %crc = call i32 @crc32b (i8* %arg1str)
- call i32 (i8*, i32) @printf (i8* @.str, i32 %crc)
+ call i32( i8*, i32 ) @printf (i8* @.str, i32 %crc)
  ret i32 0
 }

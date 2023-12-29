@@ -4,13 +4,13 @@
 @_4 = global [735 x i8] c"Nulla ac dolor ligula. Sed a purus imperdiet, mollis est in, porttitor neque. Praesent pulvinar nisi turpis, nec fringilla tortor varius in. Vivamus ultricies dictum rhoncus. Praesent sed lacus tortor. Proin fermentum a libero vitae cursus. Cras egestas diam nec accumsan varius. Sed ut sodales nulla. Aliquam molestie ac turpis non gravida. Sed scelerisque, erat a feugiat vulputate, dolor felis placerat urna, ac efficitur eros tortor tristique mauris. Donec pulvinar nisl quis lacus suscipit, in feugiat nisl ullamcorper. Phasellus non cursus eros. Nunc scelerisque lobortis justo at feugiat. Proin augue enim, convallis vel dui aliquet, accumsan pellentesque justo. Praesent ex sapien, viverra quis leo id, euismod pulvinar sem.\0A\0A\00"
 @_5 = global [567 x i8] c"Duis aliquet, elit eu porta aliquam, lectus mauris finibus arcu, at molestie justo enim sed diam. Integer sed risus eget enim sodales facilisis. Nulla facilisi. Aliquam in nisi sit amet lorem elementum mattis. In hac habitasse platea dictumst. Morbi ultricies risus non luctus convallis. Cras luctus sem ut tortor eleifend semper. Vivamus varius sit amet arcu non placerat. Morbi sed tellus semper, porta est vel, imperdiet felis. Sed tempus facilisis faucibus. Sed sed massa ante. Duis eu eleifend neque. Mauris eleifend enim lorem, eu laoreet lectus dignissim at.\0A\00"
 
-declare i32 @printf(i8*, ...)
+declare i32 @printf(i8*)
 
 define i8 @main () {
- call i32 (i8*) @printf (i8* @_1)
- call i32 (i8*) @printf (i8* @_2)
- call i32 (i8*) @printf (i8* @_3)
- call i32 (i8*) @printf (i8* @_4)
- call i32 (i8*) @printf (i8* @_5)
+ call i32( i8* ) @printf (i8* @_1)
+ call i32( i8* ) @printf (i8* @_2)
+ call i32( i8* ) @printf (i8* @_3)
+ call i32( i8* ) @printf (i8* @_4)
+ call i32( i8* ) @printf (i8* @_5)
  ret i8 0
 }

@@ -20,7 +20,7 @@ succ:
 step0:
  %x1 = phi i32 [%x0, %succ], [%x3, %even], [%x5, %odd]
  %valmsg = bitcast [4 x i8]* @valmsg to i8*
- call i32 (i8*, i32) @printf (i8* %valmsg, i32 %x1)
+ call i32( i8*, i32 ) @printf (i8* %valmsg, i32 %x1)
  %cnd1 = icmp sle i32 %x1, 1
  br i1 %cnd1, label %final, label %step1
 step1:

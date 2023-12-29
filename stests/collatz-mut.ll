@@ -22,7 +22,7 @@ succ:
 step0:
  %x2 = load i32, i32* %x1
  %valmsg = bitcast [4 x i8]* @valmsg to i8*
- call i32 (i8*, i32) @printf (i8* %valmsg, i32 %x2)
+ call i32( i8*, i32 ) @printf (i8* %valmsg, i32 %x2)
  %cnd1 = icmp sle i32 %x2, 1
  br i1 %cnd1, label %final, label %step1
 step1:

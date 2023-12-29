@@ -7970,7 +7970,7 @@ lbl7:
  %var10 = zext i32 %var9 to i64
  %var11 = getelementptr i32, i32* %var8, i64 %var10
  %var12 = load i32, i32* %var11
- %var13 = call i32 (i8*, i32) @printf (i8* @hex, i32 %var12)
+ %var13 = call i32( i8*, i32 ) @printf (i8* @hex, i32 %var12)
  br label %lbl14
 lbl14:
  %var15 = load i32, i32* %var3

@@ -2,7 +2,7 @@
 @.str.1 = global [4 x i8] c"%s \00"
 @.str.2 = global [3 x i8] c"}\0A\00"
 
-declare i32 @printf(i8*, ...)
+declare i32 @printf(i8*)
 
 define i32 @subsets (i32 %0, i8* %1) {
  %3 = alloca i32
@@ -20,7 +20,7 @@ define i32 @subsets (i32 %0, i8* %1) {
  %11 = icmp slt i32 %8, %10
  br i1 %11, label %12, label %41
 12:
- %13 = call i32 (i8*, ...) @printf (i8* @.str)
+ %13 = call i32( i8* ) @printf (i8* @.str)
  store i32 0, i32* %6
  br label %14
 14:
@@ -42,7 +42,7 @@ define i32 @subsets (i32 %0, i8* %1) {
  %28 = sext i32 %27 to i64
  %29 = getelementptr i8*, i8** %25, i64 %28
  %30 = load i8*, i8** %29
- %31 = call i32 (i8*, ...) @printf (i8* @.str.1, i8* %30)
+ %31 = call i32( i8* ) @printf (i8* @.str.1, i8* %30)
  br label %32
 32:
  br label %33
@@ -52,7 +52,7 @@ define i32 @subsets (i32 %0, i8* %1) {
  store i32 %35, i32* %6
  br label %14
 36:
- %37 = call i32 (i8*, ...) @printf (i8* @.str.2)
+ %37 = call i32( i8* ) @printf (i8* @.str.2)
  br label %38
 38:
  %39 = load i32, i32* %5
