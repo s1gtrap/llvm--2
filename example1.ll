@@ -15860,7 +15860,7 @@ define i32 @mz_zip_reader_init_file_v2(ptr noundef %0, ptr noundef %1, i32 nound
 
 42:                                               ; preds = %30, %27
   %43 = load ptr, ptr %16, align 8
-  %44 = call ptr @"\01_fopen"(ptr noundef %43, ptr noundef @.str.18)
+  %44 = call ptr @fopen(ptr noundef %43, ptr noundef @.str.18)
   store ptr %44, ptr %21, align 8
   %45 = load ptr, ptr %21, align 8
   %46 = icmp ne ptr %45, null
@@ -16012,7 +16012,7 @@ define i32 @mz_zip_reader_init_file_v2(ptr noundef %0, ptr noundef %1, i32 nound
   ret i32 %130
 }
 
-declare ptr @"\01_fopen"(ptr noundef, ptr noundef) #1
+declare ptr @fopen(ptr noundef, ptr noundef) #1
 
 declare i32 @fseeko(ptr noundef, i64 noundef, i32 noundef) #1
 
@@ -21566,7 +21566,7 @@ define i32 @mz_zip_reader_extract_to_file(ptr noundef %0, i32 noundef %1, ptr no
 
 41:                                               ; preds = %28
   %42 = load ptr, ptr %14, align 8
-  %43 = call ptr @"\01_fopen"(ptr noundef %42, ptr noundef @.str.19)
+  %43 = call ptr @fopen(ptr noundef %42, ptr noundef @.str.19)
   store ptr %43, ptr %18, align 8
   %44 = load ptr, ptr %18, align 8
   %45 = icmp ne ptr %44, null
@@ -21668,7 +21668,7 @@ define internal i64 @mz_zip_file_write_callback(ptr noundef %0, i64 noundef %1, 
   %10 = load ptr, ptr %7, align 8
   %11 = load i64, ptr %8, align 8
   %12 = load ptr, ptr %5, align 8
-  %13 = call i64 @"\01_fwrite"(ptr noundef %10, i64 noundef 1, i64 noundef %11, ptr noundef %12)
+  %13 = call i64 @fwrite(ptr noundef %10, i64 noundef 1, i64 noundef %11, ptr noundef %12)
   ret i64 %13
 }
 
@@ -25929,7 +25929,7 @@ define i32 @mz_zip_writer_init_file_v2(ptr noundef %0, ptr noundef %1, i64 nound
   %42 = icmp ne i32 %41, 0
   %43 = zext i1 %42 to i64
   %44 = select i1 %42, ptr @.str.20, ptr @.str.19
-  %45 = call ptr @"\01_fopen"(ptr noundef %39, ptr noundef %44)
+  %45 = call ptr @fopen(ptr noundef %39, ptr noundef %44)
   store ptr %45, ptr %14, align 8
   %46 = icmp eq ptr null, %45
   br i1 %46, label %47, label %58
@@ -26133,7 +26133,7 @@ define internal i64 @mz_zip_file_write_func(ptr noundef %0, i64 noundef %1, ptr 
   %57 = load ptr, ptr %56, align 8
   %58 = getelementptr inbounds %struct.mz_zip_internal_state_tag, ptr %57, i32 0, i32 6
   %59 = load ptr, ptr %58, align 8
-  %60 = call i64 @"\01_fwrite"(ptr noundef %53, i64 noundef 1, i64 noundef %54, ptr noundef %59)
+  %60 = call i64 @fwrite(ptr noundef %53, i64 noundef 1, i64 noundef %54, ptr noundef %59)
   store i64 %60, ptr %7, align 8
   br label %61
 
@@ -26496,7 +26496,7 @@ define i32 @mz_zip_writer_init_from_reader_v2(ptr noundef %0, ptr noundef %1, i3
   %168 = load ptr, ptr %30, align 8
   %169 = getelementptr inbounds %struct.mz_zip_internal_state_tag, ptr %168, i32 0, i32 6
   %170 = load ptr, ptr %169, align 8
-  %171 = call ptr @"\01_freopen"(ptr noundef %167, ptr noundef @.str.21, ptr noundef %170)
+  %171 = call ptr @freopen(ptr noundef %167, ptr noundef @.str.21, ptr noundef %170)
   %172 = load ptr, ptr %30, align 8
   %173 = getelementptr inbounds %struct.mz_zip_internal_state_tag, ptr %172, i32 0, i32 6
   store ptr %171, ptr %173, align 8
@@ -26658,7 +26658,7 @@ define i32 @mz_zip_writer_init_from_reader_v2(ptr noundef %0, ptr noundef %1, i3
   ret i32 %266
 }
 
-declare ptr @"\01_freopen"(ptr noundef, ptr noundef, ptr noundef) #1
+declare ptr @freopen(ptr noundef, ptr noundef, ptr noundef) #1
 
 ; Function Attrs: noinline nounwind optnone ssp uwtable
 define i32 @mz_zip_writer_init_from_reader(ptr noundef %0, ptr noundef %1) #0 {
@@ -32696,7 +32696,7 @@ define i32 @mz_zip_writer_add_file(ptr noundef %0, ptr noundef %1, ptr noundef %
 
 35:                                               ; preds = %6
   %36 = load ptr, ptr %14, align 8
-  %37 = call ptr @"\01_fopen"(ptr noundef %36, ptr noundef @.str.18)
+  %37 = call ptr @fopen(ptr noundef %36, ptr noundef @.str.18)
   store ptr %37, ptr %18, align 8
   %38 = load ptr, ptr %18, align 8
   %39 = icmp ne ptr %38, null
@@ -32759,7 +32759,7 @@ define internal i32 @mz_zip_get_file_modified_time(ptr noundef %0, ptr noundef %
   store ptr %0, ptr %4, align 8
   store ptr %1, ptr %5, align 8
   %7 = load ptr, ptr %4, align 8
-  %8 = call i32 @"\01_stat$INODE64"(ptr noundef %7, ptr noundef %6)
+  %8 = call i32 @stat(ptr noundef %7, ptr noundef %6)
   %9 = icmp ne i32 %8, 0
   br i1 %9, label %10, label %11
 
@@ -38745,7 +38745,7 @@ define i32 @mz_zip_add_mem_to_archive_file_in_place_v2(ptr noundef %0, ptr nound
 
 66:                                               ; preds = %56
   %67 = load ptr, ptr %10, align 8
-  %68 = call i32 @"\01_stat$INODE64"(ptr noundef %67, ptr noundef %21)
+  %68 = call i32 @stat(ptr noundef %67, ptr noundef %21)
   %69 = icmp ne i32 %68, 0
   br i1 %69, label %70, label %84
 
@@ -38917,7 +38917,7 @@ define i32 @mz_zip_add_mem_to_archive_file_in_place_v2(ptr noundef %0, ptr nound
   ret i32 %162
 }
 
-declare i32 @"\01_stat$INODE64"(ptr noundef, ptr noundef) #1
+declare i32 @stat(ptr noundef, ptr noundef) #1
 
 declare i32 @remove(ptr noundef) #1
 
@@ -45410,7 +45410,7 @@ define internal void @mz_zip_reader_sort_central_dir_offsets_by_filename(ptr nou
 
 declare i64 @fread(ptr noundef, i64 noundef, i64 noundef, ptr noundef) #1
 
-declare i64 @"\01_fwrite"(ptr noundef, i64 noundef, i64 noundef, ptr noundef) #1
+declare i64 @fwrite(ptr noundef, i64 noundef, i64 noundef, ptr noundef) #1
 
 declare i32 @utime(ptr noundef, ptr noundef) #1
 
@@ -45456,11 +45456,11 @@ define internal i64 @mz_zip_dos_to_time_t(i32 noundef %0, i32 noundef %1) #0 {
   %31 = and i32 %30, 62
   %32 = getelementptr inbounds %struct.tm, ptr %5, i32 0, i32 0
   store i32 %31, ptr %32, align 8
-  %33 = call i64 @"\01_mktime"(ptr noundef %5)
+  %33 = call i64 @mktime(ptr noundef %5)
   ret i64 %33
 }
 
-declare i64 @"\01_mktime"(ptr noundef) #1
+declare i64 @mktime(ptr noundef) #1
 
 ; Function Attrs: noinline nounwind optnone ssp uwtable
 define internal i32 @mz_zip_array_ensure_capacity(ptr noundef %0, ptr noundef %1, i64 noundef %2, i32 noundef %3) #0 {
