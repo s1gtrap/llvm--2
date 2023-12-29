@@ -7951,7 +7951,7 @@ define i32 @main () {
  %82 = sext i32 %81 to i64
  %83 = getelementptr [8 x i32], [8 x i32]* %2, i64 0, i64 %82
  %84 = load i32, i32* %83
- %85 = call i32( i8*, i32 ) @printf (i8* @.str, i32 %84)
+ %85 = call i32 (i8*, i32) @printf (i8* @.str, i32 %84)
  br label %86
 86:
  %87 = load i32, i32* %9

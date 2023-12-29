@@ -43,6 +43,7 @@ rule token = parse
   | '}'                { RBRACE }
   | '['                { LBRACKET }
   | ']'                { RBRACKET }
+  | "..."              { ELLIPSIS }
   | "true"             { TRUE }
   | "false"            { FALSE }
   | "i1"               { I1 }

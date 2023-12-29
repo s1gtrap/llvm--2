@@ -10,7 +10,7 @@
 %token AND OR XOR SHL LSHR ASHR
 %token RET BR TO NULL LABEL GLOBAL EXTGLOBAL DEFINE UNREACHABLE SWITCH
 %token CALL ICMP LOAD STORE ALLOCA BITCAST GEP ZEXT SEXT PTRTOINT PHI TRUNC SELECT
-%token DECLARE
+%token DECLARE ELLIPSIS
 
 %token <int64> INT        (* int64 values *)
 %token <Symbol.symbol> LBL   (* labels *)
@@ -56,7 +56,7 @@ fdecl:
   | DEFINE t=ty l=GID
     LPAREN params=separated_list(COMMA,typed(UID)) RPAREN
     LBRACE cfg=cfg RBRACE
-    { (l, { fty = (List.map fst params, t)
+    { (l, { fty = (List.map fst params, false, t)
           ; param = List.map snd params
           ; cfg = cfg
           }
@@ -76,8 +76,8 @@ tdecl:
 
 extfun:
   | DECLARE t=ty l=GID
-    LPAREN params=separated_list(COMMA,ty) RPAREN
-    { (l, (params, t)) }
+    LPAREN p=ty_list_var RPAREN
+    { (l, (fst p, snd p, t)) }
 
 entry_block:
   | l=INT COLON b=block
@@ -134,13 +134,29 @@ ty:
     { Struct ts }
   | LBRACKET i=INT CROSS t=ty RBRACKET
     { Array (Int64.to_int i,t) }
-  | rt=ty LPAREN ts=ty_list RPAREN
-    { Fun (ts, rt) }
+  | rt=ty LPAREN ts=ty_list_var RPAREN
+    { Fun (fst ts, snd ts, rt) }
   | t=UID           { Namedt t }
 
 ty_list:
   | ts=separated_list(COMMA,ty)
     { ts }
+
+ty_list_var_tail:
+  | COMMA ELLIPSIS
+    { ([], true) }
+  | COMMA t=ty tl=ty_list_var_tail
+    { (t :: fst tl, snd tl) }
+  | (* empty *)
+    { ([], false) }
+
+ty_list_var:
+  | ELLIPSIS
+    { ([], true) }
+  | t=ty tl=ty_list_var_tail
+    { (t :: fst tl, snd tl) }
+  | (* empty *)
+    { ([], false) }
 
 gep_path:
   | path=separated_nonempty_list(COMMA,typed(operand))

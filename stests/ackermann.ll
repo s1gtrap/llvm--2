@@ -96,6 +96,6 @@ define i32 @main (i32 %0, i8* %1) {
  %22 = load i32, i32* %7
  %23 = load i32, i32* %8
  %24 = call i32 @ack (i32 %21, i32 %22, i32 %23)
- %25 = call i32( i8* ) @printf (i8* @.str, i32 %24)
+ %25 = call i32 (i8*, ...) @printf (i8* @.str, i32 %24)
  ret i32 0
 }

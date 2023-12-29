@@ -7,7 +7,7 @@
 @.str.6 = global [3 x i8] c"  \00"
 @.str.7 = global [3 x i8] c"|\0A\00"
 
-declare i32 @printf(i8*)
+declare i32 @printf(i8*, ...)
 declare i8* @llvm.stacksave()
 declare i32 @getchar()
 declare void @llvm.stackrestore(i8*)
@@ -374,7 +374,7 @@ define void @print_sudoku (i32 %0, i8* %1) {
  %23 = icmp eq i32 %22, 0
  %24 = zext i1 %23 to i64
  %25 = select i1 %23, i8* @.str, i8* @.str.1
- %26 = call i32( i8* ) @printf (i8* %25)
+ %26 = call i32 (i8*, ...) @printf (i8* %25)
  br label %27
 27:
  %28 = load i32, i32* %5
@@ -382,7 +382,7 @@ define void @print_sudoku (i32 %0, i8* %1) {
  store i32 %29, i32* %5
  br label %9
 30:
- %31 = call i32( i8* ) @printf (i8* @.str.2)
+ %31 = call i32 (i8*, ...) @printf (i8* @.str.2)
  store i32 0, i32* %6
  br label %32
 32:
@@ -438,10 +438,10 @@ define void @print_sudoku (i32 %0, i8* %1) {
  %76 = load i32, i32* %75
  %77 = call i8 @toc (i32 %76)
  %78 = sext i8 %77 to i32
- %79 = call i32( i8* ) @printf (i8* @.str.3, i32 %78)
+ %79 = call i32 (i8*, ...) @printf (i8* @.str.3, i32 %78)
  br label %82
 80:
- %81 = call i32( i8* ) @printf (i8* @.str.4)
+ %81 = call i32 (i8*, ...) @printf (i8* @.str.4)
  br label %82
 82:
  br label %114
@@ -473,10 +473,10 @@ define void @print_sudoku (i32 %0, i8* %1) {
  %107 = load i32, i32* %106
  %108 = call i8 @toc (i32 %107)
  %109 = sext i8 %108 to i32
- %110 = call i32( i8* ) @printf (i8* @.str.5, i32 %109)
+ %110 = call i32 (i8*, ...) @printf (i8* @.str.5, i32 %109)
  br label %113
 111:
- %112 = call i32( i8* ) @printf (i8* @.str.6)
+ %112 = call i32 (i8*, ...) @printf (i8* @.str.6)
  br label %113
 113:
  br label %114
@@ -488,7 +488,7 @@ define void @print_sudoku (i32 %0, i8* %1) {
  store i32 %117, i32* %7
  br label %40
 118:
- %119 = call i32( i8* ) @printf (i8* @.str.7)
+ %119 = call i32 (i8*, ...) @printf (i8* @.str.7)
  %120 = load i32, i32* %6
  %121 = load i32, i32* %3
  %122 = srem i32 %120, %121
@@ -517,7 +517,7 @@ define void @print_sudoku (i32 %0, i8* %1) {
  %141 = icmp eq i32 %140, 0
  %142 = zext i1 %141 to i64
  %143 = select i1 %141, i8* @.str, i8* @.str.1
- %144 = call i32( i8* ) @printf (i8* %143)
+ %144 = call i32 (i8*, ...) @printf (i8* %143)
  br label %145
 145:
  %146 = load i32, i32* %8
@@ -525,7 +525,7 @@ define void @print_sudoku (i32 %0, i8* %1) {
  store i32 %147, i32* %8
  br label %127
 148:
- %149 = call i32( i8* ) @printf (i8* @.str.2)
+ %149 = call i32 (i8*, ...) @printf (i8* @.str.2)
  br label %150
 150:
  br label %151

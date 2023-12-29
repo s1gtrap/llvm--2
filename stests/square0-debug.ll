@@ -1,6 +1,6 @@
 @fmt = global [13 x i8] c"%%%u = %08x\0A\00"
 
-declare i32 @printf(i8*)
+declare i32 @printf(i8*, ...)
 
 define i32 @main (i32 %o0) {
 l1:

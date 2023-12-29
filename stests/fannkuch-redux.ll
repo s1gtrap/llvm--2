@@ -458,7 +458,7 @@ define i32 @main (i32 %0, i8* %1) {
  %325 = load i64, i64* %12
  %326 = load i64, i64* %6
  %327 = load i64, i64* %11
- %328 = call i32( i8* ) @printf (i8* @.str, i64 %325, i64 %326, i64 %327)
+ %328 = call i32 (i8*, ...) @printf (i8* @.str, i64 %325, i64 %326, i64 %327)
  store i32 0, i32* %3
  %329 = load i8*, i8** %7
  %330 = load i32, i32* %3

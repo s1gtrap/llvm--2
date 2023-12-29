@@ -22,7 +22,7 @@ type ty =
   | Fun of fty (* t1, ...., tn -> tr  *)
   | Namedt of tid (* named type aliases  *)
 
-and fty = ty list * ty
+and fty = ty list * bool * ty
 
 type operand =
   | Null (* null pointer        *)
@@ -142,7 +142,10 @@ let rec string_of_ty (t : ty) : string =
   | Ptr t' -> string_of_ty t' ^ "*"
   | Struct ts -> "{ " ^ mapcat ", " string_of_ty ts ^ " }"
   | Array (n, t) -> "[" ^ string_of_int n ^ " x " ^ string_of_ty t ^ "]"
-  | Fun (ts, t) -> string_of_ty t ^ "( " ^ mapcat ", " string_of_ty ts ^ " )"
+  | Fun (ts, var, t) ->
+      string_of_ty t ^ " ("
+      ^ mapcat ", " string_of_ty ts
+      ^ if var then ", ...)" else ")"
   | Namedt s -> "%" ^ S.name s
 
 let sot = string_of_ty
@@ -285,7 +288,7 @@ let string_of_cfg ((e, bs) : cfg) : string =
 
 let string_of_named_fdecl ((g, f) : gid * fdecl) : string =
   let string_of_arg (t, u) = sot t ^ " %" ^ S.name u in
-  let ts, t = f.fty in
+  let ts, _var, t = f.fty in
   concwsp
     [
       "define";
@@ -331,10 +334,10 @@ let string_of_named_gdecl ((g, gd) : gid * gdecl) : string =
 let string_of_named_ext_gdecl ((g, tp) : gid * ty) : string =
   "@" ^ S.name g ^ " = external global " ^ sot tp
 
-let string_of_ext_fun (g, (paramstyp, rettyp)) : string =
+let string_of_ext_fun (g, (paramstyp, var, rettyp)) : string =
   "declare " ^ string_of_ty rettyp ^ " @" ^ S.name g ^ "("
   ^ (String.concat ", ") (Stdlib.List.map string_of_ty paramstyp)
-  ^ ")"
+  ^ if var then ", ...)" else ")"
 
 let string_of_named_tdecl (tid, ty) = "%" ^ S.name tid ^ " = type " ^ sot ty
 

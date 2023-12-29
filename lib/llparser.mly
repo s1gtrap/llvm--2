@@ -10,6 +10,7 @@
 %token AND OR XOR SHL LSHR ASHR
 %token RET BR TO NULL LABEL GLOBAL EXTGLOBAL DEFINE UNREACHABLE SWITCH
 %token CALL ICMP LOAD STORE ALLOCA BITCAST GEP ZEXT SEXT PTRTOINT PHI TRUNC SELECT
+%token ELLIPSIS
 
 %token <int64> INT        (* int64 values *)
 %token <Symbol.symbol> LBL   (* labels *)
@@ -57,7 +58,7 @@ fdecl:
   | DEFINE t=ty l=GID
     LPAREN params=separated_list(COMMA,typed(UID)) RPAREN
     LBRACE cfg=cfg RBRACE
-    { (l, { fty = (List.map fst params, t)
+    { (l, { fty = (List.map fst params, false, t)
           ; param = List.map snd params
           ; cfg = cfg
           }
@@ -134,7 +135,7 @@ ty:
   | LBRACKET i=INT CROSS t=ty RBRACKET
     { Array (Int64.to_int i,t) }
   | rt=ty LPAREN ts=ty_list RPAREN
-    { Fun (ts, rt) }
+    { Fun (ts, false, rt) }
   | t=UID           { Namedt t }
 
 ty_list:

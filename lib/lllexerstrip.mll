@@ -34,7 +34,6 @@ rule token = parse
   | "immarg"
   | "exact"
   | "internal"
-  | ',' ['\t' ' ']+ "..."
   | '#' digit+         { token lexbuf } (* ignored *)
   | ','? ['\t' ' ']+ "align" ['\t' ' ']+ digit+ { token lexbuf }
   | "dereferenceable(" digit+ ')' { token lexbuf }
@@ -49,6 +48,7 @@ rule token = parse
   | '}'                { RBRACE }
   | '['                { LBRACKET }
   | ']'                { RBRACKET }
+  | "..."              { ELLIPSIS }
   | "true"             { TRUE }
   | "false"            { FALSE }
   | "i1"               { I1 }

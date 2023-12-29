@@ -25,6 +25,6 @@ error:
 
 define i32 @main (i32 %argc, i8** %argv) {
  %fun = call i8* @fun (i32 %argc)
- call void(  ) %fun ()
+ call void () %fun ()
  ret i32 0
 }

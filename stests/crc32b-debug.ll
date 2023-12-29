@@ -96,9 +96,9 @@ define i32 @main () {
  %var1 = alloca i32
  store i32 0, i32* %var1
  %var2 = call i32 @crc32b (i8* @.str.1)
- %var3 = call i32( i8*, i32 ) @printf (i8* @.str, i32 %var2)
+ %var3 = call i32 (i8*, i32) @printf (i8* @.str, i32 %var2)
  %var4 = call i32 @crc32b (i8* @.str.2)
- %var5 = call i32( i8*, i32 ) @printf (i8* @.str, i32 %var4)
+ %var5 = call i32 (i8*, i32) @printf (i8* @.str, i32 %var4)
  %var6 = call i32 @crc32b (i8* @.str.3)
  ret i32 0
 }
