@@ -80,7 +80,7 @@ define i8* @node$6 (%$locals_tigermain* %$sl, i8* %left$14, i64 %value$15, i8* %
  %arg_$_26 = getelementptr %$locals_node$6, %$locals_node$6* %locals_$_1, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_26
  %size_ptr_$_27 = getelementptr %Tree$1, %Tree$1* null, i32 1
- %size_$_28 = ptrtoint %Tree$1* %size_ptr_$_27 to i64
+ %size_$_28 = ptrtoint %Tree$1** %size_ptr_$_27 to i64
  %record_ptr_$_29 = call i8* @allocRecord (i64 %size_$_28)
  %rec_$_30 = bitcast i8* %record_ptr_$_29 to %Tree$1*
  %var_ptr_$_31 = getelementptr %$locals_node$6, %$locals_node$6* %locals_$_1, i32 0, i32 1
@@ -105,7 +105,7 @@ define i8* @leaf$7 (%$locals_tigermain* %$sl, i64 %value$17) {
  %arg_$_41 = getelementptr %$locals_leaf$7, %$locals_leaf$7* %locals_$_2, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_41
  %size_ptr_$_42 = getelementptr %Tree$1, %Tree$1* null, i32 1
- %size_$_43 = ptrtoint %Tree$1* %size_ptr_$_42 to i64
+ %size_$_43 = ptrtoint %Tree$1** %size_ptr_$_42 to i64
  %record_ptr_$_44 = call i8* @allocRecord (i64 %size_$_43)
  %rec_$_45 = bitcast i8* %record_ptr_$_44 to %Tree$1*
  %field_ptr_$_46 = getelementptr %Tree$1, %Tree$1* %rec_$_45, i32 0, i32 0
@@ -124,7 +124,7 @@ define i8* @tree$8 (%$locals_tigermain* %$sl) {
  %arg_$_51 = getelementptr %$locals_tree$8, %$locals_tree$8* %locals_$_3, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_51
  %size_ptr_$_52 = getelementptr %Root$0, %Root$0* null, i32 1
- %size_$_53 = ptrtoint %Root$0* %size_ptr_$_52 to i64
+ %size_$_53 = ptrtoint %Root$0** %size_ptr_$_52 to i64
  %record_ptr_$_54 = call i8* @allocRecord (i64 %size_$_53)
  %rec_$_55 = bitcast i8* %record_ptr_$_54 to %Root$0*
  %field_ptr_$_56 = getelementptr %Root$0, %Root$0* %rec_$_55, i32 0, i32 0
@@ -143,7 +143,7 @@ define void @insert$9 (%$locals_tigermain* %$sl, i8* %root$18, i64 %value$19) {
  %var_ptr_$_63 = getelementptr %$locals_insert$9, %$locals_insert$9* %locals_$_4, i32 0, i32 1
  %load_$_64 = load i8*, i8** %var_ptr_$_63
  %record_ptr_$_65 = bitcast i8* %load_$_64 to %Root$0*
- %int_of_ptr_$_68 = ptrtoint i8* %load_$_64 to i64
+ %int_of_ptr_$_68 = ptrtoint i8** %load_$_64 to i64
  %cnd_$_69 = icmp eq i64 %int_of_ptr_$_68, 0
  br i1 %cnd_$_69, label %thn_$_66, label %mrg_$_67
 thn_$_66:
@@ -152,8 +152,8 @@ thn_$_66:
 mrg_$_67:
  %field_ptr_$_70 = getelementptr %Root$0, %Root$0* %record_ptr_$_65, i32 0, i32 0
  %res_$_71 = load i8*, i8** %field_ptr_$_70
- %left_int_$_72 = ptrtoint i8* %res_$_71 to i64
- %right_int_$_73 = ptrtoint i8* null to i64
+ %left_int_$_72 = ptrtoint i8** %res_$_71 to i64
+ %right_int_$_73 = ptrtoint i8** null to i64
  %cnd_$_74 = icmp eq i64 %left_int_$_72, %right_int_$_73
  %zext_$_75 = zext i1 %cnd_$_74 to i64
  %cnd_$_76 = icmp ne i64 %zext_$_75, 0
@@ -167,7 +167,7 @@ thn_$_60:
  %var_ptr_$_82 = getelementptr %$locals_insert$9, %$locals_insert$9* %locals_$_4, i32 0, i32 1
  %load_$_83 = load i8*, i8** %var_ptr_$_82
  %record_ptr_$_84 = bitcast i8* %load_$_83 to %Root$0*
- %int_of_ptr_$_87 = ptrtoint i8* %load_$_83 to i64
+ %int_of_ptr_$_87 = ptrtoint i8** %load_$_83 to i64
  %cnd_$_88 = icmp eq i64 %int_of_ptr_$_87, 0
  br i1 %cnd_$_88, label %thn_$_85, label %mrg_$_86
 thn_$_85:
@@ -183,7 +183,7 @@ els_$_61:
  %var_ptr_$_92 = getelementptr %$locals_insert$9, %$locals_insert$9* %locals_$_4, i32 0, i32 1
  %load_$_93 = load i8*, i8** %var_ptr_$_92
  %record_ptr_$_94 = bitcast i8* %load_$_93 to %Root$0*
- %int_of_ptr_$_97 = ptrtoint i8* %load_$_93 to i64
+ %int_of_ptr_$_97 = ptrtoint i8** %load_$_93 to i64
  %cnd_$_98 = icmp eq i64 %int_of_ptr_$_97, 0
  br i1 %cnd_$_98, label %thn_$_95, label %mrg_$_96
 thn_$_95:
@@ -211,7 +211,7 @@ define void @insertTree$10 (%$locals_tigermain* %$sl, i8* %tree$20, i64 %value$2
  %var_ptr_$_109 = getelementptr %$locals_insertTree$10, %$locals_insertTree$10* %locals_$_5, i32 0, i32 1
  %load_$_110 = load i8*, i8** %var_ptr_$_109
  %record_ptr_$_111 = bitcast i8* %load_$_110 to %Tree$1*
- %int_of_ptr_$_114 = ptrtoint i8* %load_$_110 to i64
+ %int_of_ptr_$_114 = ptrtoint i8** %load_$_110 to i64
  %cnd_$_115 = icmp eq i64 %int_of_ptr_$_114, 0
  br i1 %cnd_$_115, label %thn_$_112, label %mrg_$_113
 thn_$_112:
@@ -230,7 +230,7 @@ thn_$_106:
  %var_ptr_$_126 = getelementptr %$locals_insertTree$10, %$locals_insertTree$10* %locals_$_5, i32 0, i32 1
  %load_$_127 = load i8*, i8** %var_ptr_$_126
  %record_ptr_$_128 = bitcast i8* %load_$_127 to %Tree$1*
- %int_of_ptr_$_131 = ptrtoint i8* %load_$_127 to i64
+ %int_of_ptr_$_131 = ptrtoint i8** %load_$_127 to i64
  %cnd_$_132 = icmp eq i64 %int_of_ptr_$_131, 0
  br i1 %cnd_$_132, label %thn_$_129, label %mrg_$_130
 thn_$_129:
@@ -239,8 +239,8 @@ thn_$_129:
 mrg_$_130:
  %field_ptr_$_133 = getelementptr %Tree$1, %Tree$1* %record_ptr_$_128, i32 0, i32 0
  %res_$_134 = load i8*, i8** %field_ptr_$_133
- %left_int_$_135 = ptrtoint i8* %res_$_134 to i64
- %right_int_$_136 = ptrtoint i8* null to i64
+ %left_int_$_135 = ptrtoint i8** %res_$_134 to i64
+ %right_int_$_136 = ptrtoint i8** null to i64
  %cnd_$_137 = icmp eq i64 %left_int_$_135, %right_int_$_136
  %zext_$_138 = zext i1 %cnd_$_137 to i64
  %cnd_$_139 = icmp ne i64 %zext_$_138, 0
@@ -254,7 +254,7 @@ thn_$_123:
  %var_ptr_$_145 = getelementptr %$locals_insertTree$10, %$locals_insertTree$10* %locals_$_5, i32 0, i32 1
  %load_$_146 = load i8*, i8** %var_ptr_$_145
  %record_ptr_$_147 = bitcast i8* %load_$_146 to %Tree$1*
- %int_of_ptr_$_150 = ptrtoint i8* %load_$_146 to i64
+ %int_of_ptr_$_150 = ptrtoint i8** %load_$_146 to i64
  %cnd_$_151 = icmp eq i64 %int_of_ptr_$_150, 0
  br i1 %cnd_$_151, label %thn_$_148, label %mrg_$_149
 thn_$_148:
@@ -270,7 +270,7 @@ els_$_124:
  %var_ptr_$_155 = getelementptr %$locals_insertTree$10, %$locals_insertTree$10* %locals_$_5, i32 0, i32 1
  %load_$_156 = load i8*, i8** %var_ptr_$_155
  %record_ptr_$_157 = bitcast i8* %load_$_156 to %Tree$1*
- %int_of_ptr_$_160 = ptrtoint i8* %load_$_156 to i64
+ %int_of_ptr_$_160 = ptrtoint i8** %load_$_156 to i64
  %cnd_$_161 = icmp eq i64 %int_of_ptr_$_160, 0
  br i1 %cnd_$_161, label %thn_$_158, label %mrg_$_159
 thn_$_158:
@@ -289,7 +289,7 @@ els_$_107:
  %var_ptr_$_169 = getelementptr %$locals_insertTree$10, %$locals_insertTree$10* %locals_$_5, i32 0, i32 1
  %load_$_170 = load i8*, i8** %var_ptr_$_169
  %record_ptr_$_171 = bitcast i8* %load_$_170 to %Tree$1*
- %int_of_ptr_$_174 = ptrtoint i8* %load_$_170 to i64
+ %int_of_ptr_$_174 = ptrtoint i8** %load_$_170 to i64
  %cnd_$_175 = icmp eq i64 %int_of_ptr_$_174, 0
  br i1 %cnd_$_175, label %thn_$_172, label %mrg_$_173
 thn_$_172:
@@ -298,8 +298,8 @@ thn_$_172:
 mrg_$_173:
  %field_ptr_$_176 = getelementptr %Tree$1, %Tree$1* %record_ptr_$_171, i32 0, i32 2
  %res_$_177 = load i8*, i8** %field_ptr_$_176
- %left_int_$_178 = ptrtoint i8* %res_$_177 to i64
- %right_int_$_179 = ptrtoint i8* null to i64
+ %left_int_$_178 = ptrtoint i8** %res_$_177 to i64
+ %right_int_$_179 = ptrtoint i8** null to i64
  %cnd_$_180 = icmp eq i64 %left_int_$_178, %right_int_$_179
  %zext_$_181 = zext i1 %cnd_$_180 to i64
  %cnd_$_182 = icmp ne i64 %zext_$_181, 0
@@ -313,7 +313,7 @@ thn_$_166:
  %var_ptr_$_188 = getelementptr %$locals_insertTree$10, %$locals_insertTree$10* %locals_$_5, i32 0, i32 1
  %load_$_189 = load i8*, i8** %var_ptr_$_188
  %record_ptr_$_190 = bitcast i8* %load_$_189 to %Tree$1*
- %int_of_ptr_$_193 = ptrtoint i8* %load_$_189 to i64
+ %int_of_ptr_$_193 = ptrtoint i8** %load_$_189 to i64
  %cnd_$_194 = icmp eq i64 %int_of_ptr_$_193, 0
  br i1 %cnd_$_194, label %thn_$_191, label %mrg_$_192
 thn_$_191:
@@ -329,7 +329,7 @@ els_$_167:
  %var_ptr_$_198 = getelementptr %$locals_insertTree$10, %$locals_insertTree$10* %locals_$_5, i32 0, i32 1
  %load_$_199 = load i8*, i8** %var_ptr_$_198
  %record_ptr_$_200 = bitcast i8* %load_$_199 to %Tree$1*
- %int_of_ptr_$_203 = ptrtoint i8* %load_$_199 to i64
+ %int_of_ptr_$_203 = ptrtoint i8** %load_$_199 to i64
  %cnd_$_204 = icmp eq i64 %int_of_ptr_$_203, 0
  br i1 %cnd_$_204, label %thn_$_201, label %mrg_$_202
 thn_$_201:
@@ -361,7 +361,7 @@ define i64 @contains$11 (%$locals_tigermain* %$sl, i8* %root$22, i64 %value$23) 
  %var_ptr_$_214 = getelementptr %$locals_contains$11, %$locals_contains$11* %locals_$_6, i32 0, i32 1
  %load_$_215 = load i8*, i8** %var_ptr_$_214
  %record_ptr_$_216 = bitcast i8* %load_$_215 to %Root$0*
- %int_of_ptr_$_219 = ptrtoint i8* %load_$_215 to i64
+ %int_of_ptr_$_219 = ptrtoint i8** %load_$_215 to i64
  %cnd_$_220 = icmp eq i64 %int_of_ptr_$_219, 0
  br i1 %cnd_$_220, label %thn_$_217, label %mrg_$_218
 thn_$_217:
@@ -389,8 +389,8 @@ define i64 @containsTree$12 (%$locals_tigermain* %$sl, i8* %tree$24, i64 %value$
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_228
  %var_ptr_$_233 = getelementptr %$locals_containsTree$12, %$locals_containsTree$12* %locals_$_7, i32 0, i32 1
  %res_$_234 = load i8*, i8** %var_ptr_$_233
- %left_int_$_235 = ptrtoint i8* %res_$_234 to i64
- %right_int_$_236 = ptrtoint i8* null to i64
+ %left_int_$_235 = ptrtoint i8** %res_$_234 to i64
+ %right_int_$_236 = ptrtoint i8** null to i64
  %cnd_$_237 = icmp eq i64 %left_int_$_235, %right_int_$_236
  %zext_$_238 = zext i1 %cnd_$_237 to i64
  %cnd_$_239 = icmp ne i64 %zext_$_238, 0
@@ -406,7 +406,7 @@ els_$_231:
  %var_ptr_$_248 = getelementptr %$locals_containsTree$12, %$locals_containsTree$12* %locals_$_7, i32 0, i32 1
  %load_$_249 = load i8*, i8** %var_ptr_$_248
  %record_ptr_$_250 = bitcast i8* %load_$_249 to %Tree$1*
- %int_of_ptr_$_253 = ptrtoint i8* %load_$_249 to i64
+ %int_of_ptr_$_253 = ptrtoint i8** %load_$_249 to i64
  %cnd_$_254 = icmp eq i64 %int_of_ptr_$_253, 0
  br i1 %cnd_$_254, label %thn_$_251, label %mrg_$_252
 thn_$_251:
@@ -432,7 +432,7 @@ els_$_246:
  %var_ptr_$_270 = getelementptr %$locals_containsTree$12, %$locals_containsTree$12* %locals_$_7, i32 0, i32 1
  %load_$_271 = load i8*, i8** %var_ptr_$_270
  %record_ptr_$_272 = bitcast i8* %load_$_271 to %Tree$1*
- %int_of_ptr_$_275 = ptrtoint i8* %load_$_271 to i64
+ %int_of_ptr_$_275 = ptrtoint i8** %load_$_271 to i64
  %cnd_$_276 = icmp eq i64 %int_of_ptr_$_275, 0
  br i1 %cnd_$_276, label %thn_$_273, label %mrg_$_274
 thn_$_273:
@@ -453,7 +453,7 @@ thn_$_267:
  %var_ptr_$_286 = getelementptr %$locals_containsTree$12, %$locals_containsTree$12* %locals_$_7, i32 0, i32 1
  %load_$_287 = load i8*, i8** %var_ptr_$_286
  %record_ptr_$_288 = bitcast i8* %load_$_287 to %Tree$1*
- %int_of_ptr_$_291 = ptrtoint i8* %load_$_287 to i64
+ %int_of_ptr_$_291 = ptrtoint i8** %load_$_287 to i64
  %cnd_$_292 = icmp eq i64 %int_of_ptr_$_291, 0
  br i1 %cnd_$_292, label %thn_$_289, label %mrg_$_290
 thn_$_289:
@@ -473,7 +473,7 @@ els_$_268:
  %var_ptr_$_300 = getelementptr %$locals_containsTree$12, %$locals_containsTree$12* %locals_$_7, i32 0, i32 1
  %load_$_301 = load i8*, i8** %var_ptr_$_300
  %record_ptr_$_302 = bitcast i8* %load_$_301 to %Tree$1*
- %int_of_ptr_$_305 = ptrtoint i8* %load_$_301 to i64
+ %int_of_ptr_$_305 = ptrtoint i8** %load_$_301 to i64
  %cnd_$_306 = icmp eq i64 %int_of_ptr_$_305, 0
  br i1 %cnd_$_306, label %thn_$_303, label %mrg_$_304
 thn_$_303:

@@ -43,21 +43,21 @@ define i8* @rev$1 (%$locals_tigermain* %$sl, i8* %l$3) {
 test_$_6:
  %var_ptr_$_9 = getelementptr %$locals_rev$1, %$locals_rev$1* %locals_$_0, i32 0, i32 2
  %res_$_10 = load i8*, i8** %var_ptr_$_9
- %left_int_$_11 = ptrtoint i8* %res_$_10 to i64
- %right_int_$_12 = ptrtoint i8* null to i64
+ %left_int_$_11 = ptrtoint i8** %res_$_10 to i64
+ %right_int_$_12 = ptrtoint i8** null to i64
  %cnd_$_13 = icmp ne i64 %left_int_$_11, %right_int_$_12
  %zext_$_14 = zext i1 %cnd_$_13 to i64
  %cnd_$_15 = icmp ne i64 %zext_$_14, 0
  br i1 %cnd_$_15, label %body_$_7, label %mrg_$_8
 body_$_7:
  %size_ptr_$_16 = getelementptr %stringlist$0, %stringlist$0* null, i32 1
- %size_$_17 = ptrtoint %stringlist$0* %size_ptr_$_16 to i64
+ %size_$_17 = ptrtoint %stringlist$0** %size_ptr_$_16 to i64
  %record_ptr_$_18 = call i8* @allocRecord (i64 %size_$_17)
  %rec_$_19 = bitcast i8* %record_ptr_$_18 to %stringlist$0*
  %var_ptr_$_20 = getelementptr %$locals_rev$1, %$locals_rev$1* %locals_$_0, i32 0, i32 2
  %load_$_21 = load i8*, i8** %var_ptr_$_20
  %record_ptr_$_22 = bitcast i8* %load_$_21 to %stringlist$0*
- %int_of_ptr_$_25 = ptrtoint i8* %load_$_21 to i64
+ %int_of_ptr_$_25 = ptrtoint i8** %load_$_21 to i64
  %cnd_$_26 = icmp eq i64 %int_of_ptr_$_25, 0
  br i1 %cnd_$_26, label %thn_$_23, label %mrg_$_24
 thn_$_23:
@@ -77,7 +77,7 @@ mrg_$_24:
  %var_ptr_$_34 = getelementptr %$locals_rev$1, %$locals_rev$1* %locals_$_0, i32 0, i32 2
  %load_$_35 = load i8*, i8** %var_ptr_$_34
  %record_ptr_$_36 = bitcast i8* %load_$_35 to %stringlist$0*
- %int_of_ptr_$_39 = ptrtoint i8* %load_$_35 to i64
+ %int_of_ptr_$_39 = ptrtoint i8** %load_$_35 to i64
  %cnd_$_40 = icmp eq i64 %int_of_ptr_$_39, 0
  br i1 %cnd_$_40, label %thn_$_37, label %mrg_$_38
 thn_$_37:
@@ -167,7 +167,7 @@ mrg_$_121:
  br i1 %cnd_$_143, label %thn_$_116, label %mrg_$_117
 thn_$_116:
  %size_ptr_$_144 = getelementptr %stringlist$0, %stringlist$0* null, i32 1
- %size_$_145 = ptrtoint %stringlist$0* %size_ptr_$_144 to i64
+ %size_$_145 = ptrtoint %stringlist$0** %size_ptr_$_144 to i64
  %record_ptr_$_146 = call i8* @allocRecord (i64 %size_$_145)
  %rec_$_147 = bitcast i8* %record_ptr_$_146 to %stringlist$0*
  %lnk_$_148 = getelementptr %$locals_split$2, %$locals_split$2* %locals_$_1, i32 0, i32 0
@@ -219,7 +219,7 @@ mrg_$_100:
  br i1 %cnd_$_70, label %thn_$_58, label %mrg_$_59
 thn_$_58:
  %size_ptr_$_71 = getelementptr %stringlist$0, %stringlist$0* null, i32 1
- %size_$_72 = ptrtoint %stringlist$0* %size_ptr_$_71 to i64
+ %size_$_72 = ptrtoint %stringlist$0** %size_ptr_$_71 to i64
  %record_ptr_$_73 = call i8* @allocRecord (i64 %size_$_72)
  %rec_$_74 = bitcast i8* %record_ptr_$_73 to %stringlist$0*
  %lnk_$_75 = getelementptr %$locals_split$2, %$locals_split$2* %locals_$_1, i32 0, i32 0
@@ -277,8 +277,8 @@ define void @tigermain (i8* %$sl) {
 test_$_197:
  %var_ptr_$_200 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_2, i32 0, i32 1
  %res_$_201 = load i8*, i8** %var_ptr_$_200
- %left_int_$_202 = ptrtoint i8* %res_$_201 to i64
- %right_int_$_203 = ptrtoint i8* null to i64
+ %left_int_$_202 = ptrtoint i8** %res_$_201 to i64
+ %right_int_$_203 = ptrtoint i8** null to i64
  %cnd_$_204 = icmp ne i64 %left_int_$_202, %right_int_$_203
  %zext_$_205 = zext i1 %cnd_$_204 to i64
  %cnd_$_206 = icmp ne i64 %zext_$_205, 0
@@ -287,7 +287,7 @@ body_$_198:
  %var_ptr_$_211 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_2, i32 0, i32 1
  %load_$_212 = load i8*, i8** %var_ptr_$_211
  %record_ptr_$_213 = bitcast i8* %load_$_212 to %stringlist$0*
- %int_of_ptr_$_216 = ptrtoint i8* %load_$_212 to i64
+ %int_of_ptr_$_216 = ptrtoint i8** %load_$_212 to i64
  %cnd_$_217 = icmp eq i64 %int_of_ptr_$_216, 0
  br i1 %cnd_$_217, label %thn_$_214, label %mrg_$_215
 thn_$_214:
@@ -302,7 +302,7 @@ mrg_$_215:
  %var_ptr_$_220 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_2, i32 0, i32 1
  %load_$_221 = load i8*, i8** %var_ptr_$_220
  %record_ptr_$_222 = bitcast i8* %load_$_221 to %stringlist$0*
- %int_of_ptr_$_225 = ptrtoint i8* %load_$_221 to i64
+ %int_of_ptr_$_225 = ptrtoint i8** %load_$_221 to i64
  %cnd_$_226 = icmp eq i64 %int_of_ptr_$_225, 0
  br i1 %cnd_$_226, label %thn_$_223, label %mrg_$_224
 thn_$_223:

@@ -434,7 +434,7 @@ define void @tigermain (i8* %$sl) {
  %var_ptr_$_312 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_2, i32 0, i32 6
  %res_$_313 = load i64, i64* %var_ptr_$_312
  %init_size_ptr_$_314 = getelementptr i64, i64* null, i32 1
- %init_size_$_315 = ptrtoint i64* %init_size_ptr_$_314 to i64
+ %init_size_$_315 = ptrtoint i64** %init_size_ptr_$_314 to i64
  %array_ptr_$_316 = call i8* @initArray (i64 %res_$_313, i64 %init_size_$_315, i8* %init_ptr_$_311)
  %temp_$_317 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_2, i32 0, i32 5
  store i8* %array_ptr_$_316, i8** %temp_$_317
@@ -444,7 +444,7 @@ define void @tigermain (i8* %$sl) {
  %var_ptr_$_320 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_2, i32 0, i32 6
  %res_$_321 = load i64, i64* %var_ptr_$_320
  %init_size_ptr_$_322 = getelementptr i64, i64* null, i32 1
- %init_size_$_323 = ptrtoint i64* %init_size_ptr_$_322 to i64
+ %init_size_$_323 = ptrtoint i64** %init_size_ptr_$_322 to i64
  %array_ptr_$_324 = call i8* @initArray (i64 %res_$_321, i64 %init_size_$_323, i8* %init_ptr_$_319)
  %temp_$_325 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_2, i32 0, i32 4
  store i8* %array_ptr_$_324, i8** %temp_$_325
@@ -458,7 +458,7 @@ define void @tigermain (i8* %$sl) {
  %temp_$_332 = add i64 %res_$_329, %res_$_331
  %temp_$_333 = sub i64 %temp_$_332, 1
  %init_size_ptr_$_334 = getelementptr i64, i64* null, i32 1
- %init_size_$_335 = ptrtoint i64* %init_size_ptr_$_334 to i64
+ %init_size_$_335 = ptrtoint i64** %init_size_ptr_$_334 to i64
  %array_ptr_$_336 = call i8* @initArray (i64 %temp_$_333, i64 %init_size_$_335, i8* %init_ptr_$_327)
  %temp_$_337 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_2, i32 0, i32 3
  store i8* %array_ptr_$_336, i8** %temp_$_337
@@ -472,7 +472,7 @@ define void @tigermain (i8* %$sl) {
  %temp_$_344 = add i64 %res_$_341, %res_$_343
  %temp_$_345 = sub i64 %temp_$_344, 1
  %init_size_ptr_$_346 = getelementptr i64, i64* null, i32 1
- %init_size_$_347 = ptrtoint i64* %init_size_ptr_$_346 to i64
+ %init_size_$_347 = ptrtoint i64** %init_size_ptr_$_346 to i64
  %array_ptr_$_348 = call i8* @initArray (i64 %temp_$_345, i64 %init_size_$_347, i8* %init_ptr_$_339)
  %temp_$_349 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_2, i32 0, i32 2
  store i8* %array_ptr_$_348, i8** %temp_$_349

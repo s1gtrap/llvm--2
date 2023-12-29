@@ -141,7 +141,7 @@ define void @tigermain (i8* %$sl) {
  store i64 0, i64* %init_ptr_$_67
  %init_ptr_$_68 = bitcast i64* %init_ptr_$_67 to i8*
  %init_size_ptr_$_69 = getelementptr i64, i64* null, i32 1
- %init_size_$_70 = ptrtoint i64* %init_size_ptr_$_69 to i64
+ %init_size_$_70 = ptrtoint i64** %init_size_ptr_$_69 to i64
  %array_ptr_$_71 = call i8* @initArray (i64 30000, i64 %init_size_$_70, i8* %init_ptr_$_68)
  %temp_$_72 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_2, i32 0, i32 11
  store i8* %array_ptr_$_71, i8** %temp_$_72
@@ -149,7 +149,7 @@ define void @tigermain (i8* %$sl) {
  store i64 0, i64* %init_ptr_$_73
  %init_ptr_$_74 = bitcast i64* %init_ptr_$_73 to i8*
  %init_size_ptr_$_75 = getelementptr i64, i64* null, i32 1
- %init_size_$_76 = ptrtoint i64* %init_size_ptr_$_75 to i64
+ %init_size_$_76 = ptrtoint i64** %init_size_ptr_$_75 to i64
  %array_ptr_$_77 = call i8* @initArray (i64 10000, i64 %init_size_$_76, i8* %init_ptr_$_74)
  %temp_$_78 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_2, i32 0, i32 10
  store i8* %array_ptr_$_77, i8** %temp_$_78
@@ -157,7 +157,7 @@ define void @tigermain (i8* %$sl) {
  store i64 0, i64* %init_ptr_$_79
  %init_ptr_$_80 = bitcast i64* %init_ptr_$_79 to i8*
  %init_size_ptr_$_81 = getelementptr i64, i64* null, i32 1
- %init_size_$_82 = ptrtoint i64* %init_size_ptr_$_81 to i64
+ %init_size_$_82 = ptrtoint i64** %init_size_ptr_$_81 to i64
  %array_ptr_$_83 = call i8* @initArray (i64 10000, i64 %init_size_$_82, i8* %init_ptr_$_80)
  %temp_$_84 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_2, i32 0, i32 9
  store i8* %array_ptr_$_83, i8** %temp_$_84

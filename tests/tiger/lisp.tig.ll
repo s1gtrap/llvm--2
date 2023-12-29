@@ -1183,7 +1183,7 @@ define i8* @mk_int_token$33 (%$locals_tigermain* %$sl, i64 %v$45) {
  %arg_$_580 = getelementptr %$locals_mk_int_token$33, %$locals_mk_int_token$33* %locals_$_6, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_580
  %size_ptr_$_581 = getelementptr %token$32, %token$32* null, i32 1
- %size_$_582 = ptrtoint %token$32* %size_ptr_$_581 to i64
+ %size_$_582 = ptrtoint %token$32** %size_ptr_$_581 to i64
  %record_ptr_$_583 = call i8* @allocRecord (i64 %size_$_582)
  %rec_$_584 = bitcast i8* %record_ptr_$_583 to %token$32*
  %var_ptr_$_585 = getelementptr %$locals_mk_int_token$33, %$locals_mk_int_token$33* %locals_$_6, i32 0, i32 1
@@ -1206,7 +1206,7 @@ define i8* @mk_id_token$34 (%$locals_tigermain* %$sl, i8* %id$46) {
  %arg_$_595 = getelementptr %$locals_mk_id_token$34, %$locals_mk_id_token$34* %locals_$_7, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_595
  %size_ptr_$_596 = getelementptr %token$32, %token$32* null, i32 1
- %size_$_597 = ptrtoint %token$32* %size_ptr_$_596 to i64
+ %size_$_597 = ptrtoint %token$32** %size_ptr_$_596 to i64
  %record_ptr_$_598 = call i8* @allocRecord (i64 %size_$_597)
  %rec_$_599 = bitcast i8* %record_ptr_$_598 to %token$32*
  %field_ptr_$_600 = getelementptr %token$32, %token$32* %rec_$_599, i32 0, i32 0
@@ -1228,7 +1228,7 @@ define i8* @mk_str_token$35 (%$locals_tigermain* %$sl, i8* %str$47) {
  %arg_$_608 = getelementptr %$locals_mk_str_token$35, %$locals_mk_str_token$35* %locals_$_8, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_608
  %size_ptr_$_609 = getelementptr %token$32, %token$32* null, i32 1
- %size_$_610 = ptrtoint %token$32* %size_ptr_$_609 to i64
+ %size_$_610 = ptrtoint %token$32** %size_ptr_$_609 to i64
  %record_ptr_$_611 = call i8* @allocRecord (i64 %size_$_610)
  %rec_$_612 = bitcast i8* %record_ptr_$_611 to %token$32*
  %field_ptr_$_613 = getelementptr %token$32, %token$32* %rec_$_612, i32 0, i32 0
@@ -1250,7 +1250,7 @@ define i8* @mk_bool_token$36 (%$locals_tigermain* %$sl, i64 %b$48) {
  %arg_$_621 = getelementptr %$locals_mk_bool_token$36, %$locals_mk_bool_token$36* %locals_$_9, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_621
  %size_ptr_$_622 = getelementptr %token$32, %token$32* null, i32 1
- %size_$_623 = ptrtoint %token$32* %size_ptr_$_622 to i64
+ %size_$_623 = ptrtoint %token$32** %size_ptr_$_622 to i64
  %record_ptr_$_624 = call i8* @allocRecord (i64 %size_$_623)
  %rec_$_625 = bitcast i8* %record_ptr_$_624 to %token$32*
  %var_ptr_$_626 = getelementptr %$locals_mk_bool_token$36, %$locals_mk_bool_token$36* %locals_$_9, i32 0, i32 1
@@ -1275,7 +1275,7 @@ define i64 @int_token_p$37 (%$locals_tigermain* %$sl, i8* %t$49) {
  %var_ptr_$_637 = getelementptr %$locals_int_token_p$37, %$locals_int_token_p$37* %locals_$_10, i32 0, i32 1
  %load_$_638 = load i8*, i8** %var_ptr_$_637
  %record_ptr_$_639 = bitcast i8* %load_$_638 to %token$32*
- %int_of_ptr_$_642 = ptrtoint i8* %load_$_638 to i64
+ %int_of_ptr_$_642 = ptrtoint i8** %load_$_638 to i64
  %cnd_$_643 = icmp eq i64 %int_of_ptr_$_642, 0
  br i1 %cnd_$_643, label %thn_$_640, label %mrg_$_641
 thn_$_640:
@@ -1298,7 +1298,7 @@ define i64 @str_token_p$38 (%$locals_tigermain* %$sl, i8* %t$50) {
  %var_ptr_$_651 = getelementptr %$locals_str_token_p$38, %$locals_str_token_p$38* %locals_$_11, i32 0, i32 1
  %load_$_652 = load i8*, i8** %var_ptr_$_651
  %record_ptr_$_653 = bitcast i8* %load_$_652 to %token$32*
- %int_of_ptr_$_656 = ptrtoint i8* %load_$_652 to i64
+ %int_of_ptr_$_656 = ptrtoint i8** %load_$_652 to i64
  %cnd_$_657 = icmp eq i64 %int_of_ptr_$_656, 0
  br i1 %cnd_$_657, label %thn_$_654, label %mrg_$_655
 thn_$_654:
@@ -1321,7 +1321,7 @@ define i64 @id_token_p$39 (%$locals_tigermain* %$sl, i8* %t$51) {
  %var_ptr_$_665 = getelementptr %$locals_id_token_p$39, %$locals_id_token_p$39* %locals_$_12, i32 0, i32 1
  %load_$_666 = load i8*, i8** %var_ptr_$_665
  %record_ptr_$_667 = bitcast i8* %load_$_666 to %token$32*
- %int_of_ptr_$_670 = ptrtoint i8* %load_$_666 to i64
+ %int_of_ptr_$_670 = ptrtoint i8** %load_$_666 to i64
  %cnd_$_671 = icmp eq i64 %int_of_ptr_$_670, 0
  br i1 %cnd_$_671, label %thn_$_668, label %mrg_$_669
 thn_$_668:
@@ -1344,7 +1344,7 @@ define i64 @bool_token_p$40 (%$locals_tigermain* %$sl, i8* %t$52) {
  %var_ptr_$_679 = getelementptr %$locals_bool_token_p$40, %$locals_bool_token_p$40* %locals_$_13, i32 0, i32 1
  %load_$_680 = load i8*, i8** %var_ptr_$_679
  %record_ptr_$_681 = bitcast i8* %load_$_680 to %token$32*
- %int_of_ptr_$_684 = ptrtoint i8* %load_$_680 to i64
+ %int_of_ptr_$_684 = ptrtoint i8** %load_$_680 to i64
  %cnd_$_685 = icmp eq i64 %int_of_ptr_$_684, 0
  br i1 %cnd_$_685, label %thn_$_682, label %mrg_$_683
 thn_$_682:
@@ -1367,7 +1367,7 @@ define i64 @get_int_token$41 (%$locals_tigermain* %$sl, i8* %t$53) {
  %var_ptr_$_693 = getelementptr %$locals_get_int_token$41, %$locals_get_int_token$41* %locals_$_14, i32 0, i32 1
  %load_$_694 = load i8*, i8** %var_ptr_$_693
  %record_ptr_$_695 = bitcast i8* %load_$_694 to %token$32*
- %int_of_ptr_$_698 = ptrtoint i8* %load_$_694 to i64
+ %int_of_ptr_$_698 = ptrtoint i8** %load_$_694 to i64
  %cnd_$_699 = icmp eq i64 %int_of_ptr_$_698, 0
  br i1 %cnd_$_699, label %thn_$_696, label %mrg_$_697
 thn_$_696:
@@ -1388,7 +1388,7 @@ define i8* @get_id_token$42 (%$locals_tigermain* %$sl, i8* %t$54) {
  %var_ptr_$_704 = getelementptr %$locals_get_id_token$42, %$locals_get_id_token$42* %locals_$_15, i32 0, i32 1
  %load_$_705 = load i8*, i8** %var_ptr_$_704
  %record_ptr_$_706 = bitcast i8* %load_$_705 to %token$32*
- %int_of_ptr_$_709 = ptrtoint i8* %load_$_705 to i64
+ %int_of_ptr_$_709 = ptrtoint i8** %load_$_705 to i64
  %cnd_$_710 = icmp eq i64 %int_of_ptr_$_709, 0
  br i1 %cnd_$_710, label %thn_$_707, label %mrg_$_708
 thn_$_707:
@@ -1409,7 +1409,7 @@ define i8* @get_str_token$43 (%$locals_tigermain* %$sl, i8* %t$55) {
  %var_ptr_$_715 = getelementptr %$locals_get_str_token$43, %$locals_get_str_token$43* %locals_$_16, i32 0, i32 1
  %load_$_716 = load i8*, i8** %var_ptr_$_715
  %record_ptr_$_717 = bitcast i8* %load_$_716 to %token$32*
- %int_of_ptr_$_720 = ptrtoint i8* %load_$_716 to i64
+ %int_of_ptr_$_720 = ptrtoint i8** %load_$_716 to i64
  %cnd_$_721 = icmp eq i64 %int_of_ptr_$_720, 0
  br i1 %cnd_$_721, label %thn_$_718, label %mrg_$_719
 thn_$_718:
@@ -1430,7 +1430,7 @@ define i64 @get_bool_token$44 (%$locals_tigermain* %$sl, i8* %t$56) {
  %var_ptr_$_726 = getelementptr %$locals_get_bool_token$44, %$locals_get_bool_token$44* %locals_$_17, i32 0, i32 1
  %load_$_727 = load i8*, i8** %var_ptr_$_726
  %record_ptr_$_728 = bitcast i8* %load_$_727 to %token$32*
- %int_of_ptr_$_731 = ptrtoint i8* %load_$_727 to i64
+ %int_of_ptr_$_731 = ptrtoint i8** %load_$_727 to i64
  %cnd_$_732 = icmp eq i64 %int_of_ptr_$_731, 0
  br i1 %cnd_$_732, label %thn_$_729, label %mrg_$_730
 thn_$_729:
@@ -1456,12 +1456,12 @@ define i8* @token2s$59 (%$locals_tigermain* %$sl, i8* %t$60) {
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_736
  %var_ptr_$_741 = getelementptr %$locals_token2s$59, %$locals_token2s$59* %locals_$_18, i32 0, i32 1
  %res_$_742 = load i8*, i8** %var_ptr_$_741
- %left_int_$_743 = ptrtoint i8* %res_$_742 to i64
+ %left_int_$_743 = ptrtoint i8** %res_$_742 to i64
  %lnk_$_744 = getelementptr %$locals_token2s$59, %$locals_token2s$59* %locals_$_18, i32 0, i32 0
  %load_$_745 = load %$locals_tigermain*, %$locals_tigermain** %lnk_$_744
  %var_ptr_$_746 = getelementptr %$locals_tigermain, %$locals_tigermain* %load_$_745, i32 0, i32 85
  %res_$_747 = load i8*, i8** %var_ptr_$_746
- %right_int_$_748 = ptrtoint i8* %res_$_747 to i64
+ %right_int_$_748 = ptrtoint i8** %res_$_747 to i64
  %cnd_$_749 = icmp eq i64 %left_int_$_743, %right_int_$_748
  %zext_$_750 = zext i1 %cnd_$_749 to i64
  %cnd_$_751 = icmp ne i64 %zext_$_750, 0
@@ -1473,12 +1473,12 @@ thn_$_738:
 els_$_739:
  %var_ptr_$_758 = getelementptr %$locals_token2s$59, %$locals_token2s$59* %locals_$_18, i32 0, i32 1
  %res_$_759 = load i8*, i8** %var_ptr_$_758
- %left_int_$_760 = ptrtoint i8* %res_$_759 to i64
+ %left_int_$_760 = ptrtoint i8** %res_$_759 to i64
  %lnk_$_761 = getelementptr %$locals_token2s$59, %$locals_token2s$59* %locals_$_18, i32 0, i32 0
  %load_$_762 = load %$locals_tigermain*, %$locals_tigermain** %lnk_$_761
  %var_ptr_$_763 = getelementptr %$locals_tigermain, %$locals_tigermain* %load_$_762, i32 0, i32 84
  %res_$_764 = load i8*, i8** %var_ptr_$_763
- %right_int_$_765 = ptrtoint i8* %res_$_764 to i64
+ %right_int_$_765 = ptrtoint i8** %res_$_764 to i64
  %cnd_$_766 = icmp eq i64 %left_int_$_760, %right_int_$_765
  %zext_$_767 = zext i1 %cnd_$_766 to i64
  %cnd_$_768 = icmp ne i64 %zext_$_767, 0
@@ -1570,7 +1570,7 @@ els_$_824:
  %var_ptr_$_848 = getelementptr %$locals_token2s$59, %$locals_token2s$59* %locals_$_18, i32 0, i32 1
  %load_$_849 = load i8*, i8** %var_ptr_$_848
  %record_ptr_$_850 = bitcast i8* %load_$_849 to %token$32*
- %int_of_ptr_$_853 = ptrtoint i8* %load_$_849 to i64
+ %int_of_ptr_$_853 = ptrtoint i8** %load_$_849 to i64
  %cnd_$_854 = icmp eq i64 %int_of_ptr_$_853, 0
  br i1 %cnd_$_854, label %thn_$_851, label %mrg_$_852
 thn_$_851:
@@ -2710,7 +2710,7 @@ define void @push_left$110 (%$locals_tigermain* %$sl, i8* %a$114, i8* %Q$115) {
  %var_ptr_$_1719 = getelementptr %$locals_push_left$110, %$locals_push_left$110* %locals_$_35, i32 0, i32 4
  %load_$_1720 = load i8*, i8** %var_ptr_$_1719
  %record_ptr_$_1721 = bitcast i8* %load_$_1720 to %deque$109*
- %int_of_ptr_$_1724 = ptrtoint i8* %load_$_1720 to i64
+ %int_of_ptr_$_1724 = ptrtoint i8** %load_$_1720 to i64
  %cnd_$_1725 = icmp eq i64 %int_of_ptr_$_1724, 0
  br i1 %cnd_$_1725, label %thn_$_1722, label %mrg_$_1723
 thn_$_1722:
@@ -2722,7 +2722,7 @@ mrg_$_1723:
  %temp_$_1728 = getelementptr %$locals_push_left$110, %$locals_push_left$110* %locals_$_35, i32 0, i32 2
  store i8* %res_$_1727, i8** %temp_$_1728
  %size_ptr_$_1729 = getelementptr %deque_elem$108, %deque_elem$108* null, i32 1
- %size_$_1730 = ptrtoint %deque_elem$108* %size_ptr_$_1729 to i64
+ %size_$_1730 = ptrtoint %deque_elem$108** %size_ptr_$_1729 to i64
  %record_ptr_$_1731 = call i8* @allocRecord (i64 %size_$_1730)
  %rec_$_1732 = bitcast i8* %record_ptr_$_1731 to %deque_elem$108*
  %var_ptr_$_1733 = getelementptr %$locals_push_left$110, %$locals_push_left$110* %locals_$_35, i32 0, i32 3
@@ -2742,7 +2742,7 @@ mrg_$_1723:
  %var_ptr_$_1743 = getelementptr %$locals_push_left$110, %$locals_push_left$110* %locals_$_35, i32 0, i32 4
  %load_$_1744 = load i8*, i8** %var_ptr_$_1743
  %record_ptr_$_1745 = bitcast i8* %load_$_1744 to %deque$109*
- %int_of_ptr_$_1748 = ptrtoint i8* %load_$_1744 to i64
+ %int_of_ptr_$_1748 = ptrtoint i8** %load_$_1744 to i64
  %cnd_$_1749 = icmp eq i64 %int_of_ptr_$_1748, 0
  br i1 %cnd_$_1749, label %thn_$_1746, label %mrg_$_1747
 thn_$_1746:
@@ -2753,8 +2753,8 @@ mrg_$_1747:
  store i8* %res_$_1742, i8** %field_ptr_$_1750
  %var_ptr_$_1754 = getelementptr %$locals_push_left$110, %$locals_push_left$110* %locals_$_35, i32 0, i32 2
  %res_$_1755 = load i8*, i8** %var_ptr_$_1754
- %left_int_$_1756 = ptrtoint i8* %res_$_1755 to i64
- %right_int_$_1757 = ptrtoint i8* null to i64
+ %left_int_$_1756 = ptrtoint i8** %res_$_1755 to i64
+ %right_int_$_1757 = ptrtoint i8** null to i64
  %cnd_$_1758 = icmp ne i64 %left_int_$_1756, %right_int_$_1757
  %zext_$_1759 = zext i1 %cnd_$_1758 to i64
  %cnd_$_1760 = icmp ne i64 %zext_$_1759, 0
@@ -2765,7 +2765,7 @@ thn_$_1751:
  %var_ptr_$_1763 = getelementptr %$locals_push_left$110, %$locals_push_left$110* %locals_$_35, i32 0, i32 2
  %load_$_1764 = load i8*, i8** %var_ptr_$_1763
  %record_ptr_$_1765 = bitcast i8* %load_$_1764 to %deque_elem$108*
- %int_of_ptr_$_1768 = ptrtoint i8* %load_$_1764 to i64
+ %int_of_ptr_$_1768 = ptrtoint i8** %load_$_1764 to i64
  %cnd_$_1769 = icmp eq i64 %int_of_ptr_$_1768, 0
  br i1 %cnd_$_1769, label %thn_$_1766, label %mrg_$_1767
 thn_$_1766:
@@ -2781,7 +2781,7 @@ els_$_1752:
  %var_ptr_$_1773 = getelementptr %$locals_push_left$110, %$locals_push_left$110* %locals_$_35, i32 0, i32 4
  %load_$_1774 = load i8*, i8** %var_ptr_$_1773
  %record_ptr_$_1775 = bitcast i8* %load_$_1774 to %deque$109*
- %int_of_ptr_$_1778 = ptrtoint i8* %load_$_1774 to i64
+ %int_of_ptr_$_1778 = ptrtoint i8** %load_$_1774 to i64
  %cnd_$_1779 = icmp eq i64 %int_of_ptr_$_1778, 0
  br i1 %cnd_$_1779, label %thn_$_1776, label %mrg_$_1777
 thn_$_1776:
@@ -2806,7 +2806,7 @@ define void @push_right$111 (%$locals_tigermain* %$sl, i8* %a$118, i8* %Q$119) {
  %var_ptr_$_1784 = getelementptr %$locals_push_right$111, %$locals_push_right$111* %locals_$_36, i32 0, i32 4
  %load_$_1785 = load i8*, i8** %var_ptr_$_1784
  %record_ptr_$_1786 = bitcast i8* %load_$_1785 to %deque$109*
- %int_of_ptr_$_1789 = ptrtoint i8* %load_$_1785 to i64
+ %int_of_ptr_$_1789 = ptrtoint i8** %load_$_1785 to i64
  %cnd_$_1790 = icmp eq i64 %int_of_ptr_$_1789, 0
  br i1 %cnd_$_1790, label %thn_$_1787, label %mrg_$_1788
 thn_$_1787:
@@ -2818,7 +2818,7 @@ mrg_$_1788:
  %temp_$_1793 = getelementptr %$locals_push_right$111, %$locals_push_right$111* %locals_$_36, i32 0, i32 2
  store i8* %res_$_1792, i8** %temp_$_1793
  %size_ptr_$_1794 = getelementptr %deque_elem$108, %deque_elem$108* null, i32 1
- %size_$_1795 = ptrtoint %deque_elem$108* %size_ptr_$_1794 to i64
+ %size_$_1795 = ptrtoint %deque_elem$108** %size_ptr_$_1794 to i64
  %record_ptr_$_1796 = call i8* @allocRecord (i64 %size_$_1795)
  %rec_$_1797 = bitcast i8* %record_ptr_$_1796 to %deque_elem$108*
  %var_ptr_$_1798 = getelementptr %$locals_push_right$111, %$locals_push_right$111* %locals_$_36, i32 0, i32 3
@@ -2838,7 +2838,7 @@ mrg_$_1788:
  %var_ptr_$_1808 = getelementptr %$locals_push_right$111, %$locals_push_right$111* %locals_$_36, i32 0, i32 4
  %load_$_1809 = load i8*, i8** %var_ptr_$_1808
  %record_ptr_$_1810 = bitcast i8* %load_$_1809 to %deque$109*
- %int_of_ptr_$_1813 = ptrtoint i8* %load_$_1809 to i64
+ %int_of_ptr_$_1813 = ptrtoint i8** %load_$_1809 to i64
  %cnd_$_1814 = icmp eq i64 %int_of_ptr_$_1813, 0
  br i1 %cnd_$_1814, label %thn_$_1811, label %mrg_$_1812
 thn_$_1811:
@@ -2849,8 +2849,8 @@ mrg_$_1812:
  store i8* %res_$_1807, i8** %field_ptr_$_1815
  %var_ptr_$_1819 = getelementptr %$locals_push_right$111, %$locals_push_right$111* %locals_$_36, i32 0, i32 2
  %res_$_1820 = load i8*, i8** %var_ptr_$_1819
- %left_int_$_1821 = ptrtoint i8* %res_$_1820 to i64
- %right_int_$_1822 = ptrtoint i8* null to i64
+ %left_int_$_1821 = ptrtoint i8** %res_$_1820 to i64
+ %right_int_$_1822 = ptrtoint i8** null to i64
  %cnd_$_1823 = icmp ne i64 %left_int_$_1821, %right_int_$_1822
  %zext_$_1824 = zext i1 %cnd_$_1823 to i64
  %cnd_$_1825 = icmp ne i64 %zext_$_1824, 0
@@ -2861,7 +2861,7 @@ thn_$_1816:
  %var_ptr_$_1828 = getelementptr %$locals_push_right$111, %$locals_push_right$111* %locals_$_36, i32 0, i32 2
  %load_$_1829 = load i8*, i8** %var_ptr_$_1828
  %record_ptr_$_1830 = bitcast i8* %load_$_1829 to %deque_elem$108*
- %int_of_ptr_$_1833 = ptrtoint i8* %load_$_1829 to i64
+ %int_of_ptr_$_1833 = ptrtoint i8** %load_$_1829 to i64
  %cnd_$_1834 = icmp eq i64 %int_of_ptr_$_1833, 0
  br i1 %cnd_$_1834, label %thn_$_1831, label %mrg_$_1832
 thn_$_1831:
@@ -2877,7 +2877,7 @@ els_$_1817:
  %var_ptr_$_1838 = getelementptr %$locals_push_right$111, %$locals_push_right$111* %locals_$_36, i32 0, i32 4
  %load_$_1839 = load i8*, i8** %var_ptr_$_1838
  %record_ptr_$_1840 = bitcast i8* %load_$_1839 to %deque$109*
- %int_of_ptr_$_1843 = ptrtoint i8* %load_$_1839 to i64
+ %int_of_ptr_$_1843 = ptrtoint i8** %load_$_1839 to i64
  %cnd_$_1844 = icmp eq i64 %int_of_ptr_$_1843, 0
  br i1 %cnd_$_1844, label %thn_$_1841, label %mrg_$_1842
 thn_$_1841:
@@ -2902,7 +2902,7 @@ define i8* @pop_right$112 (%$locals_tigermain* %$sl, i8* %Q$122) {
  %var_ptr_$_1856 = getelementptr %$locals_pop_right$112, %$locals_pop_right$112* %locals_$_37, i32 0, i32 3
  %load_$_1857 = load i8*, i8** %var_ptr_$_1856
  %record_ptr_$_1858 = bitcast i8* %load_$_1857 to %deque$109*
- %int_of_ptr_$_1861 = ptrtoint i8* %load_$_1857 to i64
+ %int_of_ptr_$_1861 = ptrtoint i8** %load_$_1857 to i64
  %cnd_$_1862 = icmp eq i64 %int_of_ptr_$_1861, 0
  br i1 %cnd_$_1862, label %thn_$_1859, label %mrg_$_1860
 thn_$_1859:
@@ -2911,8 +2911,8 @@ thn_$_1859:
 mrg_$_1860:
  %field_ptr_$_1863 = getelementptr %deque$109, %deque$109* %record_ptr_$_1858, i32 0, i32 0
  %res_$_1864 = load i8*, i8** %field_ptr_$_1863
- %left_int_$_1865 = ptrtoint i8* %res_$_1864 to i64
- %right_int_$_1866 = ptrtoint i8* null to i64
+ %left_int_$_1865 = ptrtoint i8** %res_$_1864 to i64
+ %right_int_$_1866 = ptrtoint i8** null to i64
  %cnd_$_1867 = icmp eq i64 %left_int_$_1865, %right_int_$_1866
  %zext_$_1868 = zext i1 %cnd_$_1867 to i64
  %cnd_$_1869 = icmp ne i64 %zext_$_1868, 0
@@ -2924,7 +2924,7 @@ els_$_1854:
  %var_ptr_$_1870 = getelementptr %$locals_pop_right$112, %$locals_pop_right$112* %locals_$_37, i32 0, i32 3
  %load_$_1871 = load i8*, i8** %var_ptr_$_1870
  %record_ptr_$_1872 = bitcast i8* %load_$_1871 to %deque$109*
- %int_of_ptr_$_1875 = ptrtoint i8* %load_$_1871 to i64
+ %int_of_ptr_$_1875 = ptrtoint i8** %load_$_1871 to i64
  %cnd_$_1876 = icmp eq i64 %int_of_ptr_$_1875, 0
  br i1 %cnd_$_1876, label %thn_$_1873, label %mrg_$_1874
 thn_$_1873:
@@ -2933,8 +2933,8 @@ thn_$_1873:
 mrg_$_1874:
  %field_ptr_$_1877 = getelementptr %deque$109, %deque$109* %record_ptr_$_1872, i32 0, i32 1
  %res_$_1878 = load i8*, i8** %field_ptr_$_1877
- %left_int_$_1879 = ptrtoint i8* %res_$_1878 to i64
- %right_int_$_1880 = ptrtoint i8* null to i64
+ %left_int_$_1879 = ptrtoint i8** %res_$_1878 to i64
+ %right_int_$_1880 = ptrtoint i8** null to i64
  %cnd_$_1881 = icmp eq i64 %left_int_$_1879, %right_int_$_1880
  %zext_$_1882 = zext i1 %cnd_$_1881 to i64
  store i64 %zext_$_1882, i64* %temp_$_1852
@@ -2954,7 +2954,7 @@ els_$_1850:
  %var_ptr_$_1890 = getelementptr %$locals_pop_right$112, %$locals_pop_right$112* %locals_$_37, i32 0, i32 3
  %load_$_1891 = load i8*, i8** %var_ptr_$_1890
  %record_ptr_$_1892 = bitcast i8* %load_$_1891 to %deque$109*
- %int_of_ptr_$_1895 = ptrtoint i8* %load_$_1891 to i64
+ %int_of_ptr_$_1895 = ptrtoint i8** %load_$_1891 to i64
  %cnd_$_1896 = icmp eq i64 %int_of_ptr_$_1895, 0
  br i1 %cnd_$_1896, label %thn_$_1893, label %mrg_$_1894
 thn_$_1893:
@@ -2968,7 +2968,7 @@ mrg_$_1894:
  %var_ptr_$_1900 = getelementptr %$locals_pop_right$112, %$locals_pop_right$112* %locals_$_37, i32 0, i32 2
  %load_$_1901 = load i8*, i8** %var_ptr_$_1900
  %record_ptr_$_1902 = bitcast i8* %load_$_1901 to %deque_elem$108*
- %int_of_ptr_$_1905 = ptrtoint i8* %load_$_1901 to i64
+ %int_of_ptr_$_1905 = ptrtoint i8** %load_$_1901 to i64
  %cnd_$_1906 = icmp eq i64 %int_of_ptr_$_1905, 0
  br i1 %cnd_$_1906, label %thn_$_1903, label %mrg_$_1904
 thn_$_1903:
@@ -2984,7 +2984,7 @@ mrg_$_1904:
  %var_ptr_$_1938 = getelementptr %$locals_pop_right$112, %$locals_pop_right$112* %locals_$_37, i32 0, i32 3
  %load_$_1939 = load i8*, i8** %var_ptr_$_1938
  %record_ptr_$_1940 = bitcast i8* %load_$_1939 to %deque$109*
- %int_of_ptr_$_1943 = ptrtoint i8* %load_$_1939 to i64
+ %int_of_ptr_$_1943 = ptrtoint i8** %load_$_1939 to i64
  %cnd_$_1944 = icmp eq i64 %int_of_ptr_$_1943, 0
  br i1 %cnd_$_1944, label %thn_$_1941, label %mrg_$_1942
 thn_$_1941:
@@ -2995,8 +2995,8 @@ mrg_$_1942:
  store i8* %res_$_1937, i8** %field_ptr_$_1945
  %var_ptr_$_1913 = getelementptr %$locals_pop_right$112, %$locals_pop_right$112* %locals_$_37, i32 0, i32 1
  %res_$_1914 = load i8*, i8** %var_ptr_$_1913
- %left_int_$_1915 = ptrtoint i8* %res_$_1914 to i64
- %right_int_$_1916 = ptrtoint i8* null to i64
+ %left_int_$_1915 = ptrtoint i8** %res_$_1914 to i64
+ %right_int_$_1916 = ptrtoint i8** null to i64
  %cnd_$_1917 = icmp eq i64 %left_int_$_1915, %right_int_$_1916
  %zext_$_1918 = zext i1 %cnd_$_1917 to i64
  %cnd_$_1919 = icmp ne i64 %zext_$_1918, 0
@@ -3005,7 +3005,7 @@ thn_$_1910:
  %var_ptr_$_1920 = getelementptr %$locals_pop_right$112, %$locals_pop_right$112* %locals_$_37, i32 0, i32 3
  %load_$_1921 = load i8*, i8** %var_ptr_$_1920
  %record_ptr_$_1922 = bitcast i8* %load_$_1921 to %deque$109*
- %int_of_ptr_$_1925 = ptrtoint i8* %load_$_1921 to i64
+ %int_of_ptr_$_1925 = ptrtoint i8** %load_$_1921 to i64
  %cnd_$_1926 = icmp eq i64 %int_of_ptr_$_1925, 0
  br i1 %cnd_$_1926, label %thn_$_1923, label %mrg_$_1924
 thn_$_1923:
@@ -3019,7 +3019,7 @@ els_$_1911:
  %var_ptr_$_1928 = getelementptr %$locals_pop_right$112, %$locals_pop_right$112* %locals_$_37, i32 0, i32 1
  %load_$_1929 = load i8*, i8** %var_ptr_$_1928
  %record_ptr_$_1930 = bitcast i8* %load_$_1929 to %deque_elem$108*
- %int_of_ptr_$_1933 = ptrtoint i8* %load_$_1929 to i64
+ %int_of_ptr_$_1933 = ptrtoint i8** %load_$_1929 to i64
  %cnd_$_1934 = icmp eq i64 %int_of_ptr_$_1933, 0
  br i1 %cnd_$_1934, label %thn_$_1931, label %mrg_$_1932
 thn_$_1931:
@@ -3033,7 +3033,7 @@ mrg_$_1912:
  %var_ptr_$_1946 = getelementptr %$locals_pop_right$112, %$locals_pop_right$112* %locals_$_37, i32 0, i32 2
  %load_$_1947 = load i8*, i8** %var_ptr_$_1946
  %record_ptr_$_1948 = bitcast i8* %load_$_1947 to %deque_elem$108*
- %int_of_ptr_$_1951 = ptrtoint i8* %load_$_1947 to i64
+ %int_of_ptr_$_1951 = ptrtoint i8** %load_$_1947 to i64
  %cnd_$_1952 = icmp eq i64 %int_of_ptr_$_1951, 0
  br i1 %cnd_$_1952, label %thn_$_1949, label %mrg_$_1950
 thn_$_1949:
@@ -3059,7 +3059,7 @@ define i64 @empty$113 (%$locals_tigermain* %$sl, i8* %Q$125) {
  %var_ptr_$_1962 = getelementptr %$locals_empty$113, %$locals_empty$113* %locals_$_38, i32 0, i32 1
  %load_$_1963 = load i8*, i8** %var_ptr_$_1962
  %record_ptr_$_1964 = bitcast i8* %load_$_1963 to %deque$109*
- %int_of_ptr_$_1967 = ptrtoint i8* %load_$_1963 to i64
+ %int_of_ptr_$_1967 = ptrtoint i8** %load_$_1963 to i64
  %cnd_$_1968 = icmp eq i64 %int_of_ptr_$_1967, 0
  br i1 %cnd_$_1968, label %thn_$_1965, label %mrg_$_1966
 thn_$_1965:
@@ -3068,8 +3068,8 @@ thn_$_1965:
 mrg_$_1966:
  %field_ptr_$_1969 = getelementptr %deque$109, %deque$109* %record_ptr_$_1964, i32 0, i32 0
  %res_$_1970 = load i8*, i8** %field_ptr_$_1969
- %left_int_$_1971 = ptrtoint i8* %res_$_1970 to i64
- %right_int_$_1972 = ptrtoint i8* null to i64
+ %left_int_$_1971 = ptrtoint i8** %res_$_1970 to i64
+ %right_int_$_1972 = ptrtoint i8** null to i64
  %cnd_$_1973 = icmp eq i64 %left_int_$_1971, %right_int_$_1972
  %zext_$_1974 = zext i1 %cnd_$_1973 to i64
  %cnd_$_1975 = icmp ne i64 %zext_$_1974, 0
@@ -3081,7 +3081,7 @@ els_$_1960:
  %var_ptr_$_1976 = getelementptr %$locals_empty$113, %$locals_empty$113* %locals_$_38, i32 0, i32 1
  %load_$_1977 = load i8*, i8** %var_ptr_$_1976
  %record_ptr_$_1978 = bitcast i8* %load_$_1977 to %deque$109*
- %int_of_ptr_$_1981 = ptrtoint i8* %load_$_1977 to i64
+ %int_of_ptr_$_1981 = ptrtoint i8** %load_$_1977 to i64
  %cnd_$_1982 = icmp eq i64 %int_of_ptr_$_1981, 0
  br i1 %cnd_$_1982, label %thn_$_1979, label %mrg_$_1980
 thn_$_1979:
@@ -3090,8 +3090,8 @@ thn_$_1979:
 mrg_$_1980:
  %field_ptr_$_1983 = getelementptr %deque$109, %deque$109* %record_ptr_$_1978, i32 0, i32 1
  %res_$_1984 = load i8*, i8** %field_ptr_$_1983
- %left_int_$_1985 = ptrtoint i8* %res_$_1984 to i64
- %right_int_$_1986 = ptrtoint i8* null to i64
+ %left_int_$_1985 = ptrtoint i8** %res_$_1984 to i64
+ %right_int_$_1986 = ptrtoint i8** null to i64
  %cnd_$_1987 = icmp eq i64 %left_int_$_1985, %right_int_$_1986
  %zext_$_1988 = zext i1 %cnd_$_1987 to i64
  store i64 %zext_$_1988, i64* %temp_$_1958
@@ -3118,7 +3118,7 @@ define i8* @read_sexp_to_tokens$127 (%$locals_tigermain* %$sl) {
  %temp_$_1995 = getelementptr %$locals_read_sexp_to_tokens$127, %$locals_read_sexp_to_tokens$127* %locals_$_39, i32 0, i32 3
  store i8* %ret_$_1994, i8** %temp_$_1995
  %size_ptr_$_1996 = getelementptr %deque$109, %deque$109* null, i32 1
- %size_$_1997 = ptrtoint %deque$109* %size_ptr_$_1996 to i64
+ %size_$_1997 = ptrtoint %deque$109** %size_ptr_$_1996 to i64
  %record_ptr_$_1998 = call i8* @allocRecord (i64 %size_$_1997)
  %rec_$_1999 = bitcast i8* %record_ptr_$_1998 to %deque$109*
  %field_ptr_$_2000 = getelementptr %deque$109, %deque$109* %rec_$_1999, i32 0, i32 0
@@ -3194,12 +3194,12 @@ thn_$_2010:
 els_$_2011:
  %var_ptr_$_2058 = getelementptr %$locals_read_sexp_to_tokens$127, %$locals_read_sexp_to_tokens$127* %locals_$_39, i32 0, i32 3
  %res_$_2059 = load i8*, i8** %var_ptr_$_2058
- %left_int_$_2060 = ptrtoint i8* %res_$_2059 to i64
+ %left_int_$_2060 = ptrtoint i8** %res_$_2059 to i64
  %lnk_$_2061 = getelementptr %$locals_read_sexp_to_tokens$127, %$locals_read_sexp_to_tokens$127* %locals_$_39, i32 0, i32 0
  %load_$_2062 = load %$locals_tigermain*, %$locals_tigermain** %lnk_$_2061
  %var_ptr_$_2063 = getelementptr %$locals_tigermain, %$locals_tigermain* %load_$_2062, i32 0, i32 85
  %res_$_2064 = load i8*, i8** %var_ptr_$_2063
- %right_int_$_2065 = ptrtoint i8* %res_$_2064 to i64
+ %right_int_$_2065 = ptrtoint i8** %res_$_2064 to i64
  %cnd_$_2066 = icmp ne i64 %left_int_$_2060, %right_int_$_2065
  %zext_$_2067 = zext i1 %cnd_$_2066 to i64
  %cnd_$_2068 = icmp ne i64 %zext_$_2067, 0
@@ -3240,8 +3240,8 @@ body_$_2088:
  store i8* %ret_$_2097, i8** %temp_$_2098
  %var_ptr_$_2107 = getelementptr %$locals_read_sexp_to_tokens$127, %$locals_read_sexp_to_tokens$127* %locals_$_39, i32 0, i32 1
  %res_$_2108 = load i8*, i8** %var_ptr_$_2107
- %left_int_$_2109 = ptrtoint i8* %res_$_2108 to i64
- %right_int_$_2110 = ptrtoint i8* null to i64
+ %left_int_$_2109 = ptrtoint i8** %res_$_2108 to i64
+ %right_int_$_2110 = ptrtoint i8** null to i64
  %cnd_$_2111 = icmp eq i64 %left_int_$_2109, %right_int_$_2110
  %zext_$_2112 = zext i1 %cnd_$_2111 to i64
  %cnd_$_2113 = icmp ne i64 %zext_$_2112, 0
@@ -3280,12 +3280,12 @@ mrg_$_2106:
  call void @push_right$111 (%$locals_tigermain* %load_$_2100, i8* %res_$_2102, i8* %res_$_2104)
  %var_ptr_$_2141 = getelementptr %$locals_read_sexp_to_tokens$127, %$locals_read_sexp_to_tokens$127* %locals_$_39, i32 0, i32 1
  %res_$_2142 = load i8*, i8** %var_ptr_$_2141
- %left_int_$_2143 = ptrtoint i8* %res_$_2142 to i64
+ %left_int_$_2143 = ptrtoint i8** %res_$_2142 to i64
  %lnk_$_2144 = getelementptr %$locals_read_sexp_to_tokens$127, %$locals_read_sexp_to_tokens$127* %locals_$_39, i32 0, i32 0
  %load_$_2145 = load %$locals_tigermain*, %$locals_tigermain** %lnk_$_2144
  %var_ptr_$_2146 = getelementptr %$locals_tigermain, %$locals_tigermain* %load_$_2145, i32 0, i32 85
  %res_$_2147 = load i8*, i8** %var_ptr_$_2146
- %right_int_$_2148 = ptrtoint i8* %res_$_2147 to i64
+ %right_int_$_2148 = ptrtoint i8** %res_$_2147 to i64
  %cnd_$_2149 = icmp eq i64 %left_int_$_2143, %right_int_$_2148
  %zext_$_2150 = zext i1 %cnd_$_2149 to i64
  %cnd_$_2151 = icmp ne i64 %zext_$_2150, 0
@@ -3300,12 +3300,12 @@ thn_$_2138:
 els_$_2139:
  %var_ptr_$_2158 = getelementptr %$locals_read_sexp_to_tokens$127, %$locals_read_sexp_to_tokens$127* %locals_$_39, i32 0, i32 1
  %res_$_2159 = load i8*, i8** %var_ptr_$_2158
- %left_int_$_2160 = ptrtoint i8* %res_$_2159 to i64
+ %left_int_$_2160 = ptrtoint i8** %res_$_2159 to i64
  %lnk_$_2161 = getelementptr %$locals_read_sexp_to_tokens$127, %$locals_read_sexp_to_tokens$127* %locals_$_39, i32 0, i32 0
  %load_$_2162 = load %$locals_tigermain*, %$locals_tigermain** %lnk_$_2161
  %var_ptr_$_2163 = getelementptr %$locals_tigermain, %$locals_tigermain* %load_$_2162, i32 0, i32 84
  %res_$_2164 = load i8*, i8** %var_ptr_$_2163
- %right_int_$_2165 = ptrtoint i8* %res_$_2164 to i64
+ %right_int_$_2165 = ptrtoint i8** %res_$_2164 to i64
  %cnd_$_2166 = icmp eq i64 %left_int_$_2160, %right_int_$_2165
  %zext_$_2167 = zext i1 %cnd_$_2166 to i64
  %cnd_$_2168 = icmp ne i64 %zext_$_2167, 0
@@ -3342,11 +3342,11 @@ define i8* @mk_int$139 (%$locals_tigermain* %$sl, i64 %v$167) {
  %arg_$_2178 = getelementptr %$locals_mk_int$139, %$locals_mk_int$139* %locals_$_40, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_2178
  %size_ptr_$_2179 = getelementptr %sexp$132, %sexp$132* null, i32 1
- %size_$_2180 = ptrtoint %sexp$132* %size_ptr_$_2179 to i64
+ %size_$_2180 = ptrtoint %sexp$132** %size_ptr_$_2179 to i64
  %record_ptr_$_2181 = call i8* @allocRecord (i64 %size_$_2180)
  %rec_$_2182 = bitcast i8* %record_ptr_$_2181 to %sexp$132*
  %size_ptr_$_2183 = getelementptr %Int$61, %Int$61* null, i32 1
- %size_$_2184 = ptrtoint %Int$61* %size_ptr_$_2183 to i64
+ %size_$_2184 = ptrtoint %Int$61** %size_ptr_$_2183 to i64
  %record_ptr_$_2185 = call i8* @allocRecord (i64 %size_$_2184)
  %rec_$_2186 = bitcast i8* %record_ptr_$_2185 to %Int$61*
  %var_ptr_$_2187 = getelementptr %$locals_mk_int$139, %$locals_mk_int$139* %locals_$_40, i32 0, i32 1
@@ -3375,13 +3375,13 @@ define i8* @mk_bool$140 (%$locals_tigermain* %$sl, i64 %v$168) {
  %arg_$_2197 = getelementptr %$locals_mk_bool$140, %$locals_mk_bool$140* %locals_$_41, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_2197
  %size_ptr_$_2198 = getelementptr %sexp$132, %sexp$132* null, i32 1
- %size_$_2199 = ptrtoint %sexp$132* %size_ptr_$_2198 to i64
+ %size_$_2199 = ptrtoint %sexp$132** %size_ptr_$_2198 to i64
  %record_ptr_$_2200 = call i8* @allocRecord (i64 %size_$_2199)
  %rec_$_2201 = bitcast i8* %record_ptr_$_2200 to %sexp$132*
  %field_ptr_$_2202 = getelementptr %sexp$132, %sexp$132* %rec_$_2201, i32 0, i32 0
  store i8* null, i8** %field_ptr_$_2202
  %size_ptr_$_2203 = getelementptr %Int$61, %Int$61* null, i32 1
- %size_$_2204 = ptrtoint %Int$61* %size_ptr_$_2203 to i64
+ %size_$_2204 = ptrtoint %Int$61** %size_ptr_$_2203 to i64
  %record_ptr_$_2205 = call i8* @allocRecord (i64 %size_$_2204)
  %rec_$_2206 = bitcast i8* %record_ptr_$_2205 to %Int$61*
  %var_ptr_$_2207 = getelementptr %$locals_mk_bool$140, %$locals_mk_bool$140* %locals_$_41, i32 0, i32 1
@@ -3408,7 +3408,7 @@ define i8* @mk_str$141 (%$locals_tigermain* %$sl, i8* %v$169) {
  %arg_$_2216 = getelementptr %$locals_mk_str$141, %$locals_mk_str$141* %locals_$_42, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_2216
  %size_ptr_$_2217 = getelementptr %sexp$132, %sexp$132* null, i32 1
- %size_$_2218 = ptrtoint %sexp$132* %size_ptr_$_2217 to i64
+ %size_$_2218 = ptrtoint %sexp$132** %size_ptr_$_2217 to i64
  %record_ptr_$_2219 = call i8* @allocRecord (i64 %size_$_2218)
  %rec_$_2220 = bitcast i8* %record_ptr_$_2219 to %sexp$132*
  %field_ptr_$_2221 = getelementptr %sexp$132, %sexp$132* %rec_$_2220, i32 0, i32 0
@@ -3416,7 +3416,7 @@ define i8* @mk_str$141 (%$locals_tigermain* %$sl, i8* %v$169) {
  %field_ptr_$_2222 = getelementptr %sexp$132, %sexp$132* %rec_$_2220, i32 0, i32 1
  store i8* null, i8** %field_ptr_$_2222
  %size_ptr_$_2223 = getelementptr %String$62, %String$62* null, i32 1
- %size_$_2224 = ptrtoint %String$62* %size_ptr_$_2223 to i64
+ %size_$_2224 = ptrtoint %String$62** %size_ptr_$_2223 to i64
  %record_ptr_$_2225 = call i8* @allocRecord (i64 %size_$_2224)
  %rec_$_2226 = bitcast i8* %record_ptr_$_2225 to %String$62*
  %var_ptr_$_2227 = getelementptr %$locals_mk_str$141, %$locals_mk_str$141* %locals_$_42, i32 0, i32 1
@@ -3441,7 +3441,7 @@ define i8* @mk_sym$142 (%$locals_tigermain* %$sl, i8* %v$170) {
  %arg_$_2235 = getelementptr %$locals_mk_sym$142, %$locals_mk_sym$142* %locals_$_43, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_2235
  %size_ptr_$_2236 = getelementptr %sexp$132, %sexp$132* null, i32 1
- %size_$_2237 = ptrtoint %sexp$132* %size_ptr_$_2236 to i64
+ %size_$_2237 = ptrtoint %sexp$132** %size_ptr_$_2236 to i64
  %record_ptr_$_2238 = call i8* @allocRecord (i64 %size_$_2237)
  %rec_$_2239 = bitcast i8* %record_ptr_$_2238 to %sexp$132*
  %field_ptr_$_2240 = getelementptr %sexp$132, %sexp$132* %rec_$_2239, i32 0, i32 0
@@ -3451,7 +3451,7 @@ define i8* @mk_sym$142 (%$locals_tigermain* %$sl, i8* %v$170) {
  %field_ptr_$_2242 = getelementptr %sexp$132, %sexp$132* %rec_$_2239, i32 0, i32 2
  store i8* null, i8** %field_ptr_$_2242
  %size_ptr_$_2243 = getelementptr %String$62, %String$62* null, i32 1
- %size_$_2244 = ptrtoint %String$62* %size_ptr_$_2243 to i64
+ %size_$_2244 = ptrtoint %String$62** %size_ptr_$_2243 to i64
  %record_ptr_$_2245 = call i8* @allocRecord (i64 %size_$_2244)
  %rec_$_2246 = bitcast i8* %record_ptr_$_2245 to %String$62*
  %var_ptr_$_2247 = getelementptr %$locals_mk_sym$142, %$locals_mk_sym$142* %locals_$_43, i32 0, i32 1
@@ -3474,7 +3474,7 @@ define i8* @mk_sexps$143 (%$locals_tigermain* %$sl, i8* %v$171) {
  %arg_$_2254 = getelementptr %$locals_mk_sexps$143, %$locals_mk_sexps$143* %locals_$_44, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_2254
  %size_ptr_$_2255 = getelementptr %sexp$132, %sexp$132* null, i32 1
- %size_$_2256 = ptrtoint %sexp$132* %size_ptr_$_2255 to i64
+ %size_$_2256 = ptrtoint %sexp$132** %size_ptr_$_2255 to i64
  %record_ptr_$_2257 = call i8* @allocRecord (i64 %size_$_2256)
  %rec_$_2258 = bitcast i8* %record_ptr_$_2257 to %sexp$132*
  %field_ptr_$_2259 = getelementptr %sexp$132, %sexp$132* %rec_$_2258, i32 0, i32 0
@@ -3488,7 +3488,7 @@ define i8* @mk_sexps$143 (%$locals_tigermain* %$sl, i8* %v$171) {
  %field_ptr_$_2263 = getelementptr %sexp$132, %sexp$132* %rec_$_2258, i32 0, i32 4
  store i8* null, i8** %field_ptr_$_2263
  %size_ptr_$_2264 = getelementptr %List$134, %List$134* null, i32 1
- %size_$_2265 = ptrtoint %List$134* %size_ptr_$_2264 to i64
+ %size_$_2265 = ptrtoint %List$134** %size_ptr_$_2264 to i64
  %record_ptr_$_2266 = call i8* @allocRecord (i64 %size_$_2265)
  %rec_$_2267 = bitcast i8* %record_ptr_$_2266 to %List$134*
  %var_ptr_$_2268 = getelementptr %$locals_mk_sexps$143, %$locals_mk_sexps$143* %locals_$_44, i32 0, i32 1
@@ -3507,7 +3507,7 @@ define i8* @mk_fun_from_fun$144 (%$locals_tigermain* %$sl, i8* %f$172) {
  %arg_$_2273 = getelementptr %$locals_mk_fun_from_fun$144, %$locals_mk_fun_from_fun$144* %locals_$_45, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_2273
  %size_ptr_$_2274 = getelementptr %sexp$132, %sexp$132* null, i32 1
- %size_$_2275 = ptrtoint %sexp$132* %size_ptr_$_2274 to i64
+ %size_$_2275 = ptrtoint %sexp$132** %size_ptr_$_2274 to i64
  %record_ptr_$_2276 = call i8* @allocRecord (i64 %size_$_2275)
  %rec_$_2277 = bitcast i8* %record_ptr_$_2276 to %sexp$132*
  %field_ptr_$_2278 = getelementptr %sexp$132, %sexp$132* %rec_$_2277, i32 0, i32 0
@@ -3538,7 +3538,7 @@ define i8* @mk_fun$145 (%$locals_tigermain* %$sl, i8* %pars$173, i8* %body$174, 
  %arg_$_2289 = getelementptr %$locals_mk_fun$145, %$locals_mk_fun$145* %locals_$_46, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_2289
  %size_ptr_$_2290 = getelementptr %Function$135, %Function$135* null, i32 1
- %size_$_2291 = ptrtoint %Function$135* %size_ptr_$_2290 to i64
+ %size_$_2291 = ptrtoint %Function$135** %size_ptr_$_2290 to i64
  %record_ptr_$_2292 = call i8* @allocRecord (i64 %size_$_2291)
  %rec_$_2293 = bitcast i8* %record_ptr_$_2292 to %Function$135*
  %temp_$_2295 = bitcast { i64, [4 x i8] }* @str_$_2294 to i8*
@@ -3574,7 +3574,7 @@ define i8* @mk_mt_sexp$146 (%$locals_tigermain* %$sl) {
  %arg_$_2315 = getelementptr %$locals_mk_mt_sexp$146, %$locals_mk_mt_sexp$146* %locals_$_47, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_2315
  %size_ptr_$_2316 = getelementptr %sexp$132, %sexp$132* null, i32 1
- %size_$_2317 = ptrtoint %sexp$132* %size_ptr_$_2316 to i64
+ %size_$_2317 = ptrtoint %sexp$132** %size_ptr_$_2316 to i64
  %record_ptr_$_2318 = call i8* @allocRecord (i64 %size_$_2317)
  %rec_$_2319 = bitcast i8* %record_ptr_$_2318 to %sexp$132*
  %field_ptr_$_2320 = getelementptr %sexp$132, %sexp$132* %rec_$_2319, i32 0, i32 0
@@ -3601,7 +3601,7 @@ define i64 @int_p$147 (%$locals_tigermain* %$sl, i8* %s$177) {
  %var_ptr_$_2328 = getelementptr %$locals_int_p$147, %$locals_int_p$147* %locals_$_48, i32 0, i32 1
  %load_$_2329 = load i8*, i8** %var_ptr_$_2328
  %record_ptr_$_2330 = bitcast i8* %load_$_2329 to %sexp$132*
- %int_of_ptr_$_2333 = ptrtoint i8* %load_$_2329 to i64
+ %int_of_ptr_$_2333 = ptrtoint i8** %load_$_2329 to i64
  %cnd_$_2334 = icmp eq i64 %int_of_ptr_$_2333, 0
  br i1 %cnd_$_2334, label %thn_$_2331, label %mrg_$_2332
 thn_$_2331:
@@ -3610,8 +3610,8 @@ thn_$_2331:
 mrg_$_2332:
  %field_ptr_$_2335 = getelementptr %sexp$132, %sexp$132* %record_ptr_$_2330, i32 0, i32 0
  %res_$_2336 = load i8*, i8** %field_ptr_$_2335
- %left_int_$_2337 = ptrtoint i8* %res_$_2336 to i64
- %right_int_$_2338 = ptrtoint i8* null to i64
+ %left_int_$_2337 = ptrtoint i8** %res_$_2336 to i64
+ %right_int_$_2338 = ptrtoint i8** null to i64
  %cnd_$_2339 = icmp ne i64 %left_int_$_2337, %right_int_$_2338
  %zext_$_2340 = zext i1 %cnd_$_2339 to i64
  ret i64 %zext_$_2340
@@ -3626,7 +3626,7 @@ define i64 @bool_p$148 (%$locals_tigermain* %$sl, i8* %s$178) {
  %var_ptr_$_2343 = getelementptr %$locals_bool_p$148, %$locals_bool_p$148* %locals_$_49, i32 0, i32 1
  %load_$_2344 = load i8*, i8** %var_ptr_$_2343
  %record_ptr_$_2345 = bitcast i8* %load_$_2344 to %sexp$132*
- %int_of_ptr_$_2348 = ptrtoint i8* %load_$_2344 to i64
+ %int_of_ptr_$_2348 = ptrtoint i8** %load_$_2344 to i64
  %cnd_$_2349 = icmp eq i64 %int_of_ptr_$_2348, 0
  br i1 %cnd_$_2349, label %thn_$_2346, label %mrg_$_2347
 thn_$_2346:
@@ -3635,8 +3635,8 @@ thn_$_2346:
 mrg_$_2347:
  %field_ptr_$_2350 = getelementptr %sexp$132, %sexp$132* %record_ptr_$_2345, i32 0, i32 1
  %res_$_2351 = load i8*, i8** %field_ptr_$_2350
- %left_int_$_2352 = ptrtoint i8* %res_$_2351 to i64
- %right_int_$_2353 = ptrtoint i8* null to i64
+ %left_int_$_2352 = ptrtoint i8** %res_$_2351 to i64
+ %right_int_$_2353 = ptrtoint i8** null to i64
  %cnd_$_2354 = icmp ne i64 %left_int_$_2352, %right_int_$_2353
  %zext_$_2355 = zext i1 %cnd_$_2354 to i64
  ret i64 %zext_$_2355
@@ -3651,7 +3651,7 @@ define i64 @str_p$149 (%$locals_tigermain* %$sl, i8* %s$179) {
  %var_ptr_$_2358 = getelementptr %$locals_str_p$149, %$locals_str_p$149* %locals_$_50, i32 0, i32 1
  %load_$_2359 = load i8*, i8** %var_ptr_$_2358
  %record_ptr_$_2360 = bitcast i8* %load_$_2359 to %sexp$132*
- %int_of_ptr_$_2363 = ptrtoint i8* %load_$_2359 to i64
+ %int_of_ptr_$_2363 = ptrtoint i8** %load_$_2359 to i64
  %cnd_$_2364 = icmp eq i64 %int_of_ptr_$_2363, 0
  br i1 %cnd_$_2364, label %thn_$_2361, label %mrg_$_2362
 thn_$_2361:
@@ -3660,8 +3660,8 @@ thn_$_2361:
 mrg_$_2362:
  %field_ptr_$_2365 = getelementptr %sexp$132, %sexp$132* %record_ptr_$_2360, i32 0, i32 2
  %res_$_2366 = load i8*, i8** %field_ptr_$_2365
- %left_int_$_2367 = ptrtoint i8* %res_$_2366 to i64
- %right_int_$_2368 = ptrtoint i8* null to i64
+ %left_int_$_2367 = ptrtoint i8** %res_$_2366 to i64
+ %right_int_$_2368 = ptrtoint i8** null to i64
  %cnd_$_2369 = icmp ne i64 %left_int_$_2367, %right_int_$_2368
  %zext_$_2370 = zext i1 %cnd_$_2369 to i64
  ret i64 %zext_$_2370
@@ -3676,7 +3676,7 @@ define i64 @sym_p$150 (%$locals_tigermain* %$sl, i8* %s$180) {
  %var_ptr_$_2373 = getelementptr %$locals_sym_p$150, %$locals_sym_p$150* %locals_$_51, i32 0, i32 1
  %load_$_2374 = load i8*, i8** %var_ptr_$_2373
  %record_ptr_$_2375 = bitcast i8* %load_$_2374 to %sexp$132*
- %int_of_ptr_$_2378 = ptrtoint i8* %load_$_2374 to i64
+ %int_of_ptr_$_2378 = ptrtoint i8** %load_$_2374 to i64
  %cnd_$_2379 = icmp eq i64 %int_of_ptr_$_2378, 0
  br i1 %cnd_$_2379, label %thn_$_2376, label %mrg_$_2377
 thn_$_2376:
@@ -3685,8 +3685,8 @@ thn_$_2376:
 mrg_$_2377:
  %field_ptr_$_2380 = getelementptr %sexp$132, %sexp$132* %record_ptr_$_2375, i32 0, i32 3
  %res_$_2381 = load i8*, i8** %field_ptr_$_2380
- %left_int_$_2382 = ptrtoint i8* %res_$_2381 to i64
- %right_int_$_2383 = ptrtoint i8* null to i64
+ %left_int_$_2382 = ptrtoint i8** %res_$_2381 to i64
+ %right_int_$_2383 = ptrtoint i8** null to i64
  %cnd_$_2384 = icmp ne i64 %left_int_$_2382, %right_int_$_2383
  %zext_$_2385 = zext i1 %cnd_$_2384 to i64
  ret i64 %zext_$_2385
@@ -3701,7 +3701,7 @@ define i64 @fun_p$151 (%$locals_tigermain* %$sl, i8* %s$181) {
  %var_ptr_$_2388 = getelementptr %$locals_fun_p$151, %$locals_fun_p$151* %locals_$_52, i32 0, i32 1
  %load_$_2389 = load i8*, i8** %var_ptr_$_2388
  %record_ptr_$_2390 = bitcast i8* %load_$_2389 to %sexp$132*
- %int_of_ptr_$_2393 = ptrtoint i8* %load_$_2389 to i64
+ %int_of_ptr_$_2393 = ptrtoint i8** %load_$_2389 to i64
  %cnd_$_2394 = icmp eq i64 %int_of_ptr_$_2393, 0
  br i1 %cnd_$_2394, label %thn_$_2391, label %mrg_$_2392
 thn_$_2391:
@@ -3710,8 +3710,8 @@ thn_$_2391:
 mrg_$_2392:
  %field_ptr_$_2395 = getelementptr %sexp$132, %sexp$132* %record_ptr_$_2390, i32 0, i32 4
  %res_$_2396 = load i8*, i8** %field_ptr_$_2395
- %left_int_$_2397 = ptrtoint i8* %res_$_2396 to i64
- %right_int_$_2398 = ptrtoint i8* null to i64
+ %left_int_$_2397 = ptrtoint i8** %res_$_2396 to i64
+ %right_int_$_2398 = ptrtoint i8** null to i64
  %cnd_$_2399 = icmp ne i64 %left_int_$_2397, %right_int_$_2398
  %zext_$_2400 = zext i1 %cnd_$_2399 to i64
  ret i64 %zext_$_2400
@@ -3726,7 +3726,7 @@ define i64 @sexps_p$152 (%$locals_tigermain* %$sl, i8* %s$182) {
  %var_ptr_$_2403 = getelementptr %$locals_sexps_p$152, %$locals_sexps_p$152* %locals_$_53, i32 0, i32 1
  %load_$_2404 = load i8*, i8** %var_ptr_$_2403
  %record_ptr_$_2405 = bitcast i8* %load_$_2404 to %sexp$132*
- %int_of_ptr_$_2408 = ptrtoint i8* %load_$_2404 to i64
+ %int_of_ptr_$_2408 = ptrtoint i8** %load_$_2404 to i64
  %cnd_$_2409 = icmp eq i64 %int_of_ptr_$_2408, 0
  br i1 %cnd_$_2409, label %thn_$_2406, label %mrg_$_2407
 thn_$_2406:
@@ -3735,8 +3735,8 @@ thn_$_2406:
 mrg_$_2407:
  %field_ptr_$_2410 = getelementptr %sexp$132, %sexp$132* %record_ptr_$_2405, i32 0, i32 5
  %res_$_2411 = load i8*, i8** %field_ptr_$_2410
- %left_int_$_2412 = ptrtoint i8* %res_$_2411 to i64
- %right_int_$_2413 = ptrtoint i8* null to i64
+ %left_int_$_2412 = ptrtoint i8** %res_$_2411 to i64
+ %right_int_$_2413 = ptrtoint i8** null to i64
  %cnd_$_2414 = icmp ne i64 %left_int_$_2412, %right_int_$_2413
  %zext_$_2415 = zext i1 %cnd_$_2414 to i64
  ret i64 %zext_$_2415
@@ -3751,7 +3751,7 @@ define i64 @get_int$153 (%$locals_tigermain* %$sl, i8* %s$183) {
  %var_ptr_$_2418 = getelementptr %$locals_get_int$153, %$locals_get_int$153* %locals_$_54, i32 0, i32 1
  %load_$_2419 = load i8*, i8** %var_ptr_$_2418
  %record_ptr_$_2420 = bitcast i8* %load_$_2419 to %sexp$132*
- %int_of_ptr_$_2423 = ptrtoint i8* %load_$_2419 to i64
+ %int_of_ptr_$_2423 = ptrtoint i8** %load_$_2419 to i64
  %cnd_$_2424 = icmp eq i64 %int_of_ptr_$_2423, 0
  br i1 %cnd_$_2424, label %thn_$_2421, label %mrg_$_2422
 thn_$_2421:
@@ -3761,7 +3761,7 @@ mrg_$_2422:
  %field_ptr_$_2425 = getelementptr %sexp$132, %sexp$132* %record_ptr_$_2420, i32 0, i32 0
  %load_$_2426 = load i8*, i8** %field_ptr_$_2425
  %record_ptr_$_2427 = bitcast i8* %load_$_2426 to %Int$61*
- %int_of_ptr_$_2430 = ptrtoint i8* %load_$_2426 to i64
+ %int_of_ptr_$_2430 = ptrtoint i8** %load_$_2426 to i64
  %cnd_$_2431 = icmp eq i64 %int_of_ptr_$_2430, 0
  br i1 %cnd_$_2431, label %thn_$_2428, label %mrg_$_2429
 thn_$_2428:
@@ -3782,7 +3782,7 @@ define i64 @get_bool$154 (%$locals_tigermain* %$sl, i8* %s$184) {
  %var_ptr_$_2436 = getelementptr %$locals_get_bool$154, %$locals_get_bool$154* %locals_$_55, i32 0, i32 1
  %load_$_2437 = load i8*, i8** %var_ptr_$_2436
  %record_ptr_$_2438 = bitcast i8* %load_$_2437 to %sexp$132*
- %int_of_ptr_$_2441 = ptrtoint i8* %load_$_2437 to i64
+ %int_of_ptr_$_2441 = ptrtoint i8** %load_$_2437 to i64
  %cnd_$_2442 = icmp eq i64 %int_of_ptr_$_2441, 0
  br i1 %cnd_$_2442, label %thn_$_2439, label %mrg_$_2440
 thn_$_2439:
@@ -3792,7 +3792,7 @@ mrg_$_2440:
  %field_ptr_$_2443 = getelementptr %sexp$132, %sexp$132* %record_ptr_$_2438, i32 0, i32 1
  %load_$_2444 = load i8*, i8** %field_ptr_$_2443
  %record_ptr_$_2445 = bitcast i8* %load_$_2444 to %Int$61*
- %int_of_ptr_$_2448 = ptrtoint i8* %load_$_2444 to i64
+ %int_of_ptr_$_2448 = ptrtoint i8** %load_$_2444 to i64
  %cnd_$_2449 = icmp eq i64 %int_of_ptr_$_2448, 0
  br i1 %cnd_$_2449, label %thn_$_2446, label %mrg_$_2447
 thn_$_2446:
@@ -3813,7 +3813,7 @@ define i8* @get_str$155 (%$locals_tigermain* %$sl, i8* %s$185) {
  %var_ptr_$_2454 = getelementptr %$locals_get_str$155, %$locals_get_str$155* %locals_$_56, i32 0, i32 1
  %load_$_2455 = load i8*, i8** %var_ptr_$_2454
  %record_ptr_$_2456 = bitcast i8* %load_$_2455 to %sexp$132*
- %int_of_ptr_$_2459 = ptrtoint i8* %load_$_2455 to i64
+ %int_of_ptr_$_2459 = ptrtoint i8** %load_$_2455 to i64
  %cnd_$_2460 = icmp eq i64 %int_of_ptr_$_2459, 0
  br i1 %cnd_$_2460, label %thn_$_2457, label %mrg_$_2458
 thn_$_2457:
@@ -3823,7 +3823,7 @@ mrg_$_2458:
  %field_ptr_$_2461 = getelementptr %sexp$132, %sexp$132* %record_ptr_$_2456, i32 0, i32 2
  %load_$_2462 = load i8*, i8** %field_ptr_$_2461
  %record_ptr_$_2463 = bitcast i8* %load_$_2462 to %String$62*
- %int_of_ptr_$_2466 = ptrtoint i8* %load_$_2462 to i64
+ %int_of_ptr_$_2466 = ptrtoint i8** %load_$_2462 to i64
  %cnd_$_2467 = icmp eq i64 %int_of_ptr_$_2466, 0
  br i1 %cnd_$_2467, label %thn_$_2464, label %mrg_$_2465
 thn_$_2464:
@@ -3844,7 +3844,7 @@ define i8* @get_sym$156 (%$locals_tigermain* %$sl, i8* %s$186) {
  %var_ptr_$_2472 = getelementptr %$locals_get_sym$156, %$locals_get_sym$156* %locals_$_57, i32 0, i32 1
  %load_$_2473 = load i8*, i8** %var_ptr_$_2472
  %record_ptr_$_2474 = bitcast i8* %load_$_2473 to %sexp$132*
- %int_of_ptr_$_2477 = ptrtoint i8* %load_$_2473 to i64
+ %int_of_ptr_$_2477 = ptrtoint i8** %load_$_2473 to i64
  %cnd_$_2478 = icmp eq i64 %int_of_ptr_$_2477, 0
  br i1 %cnd_$_2478, label %thn_$_2475, label %mrg_$_2476
 thn_$_2475:
@@ -3854,7 +3854,7 @@ mrg_$_2476:
  %field_ptr_$_2479 = getelementptr %sexp$132, %sexp$132* %record_ptr_$_2474, i32 0, i32 3
  %load_$_2480 = load i8*, i8** %field_ptr_$_2479
  %record_ptr_$_2481 = bitcast i8* %load_$_2480 to %String$62*
- %int_of_ptr_$_2484 = ptrtoint i8* %load_$_2480 to i64
+ %int_of_ptr_$_2484 = ptrtoint i8** %load_$_2480 to i64
  %cnd_$_2485 = icmp eq i64 %int_of_ptr_$_2484, 0
  br i1 %cnd_$_2485, label %thn_$_2482, label %mrg_$_2483
 thn_$_2482:
@@ -3875,7 +3875,7 @@ define i8* @get_fun$157 (%$locals_tigermain* %$sl, i8* %s$187) {
  %var_ptr_$_2490 = getelementptr %$locals_get_fun$157, %$locals_get_fun$157* %locals_$_58, i32 0, i32 1
  %load_$_2491 = load i8*, i8** %var_ptr_$_2490
  %record_ptr_$_2492 = bitcast i8* %load_$_2491 to %sexp$132*
- %int_of_ptr_$_2495 = ptrtoint i8* %load_$_2491 to i64
+ %int_of_ptr_$_2495 = ptrtoint i8** %load_$_2491 to i64
  %cnd_$_2496 = icmp eq i64 %int_of_ptr_$_2495, 0
  br i1 %cnd_$_2496, label %thn_$_2493, label %mrg_$_2494
 thn_$_2493:
@@ -3896,7 +3896,7 @@ define i8* @get_sexps$158 (%$locals_tigermain* %$sl, i8* %s$188) {
  %var_ptr_$_2501 = getelementptr %$locals_get_sexps$158, %$locals_get_sexps$158* %locals_$_59, i32 0, i32 1
  %load_$_2502 = load i8*, i8** %var_ptr_$_2501
  %record_ptr_$_2503 = bitcast i8* %load_$_2502 to %sexp$132*
- %int_of_ptr_$_2506 = ptrtoint i8* %load_$_2502 to i64
+ %int_of_ptr_$_2506 = ptrtoint i8** %load_$_2502 to i64
  %cnd_$_2507 = icmp eq i64 %int_of_ptr_$_2506, 0
  br i1 %cnd_$_2507, label %thn_$_2504, label %mrg_$_2505
 thn_$_2504:
@@ -3906,7 +3906,7 @@ mrg_$_2505:
  %field_ptr_$_2508 = getelementptr %sexp$132, %sexp$132* %record_ptr_$_2503, i32 0, i32 5
  %load_$_2509 = load i8*, i8** %field_ptr_$_2508
  %record_ptr_$_2510 = bitcast i8* %load_$_2509 to %List$134*
- %int_of_ptr_$_2513 = ptrtoint i8* %load_$_2509 to i64
+ %int_of_ptr_$_2513 = ptrtoint i8** %load_$_2509 to i64
  %cnd_$_2514 = icmp eq i64 %int_of_ptr_$_2513, 0
  br i1 %cnd_$_2514, label %thn_$_2511, label %mrg_$_2512
 thn_$_2511:
@@ -3928,7 +3928,7 @@ define i8* @Function2s$159 (%$locals_tigermain* %$sl, i8* %f$189) {
  %var_ptr_$_2523 = getelementptr %$locals_Function2s$159, %$locals_Function2s$159* %locals_$_60, i32 0, i32 1
  %load_$_2524 = load i8*, i8** %var_ptr_$_2523
  %record_ptr_$_2525 = bitcast i8* %load_$_2524 to %Function$135*
- %int_of_ptr_$_2528 = ptrtoint i8* %load_$_2524 to i64
+ %int_of_ptr_$_2528 = ptrtoint i8** %load_$_2524 to i64
  %cnd_$_2529 = icmp eq i64 %int_of_ptr_$_2528, 0
  br i1 %cnd_$_2529, label %thn_$_2526, label %mrg_$_2527
 thn_$_2526:
@@ -3954,7 +3954,7 @@ els_$_2521:
  %var_ptr_$_2546 = getelementptr %$locals_Function2s$159, %$locals_Function2s$159* %locals_$_60, i32 0, i32 1
  %load_$_2547 = load i8*, i8** %var_ptr_$_2546
  %record_ptr_$_2548 = bitcast i8* %load_$_2547 to %Function$135*
- %int_of_ptr_$_2551 = ptrtoint i8* %load_$_2547 to i64
+ %int_of_ptr_$_2551 = ptrtoint i8** %load_$_2547 to i64
  %cnd_$_2552 = icmp eq i64 %int_of_ptr_$_2551, 0
  br i1 %cnd_$_2552, label %thn_$_2549, label %mrg_$_2550
 thn_$_2549:
@@ -3982,8 +3982,8 @@ define i8* @aux$191 (%$locals_sexps2s$160* %$sl, i8* %vs$192) {
  store %$locals_sexps2s$160* %$sl, %$locals_sexps2s$160** %arg_$_2561
  %var_ptr_$_2566 = getelementptr %$locals_aux$191, %$locals_aux$191* %locals_$_61, i32 0, i32 1
  %res_$_2567 = load i8*, i8** %var_ptr_$_2566
- %left_int_$_2568 = ptrtoint i8* %res_$_2567 to i64
- %right_int_$_2569 = ptrtoint i8* null to i64
+ %left_int_$_2568 = ptrtoint i8** %res_$_2567 to i64
+ %right_int_$_2569 = ptrtoint i8** null to i64
  %cnd_$_2570 = icmp eq i64 %left_int_$_2568, %right_int_$_2569
  %zext_$_2571 = zext i1 %cnd_$_2570 to i64
  %cnd_$_2572 = icmp ne i64 %zext_$_2571, 0
@@ -4009,7 +4009,7 @@ els_$_2564:
  %var_ptr_$_2591 = getelementptr %$locals_aux$191, %$locals_aux$191* %locals_$_61, i32 0, i32 1
  %load_$_2592 = load i8*, i8** %var_ptr_$_2591
  %record_ptr_$_2593 = bitcast i8* %load_$_2592 to %sexps$133*
- %int_of_ptr_$_2596 = ptrtoint i8* %load_$_2592 to i64
+ %int_of_ptr_$_2596 = ptrtoint i8** %load_$_2592 to i64
  %cnd_$_2597 = icmp eq i64 %int_of_ptr_$_2596, 0
  br i1 %cnd_$_2597, label %thn_$_2594, label %mrg_$_2595
 thn_$_2594:
@@ -4024,7 +4024,7 @@ mrg_$_2595:
  %var_ptr_$_2603 = getelementptr %$locals_aux$191, %$locals_aux$191* %locals_$_61, i32 0, i32 1
  %load_$_2604 = load i8*, i8** %var_ptr_$_2603
  %record_ptr_$_2605 = bitcast i8* %load_$_2604 to %sexps$133*
- %int_of_ptr_$_2608 = ptrtoint i8* %load_$_2604 to i64
+ %int_of_ptr_$_2608 = ptrtoint i8** %load_$_2604 to i64
  %cnd_$_2609 = icmp eq i64 %int_of_ptr_$_2608, 0
  br i1 %cnd_$_2609, label %thn_$_2606, label %mrg_$_2607
 thn_$_2606:
@@ -4052,8 +4052,8 @@ define i8* @sexps2s$160 (%$locals_tigermain* %$sl, i8* %v$190) {
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_2617
  %var_ptr_$_2622 = getelementptr %$locals_sexps2s$160, %$locals_sexps2s$160* %locals_$_62, i32 0, i32 2
  %res_$_2623 = load i8*, i8** %var_ptr_$_2622
- %left_int_$_2624 = ptrtoint i8* %res_$_2623 to i64
- %right_int_$_2625 = ptrtoint i8* null to i64
+ %left_int_$_2624 = ptrtoint i8** %res_$_2623 to i64
+ %right_int_$_2625 = ptrtoint i8** null to i64
  %cnd_$_2626 = icmp eq i64 %left_int_$_2624, %right_int_$_2625
  %zext_$_2627 = zext i1 %cnd_$_2626 to i64
  %cnd_$_2628 = icmp ne i64 %zext_$_2627, 0
@@ -4073,7 +4073,7 @@ els_$_2620:
  %var_ptr_$_2641 = getelementptr %$locals_sexps2s$160, %$locals_sexps2s$160* %locals_$_62, i32 0, i32 2
  %load_$_2642 = load i8*, i8** %var_ptr_$_2641
  %record_ptr_$_2643 = bitcast i8* %load_$_2642 to %sexps$133*
- %int_of_ptr_$_2646 = ptrtoint i8* %load_$_2642 to i64
+ %int_of_ptr_$_2646 = ptrtoint i8** %load_$_2642 to i64
  %cnd_$_2647 = icmp eq i64 %int_of_ptr_$_2646, 0
  br i1 %cnd_$_2647, label %thn_$_2644, label %mrg_$_2645
 thn_$_2644:
@@ -4088,7 +4088,7 @@ mrg_$_2645:
  %var_ptr_$_2654 = getelementptr %$locals_sexps2s$160, %$locals_sexps2s$160* %locals_$_62, i32 0, i32 2
  %load_$_2655 = load i8*, i8** %var_ptr_$_2654
  %record_ptr_$_2656 = bitcast i8* %load_$_2655 to %sexps$133*
- %int_of_ptr_$_2659 = ptrtoint i8* %load_$_2655 to i64
+ %int_of_ptr_$_2659 = ptrtoint i8** %load_$_2655 to i64
  %cnd_$_2660 = icmp eq i64 %int_of_ptr_$_2659, 0
  br i1 %cnd_$_2660, label %thn_$_2657, label %mrg_$_2658
 thn_$_2657:
@@ -4282,7 +4282,7 @@ define i8* @parse_tokens$162 (%$locals_tigermain* %$sl, i8* %left_elem$194, i8* 
  %var_ptr_$_2793 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 9
  %load_$_2794 = load i8*, i8** %var_ptr_$_2793
  %record_ptr_$_2795 = bitcast i8* %load_$_2794 to %deque_elem$108*
- %int_of_ptr_$_2798 = ptrtoint i8* %load_$_2794 to i64
+ %int_of_ptr_$_2798 = ptrtoint i8** %load_$_2794 to i64
  %cnd_$_2799 = icmp eq i64 %int_of_ptr_$_2798, 0
  br i1 %cnd_$_2799, label %thn_$_2796, label %mrg_$_2797
 thn_$_2796:
@@ -4296,7 +4296,7 @@ mrg_$_2797:
  %var_ptr_$_2803 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 10
  %load_$_2804 = load i8*, i8** %var_ptr_$_2803
  %record_ptr_$_2805 = bitcast i8* %load_$_2804 to %deque_elem$108*
- %int_of_ptr_$_2808 = ptrtoint i8* %load_$_2804 to i64
+ %int_of_ptr_$_2808 = ptrtoint i8** %load_$_2804 to i64
  %cnd_$_2809 = icmp eq i64 %int_of_ptr_$_2808, 0
  br i1 %cnd_$_2809, label %thn_$_2806, label %mrg_$_2807
 thn_$_2806:
@@ -4309,10 +4309,10 @@ mrg_$_2807:
  store i8* %res_$_2811, i8** %temp_$_2812
  %var_ptr_$_2817 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 9
  %res_$_2818 = load i8*, i8** %var_ptr_$_2817
- %left_int_$_2819 = ptrtoint i8* %res_$_2818 to i64
+ %left_int_$_2819 = ptrtoint i8** %res_$_2818 to i64
  %var_ptr_$_2820 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 10
  %res_$_2821 = load i8*, i8** %var_ptr_$_2820
- %right_int_$_2822 = ptrtoint i8* %res_$_2821 to i64
+ %right_int_$_2822 = ptrtoint i8** %res_$_2821 to i64
  %cnd_$_2823 = icmp eq i64 %left_int_$_2819, %right_int_$_2822
  %zext_$_2824 = zext i1 %cnd_$_2823 to i64
  %cnd_$_2825 = icmp ne i64 %zext_$_2824, 0
@@ -4431,12 +4431,12 @@ mrg_$_2829:
 els_$_2815:
  %var_ptr_$_2928 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 8
  %res_$_2929 = load i8*, i8** %var_ptr_$_2928
- %left_int_$_2930 = ptrtoint i8* %res_$_2929 to i64
+ %left_int_$_2930 = ptrtoint i8** %res_$_2929 to i64
  %lnk_$_2931 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 0
  %load_$_2932 = load %$locals_tigermain*, %$locals_tigermain** %lnk_$_2931
  %var_ptr_$_2933 = getelementptr %$locals_tigermain, %$locals_tigermain* %load_$_2932, i32 0, i32 85
  %res_$_2934 = load i8*, i8** %var_ptr_$_2933
- %right_int_$_2935 = ptrtoint i8* %res_$_2934 to i64
+ %right_int_$_2935 = ptrtoint i8** %res_$_2934 to i64
  %cnd_$_2936 = icmp eq i64 %left_int_$_2930, %right_int_$_2935
  %zext_$_2937 = zext i1 %cnd_$_2936 to i64
  %cnd_$_2938 = icmp ne i64 %zext_$_2937, 0
@@ -4444,12 +4444,12 @@ els_$_2815:
 thn_$_2925:
  %var_ptr_$_2939 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 7
  %res_$_2940 = load i8*, i8** %var_ptr_$_2939
- %left_int_$_2941 = ptrtoint i8* %res_$_2940 to i64
+ %left_int_$_2941 = ptrtoint i8** %res_$_2940 to i64
  %lnk_$_2942 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 0
  %load_$_2943 = load %$locals_tigermain*, %$locals_tigermain** %lnk_$_2942
  %var_ptr_$_2944 = getelementptr %$locals_tigermain, %$locals_tigermain* %load_$_2943, i32 0, i32 84
  %res_$_2945 = load i8*, i8** %var_ptr_$_2944
- %right_int_$_2946 = ptrtoint i8* %res_$_2945 to i64
+ %right_int_$_2946 = ptrtoint i8** %res_$_2945 to i64
  %cnd_$_2947 = icmp eq i64 %left_int_$_2941, %right_int_$_2946
  %zext_$_2948 = zext i1 %cnd_$_2947 to i64
  store i64 %zext_$_2948, i64* %temp_$_2924
@@ -4465,7 +4465,7 @@ thn_$_2921:
  %var_ptr_$_2951 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 9
  %load_$_2952 = load i8*, i8** %var_ptr_$_2951
  %record_ptr_$_2953 = bitcast i8* %load_$_2952 to %deque_elem$108*
- %int_of_ptr_$_2956 = ptrtoint i8* %load_$_2952 to i64
+ %int_of_ptr_$_2956 = ptrtoint i8** %load_$_2952 to i64
  %cnd_$_2957 = icmp eq i64 %int_of_ptr_$_2956, 0
  br i1 %cnd_$_2957, label %thn_$_2954, label %mrg_$_2955
 thn_$_2954:
@@ -4479,7 +4479,7 @@ mrg_$_2955:
  %var_ptr_$_2961 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 10
  %load_$_2962 = load i8*, i8** %var_ptr_$_2961
  %record_ptr_$_2963 = bitcast i8* %load_$_2962 to %deque_elem$108*
- %int_of_ptr_$_2966 = ptrtoint i8* %load_$_2962 to i64
+ %int_of_ptr_$_2966 = ptrtoint i8** %load_$_2962 to i64
  %cnd_$_2967 = icmp eq i64 %int_of_ptr_$_2966, 0
  br i1 %cnd_$_2967, label %thn_$_2964, label %mrg_$_2965
 thn_$_2964:
@@ -4500,10 +4500,10 @@ mrg_$_2965:
 test_$_2975:
  %var_ptr_$_2978 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 3
  %res_$_2979 = load i8*, i8** %var_ptr_$_2978
- %left_int_$_2980 = ptrtoint i8* %res_$_2979 to i64
+ %left_int_$_2980 = ptrtoint i8** %res_$_2979 to i64
  %var_ptr_$_2981 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 9
  %res_$_2982 = load i8*, i8** %var_ptr_$_2981
- %right_int_$_2983 = ptrtoint i8* %res_$_2982 to i64
+ %right_int_$_2983 = ptrtoint i8** %res_$_2982 to i64
  %cnd_$_2984 = icmp ne i64 %left_int_$_2980, %right_int_$_2983
  %zext_$_2985 = zext i1 %cnd_$_2984 to i64
  %cnd_$_2986 = icmp ne i64 %zext_$_2985, 0
@@ -4528,7 +4528,7 @@ body_$_2976:
  %temp_$_3002 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 1
  store i8* %ret_$_3001, i8** %temp_$_3002
  %size_ptr_$_3003 = getelementptr %sexps$133, %sexps$133* null, i32 1
- %size_$_3004 = ptrtoint %sexps$133* %size_ptr_$_3003 to i64
+ %size_$_3004 = ptrtoint %sexps$133** %size_ptr_$_3003 to i64
  %record_ptr_$_3005 = call i8* @allocRecord (i64 %size_$_3004)
  %rec_$_3006 = bitcast i8* %record_ptr_$_3005 to %sexps$133*
  %var_ptr_$_3007 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 1
@@ -4544,7 +4544,7 @@ body_$_2976:
  %var_ptr_$_3014 = getelementptr %$locals_parse_tokens$162, %$locals_parse_tokens$162* %locals_$_64, i32 0, i32 2
  %load_$_3015 = load i8*, i8** %var_ptr_$_3014
  %record_ptr_$_3016 = bitcast i8* %load_$_3015 to %deque_elem$108*
- %int_of_ptr_$_3019 = ptrtoint i8* %load_$_3015 to i64
+ %int_of_ptr_$_3019 = ptrtoint i8** %load_$_3015 to i64
  %cnd_$_3020 = icmp eq i64 %int_of_ptr_$_3019, 0
  br i1 %cnd_$_3020, label %thn_$_3017, label %mrg_$_3018
 thn_$_3017:
@@ -4597,7 +4597,7 @@ define i8* @find_sexp_beginning$163 (%$locals_tigermain* %$sl, i8* %leftmost_ele
  %var_ptr_$_3039 = getelementptr %$locals_find_sexp_beginning$163, %$locals_find_sexp_beginning$163* %locals_$_65, i32 0, i32 5
  %load_$_3040 = load i8*, i8** %var_ptr_$_3039
  %record_ptr_$_3041 = bitcast i8* %load_$_3040 to %deque_elem$108*
- %int_of_ptr_$_3044 = ptrtoint i8* %load_$_3040 to i64
+ %int_of_ptr_$_3044 = ptrtoint i8** %load_$_3040 to i64
  %cnd_$_3045 = icmp eq i64 %int_of_ptr_$_3044, 0
  br i1 %cnd_$_3045, label %thn_$_3042, label %mrg_$_3043
 thn_$_3042:
@@ -4668,12 +4668,12 @@ thn_$_3050:
 els_$_3051:
  %var_ptr_$_3098 = getelementptr %$locals_find_sexp_beginning$163, %$locals_find_sexp_beginning$163* %locals_$_65, i32 0, i32 3
  %res_$_3099 = load i8*, i8** %var_ptr_$_3098
- %left_int_$_3100 = ptrtoint i8* %res_$_3099 to i64
+ %left_int_$_3100 = ptrtoint i8** %res_$_3099 to i64
  %lnk_$_3101 = getelementptr %$locals_find_sexp_beginning$163, %$locals_find_sexp_beginning$163* %locals_$_65, i32 0, i32 0
  %load_$_3102 = load %$locals_tigermain*, %$locals_tigermain** %lnk_$_3101
  %var_ptr_$_3103 = getelementptr %$locals_tigermain, %$locals_tigermain* %load_$_3102, i32 0, i32 84
  %res_$_3104 = load i8*, i8** %var_ptr_$_3103
- %right_int_$_3105 = ptrtoint i8* %res_$_3104 to i64
+ %right_int_$_3105 = ptrtoint i8** %res_$_3104 to i64
  %cnd_$_3106 = icmp eq i64 %left_int_$_3100, %right_int_$_3105
  %zext_$_3107 = zext i1 %cnd_$_3106 to i64
  %cnd_$_3108 = icmp ne i64 %zext_$_3107, 0
@@ -4684,7 +4684,7 @@ thn_$_3095:
  %var_ptr_$_3110 = getelementptr %$locals_find_sexp_beginning$163, %$locals_find_sexp_beginning$163* %locals_$_65, i32 0, i32 5
  %load_$_3111 = load i8*, i8** %var_ptr_$_3110
  %record_ptr_$_3112 = bitcast i8* %load_$_3111 to %deque_elem$108*
- %int_of_ptr_$_3115 = ptrtoint i8* %load_$_3111 to i64
+ %int_of_ptr_$_3115 = ptrtoint i8** %load_$_3111 to i64
  %cnd_$_3116 = icmp eq i64 %int_of_ptr_$_3115, 0
  br i1 %cnd_$_3116, label %thn_$_3113, label %mrg_$_3114
 thn_$_3113:
@@ -4706,8 +4706,8 @@ test_$_3120:
 body_$_3121:
  %var_ptr_$_3183 = getelementptr %$locals_find_sexp_beginning$163, %$locals_find_sexp_beginning$163* %locals_$_65, i32 0, i32 1
  %res_$_3184 = load i8*, i8** %var_ptr_$_3183
- %left_int_$_3185 = ptrtoint i8* %res_$_3184 to i64
- %right_int_$_3186 = ptrtoint i8* null to i64
+ %left_int_$_3185 = ptrtoint i8** %res_$_3184 to i64
+ %right_int_$_3186 = ptrtoint i8** null to i64
  %cnd_$_3187 = icmp eq i64 %left_int_$_3185, %right_int_$_3186
  %zext_$_3188 = zext i1 %cnd_$_3187 to i64
  %cnd_$_3189 = icmp ne i64 %zext_$_3188, 0
@@ -4719,7 +4719,7 @@ els_$_3181:
  %var_ptr_$_3190 = getelementptr %$locals_find_sexp_beginning$163, %$locals_find_sexp_beginning$163* %locals_$_65, i32 0, i32 4
  %load_$_3191 = load i8*, i8** %var_ptr_$_3190
  %record_ptr_$_3192 = bitcast i8* %load_$_3191 to %deque_elem$108*
- %int_of_ptr_$_3195 = ptrtoint i8* %load_$_3191 to i64
+ %int_of_ptr_$_3195 = ptrtoint i8** %load_$_3191 to i64
  %cnd_$_3196 = icmp eq i64 %int_of_ptr_$_3195, 0
  br i1 %cnd_$_3196, label %thn_$_3193, label %mrg_$_3194
 thn_$_3193:
@@ -4728,10 +4728,10 @@ thn_$_3193:
 mrg_$_3194:
  %field_ptr_$_3197 = getelementptr %deque_elem$108, %deque_elem$108* %record_ptr_$_3192, i32 0, i32 1
  %res_$_3198 = load i8*, i8** %field_ptr_$_3197
- %left_int_$_3199 = ptrtoint i8* %res_$_3198 to i64
+ %left_int_$_3199 = ptrtoint i8** %res_$_3198 to i64
  %var_ptr_$_3200 = getelementptr %$locals_find_sexp_beginning$163, %$locals_find_sexp_beginning$163* %locals_$_65, i32 0, i32 1
  %res_$_3201 = load i8*, i8** %var_ptr_$_3200
- %right_int_$_3202 = ptrtoint i8* %res_$_3201 to i64
+ %right_int_$_3202 = ptrtoint i8** %res_$_3201 to i64
  %cnd_$_3203 = icmp eq i64 %left_int_$_3199, %right_int_$_3202
  %zext_$_3204 = zext i1 %cnd_$_3203 to i64
  store i64 %zext_$_3204, i64* %temp_$_3179
@@ -4752,7 +4752,7 @@ mrg_$_3178:
  %var_ptr_$_3131 = getelementptr %$locals_find_sexp_beginning$163, %$locals_find_sexp_beginning$163* %locals_$_65, i32 0, i32 1
  %load_$_3132 = load i8*, i8** %var_ptr_$_3131
  %record_ptr_$_3133 = bitcast i8* %load_$_3132 to %deque_elem$108*
- %int_of_ptr_$_3136 = ptrtoint i8* %load_$_3132 to i64
+ %int_of_ptr_$_3136 = ptrtoint i8** %load_$_3132 to i64
  %cnd_$_3137 = icmp eq i64 %int_of_ptr_$_3136, 0
  br i1 %cnd_$_3137, label %thn_$_3134, label %mrg_$_3135
 thn_$_3134:
@@ -4761,12 +4761,12 @@ thn_$_3134:
 mrg_$_3135:
  %field_ptr_$_3138 = getelementptr %deque_elem$108, %deque_elem$108* %record_ptr_$_3133, i32 0, i32 0
  %res_$_3139 = load i8*, i8** %field_ptr_$_3138
- %left_int_$_3140 = ptrtoint i8* %res_$_3139 to i64
+ %left_int_$_3140 = ptrtoint i8** %res_$_3139 to i64
  %lnk_$_3141 = getelementptr %$locals_find_sexp_beginning$163, %$locals_find_sexp_beginning$163* %locals_$_65, i32 0, i32 0
  %load_$_3142 = load %$locals_tigermain*, %$locals_tigermain** %lnk_$_3141
  %var_ptr_$_3143 = getelementptr %$locals_tigermain, %$locals_tigermain* %load_$_3142, i32 0, i32 85
  %res_$_3144 = load i8*, i8** %var_ptr_$_3143
- %right_int_$_3145 = ptrtoint i8* %res_$_3144 to i64
+ %right_int_$_3145 = ptrtoint i8** %res_$_3144 to i64
  %cnd_$_3146 = icmp eq i64 %left_int_$_3140, %right_int_$_3145
  %zext_$_3147 = zext i1 %cnd_$_3146 to i64
  %cnd_$_3148 = icmp ne i64 %zext_$_3147, 0
@@ -4782,7 +4782,7 @@ els_$_3129:
  %var_ptr_$_3155 = getelementptr %$locals_find_sexp_beginning$163, %$locals_find_sexp_beginning$163* %locals_$_65, i32 0, i32 1
  %load_$_3156 = load i8*, i8** %var_ptr_$_3155
  %record_ptr_$_3157 = bitcast i8* %load_$_3156 to %deque_elem$108*
- %int_of_ptr_$_3160 = ptrtoint i8* %load_$_3156 to i64
+ %int_of_ptr_$_3160 = ptrtoint i8** %load_$_3156 to i64
  %cnd_$_3161 = icmp eq i64 %int_of_ptr_$_3160, 0
  br i1 %cnd_$_3161, label %thn_$_3158, label %mrg_$_3159
 thn_$_3158:
@@ -4791,12 +4791,12 @@ thn_$_3158:
 mrg_$_3159:
  %field_ptr_$_3162 = getelementptr %deque_elem$108, %deque_elem$108* %record_ptr_$_3157, i32 0, i32 0
  %res_$_3163 = load i8*, i8** %field_ptr_$_3162
- %left_int_$_3164 = ptrtoint i8* %res_$_3163 to i64
+ %left_int_$_3164 = ptrtoint i8** %res_$_3163 to i64
  %lnk_$_3165 = getelementptr %$locals_find_sexp_beginning$163, %$locals_find_sexp_beginning$163* %locals_$_65, i32 0, i32 0
  %load_$_3166 = load %$locals_tigermain*, %$locals_tigermain** %lnk_$_3165
  %var_ptr_$_3167 = getelementptr %$locals_tigermain, %$locals_tigermain* %load_$_3166, i32 0, i32 84
  %res_$_3168 = load i8*, i8** %var_ptr_$_3167
- %right_int_$_3169 = ptrtoint i8* %res_$_3168 to i64
+ %right_int_$_3169 = ptrtoint i8** %res_$_3168 to i64
  %cnd_$_3170 = icmp eq i64 %left_int_$_3164, %right_int_$_3169
  %zext_$_3171 = zext i1 %cnd_$_3170 to i64
  %cnd_$_3172 = icmp ne i64 %zext_$_3171, 0
@@ -4814,7 +4814,7 @@ mrg_$_3130:
  %var_ptr_$_3213 = getelementptr %$locals_find_sexp_beginning$163, %$locals_find_sexp_beginning$163* %locals_$_65, i32 0, i32 1
  %load_$_3214 = load i8*, i8** %var_ptr_$_3213
  %record_ptr_$_3215 = bitcast i8* %load_$_3214 to %deque_elem$108*
- %int_of_ptr_$_3218 = ptrtoint i8* %load_$_3214 to i64
+ %int_of_ptr_$_3218 = ptrtoint i8** %load_$_3214 to i64
  %cnd_$_3219 = icmp eq i64 %int_of_ptr_$_3218, 0
  br i1 %cnd_$_3219, label %thn_$_3216, label %mrg_$_3217
 thn_$_3216:
@@ -4830,7 +4830,7 @@ mrg_$_3122:
  %var_ptr_$_3223 = getelementptr %$locals_find_sexp_beginning$163, %$locals_find_sexp_beginning$163* %locals_$_65, i32 0, i32 1
  %load_$_3224 = load i8*, i8** %var_ptr_$_3223
  %record_ptr_$_3225 = bitcast i8* %load_$_3224 to %deque_elem$108*
- %int_of_ptr_$_3228 = ptrtoint i8* %load_$_3224 to i64
+ %int_of_ptr_$_3228 = ptrtoint i8** %load_$_3224 to i64
  %cnd_$_3229 = icmp eq i64 %int_of_ptr_$_3228, 0
  br i1 %cnd_$_3229, label %thn_$_3226, label %mrg_$_3227
 thn_$_3226:
@@ -4879,8 +4879,8 @@ define i8* @env2s_short$164 (%$locals_tigermain* %$sl, i8* %env$209) {
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_3253
  %var_ptr_$_3258 = getelementptr %$locals_env2s_short$164, %$locals_env2s_short$164* %locals_$_66, i32 0, i32 1
  %res_$_3259 = load i8*, i8** %var_ptr_$_3258
- %left_int_$_3260 = ptrtoint i8* %res_$_3259 to i64
- %right_int_$_3261 = ptrtoint i8* null to i64
+ %left_int_$_3260 = ptrtoint i8** %res_$_3259 to i64
+ %right_int_$_3261 = ptrtoint i8** null to i64
  %cnd_$_3262 = icmp eq i64 %left_int_$_3260, %right_int_$_3261
  %zext_$_3263 = zext i1 %cnd_$_3262 to i64
  %cnd_$_3264 = icmp ne i64 %zext_$_3263, 0
@@ -4893,7 +4893,7 @@ els_$_3256:
  %var_ptr_$_3271 = getelementptr %$locals_env2s_short$164, %$locals_env2s_short$164* %locals_$_66, i32 0, i32 1
  %load_$_3272 = load i8*, i8** %var_ptr_$_3271
  %record_ptr_$_3273 = bitcast i8* %load_$_3272 to %env$137*
- %int_of_ptr_$_3276 = ptrtoint i8* %load_$_3272 to i64
+ %int_of_ptr_$_3276 = ptrtoint i8** %load_$_3272 to i64
  %cnd_$_3277 = icmp eq i64 %int_of_ptr_$_3276, 0
  br i1 %cnd_$_3277, label %thn_$_3274, label %mrg_$_3275
 thn_$_3274:
@@ -4902,8 +4902,8 @@ thn_$_3274:
 mrg_$_3275:
  %field_ptr_$_3278 = getelementptr %env$137, %env$137* %record_ptr_$_3273, i32 0, i32 1
  %res_$_3279 = load i8*, i8** %field_ptr_$_3278
- %left_int_$_3280 = ptrtoint i8* %res_$_3279 to i64
- %right_int_$_3281 = ptrtoint i8* null to i64
+ %left_int_$_3280 = ptrtoint i8** %res_$_3279 to i64
+ %right_int_$_3281 = ptrtoint i8** null to i64
  %cnd_$_3282 = icmp eq i64 %left_int_$_3280, %right_int_$_3281
  %zext_$_3283 = zext i1 %cnd_$_3282 to i64
  %cnd_$_3284 = icmp ne i64 %zext_$_3283, 0
@@ -4912,7 +4912,7 @@ thn_$_3268:
  %var_ptr_$_3285 = getelementptr %$locals_env2s_short$164, %$locals_env2s_short$164* %locals_$_66, i32 0, i32 1
  %load_$_3286 = load i8*, i8** %var_ptr_$_3285
  %record_ptr_$_3287 = bitcast i8* %load_$_3286 to %env$137*
- %int_of_ptr_$_3290 = ptrtoint i8* %load_$_3286 to i64
+ %int_of_ptr_$_3290 = ptrtoint i8** %load_$_3286 to i64
  %cnd_$_3291 = icmp eq i64 %int_of_ptr_$_3290, 0
  br i1 %cnd_$_3291, label %thn_$_3288, label %mrg_$_3289
 thn_$_3288:
@@ -4922,7 +4922,7 @@ mrg_$_3289:
  %field_ptr_$_3292 = getelementptr %env$137, %env$137* %record_ptr_$_3287, i32 0, i32 0
  %load_$_3293 = load i8*, i8** %field_ptr_$_3292
  %record_ptr_$_3294 = bitcast i8* %load_$_3293 to %env_entry$138*
- %int_of_ptr_$_3297 = ptrtoint i8* %load_$_3293 to i64
+ %int_of_ptr_$_3297 = ptrtoint i8** %load_$_3293 to i64
  %cnd_$_3298 = icmp eq i64 %int_of_ptr_$_3297, 0
  br i1 %cnd_$_3298, label %thn_$_3295, label %mrg_$_3296
 thn_$_3295:
@@ -4939,7 +4939,7 @@ els_$_3269:
  %var_ptr_$_3304 = getelementptr %$locals_env2s_short$164, %$locals_env2s_short$164* %locals_$_66, i32 0, i32 1
  %load_$_3305 = load i8*, i8** %var_ptr_$_3304
  %record_ptr_$_3306 = bitcast i8* %load_$_3305 to %env$137*
- %int_of_ptr_$_3309 = ptrtoint i8* %load_$_3305 to i64
+ %int_of_ptr_$_3309 = ptrtoint i8** %load_$_3305 to i64
  %cnd_$_3310 = icmp eq i64 %int_of_ptr_$_3309, 0
  br i1 %cnd_$_3310, label %thn_$_3307, label %mrg_$_3308
 thn_$_3307:
@@ -4949,7 +4949,7 @@ mrg_$_3308:
  %field_ptr_$_3311 = getelementptr %env$137, %env$137* %record_ptr_$_3306, i32 0, i32 0
  %load_$_3312 = load i8*, i8** %field_ptr_$_3311
  %record_ptr_$_3313 = bitcast i8* %load_$_3312 to %env_entry$138*
- %int_of_ptr_$_3316 = ptrtoint i8* %load_$_3312 to i64
+ %int_of_ptr_$_3316 = ptrtoint i8** %load_$_3312 to i64
  %cnd_$_3317 = icmp eq i64 %int_of_ptr_$_3316, 0
  br i1 %cnd_$_3317, label %thn_$_3314, label %mrg_$_3315
 thn_$_3314:
@@ -4966,7 +4966,7 @@ mrg_$_3315:
  %var_ptr_$_3327 = getelementptr %$locals_env2s_short$164, %$locals_env2s_short$164* %locals_$_66, i32 0, i32 1
  %load_$_3328 = load i8*, i8** %var_ptr_$_3327
  %record_ptr_$_3329 = bitcast i8* %load_$_3328 to %env$137*
- %int_of_ptr_$_3332 = ptrtoint i8* %load_$_3328 to i64
+ %int_of_ptr_$_3332 = ptrtoint i8** %load_$_3328 to i64
  %cnd_$_3333 = icmp eq i64 %int_of_ptr_$_3332, 0
  br i1 %cnd_$_3333, label %thn_$_3330, label %mrg_$_3331
 thn_$_3330:
@@ -5126,7 +5126,7 @@ thn_$_3439:
  %var_ptr_$_3448 = getelementptr %$locals_copy_value$165, %$locals_copy_value$165* %locals_$_67, i32 0, i32 1
  %load_$_3449 = load i8*, i8** %var_ptr_$_3448
  %record_ptr_$_3450 = bitcast i8* %load_$_3449 to %sexp$132*
- %int_of_ptr_$_3453 = ptrtoint i8* %load_$_3449 to i64
+ %int_of_ptr_$_3453 = ptrtoint i8** %load_$_3449 to i64
  %cnd_$_3454 = icmp eq i64 %int_of_ptr_$_3453, 0
  br i1 %cnd_$_3454, label %thn_$_3451, label %mrg_$_3452
 thn_$_3451:
@@ -5138,7 +5138,7 @@ mrg_$_3452:
  %var_ptr_$_3457 = getelementptr %$locals_copy_value$165, %$locals_copy_value$165* %locals_$_67, i32 0, i32 2
  %load_$_3458 = load i8*, i8** %var_ptr_$_3457
  %record_ptr_$_3459 = bitcast i8* %load_$_3458 to %sexp$132*
- %int_of_ptr_$_3462 = ptrtoint i8* %load_$_3458 to i64
+ %int_of_ptr_$_3462 = ptrtoint i8** %load_$_3458 to i64
  %cnd_$_3463 = icmp eq i64 %int_of_ptr_$_3462, 0
  br i1 %cnd_$_3463, label %thn_$_3460, label %mrg_$_3461
 thn_$_3460:
@@ -5160,7 +5160,7 @@ thn_$_3465:
  %var_ptr_$_3474 = getelementptr %$locals_copy_value$165, %$locals_copy_value$165* %locals_$_67, i32 0, i32 1
  %load_$_3475 = load i8*, i8** %var_ptr_$_3474
  %record_ptr_$_3476 = bitcast i8* %load_$_3475 to %sexp$132*
- %int_of_ptr_$_3479 = ptrtoint i8* %load_$_3475 to i64
+ %int_of_ptr_$_3479 = ptrtoint i8** %load_$_3475 to i64
  %cnd_$_3480 = icmp eq i64 %int_of_ptr_$_3479, 0
  br i1 %cnd_$_3480, label %thn_$_3477, label %mrg_$_3478
 thn_$_3477:
@@ -5172,7 +5172,7 @@ mrg_$_3478:
  %var_ptr_$_3483 = getelementptr %$locals_copy_value$165, %$locals_copy_value$165* %locals_$_67, i32 0, i32 2
  %load_$_3484 = load i8*, i8** %var_ptr_$_3483
  %record_ptr_$_3485 = bitcast i8* %load_$_3484 to %sexp$132*
- %int_of_ptr_$_3488 = ptrtoint i8* %load_$_3484 to i64
+ %int_of_ptr_$_3488 = ptrtoint i8** %load_$_3484 to i64
  %cnd_$_3489 = icmp eq i64 %int_of_ptr_$_3488, 0
  br i1 %cnd_$_3489, label %thn_$_3486, label %mrg_$_3487
 thn_$_3486:
@@ -5194,7 +5194,7 @@ thn_$_3491:
  %var_ptr_$_3500 = getelementptr %$locals_copy_value$165, %$locals_copy_value$165* %locals_$_67, i32 0, i32 1
  %load_$_3501 = load i8*, i8** %var_ptr_$_3500
  %record_ptr_$_3502 = bitcast i8* %load_$_3501 to %sexp$132*
- %int_of_ptr_$_3505 = ptrtoint i8* %load_$_3501 to i64
+ %int_of_ptr_$_3505 = ptrtoint i8** %load_$_3501 to i64
  %cnd_$_3506 = icmp eq i64 %int_of_ptr_$_3505, 0
  br i1 %cnd_$_3506, label %thn_$_3503, label %mrg_$_3504
 thn_$_3503:
@@ -5206,7 +5206,7 @@ mrg_$_3504:
  %var_ptr_$_3509 = getelementptr %$locals_copy_value$165, %$locals_copy_value$165* %locals_$_67, i32 0, i32 2
  %load_$_3510 = load i8*, i8** %var_ptr_$_3509
  %record_ptr_$_3511 = bitcast i8* %load_$_3510 to %sexp$132*
- %int_of_ptr_$_3514 = ptrtoint i8* %load_$_3510 to i64
+ %int_of_ptr_$_3514 = ptrtoint i8** %load_$_3510 to i64
  %cnd_$_3515 = icmp eq i64 %int_of_ptr_$_3514, 0
  br i1 %cnd_$_3515, label %thn_$_3512, label %mrg_$_3513
 thn_$_3512:
@@ -5228,7 +5228,7 @@ thn_$_3517:
  %var_ptr_$_3526 = getelementptr %$locals_copy_value$165, %$locals_copy_value$165* %locals_$_67, i32 0, i32 1
  %load_$_3527 = load i8*, i8** %var_ptr_$_3526
  %record_ptr_$_3528 = bitcast i8* %load_$_3527 to %sexp$132*
- %int_of_ptr_$_3531 = ptrtoint i8* %load_$_3527 to i64
+ %int_of_ptr_$_3531 = ptrtoint i8** %load_$_3527 to i64
  %cnd_$_3532 = icmp eq i64 %int_of_ptr_$_3531, 0
  br i1 %cnd_$_3532, label %thn_$_3529, label %mrg_$_3530
 thn_$_3529:
@@ -5240,7 +5240,7 @@ mrg_$_3530:
  %var_ptr_$_3535 = getelementptr %$locals_copy_value$165, %$locals_copy_value$165* %locals_$_67, i32 0, i32 2
  %load_$_3536 = load i8*, i8** %var_ptr_$_3535
  %record_ptr_$_3537 = bitcast i8* %load_$_3536 to %sexp$132*
- %int_of_ptr_$_3540 = ptrtoint i8* %load_$_3536 to i64
+ %int_of_ptr_$_3540 = ptrtoint i8** %load_$_3536 to i64
  %cnd_$_3541 = icmp eq i64 %int_of_ptr_$_3540, 0
  br i1 %cnd_$_3541, label %thn_$_3538, label %mrg_$_3539
 thn_$_3538:
@@ -5262,7 +5262,7 @@ thn_$_3543:
  %var_ptr_$_3552 = getelementptr %$locals_copy_value$165, %$locals_copy_value$165* %locals_$_67, i32 0, i32 1
  %load_$_3553 = load i8*, i8** %var_ptr_$_3552
  %record_ptr_$_3554 = bitcast i8* %load_$_3553 to %sexp$132*
- %int_of_ptr_$_3557 = ptrtoint i8* %load_$_3553 to i64
+ %int_of_ptr_$_3557 = ptrtoint i8** %load_$_3553 to i64
  %cnd_$_3558 = icmp eq i64 %int_of_ptr_$_3557, 0
  br i1 %cnd_$_3558, label %thn_$_3555, label %mrg_$_3556
 thn_$_3555:
@@ -5274,7 +5274,7 @@ mrg_$_3556:
  %var_ptr_$_3561 = getelementptr %$locals_copy_value$165, %$locals_copy_value$165* %locals_$_67, i32 0, i32 2
  %load_$_3562 = load i8*, i8** %var_ptr_$_3561
  %record_ptr_$_3563 = bitcast i8* %load_$_3562 to %sexp$132*
- %int_of_ptr_$_3566 = ptrtoint i8* %load_$_3562 to i64
+ %int_of_ptr_$_3566 = ptrtoint i8** %load_$_3562 to i64
  %cnd_$_3567 = icmp eq i64 %int_of_ptr_$_3566, 0
  br i1 %cnd_$_3567, label %thn_$_3564, label %mrg_$_3565
 thn_$_3564:
@@ -5296,7 +5296,7 @@ thn_$_3569:
  %var_ptr_$_3578 = getelementptr %$locals_copy_value$165, %$locals_copy_value$165* %locals_$_67, i32 0, i32 1
  %load_$_3579 = load i8*, i8** %var_ptr_$_3578
  %record_ptr_$_3580 = bitcast i8* %load_$_3579 to %sexp$132*
- %int_of_ptr_$_3583 = ptrtoint i8* %load_$_3579 to i64
+ %int_of_ptr_$_3583 = ptrtoint i8** %load_$_3579 to i64
  %cnd_$_3584 = icmp eq i64 %int_of_ptr_$_3583, 0
  br i1 %cnd_$_3584, label %thn_$_3581, label %mrg_$_3582
 thn_$_3581:
@@ -5308,7 +5308,7 @@ mrg_$_3582:
  %var_ptr_$_3587 = getelementptr %$locals_copy_value$165, %$locals_copy_value$165* %locals_$_67, i32 0, i32 2
  %load_$_3588 = load i8*, i8** %var_ptr_$_3587
  %record_ptr_$_3589 = bitcast i8* %load_$_3588 to %sexp$132*
- %int_of_ptr_$_3592 = ptrtoint i8* %load_$_3588 to i64
+ %int_of_ptr_$_3592 = ptrtoint i8** %load_$_3588 to i64
  %cnd_$_3593 = icmp eq i64 %int_of_ptr_$_3592, 0
  br i1 %cnd_$_3593, label %thn_$_3590, label %mrg_$_3591
 thn_$_3590:
@@ -5359,7 +5359,7 @@ define i8* @mk_internal_fun$166 (%$locals_tigermain* %$sl, i8* %name$212) {
  %arg_$_3614 = getelementptr %$locals_mk_internal_fun$166, %$locals_mk_internal_fun$166* %locals_$_68, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_3614
  %size_ptr_$_3615 = getelementptr %env_entry$138, %env_entry$138* null, i32 1
- %size_$_3616 = ptrtoint %env_entry$138* %size_ptr_$_3615 to i64
+ %size_$_3616 = ptrtoint %env_entry$138** %size_ptr_$_3615 to i64
  %record_ptr_$_3617 = call i8* @allocRecord (i64 %size_$_3616)
  %rec_$_3618 = bitcast i8* %record_ptr_$_3617 to %env_entry$138*
  %var_ptr_$_3619 = getelementptr %$locals_mk_internal_fun$166, %$locals_mk_internal_fun$166* %locals_$_68, i32 0, i32 1
@@ -5369,7 +5369,7 @@ define i8* @mk_internal_fun$166 (%$locals_tigermain* %$sl, i8* %name$212) {
  %lnk_$_3622 = getelementptr %$locals_mk_internal_fun$166, %$locals_mk_internal_fun$166* %locals_$_68, i32 0, i32 0
  %load_$_3623 = load %$locals_tigermain*, %$locals_tigermain** %lnk_$_3622
  %size_ptr_$_3624 = getelementptr %Function$135, %Function$135* null, i32 1
- %size_$_3625 = ptrtoint %Function$135* %size_ptr_$_3624 to i64
+ %size_$_3625 = ptrtoint %Function$135** %size_ptr_$_3624 to i64
  %record_ptr_$_3626 = call i8* @allocRecord (i64 %size_$_3625)
  %rec_$_3627 = bitcast i8* %record_ptr_$_3626 to %Function$135*
  %temp_$_3629 = bitcast { i64, [8 x i8] }* @str_$_3628 to i8*
@@ -5403,8 +5403,8 @@ define i8* @lookup$214 (%$locals_tigermain* %$sl, i8* %id$223, i8* %env$224) {
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_3641
  %var_ptr_$_3646 = getelementptr %$locals_lookup$214, %$locals_lookup$214* %locals_$_69, i32 0, i32 3
  %res_$_3647 = load i8*, i8** %var_ptr_$_3646
- %left_int_$_3648 = ptrtoint i8* %res_$_3647 to i64
- %right_int_$_3649 = ptrtoint i8* null to i64
+ %left_int_$_3648 = ptrtoint i8** %res_$_3647 to i64
+ %right_int_$_3649 = ptrtoint i8** null to i64
  %cnd_$_3650 = icmp eq i64 %left_int_$_3648, %right_int_$_3649
  %zext_$_3651 = zext i1 %cnd_$_3650 to i64
  %cnd_$_3652 = icmp ne i64 %zext_$_3651, 0
@@ -5429,7 +5429,7 @@ els_$_3644:
  %var_ptr_$_3668 = getelementptr %$locals_lookup$214, %$locals_lookup$214* %locals_$_69, i32 0, i32 3
  %load_$_3669 = load i8*, i8** %var_ptr_$_3668
  %record_ptr_$_3670 = bitcast i8* %load_$_3669 to %env$137*
- %int_of_ptr_$_3673 = ptrtoint i8* %load_$_3669 to i64
+ %int_of_ptr_$_3673 = ptrtoint i8** %load_$_3669 to i64
  %cnd_$_3674 = icmp eq i64 %int_of_ptr_$_3673, 0
  br i1 %cnd_$_3674, label %thn_$_3671, label %mrg_$_3672
 thn_$_3671:
@@ -5443,7 +5443,7 @@ mrg_$_3672:
  %var_ptr_$_3682 = getelementptr %$locals_lookup$214, %$locals_lookup$214* %locals_$_69, i32 0, i32 1
  %load_$_3683 = load i8*, i8** %var_ptr_$_3682
  %record_ptr_$_3684 = bitcast i8* %load_$_3683 to %env_entry$138*
- %int_of_ptr_$_3687 = ptrtoint i8* %load_$_3683 to i64
+ %int_of_ptr_$_3687 = ptrtoint i8** %load_$_3683 to i64
  %cnd_$_3688 = icmp eq i64 %int_of_ptr_$_3687, 0
  br i1 %cnd_$_3688, label %thn_$_3685, label %mrg_$_3686
 thn_$_3685:
@@ -5461,7 +5461,7 @@ thn_$_3679:
  %var_ptr_$_3695 = getelementptr %$locals_lookup$214, %$locals_lookup$214* %locals_$_69, i32 0, i32 1
  %load_$_3696 = load i8*, i8** %var_ptr_$_3695
  %record_ptr_$_3697 = bitcast i8* %load_$_3696 to %env_entry$138*
- %int_of_ptr_$_3700 = ptrtoint i8* %load_$_3696 to i64
+ %int_of_ptr_$_3700 = ptrtoint i8** %load_$_3696 to i64
  %cnd_$_3701 = icmp eq i64 %int_of_ptr_$_3700, 0
  br i1 %cnd_$_3701, label %thn_$_3698, label %mrg_$_3699
 thn_$_3698:
@@ -5480,7 +5480,7 @@ els_$_3680:
  %var_ptr_$_3708 = getelementptr %$locals_lookup$214, %$locals_lookup$214* %locals_$_69, i32 0, i32 3
  %load_$_3709 = load i8*, i8** %var_ptr_$_3708
  %record_ptr_$_3710 = bitcast i8* %load_$_3709 to %env$137*
- %int_of_ptr_$_3713 = ptrtoint i8* %load_$_3709 to i64
+ %int_of_ptr_$_3713 = ptrtoint i8** %load_$_3709 to i64
  %cnd_$_3714 = icmp eq i64 %int_of_ptr_$_3713, 0
  br i1 %cnd_$_3714, label %thn_$_3711, label %mrg_$_3712
 thn_$_3711:
@@ -5593,8 +5593,8 @@ thn_$_3780:
  store i8* %ret_$_3793, i8** %temp_$_3794
  %var_ptr_$_3799 = getelementptr %$locals_eval$215, %$locals_eval$215* %locals_$_70, i32 0, i32 4
  %res_$_3800 = load i8*, i8** %var_ptr_$_3799
- %left_int_$_3801 = ptrtoint i8* %res_$_3800 to i64
- %right_int_$_3802 = ptrtoint i8* null to i64
+ %left_int_$_3801 = ptrtoint i8** %res_$_3800 to i64
+ %right_int_$_3802 = ptrtoint i8** null to i64
  %cnd_$_3803 = icmp eq i64 %left_int_$_3801, %right_int_$_3802
  %zext_$_3804 = zext i1 %cnd_$_3803 to i64
  %cnd_$_3805 = icmp ne i64 %zext_$_3804, 0
@@ -5609,7 +5609,7 @@ els_$_3797:
  %var_ptr_$_3809 = getelementptr %$locals_eval$215, %$locals_eval$215* %locals_$_70, i32 0, i32 4
  %load_$_3810 = load i8*, i8** %var_ptr_$_3809
  %record_ptr_$_3811 = bitcast i8* %load_$_3810 to %sexps$133*
- %int_of_ptr_$_3814 = ptrtoint i8* %load_$_3810 to i64
+ %int_of_ptr_$_3814 = ptrtoint i8** %load_$_3810 to i64
  %cnd_$_3815 = icmp eq i64 %int_of_ptr_$_3814, 0
  br i1 %cnd_$_3815, label %thn_$_3812, label %mrg_$_3813
 thn_$_3812:
@@ -5651,7 +5651,7 @@ thn_$_3828:
  %var_ptr_$_3847 = getelementptr %$locals_eval$215, %$locals_eval$215* %locals_$_70, i32 0, i32 4
  %load_$_3848 = load i8*, i8** %var_ptr_$_3847
  %record_ptr_$_3849 = bitcast i8* %load_$_3848 to %sexps$133*
- %int_of_ptr_$_3852 = ptrtoint i8* %load_$_3848 to i64
+ %int_of_ptr_$_3852 = ptrtoint i8** %load_$_3848 to i64
  %cnd_$_3853 = icmp eq i64 %int_of_ptr_$_3852, 0
  br i1 %cnd_$_3853, label %thn_$_3850, label %mrg_$_3851
 thn_$_3850:
@@ -5743,8 +5743,8 @@ define i8* @eval_sexps$216 (%$locals_tigermain* %$sl, i8* %sexps$232, i8* %env$2
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_3904
  %var_ptr_$_3909 = getelementptr %$locals_eval_sexps$216, %$locals_eval_sexps$216* %locals_$_71, i32 0, i32 1
  %res_$_3910 = load i8*, i8** %var_ptr_$_3909
- %left_int_$_3911 = ptrtoint i8* %res_$_3910 to i64
- %right_int_$_3912 = ptrtoint i8* null to i64
+ %left_int_$_3911 = ptrtoint i8** %res_$_3910 to i64
+ %right_int_$_3912 = ptrtoint i8** null to i64
  %cnd_$_3913 = icmp eq i64 %left_int_$_3911, %right_int_$_3912
  %zext_$_3914 = zext i1 %cnd_$_3913 to i64
  %cnd_$_3915 = icmp ne i64 %zext_$_3914, 0
@@ -5754,7 +5754,7 @@ thn_$_3906:
  br label %mrg_$_3908
 els_$_3907:
  %size_ptr_$_3916 = getelementptr %sexps$133, %sexps$133* null, i32 1
- %size_$_3917 = ptrtoint %sexps$133* %size_ptr_$_3916 to i64
+ %size_$_3917 = ptrtoint %sexps$133** %size_ptr_$_3916 to i64
  %record_ptr_$_3918 = call i8* @allocRecord (i64 %size_$_3917)
  %rec_$_3919 = bitcast i8* %record_ptr_$_3918 to %sexps$133*
  %lnk_$_3920 = getelementptr %$locals_eval_sexps$216, %$locals_eval_sexps$216* %locals_$_71, i32 0, i32 0
@@ -5762,7 +5762,7 @@ els_$_3907:
  %var_ptr_$_3922 = getelementptr %$locals_eval_sexps$216, %$locals_eval_sexps$216* %locals_$_71, i32 0, i32 1
  %load_$_3923 = load i8*, i8** %var_ptr_$_3922
  %record_ptr_$_3924 = bitcast i8* %load_$_3923 to %sexps$133*
- %int_of_ptr_$_3927 = ptrtoint i8* %load_$_3923 to i64
+ %int_of_ptr_$_3927 = ptrtoint i8** %load_$_3923 to i64
  %cnd_$_3928 = icmp eq i64 %int_of_ptr_$_3927, 0
  br i1 %cnd_$_3928, label %thn_$_3925, label %mrg_$_3926
 thn_$_3925:
@@ -5781,7 +5781,7 @@ mrg_$_3926:
  %var_ptr_$_3937 = getelementptr %$locals_eval_sexps$216, %$locals_eval_sexps$216* %locals_$_71, i32 0, i32 1
  %load_$_3938 = load i8*, i8** %var_ptr_$_3937
  %record_ptr_$_3939 = bitcast i8* %load_$_3938 to %sexps$133*
- %int_of_ptr_$_3942 = ptrtoint i8* %load_$_3938 to i64
+ %int_of_ptr_$_3942 = ptrtoint i8** %load_$_3938 to i64
  %cnd_$_3943 = icmp eq i64 %int_of_ptr_$_3942, 0
  br i1 %cnd_$_3943, label %thn_$_3940, label %mrg_$_3941
 thn_$_3940:
@@ -5826,7 +5826,7 @@ thn_$_3956:
  %var_ptr_$_3967 = getelementptr %$locals_apply_fun$217, %$locals_apply_fun$217* %locals_$_72, i32 0, i32 1
  %load_$_3968 = load i8*, i8** %var_ptr_$_3967
  %record_ptr_$_3969 = bitcast i8* %load_$_3968 to %Function$135*
- %int_of_ptr_$_3972 = ptrtoint i8* %load_$_3968 to i64
+ %int_of_ptr_$_3972 = ptrtoint i8** %load_$_3968 to i64
  %cnd_$_3973 = icmp eq i64 %int_of_ptr_$_3972, 0
  br i1 %cnd_$_3973, label %thn_$_3970, label %mrg_$_3971
 thn_$_3970:
@@ -5878,7 +5878,7 @@ define i8* @apply_fun_cbv$218 (%$locals_tigermain* %$sl, i8* %fun$237, i8* %args
  %var_ptr_$_4004 = getelementptr %$locals_apply_fun_cbv$218, %$locals_apply_fun_cbv$218* %locals_$_73, i32 0, i32 1
  %load_$_4005 = load i8*, i8** %var_ptr_$_4004
  %record_ptr_$_4006 = bitcast i8* %load_$_4005 to %Function$135*
- %int_of_ptr_$_4009 = ptrtoint i8* %load_$_4005 to i64
+ %int_of_ptr_$_4009 = ptrtoint i8** %load_$_4005 to i64
  %cnd_$_4010 = icmp eq i64 %int_of_ptr_$_4009, 0
  br i1 %cnd_$_4010, label %thn_$_4007, label %mrg_$_4008
 thn_$_4007:
@@ -5897,7 +5897,7 @@ thn_$_4001:
  %var_ptr_$_4019 = getelementptr %$locals_apply_fun_cbv$218, %$locals_apply_fun_cbv$218* %locals_$_73, i32 0, i32 1
  %load_$_4020 = load i8*, i8** %var_ptr_$_4019
  %record_ptr_$_4021 = bitcast i8* %load_$_4020 to %Function$135*
- %int_of_ptr_$_4024 = ptrtoint i8* %load_$_4020 to i64
+ %int_of_ptr_$_4024 = ptrtoint i8** %load_$_4020 to i64
  %cnd_$_4025 = icmp eq i64 %int_of_ptr_$_4024, 0
  br i1 %cnd_$_4025, label %thn_$_4022, label %mrg_$_4023
 thn_$_4022:
@@ -5941,8 +5941,8 @@ define void @fill_env$243 (%$locals_apply_user_cbv$219* %$sl, i8* %parameters$24
  store %$locals_apply_user_cbv$219* %$sl, %$locals_apply_user_cbv$219** %arg_$_4043
  %var_ptr_$_4051 = getelementptr %$locals_fill_env$243, %$locals_fill_env$243* %locals_$_74, i32 0, i32 1
  %res_$_4052 = load i8*, i8** %var_ptr_$_4051
- %left_int_$_4053 = ptrtoint i8* %res_$_4052 to i64
- %right_int_$_4054 = ptrtoint i8* null to i64
+ %left_int_$_4053 = ptrtoint i8** %res_$_4052 to i64
+ %right_int_$_4054 = ptrtoint i8** null to i64
  %cnd_$_4055 = icmp ne i64 %left_int_$_4053, %right_int_$_4054
  %zext_$_4056 = zext i1 %cnd_$_4055 to i64
  %cnd_$_4057 = icmp ne i64 %zext_$_4056, 0
@@ -5950,8 +5950,8 @@ define void @fill_env$243 (%$locals_apply_user_cbv$219* %$sl, i8* %parameters$24
 thn_$_4048:
  %var_ptr_$_4058 = getelementptr %$locals_fill_env$243, %$locals_fill_env$243* %locals_$_74, i32 0, i32 2
  %res_$_4059 = load i8*, i8** %var_ptr_$_4058
- %left_int_$_4060 = ptrtoint i8* %res_$_4059 to i64
- %right_int_$_4061 = ptrtoint i8* null to i64
+ %left_int_$_4060 = ptrtoint i8** %res_$_4059 to i64
+ %right_int_$_4061 = ptrtoint i8** null to i64
  %cnd_$_4062 = icmp ne i64 %left_int_$_4060, %right_int_$_4061
  %zext_$_4063 = zext i1 %cnd_$_4062 to i64
  store i64 %zext_$_4063, i64* %temp_$_4047
@@ -5965,17 +5965,17 @@ mrg_$_4050:
  br i1 %cnd_$_4065, label %thn_$_4044, label %els_$_4045
 thn_$_4044:
  %size_ptr_$_4066 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_4067 = ptrtoint %env$137* %size_ptr_$_4066 to i64
+ %size_$_4067 = ptrtoint %env$137** %size_ptr_$_4066 to i64
  %record_ptr_$_4068 = call i8* @allocRecord (i64 %size_$_4067)
  %rec_$_4069 = bitcast i8* %record_ptr_$_4068 to %env$137*
  %size_ptr_$_4070 = getelementptr %env_entry$138, %env_entry$138* null, i32 1
- %size_$_4071 = ptrtoint %env_entry$138* %size_ptr_$_4070 to i64
+ %size_$_4071 = ptrtoint %env_entry$138** %size_ptr_$_4070 to i64
  %record_ptr_$_4072 = call i8* @allocRecord (i64 %size_$_4071)
  %rec_$_4073 = bitcast i8* %record_ptr_$_4072 to %env_entry$138*
  %var_ptr_$_4074 = getelementptr %$locals_fill_env$243, %$locals_fill_env$243* %locals_$_74, i32 0, i32 1
  %load_$_4075 = load i8*, i8** %var_ptr_$_4074
  %record_ptr_$_4076 = bitcast i8* %load_$_4075 to %parameters$136*
- %int_of_ptr_$_4079 = ptrtoint i8* %load_$_4075 to i64
+ %int_of_ptr_$_4079 = ptrtoint i8** %load_$_4075 to i64
  %cnd_$_4080 = icmp eq i64 %int_of_ptr_$_4079, 0
  br i1 %cnd_$_4080, label %thn_$_4077, label %mrg_$_4078
 thn_$_4077:
@@ -5989,7 +5989,7 @@ mrg_$_4078:
  %var_ptr_$_4084 = getelementptr %$locals_fill_env$243, %$locals_fill_env$243* %locals_$_74, i32 0, i32 2
  %load_$_4085 = load i8*, i8** %var_ptr_$_4084
  %record_ptr_$_4086 = bitcast i8* %load_$_4085 to %sexps$133*
- %int_of_ptr_$_4089 = ptrtoint i8* %load_$_4085 to i64
+ %int_of_ptr_$_4089 = ptrtoint i8** %load_$_4085 to i64
  %cnd_$_4090 = icmp eq i64 %int_of_ptr_$_4089, 0
  br i1 %cnd_$_4090, label %thn_$_4087, label %mrg_$_4088
 thn_$_4087:
@@ -6017,7 +6017,7 @@ mrg_$_4088:
  %var_ptr_$_4105 = getelementptr %$locals_fill_env$243, %$locals_fill_env$243* %locals_$_74, i32 0, i32 1
  %load_$_4106 = load i8*, i8** %var_ptr_$_4105
  %record_ptr_$_4107 = bitcast i8* %load_$_4106 to %parameters$136*
- %int_of_ptr_$_4110 = ptrtoint i8* %load_$_4106 to i64
+ %int_of_ptr_$_4110 = ptrtoint i8** %load_$_4106 to i64
  %cnd_$_4111 = icmp eq i64 %int_of_ptr_$_4110, 0
  br i1 %cnd_$_4111, label %thn_$_4108, label %mrg_$_4109
 thn_$_4108:
@@ -6029,7 +6029,7 @@ mrg_$_4109:
  %var_ptr_$_4114 = getelementptr %$locals_fill_env$243, %$locals_fill_env$243* %locals_$_74, i32 0, i32 2
  %load_$_4115 = load i8*, i8** %var_ptr_$_4114
  %record_ptr_$_4116 = bitcast i8* %load_$_4115 to %sexps$133*
- %int_of_ptr_$_4119 = ptrtoint i8* %load_$_4115 to i64
+ %int_of_ptr_$_4119 = ptrtoint i8** %load_$_4115 to i64
  %cnd_$_4120 = icmp eq i64 %int_of_ptr_$_4119, 0
  br i1 %cnd_$_4120, label %thn_$_4117, label %mrg_$_4118
 thn_$_4117:
@@ -6043,8 +6043,8 @@ mrg_$_4118:
 els_$_4045:
  %var_ptr_$_4130 = getelementptr %$locals_fill_env$243, %$locals_fill_env$243* %locals_$_74, i32 0, i32 1
  %res_$_4131 = load i8*, i8** %var_ptr_$_4130
- %left_int_$_4132 = ptrtoint i8* %res_$_4131 to i64
- %right_int_$_4133 = ptrtoint i8* null to i64
+ %left_int_$_4132 = ptrtoint i8** %res_$_4131 to i64
+ %right_int_$_4133 = ptrtoint i8** null to i64
  %cnd_$_4134 = icmp eq i64 %left_int_$_4132, %right_int_$_4133
  %zext_$_4135 = zext i1 %cnd_$_4134 to i64
  %cnd_$_4136 = icmp ne i64 %zext_$_4135, 0
@@ -6052,8 +6052,8 @@ els_$_4045:
 thn_$_4127:
  %var_ptr_$_4137 = getelementptr %$locals_fill_env$243, %$locals_fill_env$243* %locals_$_74, i32 0, i32 2
  %res_$_4138 = load i8*, i8** %var_ptr_$_4137
- %left_int_$_4139 = ptrtoint i8* %res_$_4138 to i64
- %right_int_$_4140 = ptrtoint i8* null to i64
+ %left_int_$_4139 = ptrtoint i8** %res_$_4138 to i64
+ %right_int_$_4140 = ptrtoint i8** null to i64
  %cnd_$_4141 = icmp ne i64 %left_int_$_4139, %right_int_$_4140
  %zext_$_4142 = zext i1 %cnd_$_4141 to i64
  store i64 %zext_$_4142, i64* %temp_$_4126
@@ -6103,7 +6103,7 @@ thn_$_4123:
  %var_ptr_$_4154 = getelementptr %$locals_fill_env$243, %$locals_fill_env$243* %locals_$_74, i32 0, i32 2
  %load_$_4155 = load i8*, i8** %var_ptr_$_4154
  %record_ptr_$_4156 = bitcast i8* %load_$_4155 to %sexps$133*
- %int_of_ptr_$_4159 = ptrtoint i8* %load_$_4155 to i64
+ %int_of_ptr_$_4159 = ptrtoint i8** %load_$_4155 to i64
  %cnd_$_4160 = icmp eq i64 %int_of_ptr_$_4159, 0
  br i1 %cnd_$_4160, label %thn_$_4157, label %mrg_$_4158
 thn_$_4157:
@@ -6124,8 +6124,8 @@ mrg_$_4158:
 els_$_4124:
  %var_ptr_$_4206 = getelementptr %$locals_fill_env$243, %$locals_fill_env$243* %locals_$_74, i32 0, i32 1
  %res_$_4207 = load i8*, i8** %var_ptr_$_4206
- %left_int_$_4208 = ptrtoint i8* %res_$_4207 to i64
- %right_int_$_4209 = ptrtoint i8* null to i64
+ %left_int_$_4208 = ptrtoint i8** %res_$_4207 to i64
+ %right_int_$_4209 = ptrtoint i8** null to i64
  %cnd_$_4210 = icmp ne i64 %left_int_$_4208, %right_int_$_4209
  %zext_$_4211 = zext i1 %cnd_$_4210 to i64
  %cnd_$_4212 = icmp ne i64 %zext_$_4211, 0
@@ -6133,8 +6133,8 @@ els_$_4124:
 thn_$_4203:
  %var_ptr_$_4213 = getelementptr %$locals_fill_env$243, %$locals_fill_env$243* %locals_$_74, i32 0, i32 2
  %res_$_4214 = load i8*, i8** %var_ptr_$_4213
- %left_int_$_4215 = ptrtoint i8* %res_$_4214 to i64
- %right_int_$_4216 = ptrtoint i8* null to i64
+ %left_int_$_4215 = ptrtoint i8** %res_$_4214 to i64
+ %right_int_$_4216 = ptrtoint i8** null to i64
  %cnd_$_4217 = icmp eq i64 %left_int_$_4215, %right_int_$_4216
  %zext_$_4218 = zext i1 %cnd_$_4217 to i64
  store i64 %zext_$_4218, i64* %temp_$_4202
@@ -6180,7 +6180,7 @@ thn_$_4199:
  %var_ptr_$_4226 = getelementptr %$locals_fill_env$243, %$locals_fill_env$243* %locals_$_74, i32 0, i32 1
  %load_$_4227 = load i8*, i8** %var_ptr_$_4226
  %record_ptr_$_4228 = bitcast i8* %load_$_4227 to %parameters$136*
- %int_of_ptr_$_4231 = ptrtoint i8* %load_$_4227 to i64
+ %int_of_ptr_$_4231 = ptrtoint i8** %load_$_4227 to i64
  %cnd_$_4232 = icmp eq i64 %int_of_ptr_$_4231, 0
  br i1 %cnd_$_4232, label %thn_$_4229, label %mrg_$_4230
 thn_$_4229:
@@ -6218,7 +6218,7 @@ define i8* @apply_user_cbv$219 (%$locals_tigermain* %$sl, i8* %fun$240, i8* %arg
  %var_ptr_$_4273 = getelementptr %$locals_apply_user_cbv$219, %$locals_apply_user_cbv$219* %locals_$_75, i32 0, i32 4
  %load_$_4274 = load i8*, i8** %var_ptr_$_4273
  %record_ptr_$_4275 = bitcast i8* %load_$_4274 to %Function$135*
- %int_of_ptr_$_4278 = ptrtoint i8* %load_$_4274 to i64
+ %int_of_ptr_$_4278 = ptrtoint i8** %load_$_4274 to i64
  %cnd_$_4279 = icmp eq i64 %int_of_ptr_$_4278, 0
  br i1 %cnd_$_4279, label %thn_$_4276, label %mrg_$_4277
 thn_$_4276:
@@ -6232,7 +6232,7 @@ mrg_$_4277:
  %var_ptr_$_4283 = getelementptr %$locals_apply_user_cbv$219, %$locals_apply_user_cbv$219* %locals_$_75, i32 0, i32 4
  %load_$_4284 = load i8*, i8** %var_ptr_$_4283
  %record_ptr_$_4285 = bitcast i8* %load_$_4284 to %Function$135*
- %int_of_ptr_$_4288 = ptrtoint i8* %load_$_4284 to i64
+ %int_of_ptr_$_4288 = ptrtoint i8** %load_$_4284 to i64
  %cnd_$_4289 = icmp eq i64 %int_of_ptr_$_4288, 0
  br i1 %cnd_$_4289, label %thn_$_4286, label %mrg_$_4287
 thn_$_4286:
@@ -6249,7 +6249,7 @@ mrg_$_4287:
  %var_ptr_$_4296 = getelementptr %$locals_apply_user_cbv$219, %$locals_apply_user_cbv$219* %locals_$_75, i32 0, i32 4
  %load_$_4297 = load i8*, i8** %var_ptr_$_4296
  %record_ptr_$_4298 = bitcast i8* %load_$_4297 to %Function$135*
- %int_of_ptr_$_4301 = ptrtoint i8* %load_$_4297 to i64
+ %int_of_ptr_$_4301 = ptrtoint i8** %load_$_4297 to i64
  %cnd_$_4302 = icmp eq i64 %int_of_ptr_$_4301, 0
  br i1 %cnd_$_4302, label %thn_$_4299, label %mrg_$_4300
 thn_$_4299:
@@ -6284,7 +6284,7 @@ define i64 @lazy_fun_p$220 (%$locals_tigermain* %$sl, i8* %fun$246) {
  %var_ptr_$_4310 = getelementptr %$locals_lazy_fun_p$220, %$locals_lazy_fun_p$220* %locals_$_76, i32 0, i32 3
  %load_$_4311 = load i8*, i8** %var_ptr_$_4310
  %record_ptr_$_4312 = bitcast i8* %load_$_4311 to %Function$135*
- %int_of_ptr_$_4315 = ptrtoint i8* %load_$_4311 to i64
+ %int_of_ptr_$_4315 = ptrtoint i8** %load_$_4311 to i64
  %cnd_$_4316 = icmp eq i64 %int_of_ptr_$_4315, 0
  br i1 %cnd_$_4316, label %thn_$_4313, label %mrg_$_4314
 thn_$_4313:
@@ -6298,7 +6298,7 @@ mrg_$_4314:
  %var_ptr_$_4320 = getelementptr %$locals_lazy_fun_p$220, %$locals_lazy_fun_p$220* %locals_$_76, i32 0, i32 3
  %load_$_4321 = load i8*, i8** %var_ptr_$_4320
  %record_ptr_$_4322 = bitcast i8* %load_$_4321 to %Function$135*
- %int_of_ptr_$_4325 = ptrtoint i8* %load_$_4321 to i64
+ %int_of_ptr_$_4325 = ptrtoint i8** %load_$_4321 to i64
  %cnd_$_4326 = icmp eq i64 %int_of_ptr_$_4325, 0
  br i1 %cnd_$_4326, label %thn_$_4323, label %mrg_$_4324
 thn_$_4323:
@@ -6481,8 +6481,8 @@ define i8* @or$252 (%$locals_apply_internal_lazy$221* %$sl, i8* %args$263) {
  store %$locals_apply_internal_lazy$221* %$sl, %$locals_apply_internal_lazy$221** %arg_$_4457
  %var_ptr_$_4462 = getelementptr %$locals_or$252, %$locals_or$252* %locals_$_77, i32 0, i32 2
  %res_$_4463 = load i8*, i8** %var_ptr_$_4462
- %left_int_$_4464 = ptrtoint i8* %res_$_4463 to i64
- %right_int_$_4465 = ptrtoint i8* null to i64
+ %left_int_$_4464 = ptrtoint i8** %res_$_4463 to i64
+ %right_int_$_4465 = ptrtoint i8** null to i64
  %cnd_$_4466 = icmp eq i64 %left_int_$_4464, %right_int_$_4465
  %zext_$_4467 = zext i1 %cnd_$_4466 to i64
  %cnd_$_4468 = icmp ne i64 %zext_$_4467, 0
@@ -6503,7 +6503,7 @@ els_$_4460:
  %var_ptr_$_4478 = getelementptr %$locals_or$252, %$locals_or$252* %locals_$_77, i32 0, i32 2
  %load_$_4479 = load i8*, i8** %var_ptr_$_4478
  %record_ptr_$_4480 = bitcast i8* %load_$_4479 to %sexps$133*
- %int_of_ptr_$_4483 = ptrtoint i8* %load_$_4479 to i64
+ %int_of_ptr_$_4483 = ptrtoint i8** %load_$_4479 to i64
  %cnd_$_4484 = icmp eq i64 %int_of_ptr_$_4483, 0
  br i1 %cnd_$_4484, label %thn_$_4481, label %mrg_$_4482
 thn_$_4481:
@@ -6553,7 +6553,7 @@ thn_$_4494:
  %var_ptr_$_4522 = getelementptr %$locals_or$252, %$locals_or$252* %locals_$_77, i32 0, i32 2
  %load_$_4523 = load i8*, i8** %var_ptr_$_4522
  %record_ptr_$_4524 = bitcast i8* %load_$_4523 to %sexps$133*
- %int_of_ptr_$_4527 = ptrtoint i8* %load_$_4523 to i64
+ %int_of_ptr_$_4527 = ptrtoint i8** %load_$_4523 to i64
  %cnd_$_4528 = icmp eq i64 %int_of_ptr_$_4527, 0
  br i1 %cnd_$_4528, label %thn_$_4525, label %mrg_$_4526
 thn_$_4525:
@@ -6591,8 +6591,8 @@ define i8* @and$253 (%$locals_apply_internal_lazy$221* %$sl, i8* %args$265) {
  store %$locals_apply_internal_lazy$221* %$sl, %$locals_apply_internal_lazy$221** %arg_$_4537
  %var_ptr_$_4542 = getelementptr %$locals_and$253, %$locals_and$253* %locals_$_78, i32 0, i32 2
  %res_$_4543 = load i8*, i8** %var_ptr_$_4542
- %left_int_$_4544 = ptrtoint i8* %res_$_4543 to i64
- %right_int_$_4545 = ptrtoint i8* null to i64
+ %left_int_$_4544 = ptrtoint i8** %res_$_4543 to i64
+ %right_int_$_4545 = ptrtoint i8** null to i64
  %cnd_$_4546 = icmp eq i64 %left_int_$_4544, %right_int_$_4545
  %zext_$_4547 = zext i1 %cnd_$_4546 to i64
  %cnd_$_4548 = icmp ne i64 %zext_$_4547, 0
@@ -6613,7 +6613,7 @@ els_$_4540:
  %var_ptr_$_4558 = getelementptr %$locals_and$253, %$locals_and$253* %locals_$_78, i32 0, i32 2
  %load_$_4559 = load i8*, i8** %var_ptr_$_4558
  %record_ptr_$_4560 = bitcast i8* %load_$_4559 to %sexps$133*
- %int_of_ptr_$_4563 = ptrtoint i8* %load_$_4559 to i64
+ %int_of_ptr_$_4563 = ptrtoint i8** %load_$_4559 to i64
  %cnd_$_4564 = icmp eq i64 %int_of_ptr_$_4563, 0
  br i1 %cnd_$_4564, label %thn_$_4561, label %mrg_$_4562
 thn_$_4561:
@@ -6669,7 +6669,7 @@ els_$_4575:
  %var_ptr_$_4609 = getelementptr %$locals_and$253, %$locals_and$253* %locals_$_78, i32 0, i32 2
  %load_$_4610 = load i8*, i8** %var_ptr_$_4609
  %record_ptr_$_4611 = bitcast i8* %load_$_4610 to %sexps$133*
- %int_of_ptr_$_4614 = ptrtoint i8* %load_$_4610 to i64
+ %int_of_ptr_$_4614 = ptrtoint i8** %load_$_4610 to i64
  %cnd_$_4615 = icmp eq i64 %int_of_ptr_$_4614, 0
  br i1 %cnd_$_4615, label %thn_$_4612, label %mrg_$_4613
 thn_$_4612:
@@ -6678,8 +6678,8 @@ thn_$_4612:
 mrg_$_4613:
  %field_ptr_$_4616 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_4611, i32 0, i32 1
  %res_$_4617 = load i8*, i8** %field_ptr_$_4616
- %left_int_$_4618 = ptrtoint i8* %res_$_4617 to i64
- %right_int_$_4619 = ptrtoint i8* null to i64
+ %left_int_$_4618 = ptrtoint i8** %res_$_4617 to i64
+ %right_int_$_4619 = ptrtoint i8** null to i64
  %cnd_$_4620 = icmp eq i64 %left_int_$_4618, %right_int_$_4619
  %zext_$_4621 = zext i1 %cnd_$_4620 to i64
  %cnd_$_4622 = icmp ne i64 %zext_$_4621, 0
@@ -6695,7 +6695,7 @@ els_$_4607:
  %var_ptr_$_4627 = getelementptr %$locals_and$253, %$locals_and$253* %locals_$_78, i32 0, i32 2
  %load_$_4628 = load i8*, i8** %var_ptr_$_4627
  %record_ptr_$_4629 = bitcast i8* %load_$_4628 to %sexps$133*
- %int_of_ptr_$_4632 = ptrtoint i8* %load_$_4628 to i64
+ %int_of_ptr_$_4632 = ptrtoint i8** %load_$_4628 to i64
  %cnd_$_4633 = icmp eq i64 %int_of_ptr_$_4632, 0
  br i1 %cnd_$_4633, label %thn_$_4630, label %mrg_$_4631
 thn_$_4630:
@@ -6735,8 +6735,8 @@ define i8* @ifb$254 (%$locals_apply_internal_lazy$221* %$sl, i8* %args$267) {
  store %$locals_apply_internal_lazy$221* %$sl, %$locals_apply_internal_lazy$221** %arg_$_4641
  %var_ptr_$_4658 = getelementptr %$locals_ifb$254, %$locals_ifb$254* %locals_$_79, i32 0, i32 4
  %res_$_4659 = load i8*, i8** %var_ptr_$_4658
- %left_int_$_4660 = ptrtoint i8* %res_$_4659 to i64
- %right_int_$_4661 = ptrtoint i8* null to i64
+ %left_int_$_4660 = ptrtoint i8** %res_$_4659 to i64
+ %right_int_$_4661 = ptrtoint i8** null to i64
  %cnd_$_4662 = icmp eq i64 %left_int_$_4660, %right_int_$_4661
  %zext_$_4663 = zext i1 %cnd_$_4662 to i64
  %cnd_$_4664 = icmp ne i64 %zext_$_4663, 0
@@ -6748,7 +6748,7 @@ els_$_4656:
  %var_ptr_$_4665 = getelementptr %$locals_ifb$254, %$locals_ifb$254* %locals_$_79, i32 0, i32 4
  %load_$_4666 = load i8*, i8** %var_ptr_$_4665
  %record_ptr_$_4667 = bitcast i8* %load_$_4666 to %sexps$133*
- %int_of_ptr_$_4670 = ptrtoint i8* %load_$_4666 to i64
+ %int_of_ptr_$_4670 = ptrtoint i8** %load_$_4666 to i64
  %cnd_$_4671 = icmp eq i64 %int_of_ptr_$_4670, 0
  br i1 %cnd_$_4671, label %thn_$_4668, label %mrg_$_4669
 thn_$_4668:
@@ -6757,8 +6757,8 @@ thn_$_4668:
 mrg_$_4669:
  %field_ptr_$_4672 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_4667, i32 0, i32 1
  %res_$_4673 = load i8*, i8** %field_ptr_$_4672
- %left_int_$_4674 = ptrtoint i8* %res_$_4673 to i64
- %right_int_$_4675 = ptrtoint i8* null to i64
+ %left_int_$_4674 = ptrtoint i8** %res_$_4673 to i64
+ %right_int_$_4675 = ptrtoint i8** null to i64
  %cnd_$_4676 = icmp eq i64 %left_int_$_4674, %right_int_$_4675
  %zext_$_4677 = zext i1 %cnd_$_4676 to i64
  store i64 %zext_$_4677, i64* %temp_$_4654
@@ -6774,7 +6774,7 @@ els_$_4652:
  %var_ptr_$_4680 = getelementptr %$locals_ifb$254, %$locals_ifb$254* %locals_$_79, i32 0, i32 4
  %load_$_4681 = load i8*, i8** %var_ptr_$_4680
  %record_ptr_$_4682 = bitcast i8* %load_$_4681 to %sexps$133*
- %int_of_ptr_$_4685 = ptrtoint i8* %load_$_4681 to i64
+ %int_of_ptr_$_4685 = ptrtoint i8** %load_$_4681 to i64
  %cnd_$_4686 = icmp eq i64 %int_of_ptr_$_4685, 0
  br i1 %cnd_$_4686, label %thn_$_4683, label %mrg_$_4684
 thn_$_4683:
@@ -6784,7 +6784,7 @@ mrg_$_4684:
  %field_ptr_$_4687 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_4682, i32 0, i32 1
  %load_$_4688 = load i8*, i8** %field_ptr_$_4687
  %record_ptr_$_4689 = bitcast i8* %load_$_4688 to %sexps$133*
- %int_of_ptr_$_4692 = ptrtoint i8* %load_$_4688 to i64
+ %int_of_ptr_$_4692 = ptrtoint i8** %load_$_4688 to i64
  %cnd_$_4693 = icmp eq i64 %int_of_ptr_$_4692, 0
  br i1 %cnd_$_4693, label %thn_$_4690, label %mrg_$_4691
 thn_$_4690:
@@ -6793,8 +6793,8 @@ thn_$_4690:
 mrg_$_4691:
  %field_ptr_$_4694 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_4689, i32 0, i32 1
  %res_$_4695 = load i8*, i8** %field_ptr_$_4694
- %left_int_$_4696 = ptrtoint i8* %res_$_4695 to i64
- %right_int_$_4697 = ptrtoint i8* null to i64
+ %left_int_$_4696 = ptrtoint i8** %res_$_4695 to i64
+ %right_int_$_4697 = ptrtoint i8** null to i64
  %cnd_$_4698 = icmp eq i64 %left_int_$_4696, %right_int_$_4697
  %zext_$_4699 = zext i1 %cnd_$_4698 to i64
  store i64 %zext_$_4699, i64* %temp_$_4650
@@ -6810,7 +6810,7 @@ els_$_4648:
  %var_ptr_$_4706 = getelementptr %$locals_ifb$254, %$locals_ifb$254* %locals_$_79, i32 0, i32 4
  %load_$_4707 = load i8*, i8** %var_ptr_$_4706
  %record_ptr_$_4708 = bitcast i8* %load_$_4707 to %sexps$133*
- %int_of_ptr_$_4711 = ptrtoint i8* %load_$_4707 to i64
+ %int_of_ptr_$_4711 = ptrtoint i8** %load_$_4707 to i64
  %cnd_$_4712 = icmp eq i64 %int_of_ptr_$_4711, 0
  br i1 %cnd_$_4712, label %thn_$_4709, label %mrg_$_4710
 thn_$_4709:
@@ -6820,7 +6820,7 @@ mrg_$_4710:
  %field_ptr_$_4713 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_4708, i32 0, i32 1
  %load_$_4714 = load i8*, i8** %field_ptr_$_4713
  %record_ptr_$_4715 = bitcast i8* %load_$_4714 to %sexps$133*
- %int_of_ptr_$_4718 = ptrtoint i8* %load_$_4714 to i64
+ %int_of_ptr_$_4718 = ptrtoint i8** %load_$_4714 to i64
  %cnd_$_4719 = icmp eq i64 %int_of_ptr_$_4718, 0
  br i1 %cnd_$_4719, label %thn_$_4716, label %mrg_$_4717
 thn_$_4716:
@@ -6829,8 +6829,8 @@ thn_$_4716:
 mrg_$_4717:
  %field_ptr_$_4720 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_4715, i32 0, i32 1
  %res_$_4721 = load i8*, i8** %field_ptr_$_4720
- %left_int_$_4722 = ptrtoint i8* %res_$_4721 to i64
- %right_int_$_4723 = ptrtoint i8* null to i64
+ %left_int_$_4722 = ptrtoint i8** %res_$_4721 to i64
+ %right_int_$_4723 = ptrtoint i8** null to i64
  %cnd_$_4724 = icmp ne i64 %left_int_$_4722, %right_int_$_4723
  %zext_$_4725 = zext i1 %cnd_$_4724 to i64
  %cnd_$_4726 = icmp ne i64 %zext_$_4725, 0
@@ -6839,7 +6839,7 @@ thn_$_4703:
  %var_ptr_$_4727 = getelementptr %$locals_ifb$254, %$locals_ifb$254* %locals_$_79, i32 0, i32 4
  %load_$_4728 = load i8*, i8** %var_ptr_$_4727
  %record_ptr_$_4729 = bitcast i8* %load_$_4728 to %sexps$133*
- %int_of_ptr_$_4732 = ptrtoint i8* %load_$_4728 to i64
+ %int_of_ptr_$_4732 = ptrtoint i8** %load_$_4728 to i64
  %cnd_$_4733 = icmp eq i64 %int_of_ptr_$_4732, 0
  br i1 %cnd_$_4733, label %thn_$_4730, label %mrg_$_4731
 thn_$_4730:
@@ -6849,7 +6849,7 @@ mrg_$_4731:
  %field_ptr_$_4734 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_4729, i32 0, i32 1
  %load_$_4735 = load i8*, i8** %field_ptr_$_4734
  %record_ptr_$_4736 = bitcast i8* %load_$_4735 to %sexps$133*
- %int_of_ptr_$_4739 = ptrtoint i8* %load_$_4735 to i64
+ %int_of_ptr_$_4739 = ptrtoint i8** %load_$_4735 to i64
  %cnd_$_4740 = icmp eq i64 %int_of_ptr_$_4739, 0
  br i1 %cnd_$_4740, label %thn_$_4737, label %mrg_$_4738
 thn_$_4737:
@@ -6859,7 +6859,7 @@ mrg_$_4738:
  %field_ptr_$_4741 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_4736, i32 0, i32 1
  %load_$_4742 = load i8*, i8** %field_ptr_$_4741
  %record_ptr_$_4743 = bitcast i8* %load_$_4742 to %sexps$133*
- %int_of_ptr_$_4746 = ptrtoint i8* %load_$_4742 to i64
+ %int_of_ptr_$_4746 = ptrtoint i8** %load_$_4742 to i64
  %cnd_$_4747 = icmp eq i64 %int_of_ptr_$_4746, 0
  br i1 %cnd_$_4747, label %thn_$_4744, label %mrg_$_4745
 thn_$_4744:
@@ -6868,8 +6868,8 @@ thn_$_4744:
 mrg_$_4745:
  %field_ptr_$_4748 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_4743, i32 0, i32 1
  %res_$_4749 = load i8*, i8** %field_ptr_$_4748
- %left_int_$_4750 = ptrtoint i8* %res_$_4749 to i64
- %right_int_$_4751 = ptrtoint i8* null to i64
+ %left_int_$_4750 = ptrtoint i8** %res_$_4749 to i64
+ %right_int_$_4751 = ptrtoint i8** null to i64
  %cnd_$_4752 = icmp ne i64 %left_int_$_4750, %right_int_$_4751
  %zext_$_4753 = zext i1 %cnd_$_4752 to i64
  store i64 %zext_$_4753, i64* %temp_$_4702
@@ -6902,7 +6902,7 @@ els_$_4644:
  %var_ptr_$_4768 = getelementptr %$locals_ifb$254, %$locals_ifb$254* %locals_$_79, i32 0, i32 4
  %load_$_4769 = load i8*, i8** %var_ptr_$_4768
  %record_ptr_$_4770 = bitcast i8* %load_$_4769 to %sexps$133*
- %int_of_ptr_$_4773 = ptrtoint i8* %load_$_4769 to i64
+ %int_of_ptr_$_4773 = ptrtoint i8** %load_$_4769 to i64
  %cnd_$_4774 = icmp eq i64 %int_of_ptr_$_4773, 0
  br i1 %cnd_$_4774, label %thn_$_4771, label %mrg_$_4772
 thn_$_4771:
@@ -6921,7 +6921,7 @@ mrg_$_4772:
  %var_ptr_$_4783 = getelementptr %$locals_ifb$254, %$locals_ifb$254* %locals_$_79, i32 0, i32 4
  %load_$_4784 = load i8*, i8** %var_ptr_$_4783
  %record_ptr_$_4785 = bitcast i8* %load_$_4784 to %sexps$133*
- %int_of_ptr_$_4788 = ptrtoint i8* %load_$_4784 to i64
+ %int_of_ptr_$_4788 = ptrtoint i8** %load_$_4784 to i64
  %cnd_$_4789 = icmp eq i64 %int_of_ptr_$_4788, 0
  br i1 %cnd_$_4789, label %thn_$_4786, label %mrg_$_4787
 thn_$_4786:
@@ -6931,7 +6931,7 @@ mrg_$_4787:
  %field_ptr_$_4790 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_4785, i32 0, i32 1
  %load_$_4791 = load i8*, i8** %field_ptr_$_4790
  %record_ptr_$_4792 = bitcast i8* %load_$_4791 to %sexps$133*
- %int_of_ptr_$_4795 = ptrtoint i8* %load_$_4791 to i64
+ %int_of_ptr_$_4795 = ptrtoint i8** %load_$_4791 to i64
  %cnd_$_4796 = icmp eq i64 %int_of_ptr_$_4795, 0
  br i1 %cnd_$_4796, label %thn_$_4793, label %mrg_$_4794
 thn_$_4793:
@@ -6945,7 +6945,7 @@ mrg_$_4794:
  %var_ptr_$_4800 = getelementptr %$locals_ifb$254, %$locals_ifb$254* %locals_$_79, i32 0, i32 4
  %load_$_4801 = load i8*, i8** %var_ptr_$_4800
  %record_ptr_$_4802 = bitcast i8* %load_$_4801 to %sexps$133*
- %int_of_ptr_$_4805 = ptrtoint i8* %load_$_4801 to i64
+ %int_of_ptr_$_4805 = ptrtoint i8** %load_$_4801 to i64
  %cnd_$_4806 = icmp eq i64 %int_of_ptr_$_4805, 0
  br i1 %cnd_$_4806, label %thn_$_4803, label %mrg_$_4804
 thn_$_4803:
@@ -6955,7 +6955,7 @@ mrg_$_4804:
  %field_ptr_$_4807 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_4802, i32 0, i32 1
  %load_$_4808 = load i8*, i8** %field_ptr_$_4807
  %record_ptr_$_4809 = bitcast i8* %load_$_4808 to %sexps$133*
- %int_of_ptr_$_4812 = ptrtoint i8* %load_$_4808 to i64
+ %int_of_ptr_$_4812 = ptrtoint i8** %load_$_4808 to i64
  %cnd_$_4813 = icmp eq i64 %int_of_ptr_$_4812, 0
  br i1 %cnd_$_4813, label %thn_$_4810, label %mrg_$_4811
 thn_$_4810:
@@ -6965,7 +6965,7 @@ mrg_$_4811:
  %field_ptr_$_4814 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_4809, i32 0, i32 1
  %load_$_4815 = load i8*, i8** %field_ptr_$_4814
  %record_ptr_$_4816 = bitcast i8* %load_$_4815 to %sexps$133*
- %int_of_ptr_$_4819 = ptrtoint i8* %load_$_4815 to i64
+ %int_of_ptr_$_4819 = ptrtoint i8** %load_$_4815 to i64
  %cnd_$_4820 = icmp eq i64 %int_of_ptr_$_4819, 0
  br i1 %cnd_$_4820, label %thn_$_4817, label %mrg_$_4818
 thn_$_4817:
@@ -7071,8 +7071,8 @@ define void @fill_parameters$275 (%$locals_lambda$255* %$sl, i8* %sexps$276) {
  store %$locals_lambda$255* %$sl, %$locals_lambda$255** %arg_$_4900
  %var_ptr_$_4903 = getelementptr %$locals_fill_parameters$275, %$locals_fill_parameters$275* %locals_$_80, i32 0, i32 1
  %res_$_4904 = load i8*, i8** %var_ptr_$_4903
- %left_int_$_4905 = ptrtoint i8* %res_$_4904 to i64
- %right_int_$_4906 = ptrtoint i8* null to i64
+ %left_int_$_4905 = ptrtoint i8** %res_$_4904 to i64
+ %right_int_$_4906 = ptrtoint i8** null to i64
  %cnd_$_4907 = icmp ne i64 %left_int_$_4905, %right_int_$_4906
  %zext_$_4908 = zext i1 %cnd_$_4907 to i64
  %cnd_$_4909 = icmp ne i64 %zext_$_4908, 0
@@ -7083,7 +7083,7 @@ thn_$_4901:
  %var_ptr_$_4912 = getelementptr %$locals_fill_parameters$275, %$locals_fill_parameters$275* %locals_$_80, i32 0, i32 1
  %load_$_4913 = load i8*, i8** %var_ptr_$_4912
  %record_ptr_$_4914 = bitcast i8* %load_$_4913 to %sexps$133*
- %int_of_ptr_$_4917 = ptrtoint i8* %load_$_4913 to i64
+ %int_of_ptr_$_4917 = ptrtoint i8** %load_$_4913 to i64
  %cnd_$_4918 = icmp eq i64 %int_of_ptr_$_4917, 0
  br i1 %cnd_$_4918, label %thn_$_4915, label %mrg_$_4916
 thn_$_4915:
@@ -7102,7 +7102,7 @@ mrg_$_4916:
  %var_ptr_$_4930 = getelementptr %$locals_fill_parameters$275, %$locals_fill_parameters$275* %locals_$_80, i32 0, i32 1
  %load_$_4931 = load i8*, i8** %var_ptr_$_4930
  %record_ptr_$_4932 = bitcast i8* %load_$_4931 to %sexps$133*
- %int_of_ptr_$_4935 = ptrtoint i8* %load_$_4931 to i64
+ %int_of_ptr_$_4935 = ptrtoint i8** %load_$_4931 to i64
  %cnd_$_4936 = icmp eq i64 %int_of_ptr_$_4935, 0
  br i1 %cnd_$_4936, label %thn_$_4933, label %mrg_$_4934
 thn_$_4933:
@@ -7116,7 +7116,7 @@ mrg_$_4934:
  br i1 %cnd_$_4940, label %thn_$_4921, label %els_$_4922
 thn_$_4921:
  %size_ptr_$_4941 = getelementptr %parameters$136, %parameters$136* null, i32 1
- %size_$_4942 = ptrtoint %parameters$136* %size_ptr_$_4941 to i64
+ %size_$_4942 = ptrtoint %parameters$136** %size_ptr_$_4941 to i64
  %record_ptr_$_4943 = call i8* @allocRecord (i64 %size_$_4942)
  %rec_$_4944 = bitcast i8* %record_ptr_$_4943 to %parameters$136*
  %lnk_$_4945 = getelementptr %$locals_fill_parameters$275, %$locals_fill_parameters$275* %locals_$_80, i32 0, i32 0
@@ -7128,7 +7128,7 @@ thn_$_4921:
  %var_ptr_$_4951 = getelementptr %$locals_fill_parameters$275, %$locals_fill_parameters$275* %locals_$_80, i32 0, i32 1
  %load_$_4952 = load i8*, i8** %var_ptr_$_4951
  %record_ptr_$_4953 = bitcast i8* %load_$_4952 to %sexps$133*
- %int_of_ptr_$_4956 = ptrtoint i8* %load_$_4952 to i64
+ %int_of_ptr_$_4956 = ptrtoint i8** %load_$_4952 to i64
  %cnd_$_4957 = icmp eq i64 %int_of_ptr_$_4956, 0
  br i1 %cnd_$_4957, label %thn_$_4954, label %mrg_$_4955
 thn_$_4954:
@@ -7175,7 +7175,7 @@ els_$_4922:
  %var_ptr_$_4983 = getelementptr %$locals_fill_parameters$275, %$locals_fill_parameters$275* %locals_$_80, i32 0, i32 1
  %load_$_4984 = load i8*, i8** %var_ptr_$_4983
  %record_ptr_$_4985 = bitcast i8* %load_$_4984 to %sexps$133*
- %int_of_ptr_$_4988 = ptrtoint i8* %load_$_4984 to i64
+ %int_of_ptr_$_4988 = ptrtoint i8** %load_$_4984 to i64
  %cnd_$_4989 = icmp eq i64 %int_of_ptr_$_4988, 0
  br i1 %cnd_$_4989, label %thn_$_4986, label %mrg_$_4987
 thn_$_4986:
@@ -7214,8 +7214,8 @@ define i8* @lambda$255 (%$locals_apply_internal_lazy$221* %$sl, i8* %args$271) {
  store %$locals_apply_internal_lazy$221* %$sl, %$locals_apply_internal_lazy$221** %arg_$_5012
  %var_ptr_$_5025 = getelementptr %$locals_lambda$255, %$locals_lambda$255* %locals_$_81, i32 0, i32 5
  %res_$_5026 = load i8*, i8** %var_ptr_$_5025
- %left_int_$_5027 = ptrtoint i8* %res_$_5026 to i64
- %right_int_$_5028 = ptrtoint i8* null to i64
+ %left_int_$_5027 = ptrtoint i8** %res_$_5026 to i64
+ %right_int_$_5028 = ptrtoint i8** null to i64
  %cnd_$_5029 = icmp eq i64 %left_int_$_5027, %right_int_$_5028
  %zext_$_5030 = zext i1 %cnd_$_5029 to i64
  %cnd_$_5031 = icmp ne i64 %zext_$_5030, 0
@@ -7227,7 +7227,7 @@ els_$_5023:
  %var_ptr_$_5032 = getelementptr %$locals_lambda$255, %$locals_lambda$255* %locals_$_81, i32 0, i32 5
  %load_$_5033 = load i8*, i8** %var_ptr_$_5032
  %record_ptr_$_5034 = bitcast i8* %load_$_5033 to %sexps$133*
- %int_of_ptr_$_5037 = ptrtoint i8* %load_$_5033 to i64
+ %int_of_ptr_$_5037 = ptrtoint i8** %load_$_5033 to i64
  %cnd_$_5038 = icmp eq i64 %int_of_ptr_$_5037, 0
  br i1 %cnd_$_5038, label %thn_$_5035, label %mrg_$_5036
 thn_$_5035:
@@ -7236,8 +7236,8 @@ thn_$_5035:
 mrg_$_5036:
  %field_ptr_$_5039 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5034, i32 0, i32 1
  %res_$_5040 = load i8*, i8** %field_ptr_$_5039
- %left_int_$_5041 = ptrtoint i8* %res_$_5040 to i64
- %right_int_$_5042 = ptrtoint i8* null to i64
+ %left_int_$_5041 = ptrtoint i8** %res_$_5040 to i64
+ %right_int_$_5042 = ptrtoint i8** null to i64
  %cnd_$_5043 = icmp eq i64 %left_int_$_5041, %right_int_$_5042
  %zext_$_5044 = zext i1 %cnd_$_5043 to i64
  store i64 %zext_$_5044, i64* %temp_$_5021
@@ -7253,7 +7253,7 @@ els_$_5019:
  %var_ptr_$_5051 = getelementptr %$locals_lambda$255, %$locals_lambda$255* %locals_$_81, i32 0, i32 5
  %load_$_5052 = load i8*, i8** %var_ptr_$_5051
  %record_ptr_$_5053 = bitcast i8* %load_$_5052 to %sexps$133*
- %int_of_ptr_$_5056 = ptrtoint i8* %load_$_5052 to i64
+ %int_of_ptr_$_5056 = ptrtoint i8** %load_$_5052 to i64
  %cnd_$_5057 = icmp eq i64 %int_of_ptr_$_5056, 0
  br i1 %cnd_$_5057, label %thn_$_5054, label %mrg_$_5055
 thn_$_5054:
@@ -7262,8 +7262,8 @@ thn_$_5054:
 mrg_$_5055:
  %field_ptr_$_5058 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5053, i32 0, i32 1
  %res_$_5059 = load i8*, i8** %field_ptr_$_5058
- %left_int_$_5060 = ptrtoint i8* %res_$_5059 to i64
- %right_int_$_5061 = ptrtoint i8* null to i64
+ %left_int_$_5060 = ptrtoint i8** %res_$_5059 to i64
+ %right_int_$_5061 = ptrtoint i8** null to i64
  %cnd_$_5062 = icmp ne i64 %left_int_$_5060, %right_int_$_5061
  %zext_$_5063 = zext i1 %cnd_$_5062 to i64
  %cnd_$_5064 = icmp ne i64 %zext_$_5063, 0
@@ -7272,7 +7272,7 @@ thn_$_5048:
  %var_ptr_$_5065 = getelementptr %$locals_lambda$255, %$locals_lambda$255* %locals_$_81, i32 0, i32 5
  %load_$_5066 = load i8*, i8** %var_ptr_$_5065
  %record_ptr_$_5067 = bitcast i8* %load_$_5066 to %sexps$133*
- %int_of_ptr_$_5070 = ptrtoint i8* %load_$_5066 to i64
+ %int_of_ptr_$_5070 = ptrtoint i8** %load_$_5066 to i64
  %cnd_$_5071 = icmp eq i64 %int_of_ptr_$_5070, 0
  br i1 %cnd_$_5071, label %thn_$_5068, label %mrg_$_5069
 thn_$_5068:
@@ -7282,7 +7282,7 @@ mrg_$_5069:
  %field_ptr_$_5072 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5067, i32 0, i32 1
  %load_$_5073 = load i8*, i8** %field_ptr_$_5072
  %record_ptr_$_5074 = bitcast i8* %load_$_5073 to %sexps$133*
- %int_of_ptr_$_5077 = ptrtoint i8* %load_$_5073 to i64
+ %int_of_ptr_$_5077 = ptrtoint i8** %load_$_5073 to i64
  %cnd_$_5078 = icmp eq i64 %int_of_ptr_$_5077, 0
  br i1 %cnd_$_5078, label %thn_$_5075, label %mrg_$_5076
 thn_$_5075:
@@ -7291,8 +7291,8 @@ thn_$_5075:
 mrg_$_5076:
  %field_ptr_$_5079 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5074, i32 0, i32 1
  %res_$_5080 = load i8*, i8** %field_ptr_$_5079
- %left_int_$_5081 = ptrtoint i8* %res_$_5080 to i64
- %right_int_$_5082 = ptrtoint i8* null to i64
+ %left_int_$_5081 = ptrtoint i8** %res_$_5080 to i64
+ %right_int_$_5082 = ptrtoint i8** null to i64
  %cnd_$_5083 = icmp ne i64 %left_int_$_5081, %right_int_$_5082
  %zext_$_5084 = zext i1 %cnd_$_5083 to i64
  store i64 %zext_$_5084, i64* %temp_$_5047
@@ -7321,7 +7321,7 @@ els_$_5015:
  %var_ptr_$_5095 = getelementptr %$locals_lambda$255, %$locals_lambda$255* %locals_$_81, i32 0, i32 5
  %load_$_5096 = load i8*, i8** %var_ptr_$_5095
  %record_ptr_$_5097 = bitcast i8* %load_$_5096 to %sexps$133*
- %int_of_ptr_$_5100 = ptrtoint i8* %load_$_5096 to i64
+ %int_of_ptr_$_5100 = ptrtoint i8** %load_$_5096 to i64
  %cnd_$_5101 = icmp eq i64 %int_of_ptr_$_5100, 0
  br i1 %cnd_$_5101, label %thn_$_5098, label %mrg_$_5099
 thn_$_5098:
@@ -7335,7 +7335,7 @@ mrg_$_5099:
  %var_ptr_$_5105 = getelementptr %$locals_lambda$255, %$locals_lambda$255* %locals_$_81, i32 0, i32 5
  %load_$_5106 = load i8*, i8** %var_ptr_$_5105
  %record_ptr_$_5107 = bitcast i8* %load_$_5106 to %sexps$133*
- %int_of_ptr_$_5110 = ptrtoint i8* %load_$_5106 to i64
+ %int_of_ptr_$_5110 = ptrtoint i8** %load_$_5106 to i64
  %cnd_$_5111 = icmp eq i64 %int_of_ptr_$_5110, 0
  br i1 %cnd_$_5111, label %thn_$_5108, label %mrg_$_5109
 thn_$_5108:
@@ -7345,7 +7345,7 @@ mrg_$_5109:
  %field_ptr_$_5112 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5107, i32 0, i32 1
  %load_$_5113 = load i8*, i8** %field_ptr_$_5112
  %record_ptr_$_5114 = bitcast i8* %load_$_5113 to %sexps$133*
- %int_of_ptr_$_5117 = ptrtoint i8* %load_$_5113 to i64
+ %int_of_ptr_$_5117 = ptrtoint i8** %load_$_5113 to i64
  %cnd_$_5118 = icmp eq i64 %int_of_ptr_$_5117, 0
  br i1 %cnd_$_5118, label %thn_$_5115, label %mrg_$_5116
 thn_$_5115:
@@ -7438,8 +7438,8 @@ define void @fill_env$281 (%$locals_let_$256* %$sl, i8* %bindings$282) {
  store %$locals_let_$256* %$sl, %$locals_let_$256** %arg_$_5184
  %var_ptr_$_5187 = getelementptr %$locals_fill_env$281, %$locals_fill_env$281* %locals_$_82, i32 0, i32 5
  %res_$_5188 = load i8*, i8** %var_ptr_$_5187
- %left_int_$_5189 = ptrtoint i8* %res_$_5188 to i64
- %right_int_$_5190 = ptrtoint i8* null to i64
+ %left_int_$_5189 = ptrtoint i8** %res_$_5188 to i64
+ %right_int_$_5190 = ptrtoint i8** null to i64
  %cnd_$_5191 = icmp ne i64 %left_int_$_5189, %right_int_$_5190
  %zext_$_5192 = zext i1 %cnd_$_5191 to i64
  %cnd_$_5193 = icmp ne i64 %zext_$_5192, 0
@@ -7448,7 +7448,7 @@ thn_$_5185:
  %var_ptr_$_5194 = getelementptr %$locals_fill_env$281, %$locals_fill_env$281* %locals_$_82, i32 0, i32 5
  %load_$_5195 = load i8*, i8** %var_ptr_$_5194
  %record_ptr_$_5196 = bitcast i8* %load_$_5195 to %sexps$133*
- %int_of_ptr_$_5199 = ptrtoint i8* %load_$_5195 to i64
+ %int_of_ptr_$_5199 = ptrtoint i8** %load_$_5195 to i64
  %cnd_$_5200 = icmp eq i64 %int_of_ptr_$_5199, 0
  br i1 %cnd_$_5200, label %thn_$_5197, label %mrg_$_5198
 thn_$_5197:
@@ -7484,8 +7484,8 @@ thn_$_5204:
  store i8* %ret_$_5225, i8** %temp_$_5226
  %var_ptr_$_5238 = getelementptr %$locals_fill_env$281, %$locals_fill_env$281* %locals_$_82, i32 0, i32 3
  %res_$_5239 = load i8*, i8** %var_ptr_$_5238
- %left_int_$_5240 = ptrtoint i8* %res_$_5239 to i64
- %right_int_$_5241 = ptrtoint i8* null to i64
+ %left_int_$_5240 = ptrtoint i8** %res_$_5239 to i64
+ %right_int_$_5241 = ptrtoint i8** null to i64
  %cnd_$_5242 = icmp eq i64 %left_int_$_5240, %right_int_$_5241
  %zext_$_5243 = zext i1 %cnd_$_5242 to i64
  %cnd_$_5244 = icmp ne i64 %zext_$_5243, 0
@@ -7497,7 +7497,7 @@ els_$_5236:
  %var_ptr_$_5245 = getelementptr %$locals_fill_env$281, %$locals_fill_env$281* %locals_$_82, i32 0, i32 3
  %load_$_5246 = load i8*, i8** %var_ptr_$_5245
  %record_ptr_$_5247 = bitcast i8* %load_$_5246 to %sexps$133*
- %int_of_ptr_$_5250 = ptrtoint i8* %load_$_5246 to i64
+ %int_of_ptr_$_5250 = ptrtoint i8** %load_$_5246 to i64
  %cnd_$_5251 = icmp eq i64 %int_of_ptr_$_5250, 0
  br i1 %cnd_$_5251, label %thn_$_5248, label %mrg_$_5249
 thn_$_5248:
@@ -7506,8 +7506,8 @@ thn_$_5248:
 mrg_$_5249:
  %field_ptr_$_5252 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5247, i32 0, i32 1
  %res_$_5253 = load i8*, i8** %field_ptr_$_5252
- %left_int_$_5254 = ptrtoint i8* %res_$_5253 to i64
- %right_int_$_5255 = ptrtoint i8* null to i64
+ %left_int_$_5254 = ptrtoint i8** %res_$_5253 to i64
+ %right_int_$_5255 = ptrtoint i8** null to i64
  %cnd_$_5256 = icmp eq i64 %left_int_$_5254, %right_int_$_5255
  %zext_$_5257 = zext i1 %cnd_$_5256 to i64
  store i64 %zext_$_5257, i64* %temp_$_5234
@@ -7523,7 +7523,7 @@ els_$_5232:
  %var_ptr_$_5264 = getelementptr %$locals_fill_env$281, %$locals_fill_env$281* %locals_$_82, i32 0, i32 3
  %load_$_5265 = load i8*, i8** %var_ptr_$_5264
  %record_ptr_$_5266 = bitcast i8* %load_$_5265 to %sexps$133*
- %int_of_ptr_$_5269 = ptrtoint i8* %load_$_5265 to i64
+ %int_of_ptr_$_5269 = ptrtoint i8** %load_$_5265 to i64
  %cnd_$_5270 = icmp eq i64 %int_of_ptr_$_5269, 0
  br i1 %cnd_$_5270, label %thn_$_5267, label %mrg_$_5268
 thn_$_5267:
@@ -7532,8 +7532,8 @@ thn_$_5267:
 mrg_$_5268:
  %field_ptr_$_5271 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5266, i32 0, i32 1
  %res_$_5272 = load i8*, i8** %field_ptr_$_5271
- %left_int_$_5273 = ptrtoint i8* %res_$_5272 to i64
- %right_int_$_5274 = ptrtoint i8* null to i64
+ %left_int_$_5273 = ptrtoint i8** %res_$_5272 to i64
+ %right_int_$_5274 = ptrtoint i8** null to i64
  %cnd_$_5275 = icmp ne i64 %left_int_$_5273, %right_int_$_5274
  %zext_$_5276 = zext i1 %cnd_$_5275 to i64
  %cnd_$_5277 = icmp ne i64 %zext_$_5276, 0
@@ -7542,7 +7542,7 @@ thn_$_5261:
  %var_ptr_$_5278 = getelementptr %$locals_fill_env$281, %$locals_fill_env$281* %locals_$_82, i32 0, i32 3
  %load_$_5279 = load i8*, i8** %var_ptr_$_5278
  %record_ptr_$_5280 = bitcast i8* %load_$_5279 to %sexps$133*
- %int_of_ptr_$_5283 = ptrtoint i8* %load_$_5279 to i64
+ %int_of_ptr_$_5283 = ptrtoint i8** %load_$_5279 to i64
  %cnd_$_5284 = icmp eq i64 %int_of_ptr_$_5283, 0
  br i1 %cnd_$_5284, label %thn_$_5281, label %mrg_$_5282
 thn_$_5281:
@@ -7551,8 +7551,8 @@ thn_$_5281:
 mrg_$_5282:
  %field_ptr_$_5285 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5280, i32 0, i32 1
  %res_$_5286 = load i8*, i8** %field_ptr_$_5285
- %left_int_$_5287 = ptrtoint i8* %res_$_5286 to i64
- %right_int_$_5288 = ptrtoint i8* null to i64
+ %left_int_$_5287 = ptrtoint i8** %res_$_5286 to i64
+ %right_int_$_5288 = ptrtoint i8** null to i64
  %cnd_$_5289 = icmp ne i64 %left_int_$_5287, %right_int_$_5288
  %zext_$_5290 = zext i1 %cnd_$_5289 to i64
  store i64 %zext_$_5290, i64* %temp_$_5260
@@ -7572,7 +7572,7 @@ thn_$_5227:
  %var_ptr_$_5294 = getelementptr %$locals_fill_env$281, %$locals_fill_env$281* %locals_$_82, i32 0, i32 3
  %load_$_5295 = load i8*, i8** %var_ptr_$_5294
  %record_ptr_$_5296 = bitcast i8* %load_$_5295 to %sexps$133*
- %int_of_ptr_$_5299 = ptrtoint i8* %load_$_5295 to i64
+ %int_of_ptr_$_5299 = ptrtoint i8** %load_$_5295 to i64
  %cnd_$_5300 = icmp eq i64 %int_of_ptr_$_5299, 0
  br i1 %cnd_$_5300, label %thn_$_5297, label %mrg_$_5298
 thn_$_5297:
@@ -7586,7 +7586,7 @@ mrg_$_5298:
  %var_ptr_$_5304 = getelementptr %$locals_fill_env$281, %$locals_fill_env$281* %locals_$_82, i32 0, i32 3
  %load_$_5305 = load i8*, i8** %var_ptr_$_5304
  %record_ptr_$_5306 = bitcast i8* %load_$_5305 to %sexps$133*
- %int_of_ptr_$_5309 = ptrtoint i8* %load_$_5305 to i64
+ %int_of_ptr_$_5309 = ptrtoint i8** %load_$_5305 to i64
  %cnd_$_5310 = icmp eq i64 %int_of_ptr_$_5309, 0
  br i1 %cnd_$_5310, label %thn_$_5307, label %mrg_$_5308
 thn_$_5307:
@@ -7596,7 +7596,7 @@ mrg_$_5308:
  %field_ptr_$_5311 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5306, i32 0, i32 1
  %load_$_5312 = load i8*, i8** %field_ptr_$_5311
  %record_ptr_$_5313 = bitcast i8* %load_$_5312 to %sexps$133*
- %int_of_ptr_$_5316 = ptrtoint i8* %load_$_5312 to i64
+ %int_of_ptr_$_5316 = ptrtoint i8** %load_$_5312 to i64
  %cnd_$_5317 = icmp eq i64 %int_of_ptr_$_5316, 0
  br i1 %cnd_$_5317, label %thn_$_5314, label %mrg_$_5315
 thn_$_5314:
@@ -7620,11 +7620,11 @@ mrg_$_5315:
  br i1 %cnd_$_5333, label %thn_$_5321, label %els_$_5322
 thn_$_5321:
  %size_ptr_$_5334 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_5335 = ptrtoint %env$137* %size_ptr_$_5334 to i64
+ %size_$_5335 = ptrtoint %env$137** %size_ptr_$_5334 to i64
  %record_ptr_$_5336 = call i8* @allocRecord (i64 %size_$_5335)
  %rec_$_5337 = bitcast i8* %record_ptr_$_5336 to %env$137*
  %size_ptr_$_5338 = getelementptr %env_entry$138, %env_entry$138* null, i32 1
- %size_$_5339 = ptrtoint %env_entry$138* %size_ptr_$_5338 to i64
+ %size_$_5339 = ptrtoint %env_entry$138** %size_ptr_$_5338 to i64
  %record_ptr_$_5340 = call i8* @allocRecord (i64 %size_$_5339)
  %rec_$_5341 = bitcast i8* %record_ptr_$_5340 to %env_entry$138*
  %lnk_$_5342 = getelementptr %$locals_fill_env$281, %$locals_fill_env$281* %locals_$_82, i32 0, i32 0
@@ -7672,7 +7672,7 @@ thn_$_5321:
  %var_ptr_$_5379 = getelementptr %$locals_fill_env$281, %$locals_fill_env$281* %locals_$_82, i32 0, i32 5
  %load_$_5380 = load i8*, i8** %var_ptr_$_5379
  %record_ptr_$_5381 = bitcast i8* %load_$_5380 to %sexps$133*
- %int_of_ptr_$_5384 = ptrtoint i8* %load_$_5380 to i64
+ %int_of_ptr_$_5384 = ptrtoint i8** %load_$_5380 to i64
  %cnd_$_5385 = icmp eq i64 %int_of_ptr_$_5384, 0
  br i1 %cnd_$_5385, label %thn_$_5382, label %mrg_$_5383
 thn_$_5382:
@@ -7808,8 +7808,8 @@ define i8* @let_$256 (%$locals_apply_internal_lazy$221* %$sl, i8* %args$277) {
  store %$locals_apply_internal_lazy$221* %$sl, %$locals_apply_internal_lazy$221** %arg_$_5491
  %var_ptr_$_5504 = getelementptr %$locals_let_$256, %$locals_let_$256* %locals_$_83, i32 0, i32 5
  %res_$_5505 = load i8*, i8** %var_ptr_$_5504
- %left_int_$_5506 = ptrtoint i8* %res_$_5505 to i64
- %right_int_$_5507 = ptrtoint i8* null to i64
+ %left_int_$_5506 = ptrtoint i8** %res_$_5505 to i64
+ %right_int_$_5507 = ptrtoint i8** null to i64
  %cnd_$_5508 = icmp eq i64 %left_int_$_5506, %right_int_$_5507
  %zext_$_5509 = zext i1 %cnd_$_5508 to i64
  %cnd_$_5510 = icmp ne i64 %zext_$_5509, 0
@@ -7821,7 +7821,7 @@ els_$_5502:
  %var_ptr_$_5511 = getelementptr %$locals_let_$256, %$locals_let_$256* %locals_$_83, i32 0, i32 5
  %load_$_5512 = load i8*, i8** %var_ptr_$_5511
  %record_ptr_$_5513 = bitcast i8* %load_$_5512 to %sexps$133*
- %int_of_ptr_$_5516 = ptrtoint i8* %load_$_5512 to i64
+ %int_of_ptr_$_5516 = ptrtoint i8** %load_$_5512 to i64
  %cnd_$_5517 = icmp eq i64 %int_of_ptr_$_5516, 0
  br i1 %cnd_$_5517, label %thn_$_5514, label %mrg_$_5515
 thn_$_5514:
@@ -7830,8 +7830,8 @@ thn_$_5514:
 mrg_$_5515:
  %field_ptr_$_5518 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5513, i32 0, i32 1
  %res_$_5519 = load i8*, i8** %field_ptr_$_5518
- %left_int_$_5520 = ptrtoint i8* %res_$_5519 to i64
- %right_int_$_5521 = ptrtoint i8* null to i64
+ %left_int_$_5520 = ptrtoint i8** %res_$_5519 to i64
+ %right_int_$_5521 = ptrtoint i8** null to i64
  %cnd_$_5522 = icmp eq i64 %left_int_$_5520, %right_int_$_5521
  %zext_$_5523 = zext i1 %cnd_$_5522 to i64
  store i64 %zext_$_5523, i64* %temp_$_5500
@@ -7847,7 +7847,7 @@ els_$_5498:
  %var_ptr_$_5530 = getelementptr %$locals_let_$256, %$locals_let_$256* %locals_$_83, i32 0, i32 5
  %load_$_5531 = load i8*, i8** %var_ptr_$_5530
  %record_ptr_$_5532 = bitcast i8* %load_$_5531 to %sexps$133*
- %int_of_ptr_$_5535 = ptrtoint i8* %load_$_5531 to i64
+ %int_of_ptr_$_5535 = ptrtoint i8** %load_$_5531 to i64
  %cnd_$_5536 = icmp eq i64 %int_of_ptr_$_5535, 0
  br i1 %cnd_$_5536, label %thn_$_5533, label %mrg_$_5534
 thn_$_5533:
@@ -7856,8 +7856,8 @@ thn_$_5533:
 mrg_$_5534:
  %field_ptr_$_5537 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5532, i32 0, i32 1
  %res_$_5538 = load i8*, i8** %field_ptr_$_5537
- %left_int_$_5539 = ptrtoint i8* %res_$_5538 to i64
- %right_int_$_5540 = ptrtoint i8* null to i64
+ %left_int_$_5539 = ptrtoint i8** %res_$_5538 to i64
+ %right_int_$_5540 = ptrtoint i8** null to i64
  %cnd_$_5541 = icmp ne i64 %left_int_$_5539, %right_int_$_5540
  %zext_$_5542 = zext i1 %cnd_$_5541 to i64
  %cnd_$_5543 = icmp ne i64 %zext_$_5542, 0
@@ -7866,7 +7866,7 @@ thn_$_5527:
  %var_ptr_$_5544 = getelementptr %$locals_let_$256, %$locals_let_$256* %locals_$_83, i32 0, i32 5
  %load_$_5545 = load i8*, i8** %var_ptr_$_5544
  %record_ptr_$_5546 = bitcast i8* %load_$_5545 to %sexps$133*
- %int_of_ptr_$_5549 = ptrtoint i8* %load_$_5545 to i64
+ %int_of_ptr_$_5549 = ptrtoint i8** %load_$_5545 to i64
  %cnd_$_5550 = icmp eq i64 %int_of_ptr_$_5549, 0
  br i1 %cnd_$_5550, label %thn_$_5547, label %mrg_$_5548
 thn_$_5547:
@@ -7876,7 +7876,7 @@ mrg_$_5548:
  %field_ptr_$_5551 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5546, i32 0, i32 1
  %load_$_5552 = load i8*, i8** %field_ptr_$_5551
  %record_ptr_$_5553 = bitcast i8* %load_$_5552 to %sexps$133*
- %int_of_ptr_$_5556 = ptrtoint i8* %load_$_5552 to i64
+ %int_of_ptr_$_5556 = ptrtoint i8** %load_$_5552 to i64
  %cnd_$_5557 = icmp eq i64 %int_of_ptr_$_5556, 0
  br i1 %cnd_$_5557, label %thn_$_5554, label %mrg_$_5555
 thn_$_5554:
@@ -7885,8 +7885,8 @@ thn_$_5554:
 mrg_$_5555:
  %field_ptr_$_5558 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5553, i32 0, i32 1
  %res_$_5559 = load i8*, i8** %field_ptr_$_5558
- %left_int_$_5560 = ptrtoint i8* %res_$_5559 to i64
- %right_int_$_5561 = ptrtoint i8* null to i64
+ %left_int_$_5560 = ptrtoint i8** %res_$_5559 to i64
+ %right_int_$_5561 = ptrtoint i8** null to i64
  %cnd_$_5562 = icmp ne i64 %left_int_$_5560, %right_int_$_5561
  %zext_$_5563 = zext i1 %cnd_$_5562 to i64
  store i64 %zext_$_5563, i64* %temp_$_5526
@@ -7915,7 +7915,7 @@ els_$_5494:
  %var_ptr_$_5574 = getelementptr %$locals_let_$256, %$locals_let_$256* %locals_$_83, i32 0, i32 5
  %load_$_5575 = load i8*, i8** %var_ptr_$_5574
  %record_ptr_$_5576 = bitcast i8* %load_$_5575 to %sexps$133*
- %int_of_ptr_$_5579 = ptrtoint i8* %load_$_5575 to i64
+ %int_of_ptr_$_5579 = ptrtoint i8** %load_$_5575 to i64
  %cnd_$_5580 = icmp eq i64 %int_of_ptr_$_5579, 0
  br i1 %cnd_$_5580, label %thn_$_5577, label %mrg_$_5578
 thn_$_5577:
@@ -7929,7 +7929,7 @@ mrg_$_5578:
  %var_ptr_$_5584 = getelementptr %$locals_let_$256, %$locals_let_$256* %locals_$_83, i32 0, i32 5
  %load_$_5585 = load i8*, i8** %var_ptr_$_5584
  %record_ptr_$_5586 = bitcast i8* %load_$_5585 to %sexps$133*
- %int_of_ptr_$_5589 = ptrtoint i8* %load_$_5585 to i64
+ %int_of_ptr_$_5589 = ptrtoint i8** %load_$_5585 to i64
  %cnd_$_5590 = icmp eq i64 %int_of_ptr_$_5589, 0
  br i1 %cnd_$_5590, label %thn_$_5587, label %mrg_$_5588
 thn_$_5587:
@@ -7939,7 +7939,7 @@ mrg_$_5588:
  %field_ptr_$_5591 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5586, i32 0, i32 1
  %load_$_5592 = load i8*, i8** %field_ptr_$_5591
  %record_ptr_$_5593 = bitcast i8* %load_$_5592 to %sexps$133*
- %int_of_ptr_$_5596 = ptrtoint i8* %load_$_5592 to i64
+ %int_of_ptr_$_5596 = ptrtoint i8** %load_$_5592 to i64
  %cnd_$_5597 = icmp eq i64 %int_of_ptr_$_5596, 0
  br i1 %cnd_$_5597, label %thn_$_5594, label %mrg_$_5595
 thn_$_5594:
@@ -8032,8 +8032,8 @@ define void @fill_env$291 (%$locals_letstar$257* %$sl, i8* %bindings$292) {
  store %$locals_letstar$257* %$sl, %$locals_letstar$257** %arg_$_5663
  %var_ptr_$_5666 = getelementptr %$locals_fill_env$291, %$locals_fill_env$291* %locals_$_84, i32 0, i32 5
  %res_$_5667 = load i8*, i8** %var_ptr_$_5666
- %left_int_$_5668 = ptrtoint i8* %res_$_5667 to i64
- %right_int_$_5669 = ptrtoint i8* null to i64
+ %left_int_$_5668 = ptrtoint i8** %res_$_5667 to i64
+ %right_int_$_5669 = ptrtoint i8** null to i64
  %cnd_$_5670 = icmp ne i64 %left_int_$_5668, %right_int_$_5669
  %zext_$_5671 = zext i1 %cnd_$_5670 to i64
  %cnd_$_5672 = icmp ne i64 %zext_$_5671, 0
@@ -8042,7 +8042,7 @@ thn_$_5664:
  %var_ptr_$_5673 = getelementptr %$locals_fill_env$291, %$locals_fill_env$291* %locals_$_84, i32 0, i32 5
  %load_$_5674 = load i8*, i8** %var_ptr_$_5673
  %record_ptr_$_5675 = bitcast i8* %load_$_5674 to %sexps$133*
- %int_of_ptr_$_5678 = ptrtoint i8* %load_$_5674 to i64
+ %int_of_ptr_$_5678 = ptrtoint i8** %load_$_5674 to i64
  %cnd_$_5679 = icmp eq i64 %int_of_ptr_$_5678, 0
  br i1 %cnd_$_5679, label %thn_$_5676, label %mrg_$_5677
 thn_$_5676:
@@ -8078,8 +8078,8 @@ thn_$_5683:
  store i8* %ret_$_5704, i8** %temp_$_5705
  %var_ptr_$_5717 = getelementptr %$locals_fill_env$291, %$locals_fill_env$291* %locals_$_84, i32 0, i32 3
  %res_$_5718 = load i8*, i8** %var_ptr_$_5717
- %left_int_$_5719 = ptrtoint i8* %res_$_5718 to i64
- %right_int_$_5720 = ptrtoint i8* null to i64
+ %left_int_$_5719 = ptrtoint i8** %res_$_5718 to i64
+ %right_int_$_5720 = ptrtoint i8** null to i64
  %cnd_$_5721 = icmp eq i64 %left_int_$_5719, %right_int_$_5720
  %zext_$_5722 = zext i1 %cnd_$_5721 to i64
  %cnd_$_5723 = icmp ne i64 %zext_$_5722, 0
@@ -8091,7 +8091,7 @@ els_$_5715:
  %var_ptr_$_5724 = getelementptr %$locals_fill_env$291, %$locals_fill_env$291* %locals_$_84, i32 0, i32 3
  %load_$_5725 = load i8*, i8** %var_ptr_$_5724
  %record_ptr_$_5726 = bitcast i8* %load_$_5725 to %sexps$133*
- %int_of_ptr_$_5729 = ptrtoint i8* %load_$_5725 to i64
+ %int_of_ptr_$_5729 = ptrtoint i8** %load_$_5725 to i64
  %cnd_$_5730 = icmp eq i64 %int_of_ptr_$_5729, 0
  br i1 %cnd_$_5730, label %thn_$_5727, label %mrg_$_5728
 thn_$_5727:
@@ -8100,8 +8100,8 @@ thn_$_5727:
 mrg_$_5728:
  %field_ptr_$_5731 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5726, i32 0, i32 1
  %res_$_5732 = load i8*, i8** %field_ptr_$_5731
- %left_int_$_5733 = ptrtoint i8* %res_$_5732 to i64
- %right_int_$_5734 = ptrtoint i8* null to i64
+ %left_int_$_5733 = ptrtoint i8** %res_$_5732 to i64
+ %right_int_$_5734 = ptrtoint i8** null to i64
  %cnd_$_5735 = icmp eq i64 %left_int_$_5733, %right_int_$_5734
  %zext_$_5736 = zext i1 %cnd_$_5735 to i64
  store i64 %zext_$_5736, i64* %temp_$_5713
@@ -8117,7 +8117,7 @@ els_$_5711:
  %var_ptr_$_5743 = getelementptr %$locals_fill_env$291, %$locals_fill_env$291* %locals_$_84, i32 0, i32 3
  %load_$_5744 = load i8*, i8** %var_ptr_$_5743
  %record_ptr_$_5745 = bitcast i8* %load_$_5744 to %sexps$133*
- %int_of_ptr_$_5748 = ptrtoint i8* %load_$_5744 to i64
+ %int_of_ptr_$_5748 = ptrtoint i8** %load_$_5744 to i64
  %cnd_$_5749 = icmp eq i64 %int_of_ptr_$_5748, 0
  br i1 %cnd_$_5749, label %thn_$_5746, label %mrg_$_5747
 thn_$_5746:
@@ -8126,8 +8126,8 @@ thn_$_5746:
 mrg_$_5747:
  %field_ptr_$_5750 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5745, i32 0, i32 1
  %res_$_5751 = load i8*, i8** %field_ptr_$_5750
- %left_int_$_5752 = ptrtoint i8* %res_$_5751 to i64
- %right_int_$_5753 = ptrtoint i8* null to i64
+ %left_int_$_5752 = ptrtoint i8** %res_$_5751 to i64
+ %right_int_$_5753 = ptrtoint i8** null to i64
  %cnd_$_5754 = icmp ne i64 %left_int_$_5752, %right_int_$_5753
  %zext_$_5755 = zext i1 %cnd_$_5754 to i64
  %cnd_$_5756 = icmp ne i64 %zext_$_5755, 0
@@ -8136,7 +8136,7 @@ thn_$_5740:
  %var_ptr_$_5757 = getelementptr %$locals_fill_env$291, %$locals_fill_env$291* %locals_$_84, i32 0, i32 3
  %load_$_5758 = load i8*, i8** %var_ptr_$_5757
  %record_ptr_$_5759 = bitcast i8* %load_$_5758 to %sexps$133*
- %int_of_ptr_$_5762 = ptrtoint i8* %load_$_5758 to i64
+ %int_of_ptr_$_5762 = ptrtoint i8** %load_$_5758 to i64
  %cnd_$_5763 = icmp eq i64 %int_of_ptr_$_5762, 0
  br i1 %cnd_$_5763, label %thn_$_5760, label %mrg_$_5761
 thn_$_5760:
@@ -8145,8 +8145,8 @@ thn_$_5760:
 mrg_$_5761:
  %field_ptr_$_5764 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5759, i32 0, i32 1
  %res_$_5765 = load i8*, i8** %field_ptr_$_5764
- %left_int_$_5766 = ptrtoint i8* %res_$_5765 to i64
- %right_int_$_5767 = ptrtoint i8* null to i64
+ %left_int_$_5766 = ptrtoint i8** %res_$_5765 to i64
+ %right_int_$_5767 = ptrtoint i8** null to i64
  %cnd_$_5768 = icmp ne i64 %left_int_$_5766, %right_int_$_5767
  %zext_$_5769 = zext i1 %cnd_$_5768 to i64
  store i64 %zext_$_5769, i64* %temp_$_5739
@@ -8166,7 +8166,7 @@ thn_$_5706:
  %var_ptr_$_5773 = getelementptr %$locals_fill_env$291, %$locals_fill_env$291* %locals_$_84, i32 0, i32 3
  %load_$_5774 = load i8*, i8** %var_ptr_$_5773
  %record_ptr_$_5775 = bitcast i8* %load_$_5774 to %sexps$133*
- %int_of_ptr_$_5778 = ptrtoint i8* %load_$_5774 to i64
+ %int_of_ptr_$_5778 = ptrtoint i8** %load_$_5774 to i64
  %cnd_$_5779 = icmp eq i64 %int_of_ptr_$_5778, 0
  br i1 %cnd_$_5779, label %thn_$_5776, label %mrg_$_5777
 thn_$_5776:
@@ -8180,7 +8180,7 @@ mrg_$_5777:
  %var_ptr_$_5783 = getelementptr %$locals_fill_env$291, %$locals_fill_env$291* %locals_$_84, i32 0, i32 3
  %load_$_5784 = load i8*, i8** %var_ptr_$_5783
  %record_ptr_$_5785 = bitcast i8* %load_$_5784 to %sexps$133*
- %int_of_ptr_$_5788 = ptrtoint i8* %load_$_5784 to i64
+ %int_of_ptr_$_5788 = ptrtoint i8** %load_$_5784 to i64
  %cnd_$_5789 = icmp eq i64 %int_of_ptr_$_5788, 0
  br i1 %cnd_$_5789, label %thn_$_5786, label %mrg_$_5787
 thn_$_5786:
@@ -8190,7 +8190,7 @@ mrg_$_5787:
  %field_ptr_$_5790 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5785, i32 0, i32 1
  %load_$_5791 = load i8*, i8** %field_ptr_$_5790
  %record_ptr_$_5792 = bitcast i8* %load_$_5791 to %sexps$133*
- %int_of_ptr_$_5795 = ptrtoint i8* %load_$_5791 to i64
+ %int_of_ptr_$_5795 = ptrtoint i8** %load_$_5791 to i64
  %cnd_$_5796 = icmp eq i64 %int_of_ptr_$_5795, 0
  br i1 %cnd_$_5796, label %thn_$_5793, label %mrg_$_5794
 thn_$_5793:
@@ -8214,11 +8214,11 @@ mrg_$_5794:
  br i1 %cnd_$_5812, label %thn_$_5800, label %els_$_5801
 thn_$_5800:
  %size_ptr_$_5813 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_5814 = ptrtoint %env$137* %size_ptr_$_5813 to i64
+ %size_$_5814 = ptrtoint %env$137** %size_ptr_$_5813 to i64
  %record_ptr_$_5815 = call i8* @allocRecord (i64 %size_$_5814)
  %rec_$_5816 = bitcast i8* %record_ptr_$_5815 to %env$137*
  %size_ptr_$_5817 = getelementptr %env_entry$138, %env_entry$138* null, i32 1
- %size_$_5818 = ptrtoint %env_entry$138* %size_ptr_$_5817 to i64
+ %size_$_5818 = ptrtoint %env_entry$138** %size_ptr_$_5817 to i64
  %record_ptr_$_5819 = call i8* @allocRecord (i64 %size_$_5818)
  %rec_$_5820 = bitcast i8* %record_ptr_$_5819 to %env_entry$138*
  %lnk_$_5821 = getelementptr %$locals_fill_env$291, %$locals_fill_env$291* %locals_$_84, i32 0, i32 0
@@ -8264,7 +8264,7 @@ thn_$_5800:
  %var_ptr_$_5856 = getelementptr %$locals_fill_env$291, %$locals_fill_env$291* %locals_$_84, i32 0, i32 5
  %load_$_5857 = load i8*, i8** %var_ptr_$_5856
  %record_ptr_$_5858 = bitcast i8* %load_$_5857 to %sexps$133*
- %int_of_ptr_$_5861 = ptrtoint i8* %load_$_5857 to i64
+ %int_of_ptr_$_5861 = ptrtoint i8** %load_$_5857 to i64
  %cnd_$_5862 = icmp eq i64 %int_of_ptr_$_5861, 0
  br i1 %cnd_$_5862, label %thn_$_5859, label %mrg_$_5860
 thn_$_5859:
@@ -8400,8 +8400,8 @@ define i8* @letstar$257 (%$locals_apply_internal_lazy$221* %$sl, i8* %args$287) 
  store %$locals_apply_internal_lazy$221* %$sl, %$locals_apply_internal_lazy$221** %arg_$_5968
  %var_ptr_$_5981 = getelementptr %$locals_letstar$257, %$locals_letstar$257* %locals_$_85, i32 0, i32 5
  %res_$_5982 = load i8*, i8** %var_ptr_$_5981
- %left_int_$_5983 = ptrtoint i8* %res_$_5982 to i64
- %right_int_$_5984 = ptrtoint i8* null to i64
+ %left_int_$_5983 = ptrtoint i8** %res_$_5982 to i64
+ %right_int_$_5984 = ptrtoint i8** null to i64
  %cnd_$_5985 = icmp eq i64 %left_int_$_5983, %right_int_$_5984
  %zext_$_5986 = zext i1 %cnd_$_5985 to i64
  %cnd_$_5987 = icmp ne i64 %zext_$_5986, 0
@@ -8413,7 +8413,7 @@ els_$_5979:
  %var_ptr_$_5988 = getelementptr %$locals_letstar$257, %$locals_letstar$257* %locals_$_85, i32 0, i32 5
  %load_$_5989 = load i8*, i8** %var_ptr_$_5988
  %record_ptr_$_5990 = bitcast i8* %load_$_5989 to %sexps$133*
- %int_of_ptr_$_5993 = ptrtoint i8* %load_$_5989 to i64
+ %int_of_ptr_$_5993 = ptrtoint i8** %load_$_5989 to i64
  %cnd_$_5994 = icmp eq i64 %int_of_ptr_$_5993, 0
  br i1 %cnd_$_5994, label %thn_$_5991, label %mrg_$_5992
 thn_$_5991:
@@ -8422,8 +8422,8 @@ thn_$_5991:
 mrg_$_5992:
  %field_ptr_$_5995 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_5990, i32 0, i32 1
  %res_$_5996 = load i8*, i8** %field_ptr_$_5995
- %left_int_$_5997 = ptrtoint i8* %res_$_5996 to i64
- %right_int_$_5998 = ptrtoint i8* null to i64
+ %left_int_$_5997 = ptrtoint i8** %res_$_5996 to i64
+ %right_int_$_5998 = ptrtoint i8** null to i64
  %cnd_$_5999 = icmp eq i64 %left_int_$_5997, %right_int_$_5998
  %zext_$_6000 = zext i1 %cnd_$_5999 to i64
  store i64 %zext_$_6000, i64* %temp_$_5977
@@ -8439,7 +8439,7 @@ els_$_5975:
  %var_ptr_$_6007 = getelementptr %$locals_letstar$257, %$locals_letstar$257* %locals_$_85, i32 0, i32 5
  %load_$_6008 = load i8*, i8** %var_ptr_$_6007
  %record_ptr_$_6009 = bitcast i8* %load_$_6008 to %sexps$133*
- %int_of_ptr_$_6012 = ptrtoint i8* %load_$_6008 to i64
+ %int_of_ptr_$_6012 = ptrtoint i8** %load_$_6008 to i64
  %cnd_$_6013 = icmp eq i64 %int_of_ptr_$_6012, 0
  br i1 %cnd_$_6013, label %thn_$_6010, label %mrg_$_6011
 thn_$_6010:
@@ -8448,8 +8448,8 @@ thn_$_6010:
 mrg_$_6011:
  %field_ptr_$_6014 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6009, i32 0, i32 1
  %res_$_6015 = load i8*, i8** %field_ptr_$_6014
- %left_int_$_6016 = ptrtoint i8* %res_$_6015 to i64
- %right_int_$_6017 = ptrtoint i8* null to i64
+ %left_int_$_6016 = ptrtoint i8** %res_$_6015 to i64
+ %right_int_$_6017 = ptrtoint i8** null to i64
  %cnd_$_6018 = icmp ne i64 %left_int_$_6016, %right_int_$_6017
  %zext_$_6019 = zext i1 %cnd_$_6018 to i64
  %cnd_$_6020 = icmp ne i64 %zext_$_6019, 0
@@ -8458,7 +8458,7 @@ thn_$_6004:
  %var_ptr_$_6021 = getelementptr %$locals_letstar$257, %$locals_letstar$257* %locals_$_85, i32 0, i32 5
  %load_$_6022 = load i8*, i8** %var_ptr_$_6021
  %record_ptr_$_6023 = bitcast i8* %load_$_6022 to %sexps$133*
- %int_of_ptr_$_6026 = ptrtoint i8* %load_$_6022 to i64
+ %int_of_ptr_$_6026 = ptrtoint i8** %load_$_6022 to i64
  %cnd_$_6027 = icmp eq i64 %int_of_ptr_$_6026, 0
  br i1 %cnd_$_6027, label %thn_$_6024, label %mrg_$_6025
 thn_$_6024:
@@ -8468,7 +8468,7 @@ mrg_$_6025:
  %field_ptr_$_6028 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6023, i32 0, i32 1
  %load_$_6029 = load i8*, i8** %field_ptr_$_6028
  %record_ptr_$_6030 = bitcast i8* %load_$_6029 to %sexps$133*
- %int_of_ptr_$_6033 = ptrtoint i8* %load_$_6029 to i64
+ %int_of_ptr_$_6033 = ptrtoint i8** %load_$_6029 to i64
  %cnd_$_6034 = icmp eq i64 %int_of_ptr_$_6033, 0
  br i1 %cnd_$_6034, label %thn_$_6031, label %mrg_$_6032
 thn_$_6031:
@@ -8477,8 +8477,8 @@ thn_$_6031:
 mrg_$_6032:
  %field_ptr_$_6035 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6030, i32 0, i32 1
  %res_$_6036 = load i8*, i8** %field_ptr_$_6035
- %left_int_$_6037 = ptrtoint i8* %res_$_6036 to i64
- %right_int_$_6038 = ptrtoint i8* null to i64
+ %left_int_$_6037 = ptrtoint i8** %res_$_6036 to i64
+ %right_int_$_6038 = ptrtoint i8** null to i64
  %cnd_$_6039 = icmp ne i64 %left_int_$_6037, %right_int_$_6038
  %zext_$_6040 = zext i1 %cnd_$_6039 to i64
  store i64 %zext_$_6040, i64* %temp_$_6003
@@ -8507,7 +8507,7 @@ els_$_5971:
  %var_ptr_$_6051 = getelementptr %$locals_letstar$257, %$locals_letstar$257* %locals_$_85, i32 0, i32 5
  %load_$_6052 = load i8*, i8** %var_ptr_$_6051
  %record_ptr_$_6053 = bitcast i8* %load_$_6052 to %sexps$133*
- %int_of_ptr_$_6056 = ptrtoint i8* %load_$_6052 to i64
+ %int_of_ptr_$_6056 = ptrtoint i8** %load_$_6052 to i64
  %cnd_$_6057 = icmp eq i64 %int_of_ptr_$_6056, 0
  br i1 %cnd_$_6057, label %thn_$_6054, label %mrg_$_6055
 thn_$_6054:
@@ -8521,7 +8521,7 @@ mrg_$_6055:
  %var_ptr_$_6061 = getelementptr %$locals_letstar$257, %$locals_letstar$257* %locals_$_85, i32 0, i32 5
  %load_$_6062 = load i8*, i8** %var_ptr_$_6061
  %record_ptr_$_6063 = bitcast i8* %load_$_6062 to %sexps$133*
- %int_of_ptr_$_6066 = ptrtoint i8* %load_$_6062 to i64
+ %int_of_ptr_$_6066 = ptrtoint i8** %load_$_6062 to i64
  %cnd_$_6067 = icmp eq i64 %int_of_ptr_$_6066, 0
  br i1 %cnd_$_6067, label %thn_$_6064, label %mrg_$_6065
 thn_$_6064:
@@ -8531,7 +8531,7 @@ mrg_$_6065:
  %field_ptr_$_6068 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6063, i32 0, i32 1
  %load_$_6069 = load i8*, i8** %field_ptr_$_6068
  %record_ptr_$_6070 = bitcast i8* %load_$_6069 to %sexps$133*
- %int_of_ptr_$_6073 = ptrtoint i8* %load_$_6069 to i64
+ %int_of_ptr_$_6073 = ptrtoint i8** %load_$_6069 to i64
  %cnd_$_6074 = icmp eq i64 %int_of_ptr_$_6073, 0
  br i1 %cnd_$_6074, label %thn_$_6071, label %mrg_$_6072
 thn_$_6071:
@@ -8628,8 +8628,8 @@ define i8* @get_env_extension$302 (%$locals_letrec$258* %$sl, i8* %bindings$304)
  store %$locals_letrec$258* %$sl, %$locals_letrec$258** %arg_$_6140
  %var_ptr_$_6145 = getelementptr %$locals_get_env_extension$302, %$locals_get_env_extension$302* %locals_$_86, i32 0, i32 6
  %res_$_6146 = load i8*, i8** %var_ptr_$_6145
- %left_int_$_6147 = ptrtoint i8* %res_$_6146 to i64
- %right_int_$_6148 = ptrtoint i8* null to i64
+ %left_int_$_6147 = ptrtoint i8** %res_$_6146 to i64
+ %right_int_$_6148 = ptrtoint i8** null to i64
  %cnd_$_6149 = icmp eq i64 %left_int_$_6147, %right_int_$_6148
  %zext_$_6150 = zext i1 %cnd_$_6149 to i64
  %cnd_$_6151 = icmp ne i64 %zext_$_6150, 0
@@ -8641,7 +8641,7 @@ els_$_6143:
  %var_ptr_$_6152 = getelementptr %$locals_get_env_extension$302, %$locals_get_env_extension$302* %locals_$_86, i32 0, i32 6
  %load_$_6153 = load i8*, i8** %var_ptr_$_6152
  %record_ptr_$_6154 = bitcast i8* %load_$_6153 to %sexps$133*
- %int_of_ptr_$_6157 = ptrtoint i8* %load_$_6153 to i64
+ %int_of_ptr_$_6157 = ptrtoint i8** %load_$_6153 to i64
  %cnd_$_6158 = icmp eq i64 %int_of_ptr_$_6157, 0
  br i1 %cnd_$_6158, label %thn_$_6155, label %mrg_$_6156
 thn_$_6155:
@@ -8677,8 +8677,8 @@ thn_$_6163:
  store i8* %ret_$_6184, i8** %temp_$_6185
  %var_ptr_$_6198 = getelementptr %$locals_get_env_extension$302, %$locals_get_env_extension$302* %locals_$_86, i32 0, i32 4
  %res_$_6199 = load i8*, i8** %var_ptr_$_6198
- %left_int_$_6200 = ptrtoint i8* %res_$_6199 to i64
- %right_int_$_6201 = ptrtoint i8* null to i64
+ %left_int_$_6200 = ptrtoint i8** %res_$_6199 to i64
+ %right_int_$_6201 = ptrtoint i8** null to i64
  %cnd_$_6202 = icmp eq i64 %left_int_$_6200, %right_int_$_6201
  %zext_$_6203 = zext i1 %cnd_$_6202 to i64
  %cnd_$_6204 = icmp ne i64 %zext_$_6203, 0
@@ -8690,7 +8690,7 @@ els_$_6196:
  %var_ptr_$_6205 = getelementptr %$locals_get_env_extension$302, %$locals_get_env_extension$302* %locals_$_86, i32 0, i32 4
  %load_$_6206 = load i8*, i8** %var_ptr_$_6205
  %record_ptr_$_6207 = bitcast i8* %load_$_6206 to %sexps$133*
- %int_of_ptr_$_6210 = ptrtoint i8* %load_$_6206 to i64
+ %int_of_ptr_$_6210 = ptrtoint i8** %load_$_6206 to i64
  %cnd_$_6211 = icmp eq i64 %int_of_ptr_$_6210, 0
  br i1 %cnd_$_6211, label %thn_$_6208, label %mrg_$_6209
 thn_$_6208:
@@ -8699,8 +8699,8 @@ thn_$_6208:
 mrg_$_6209:
  %field_ptr_$_6212 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6207, i32 0, i32 1
  %res_$_6213 = load i8*, i8** %field_ptr_$_6212
- %left_int_$_6214 = ptrtoint i8* %res_$_6213 to i64
- %right_int_$_6215 = ptrtoint i8* null to i64
+ %left_int_$_6214 = ptrtoint i8** %res_$_6213 to i64
+ %right_int_$_6215 = ptrtoint i8** null to i64
  %cnd_$_6216 = icmp eq i64 %left_int_$_6214, %right_int_$_6215
  %zext_$_6217 = zext i1 %cnd_$_6216 to i64
  store i64 %zext_$_6217, i64* %temp_$_6194
@@ -8716,7 +8716,7 @@ els_$_6192:
  %var_ptr_$_6224 = getelementptr %$locals_get_env_extension$302, %$locals_get_env_extension$302* %locals_$_86, i32 0, i32 4
  %load_$_6225 = load i8*, i8** %var_ptr_$_6224
  %record_ptr_$_6226 = bitcast i8* %load_$_6225 to %sexps$133*
- %int_of_ptr_$_6229 = ptrtoint i8* %load_$_6225 to i64
+ %int_of_ptr_$_6229 = ptrtoint i8** %load_$_6225 to i64
  %cnd_$_6230 = icmp eq i64 %int_of_ptr_$_6229, 0
  br i1 %cnd_$_6230, label %thn_$_6227, label %mrg_$_6228
 thn_$_6227:
@@ -8725,8 +8725,8 @@ thn_$_6227:
 mrg_$_6228:
  %field_ptr_$_6231 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6226, i32 0, i32 1
  %res_$_6232 = load i8*, i8** %field_ptr_$_6231
- %left_int_$_6233 = ptrtoint i8* %res_$_6232 to i64
- %right_int_$_6234 = ptrtoint i8* null to i64
+ %left_int_$_6233 = ptrtoint i8** %res_$_6232 to i64
+ %right_int_$_6234 = ptrtoint i8** null to i64
  %cnd_$_6235 = icmp ne i64 %left_int_$_6233, %right_int_$_6234
  %zext_$_6236 = zext i1 %cnd_$_6235 to i64
  %cnd_$_6237 = icmp ne i64 %zext_$_6236, 0
@@ -8735,7 +8735,7 @@ thn_$_6221:
  %var_ptr_$_6238 = getelementptr %$locals_get_env_extension$302, %$locals_get_env_extension$302* %locals_$_86, i32 0, i32 4
  %load_$_6239 = load i8*, i8** %var_ptr_$_6238
  %record_ptr_$_6240 = bitcast i8* %load_$_6239 to %sexps$133*
- %int_of_ptr_$_6243 = ptrtoint i8* %load_$_6239 to i64
+ %int_of_ptr_$_6243 = ptrtoint i8** %load_$_6239 to i64
  %cnd_$_6244 = icmp eq i64 %int_of_ptr_$_6243, 0
  br i1 %cnd_$_6244, label %thn_$_6241, label %mrg_$_6242
 thn_$_6241:
@@ -8744,8 +8744,8 @@ thn_$_6241:
 mrg_$_6242:
  %field_ptr_$_6245 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6240, i32 0, i32 1
  %res_$_6246 = load i8*, i8** %field_ptr_$_6245
- %left_int_$_6247 = ptrtoint i8* %res_$_6246 to i64
- %right_int_$_6248 = ptrtoint i8* null to i64
+ %left_int_$_6247 = ptrtoint i8** %res_$_6246 to i64
+ %right_int_$_6248 = ptrtoint i8** null to i64
  %cnd_$_6249 = icmp ne i64 %left_int_$_6247, %right_int_$_6248
  %zext_$_6250 = zext i1 %cnd_$_6249 to i64
  store i64 %zext_$_6250, i64* %temp_$_6220
@@ -8765,7 +8765,7 @@ thn_$_6187:
  %var_ptr_$_6254 = getelementptr %$locals_get_env_extension$302, %$locals_get_env_extension$302* %locals_$_86, i32 0, i32 4
  %load_$_6255 = load i8*, i8** %var_ptr_$_6254
  %record_ptr_$_6256 = bitcast i8* %load_$_6255 to %sexps$133*
- %int_of_ptr_$_6259 = ptrtoint i8* %load_$_6255 to i64
+ %int_of_ptr_$_6259 = ptrtoint i8** %load_$_6255 to i64
  %cnd_$_6260 = icmp eq i64 %int_of_ptr_$_6259, 0
  br i1 %cnd_$_6260, label %thn_$_6257, label %mrg_$_6258
 thn_$_6257:
@@ -8779,7 +8779,7 @@ mrg_$_6258:
  %var_ptr_$_6264 = getelementptr %$locals_get_env_extension$302, %$locals_get_env_extension$302* %locals_$_86, i32 0, i32 4
  %load_$_6265 = load i8*, i8** %var_ptr_$_6264
  %record_ptr_$_6266 = bitcast i8* %load_$_6265 to %sexps$133*
- %int_of_ptr_$_6269 = ptrtoint i8* %load_$_6265 to i64
+ %int_of_ptr_$_6269 = ptrtoint i8** %load_$_6265 to i64
  %cnd_$_6270 = icmp eq i64 %int_of_ptr_$_6269, 0
  br i1 %cnd_$_6270, label %thn_$_6267, label %mrg_$_6268
 thn_$_6267:
@@ -8789,7 +8789,7 @@ mrg_$_6268:
  %field_ptr_$_6271 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6266, i32 0, i32 1
  %load_$_6272 = load i8*, i8** %field_ptr_$_6271
  %record_ptr_$_6273 = bitcast i8* %load_$_6272 to %sexps$133*
- %int_of_ptr_$_6276 = ptrtoint i8* %load_$_6272 to i64
+ %int_of_ptr_$_6276 = ptrtoint i8** %load_$_6272 to i64
  %cnd_$_6277 = icmp eq i64 %int_of_ptr_$_6276, 0
  br i1 %cnd_$_6277, label %thn_$_6274, label %mrg_$_6275
 thn_$_6274:
@@ -8822,11 +8822,11 @@ thn_$_6282:
  %temp_$_6302 = getelementptr %$locals_get_env_extension$302, %$locals_get_env_extension$302* %locals_$_86, i32 0, i32 1
  store i8* %ret_$_6301, i8** %temp_$_6302
  %size_ptr_$_6303 = getelementptr %partials$301, %partials$301* null, i32 1
- %size_$_6304 = ptrtoint %partials$301* %size_ptr_$_6303 to i64
+ %size_$_6304 = ptrtoint %partials$301** %size_ptr_$_6303 to i64
  %record_ptr_$_6305 = call i8* @allocRecord (i64 %size_$_6304)
  %rec_$_6306 = bitcast i8* %record_ptr_$_6305 to %partials$301*
  %size_ptr_$_6307 = getelementptr %partial$300, %partial$300* null, i32 1
- %size_$_6308 = ptrtoint %partial$300* %size_ptr_$_6307 to i64
+ %size_$_6308 = ptrtoint %partial$300** %size_ptr_$_6307 to i64
  %record_ptr_$_6309 = call i8* @allocRecord (i64 %size_$_6308)
  %rec_$_6310 = bitcast i8* %record_ptr_$_6309 to %partial$300*
  %var_ptr_$_6311 = getelementptr %$locals_get_env_extension$302, %$locals_get_env_extension$302* %locals_$_86, i32 0, i32 1
@@ -8834,7 +8834,7 @@ thn_$_6282:
  %field_ptr_$_6313 = getelementptr %partial$300, %partial$300* %rec_$_6310, i32 0, i32 0
  store i8* %res_$_6312, i8** %field_ptr_$_6313
  %size_ptr_$_6314 = getelementptr %env_entry$138, %env_entry$138* null, i32 1
- %size_$_6315 = ptrtoint %env_entry$138* %size_ptr_$_6314 to i64
+ %size_$_6315 = ptrtoint %env_entry$138** %size_ptr_$_6314 to i64
  %record_ptr_$_6316 = call i8* @allocRecord (i64 %size_$_6315)
  %rec_$_6317 = bitcast i8* %record_ptr_$_6316 to %env_entry$138*
  %lnk_$_6318 = getelementptr %$locals_get_env_extension$302, %$locals_get_env_extension$302* %locals_$_86, i32 0, i32 0
@@ -8865,7 +8865,7 @@ thn_$_6282:
  %var_ptr_$_6338 = getelementptr %$locals_get_env_extension$302, %$locals_get_env_extension$302* %locals_$_86, i32 0, i32 6
  %load_$_6339 = load i8*, i8** %var_ptr_$_6338
  %record_ptr_$_6340 = bitcast i8* %load_$_6339 to %sexps$133*
- %int_of_ptr_$_6343 = ptrtoint i8* %load_$_6339 to i64
+ %int_of_ptr_$_6343 = ptrtoint i8** %load_$_6339 to i64
  %cnd_$_6344 = icmp eq i64 %int_of_ptr_$_6343, 0
  br i1 %cnd_$_6344, label %thn_$_6341, label %mrg_$_6342
 thn_$_6341:
@@ -9010,8 +9010,8 @@ define i8* @fill_body_env$303 (%$locals_letrec$258* %$sl, i8* %partials$310) {
  store %$locals_letrec$258* %$sl, %$locals_letrec$258** %arg_$_6456
  %var_ptr_$_6461 = getelementptr %$locals_fill_body_env$303, %$locals_fill_body_env$303* %locals_$_87, i32 0, i32 1
  %res_$_6462 = load i8*, i8** %var_ptr_$_6461
- %left_int_$_6463 = ptrtoint i8* %res_$_6462 to i64
- %right_int_$_6464 = ptrtoint i8* null to i64
+ %left_int_$_6463 = ptrtoint i8** %res_$_6462 to i64
+ %right_int_$_6464 = ptrtoint i8** null to i64
  %cnd_$_6465 = icmp eq i64 %left_int_$_6463, %right_int_$_6464
  %zext_$_6466 = zext i1 %cnd_$_6465 to i64
  %cnd_$_6467 = icmp ne i64 %zext_$_6466, 0
@@ -9027,13 +9027,13 @@ thn_$_6458:
  br label %mrg_$_6460
 els_$_6459:
  %size_ptr_$_6474 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_6475 = ptrtoint %env$137* %size_ptr_$_6474 to i64
+ %size_$_6475 = ptrtoint %env$137** %size_ptr_$_6474 to i64
  %record_ptr_$_6476 = call i8* @allocRecord (i64 %size_$_6475)
  %rec_$_6477 = bitcast i8* %record_ptr_$_6476 to %env$137*
  %var_ptr_$_6478 = getelementptr %$locals_fill_body_env$303, %$locals_fill_body_env$303* %locals_$_87, i32 0, i32 1
  %load_$_6479 = load i8*, i8** %var_ptr_$_6478
  %record_ptr_$_6480 = bitcast i8* %load_$_6479 to %partials$301*
- %int_of_ptr_$_6483 = ptrtoint i8* %load_$_6479 to i64
+ %int_of_ptr_$_6483 = ptrtoint i8** %load_$_6479 to i64
  %cnd_$_6484 = icmp eq i64 %int_of_ptr_$_6483, 0
  br i1 %cnd_$_6484, label %thn_$_6481, label %mrg_$_6482
 thn_$_6481:
@@ -9043,7 +9043,7 @@ mrg_$_6482:
  %field_ptr_$_6485 = getelementptr %partials$301, %partials$301* %record_ptr_$_6480, i32 0, i32 0
  %load_$_6486 = load i8*, i8** %field_ptr_$_6485
  %record_ptr_$_6487 = bitcast i8* %load_$_6486 to %partial$300*
- %int_of_ptr_$_6490 = ptrtoint i8* %load_$_6486 to i64
+ %int_of_ptr_$_6490 = ptrtoint i8** %load_$_6486 to i64
  %cnd_$_6491 = icmp eq i64 %int_of_ptr_$_6490, 0
  br i1 %cnd_$_6491, label %thn_$_6488, label %mrg_$_6489
 thn_$_6488:
@@ -9059,7 +9059,7 @@ mrg_$_6489:
  %var_ptr_$_6497 = getelementptr %$locals_fill_body_env$303, %$locals_fill_body_env$303* %locals_$_87, i32 0, i32 1
  %load_$_6498 = load i8*, i8** %var_ptr_$_6497
  %record_ptr_$_6499 = bitcast i8* %load_$_6498 to %partials$301*
- %int_of_ptr_$_6502 = ptrtoint i8* %load_$_6498 to i64
+ %int_of_ptr_$_6502 = ptrtoint i8** %load_$_6498 to i64
  %cnd_$_6503 = icmp eq i64 %int_of_ptr_$_6502, 0
  br i1 %cnd_$_6503, label %thn_$_6500, label %mrg_$_6501
 thn_$_6500:
@@ -9086,8 +9086,8 @@ define void @complete_partials$313 (%$locals_letrec$258* %$sl, i8* %partials$314
  store %$locals_letrec$258* %$sl, %$locals_letrec$258** %arg_$_6510
  %var_ptr_$_6513 = getelementptr %$locals_complete_partials$313, %$locals_complete_partials$313* %locals_$_88, i32 0, i32 4
  %res_$_6514 = load i8*, i8** %var_ptr_$_6513
- %left_int_$_6515 = ptrtoint i8* %res_$_6514 to i64
- %right_int_$_6516 = ptrtoint i8* null to i64
+ %left_int_$_6515 = ptrtoint i8** %res_$_6514 to i64
+ %right_int_$_6516 = ptrtoint i8** null to i64
  %cnd_$_6517 = icmp ne i64 %left_int_$_6515, %right_int_$_6516
  %zext_$_6518 = zext i1 %cnd_$_6517 to i64
  %cnd_$_6519 = icmp ne i64 %zext_$_6518, 0
@@ -9096,7 +9096,7 @@ thn_$_6511:
  %var_ptr_$_6520 = getelementptr %$locals_complete_partials$313, %$locals_complete_partials$313* %locals_$_88, i32 0, i32 4
  %load_$_6521 = load i8*, i8** %var_ptr_$_6520
  %record_ptr_$_6522 = bitcast i8* %load_$_6521 to %partials$301*
- %int_of_ptr_$_6525 = ptrtoint i8* %load_$_6521 to i64
+ %int_of_ptr_$_6525 = ptrtoint i8** %load_$_6521 to i64
  %cnd_$_6526 = icmp eq i64 %int_of_ptr_$_6525, 0
  br i1 %cnd_$_6526, label %thn_$_6523, label %mrg_$_6524
 thn_$_6523:
@@ -9106,7 +9106,7 @@ mrg_$_6524:
  %field_ptr_$_6527 = getelementptr %partials$301, %partials$301* %record_ptr_$_6522, i32 0, i32 0
  %load_$_6528 = load i8*, i8** %field_ptr_$_6527
  %record_ptr_$_6529 = bitcast i8* %load_$_6528 to %partial$300*
- %int_of_ptr_$_6532 = ptrtoint i8* %load_$_6528 to i64
+ %int_of_ptr_$_6532 = ptrtoint i8** %load_$_6528 to i64
  %cnd_$_6533 = icmp eq i64 %int_of_ptr_$_6532, 0
  br i1 %cnd_$_6533, label %thn_$_6530, label %mrg_$_6531
 thn_$_6530:
@@ -9120,7 +9120,7 @@ mrg_$_6531:
  %var_ptr_$_6537 = getelementptr %$locals_complete_partials$313, %$locals_complete_partials$313* %locals_$_88, i32 0, i32 4
  %load_$_6538 = load i8*, i8** %var_ptr_$_6537
  %record_ptr_$_6539 = bitcast i8* %load_$_6538 to %partials$301*
- %int_of_ptr_$_6542 = ptrtoint i8* %load_$_6538 to i64
+ %int_of_ptr_$_6542 = ptrtoint i8** %load_$_6538 to i64
  %cnd_$_6543 = icmp eq i64 %int_of_ptr_$_6542, 0
  br i1 %cnd_$_6543, label %thn_$_6540, label %mrg_$_6541
 thn_$_6540:
@@ -9130,7 +9130,7 @@ mrg_$_6541:
  %field_ptr_$_6544 = getelementptr %partials$301, %partials$301* %record_ptr_$_6539, i32 0, i32 0
  %load_$_6545 = load i8*, i8** %field_ptr_$_6544
  %record_ptr_$_6546 = bitcast i8* %load_$_6545 to %partial$300*
- %int_of_ptr_$_6549 = ptrtoint i8* %load_$_6545 to i64
+ %int_of_ptr_$_6549 = ptrtoint i8** %load_$_6545 to i64
  %cnd_$_6550 = icmp eq i64 %int_of_ptr_$_6549, 0
  br i1 %cnd_$_6550, label %thn_$_6547, label %mrg_$_6548
 thn_$_6547:
@@ -9172,7 +9172,7 @@ mrg_$_6548:
  %var_ptr_$_6580 = getelementptr %$locals_complete_partials$313, %$locals_complete_partials$313* %locals_$_88, i32 0, i32 4
  %load_$_6581 = load i8*, i8** %var_ptr_$_6580
  %record_ptr_$_6582 = bitcast i8* %load_$_6581 to %partials$301*
- %int_of_ptr_$_6585 = ptrtoint i8* %load_$_6581 to i64
+ %int_of_ptr_$_6585 = ptrtoint i8** %load_$_6581 to i64
  %cnd_$_6586 = icmp eq i64 %int_of_ptr_$_6585, 0
  br i1 %cnd_$_6586, label %thn_$_6583, label %mrg_$_6584
 thn_$_6583:
@@ -9200,8 +9200,8 @@ define i8* @letrec$258 (%$locals_apply_internal_lazy$221* %$sl, i8* %args$297) {
  store %$locals_apply_internal_lazy$221* %$sl, %$locals_apply_internal_lazy$221** %arg_$_6590
  %var_ptr_$_6603 = getelementptr %$locals_letrec$258, %$locals_letrec$258* %locals_$_89, i32 0, i32 8
  %res_$_6604 = load i8*, i8** %var_ptr_$_6603
- %left_int_$_6605 = ptrtoint i8* %res_$_6604 to i64
- %right_int_$_6606 = ptrtoint i8* null to i64
+ %left_int_$_6605 = ptrtoint i8** %res_$_6604 to i64
+ %right_int_$_6606 = ptrtoint i8** null to i64
  %cnd_$_6607 = icmp eq i64 %left_int_$_6605, %right_int_$_6606
  %zext_$_6608 = zext i1 %cnd_$_6607 to i64
  %cnd_$_6609 = icmp ne i64 %zext_$_6608, 0
@@ -9213,7 +9213,7 @@ els_$_6601:
  %var_ptr_$_6610 = getelementptr %$locals_letrec$258, %$locals_letrec$258* %locals_$_89, i32 0, i32 8
  %load_$_6611 = load i8*, i8** %var_ptr_$_6610
  %record_ptr_$_6612 = bitcast i8* %load_$_6611 to %sexps$133*
- %int_of_ptr_$_6615 = ptrtoint i8* %load_$_6611 to i64
+ %int_of_ptr_$_6615 = ptrtoint i8** %load_$_6611 to i64
  %cnd_$_6616 = icmp eq i64 %int_of_ptr_$_6615, 0
  br i1 %cnd_$_6616, label %thn_$_6613, label %mrg_$_6614
 thn_$_6613:
@@ -9222,8 +9222,8 @@ thn_$_6613:
 mrg_$_6614:
  %field_ptr_$_6617 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6612, i32 0, i32 1
  %res_$_6618 = load i8*, i8** %field_ptr_$_6617
- %left_int_$_6619 = ptrtoint i8* %res_$_6618 to i64
- %right_int_$_6620 = ptrtoint i8* null to i64
+ %left_int_$_6619 = ptrtoint i8** %res_$_6618 to i64
+ %right_int_$_6620 = ptrtoint i8** null to i64
  %cnd_$_6621 = icmp eq i64 %left_int_$_6619, %right_int_$_6620
  %zext_$_6622 = zext i1 %cnd_$_6621 to i64
  store i64 %zext_$_6622, i64* %temp_$_6599
@@ -9239,7 +9239,7 @@ els_$_6597:
  %var_ptr_$_6629 = getelementptr %$locals_letrec$258, %$locals_letrec$258* %locals_$_89, i32 0, i32 8
  %load_$_6630 = load i8*, i8** %var_ptr_$_6629
  %record_ptr_$_6631 = bitcast i8* %load_$_6630 to %sexps$133*
- %int_of_ptr_$_6634 = ptrtoint i8* %load_$_6630 to i64
+ %int_of_ptr_$_6634 = ptrtoint i8** %load_$_6630 to i64
  %cnd_$_6635 = icmp eq i64 %int_of_ptr_$_6634, 0
  br i1 %cnd_$_6635, label %thn_$_6632, label %mrg_$_6633
 thn_$_6632:
@@ -9248,8 +9248,8 @@ thn_$_6632:
 mrg_$_6633:
  %field_ptr_$_6636 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6631, i32 0, i32 1
  %res_$_6637 = load i8*, i8** %field_ptr_$_6636
- %left_int_$_6638 = ptrtoint i8* %res_$_6637 to i64
- %right_int_$_6639 = ptrtoint i8* null to i64
+ %left_int_$_6638 = ptrtoint i8** %res_$_6637 to i64
+ %right_int_$_6639 = ptrtoint i8** null to i64
  %cnd_$_6640 = icmp ne i64 %left_int_$_6638, %right_int_$_6639
  %zext_$_6641 = zext i1 %cnd_$_6640 to i64
  %cnd_$_6642 = icmp ne i64 %zext_$_6641, 0
@@ -9258,7 +9258,7 @@ thn_$_6626:
  %var_ptr_$_6643 = getelementptr %$locals_letrec$258, %$locals_letrec$258* %locals_$_89, i32 0, i32 8
  %load_$_6644 = load i8*, i8** %var_ptr_$_6643
  %record_ptr_$_6645 = bitcast i8* %load_$_6644 to %sexps$133*
- %int_of_ptr_$_6648 = ptrtoint i8* %load_$_6644 to i64
+ %int_of_ptr_$_6648 = ptrtoint i8** %load_$_6644 to i64
  %cnd_$_6649 = icmp eq i64 %int_of_ptr_$_6648, 0
  br i1 %cnd_$_6649, label %thn_$_6646, label %mrg_$_6647
 thn_$_6646:
@@ -9268,7 +9268,7 @@ mrg_$_6647:
  %field_ptr_$_6650 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6645, i32 0, i32 1
  %load_$_6651 = load i8*, i8** %field_ptr_$_6650
  %record_ptr_$_6652 = bitcast i8* %load_$_6651 to %sexps$133*
- %int_of_ptr_$_6655 = ptrtoint i8* %load_$_6651 to i64
+ %int_of_ptr_$_6655 = ptrtoint i8** %load_$_6651 to i64
  %cnd_$_6656 = icmp eq i64 %int_of_ptr_$_6655, 0
  br i1 %cnd_$_6656, label %thn_$_6653, label %mrg_$_6654
 thn_$_6653:
@@ -9277,8 +9277,8 @@ thn_$_6653:
 mrg_$_6654:
  %field_ptr_$_6657 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6652, i32 0, i32 1
  %res_$_6658 = load i8*, i8** %field_ptr_$_6657
- %left_int_$_6659 = ptrtoint i8* %res_$_6658 to i64
- %right_int_$_6660 = ptrtoint i8* null to i64
+ %left_int_$_6659 = ptrtoint i8** %res_$_6658 to i64
+ %right_int_$_6660 = ptrtoint i8** null to i64
  %cnd_$_6661 = icmp ne i64 %left_int_$_6659, %right_int_$_6660
  %zext_$_6662 = zext i1 %cnd_$_6661 to i64
  store i64 %zext_$_6662, i64* %temp_$_6625
@@ -9307,7 +9307,7 @@ els_$_6593:
  %var_ptr_$_6673 = getelementptr %$locals_letrec$258, %$locals_letrec$258* %locals_$_89, i32 0, i32 8
  %load_$_6674 = load i8*, i8** %var_ptr_$_6673
  %record_ptr_$_6675 = bitcast i8* %load_$_6674 to %sexps$133*
- %int_of_ptr_$_6678 = ptrtoint i8* %load_$_6674 to i64
+ %int_of_ptr_$_6678 = ptrtoint i8** %load_$_6674 to i64
  %cnd_$_6679 = icmp eq i64 %int_of_ptr_$_6678, 0
  br i1 %cnd_$_6679, label %thn_$_6676, label %mrg_$_6677
 thn_$_6676:
@@ -9321,7 +9321,7 @@ mrg_$_6677:
  %var_ptr_$_6683 = getelementptr %$locals_letrec$258, %$locals_letrec$258* %locals_$_89, i32 0, i32 8
  %load_$_6684 = load i8*, i8** %var_ptr_$_6683
  %record_ptr_$_6685 = bitcast i8* %load_$_6684 to %sexps$133*
- %int_of_ptr_$_6688 = ptrtoint i8* %load_$_6684 to i64
+ %int_of_ptr_$_6688 = ptrtoint i8** %load_$_6684 to i64
  %cnd_$_6689 = icmp eq i64 %int_of_ptr_$_6688, 0
  br i1 %cnd_$_6689, label %thn_$_6686, label %mrg_$_6687
 thn_$_6686:
@@ -9331,7 +9331,7 @@ mrg_$_6687:
  %field_ptr_$_6690 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6685, i32 0, i32 1
  %load_$_6691 = load i8*, i8** %field_ptr_$_6690
  %record_ptr_$_6692 = bitcast i8* %load_$_6691 to %sexps$133*
- %int_of_ptr_$_6695 = ptrtoint i8* %load_$_6691 to i64
+ %int_of_ptr_$_6695 = ptrtoint i8** %load_$_6691 to i64
  %cnd_$_6696 = icmp eq i64 %int_of_ptr_$_6695, 0
  br i1 %cnd_$_6696, label %thn_$_6693, label %mrg_$_6694
 thn_$_6693:
@@ -9428,8 +9428,8 @@ define i8* @quote$259 (%$locals_apply_internal_lazy$221* %$sl, i8* %args$318) {
  store %$locals_apply_internal_lazy$221* %$sl, %$locals_apply_internal_lazy$221** %arg_$_6765
  %var_ptr_$_6774 = getelementptr %$locals_quote$259, %$locals_quote$259* %locals_$_90, i32 0, i32 1
  %res_$_6775 = load i8*, i8** %var_ptr_$_6774
- %left_int_$_6776 = ptrtoint i8* %res_$_6775 to i64
- %right_int_$_6777 = ptrtoint i8* null to i64
+ %left_int_$_6776 = ptrtoint i8** %res_$_6775 to i64
+ %right_int_$_6777 = ptrtoint i8** null to i64
  %cnd_$_6778 = icmp eq i64 %left_int_$_6776, %right_int_$_6777
  %zext_$_6779 = zext i1 %cnd_$_6778 to i64
  %cnd_$_6780 = icmp ne i64 %zext_$_6779, 0
@@ -9440,8 +9440,8 @@ thn_$_6771:
 els_$_6772:
  %var_ptr_$_6785 = getelementptr %$locals_quote$259, %$locals_quote$259* %locals_$_90, i32 0, i32 1
  %res_$_6786 = load i8*, i8** %var_ptr_$_6785
- %left_int_$_6787 = ptrtoint i8* %res_$_6786 to i64
- %right_int_$_6788 = ptrtoint i8* null to i64
+ %left_int_$_6787 = ptrtoint i8** %res_$_6786 to i64
+ %right_int_$_6788 = ptrtoint i8** null to i64
  %cnd_$_6789 = icmp ne i64 %left_int_$_6787, %right_int_$_6788
  %zext_$_6790 = zext i1 %cnd_$_6789 to i64
  %cnd_$_6791 = icmp ne i64 %zext_$_6790, 0
@@ -9450,7 +9450,7 @@ thn_$_6782:
  %var_ptr_$_6792 = getelementptr %$locals_quote$259, %$locals_quote$259* %locals_$_90, i32 0, i32 1
  %load_$_6793 = load i8*, i8** %var_ptr_$_6792
  %record_ptr_$_6794 = bitcast i8* %load_$_6793 to %sexps$133*
- %int_of_ptr_$_6797 = ptrtoint i8* %load_$_6793 to i64
+ %int_of_ptr_$_6797 = ptrtoint i8** %load_$_6793 to i64
  %cnd_$_6798 = icmp eq i64 %int_of_ptr_$_6797, 0
  br i1 %cnd_$_6798, label %thn_$_6795, label %mrg_$_6796
 thn_$_6795:
@@ -9459,8 +9459,8 @@ thn_$_6795:
 mrg_$_6796:
  %field_ptr_$_6799 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6794, i32 0, i32 1
  %res_$_6800 = load i8*, i8** %field_ptr_$_6799
- %left_int_$_6801 = ptrtoint i8* %res_$_6800 to i64
- %right_int_$_6802 = ptrtoint i8* null to i64
+ %left_int_$_6801 = ptrtoint i8** %res_$_6800 to i64
+ %right_int_$_6802 = ptrtoint i8** null to i64
  %cnd_$_6803 = icmp ne i64 %left_int_$_6801, %right_int_$_6802
  %zext_$_6804 = zext i1 %cnd_$_6803 to i64
  store i64 %zext_$_6804, i64* %temp_$_6781
@@ -9489,7 +9489,7 @@ els_$_6768:
  %var_ptr_$_6815 = getelementptr %$locals_quote$259, %$locals_quote$259* %locals_$_90, i32 0, i32 1
  %load_$_6816 = load i8*, i8** %var_ptr_$_6815
  %record_ptr_$_6817 = bitcast i8* %load_$_6816 to %sexps$133*
- %int_of_ptr_$_6820 = ptrtoint i8* %load_$_6816 to i64
+ %int_of_ptr_$_6820 = ptrtoint i8** %load_$_6816 to i64
  %cnd_$_6821 = icmp eq i64 %int_of_ptr_$_6820, 0
  br i1 %cnd_$_6821, label %thn_$_6818, label %mrg_$_6819
 thn_$_6818:
@@ -9518,8 +9518,8 @@ define i8* @define$260 (%$locals_apply_internal_lazy$221* %$sl, i8* %args$319) {
  store %$locals_apply_internal_lazy$221* %$sl, %$locals_apply_internal_lazy$221** %arg_$_6826
  %var_ptr_$_6839 = getelementptr %$locals_define$260, %$locals_define$260* %locals_$_91, i32 0, i32 3
  %res_$_6840 = load i8*, i8** %var_ptr_$_6839
- %left_int_$_6841 = ptrtoint i8* %res_$_6840 to i64
- %right_int_$_6842 = ptrtoint i8* null to i64
+ %left_int_$_6841 = ptrtoint i8** %res_$_6840 to i64
+ %right_int_$_6842 = ptrtoint i8** null to i64
  %cnd_$_6843 = icmp eq i64 %left_int_$_6841, %right_int_$_6842
  %zext_$_6844 = zext i1 %cnd_$_6843 to i64
  %cnd_$_6845 = icmp ne i64 %zext_$_6844, 0
@@ -9531,7 +9531,7 @@ els_$_6837:
  %var_ptr_$_6846 = getelementptr %$locals_define$260, %$locals_define$260* %locals_$_91, i32 0, i32 3
  %load_$_6847 = load i8*, i8** %var_ptr_$_6846
  %record_ptr_$_6848 = bitcast i8* %load_$_6847 to %sexps$133*
- %int_of_ptr_$_6851 = ptrtoint i8* %load_$_6847 to i64
+ %int_of_ptr_$_6851 = ptrtoint i8** %load_$_6847 to i64
  %cnd_$_6852 = icmp eq i64 %int_of_ptr_$_6851, 0
  br i1 %cnd_$_6852, label %thn_$_6849, label %mrg_$_6850
 thn_$_6849:
@@ -9540,8 +9540,8 @@ thn_$_6849:
 mrg_$_6850:
  %field_ptr_$_6853 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6848, i32 0, i32 1
  %res_$_6854 = load i8*, i8** %field_ptr_$_6853
- %left_int_$_6855 = ptrtoint i8* %res_$_6854 to i64
- %right_int_$_6856 = ptrtoint i8* null to i64
+ %left_int_$_6855 = ptrtoint i8** %res_$_6854 to i64
+ %right_int_$_6856 = ptrtoint i8** null to i64
  %cnd_$_6857 = icmp eq i64 %left_int_$_6855, %right_int_$_6856
  %zext_$_6858 = zext i1 %cnd_$_6857 to i64
  store i64 %zext_$_6858, i64* %temp_$_6835
@@ -9557,7 +9557,7 @@ els_$_6833:
  %var_ptr_$_6865 = getelementptr %$locals_define$260, %$locals_define$260* %locals_$_91, i32 0, i32 3
  %load_$_6866 = load i8*, i8** %var_ptr_$_6865
  %record_ptr_$_6867 = bitcast i8* %load_$_6866 to %sexps$133*
- %int_of_ptr_$_6870 = ptrtoint i8* %load_$_6866 to i64
+ %int_of_ptr_$_6870 = ptrtoint i8** %load_$_6866 to i64
  %cnd_$_6871 = icmp eq i64 %int_of_ptr_$_6870, 0
  br i1 %cnd_$_6871, label %thn_$_6868, label %mrg_$_6869
 thn_$_6868:
@@ -9566,8 +9566,8 @@ thn_$_6868:
 mrg_$_6869:
  %field_ptr_$_6872 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6867, i32 0, i32 1
  %res_$_6873 = load i8*, i8** %field_ptr_$_6872
- %left_int_$_6874 = ptrtoint i8* %res_$_6873 to i64
- %right_int_$_6875 = ptrtoint i8* null to i64
+ %left_int_$_6874 = ptrtoint i8** %res_$_6873 to i64
+ %right_int_$_6875 = ptrtoint i8** null to i64
  %cnd_$_6876 = icmp ne i64 %left_int_$_6874, %right_int_$_6875
  %zext_$_6877 = zext i1 %cnd_$_6876 to i64
  %cnd_$_6878 = icmp ne i64 %zext_$_6877, 0
@@ -9576,7 +9576,7 @@ thn_$_6862:
  %var_ptr_$_6879 = getelementptr %$locals_define$260, %$locals_define$260* %locals_$_91, i32 0, i32 3
  %load_$_6880 = load i8*, i8** %var_ptr_$_6879
  %record_ptr_$_6881 = bitcast i8* %load_$_6880 to %sexps$133*
- %int_of_ptr_$_6884 = ptrtoint i8* %load_$_6880 to i64
+ %int_of_ptr_$_6884 = ptrtoint i8** %load_$_6880 to i64
  %cnd_$_6885 = icmp eq i64 %int_of_ptr_$_6884, 0
  br i1 %cnd_$_6885, label %thn_$_6882, label %mrg_$_6883
 thn_$_6882:
@@ -9586,7 +9586,7 @@ mrg_$_6883:
  %field_ptr_$_6886 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6881, i32 0, i32 1
  %load_$_6887 = load i8*, i8** %field_ptr_$_6886
  %record_ptr_$_6888 = bitcast i8* %load_$_6887 to %sexps$133*
- %int_of_ptr_$_6891 = ptrtoint i8* %load_$_6887 to i64
+ %int_of_ptr_$_6891 = ptrtoint i8** %load_$_6887 to i64
  %cnd_$_6892 = icmp eq i64 %int_of_ptr_$_6891, 0
  br i1 %cnd_$_6892, label %thn_$_6889, label %mrg_$_6890
 thn_$_6889:
@@ -9595,8 +9595,8 @@ thn_$_6889:
 mrg_$_6890:
  %field_ptr_$_6893 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6888, i32 0, i32 1
  %res_$_6894 = load i8*, i8** %field_ptr_$_6893
- %left_int_$_6895 = ptrtoint i8* %res_$_6894 to i64
- %right_int_$_6896 = ptrtoint i8* null to i64
+ %left_int_$_6895 = ptrtoint i8** %res_$_6894 to i64
+ %right_int_$_6896 = ptrtoint i8** null to i64
  %cnd_$_6897 = icmp ne i64 %left_int_$_6895, %right_int_$_6896
  %zext_$_6898 = zext i1 %cnd_$_6897 to i64
  store i64 %zext_$_6898, i64* %temp_$_6861
@@ -9625,7 +9625,7 @@ els_$_6829:
  %var_ptr_$_6909 = getelementptr %$locals_define$260, %$locals_define$260* %locals_$_91, i32 0, i32 3
  %load_$_6910 = load i8*, i8** %var_ptr_$_6909
  %record_ptr_$_6911 = bitcast i8* %load_$_6910 to %sexps$133*
- %int_of_ptr_$_6914 = ptrtoint i8* %load_$_6910 to i64
+ %int_of_ptr_$_6914 = ptrtoint i8** %load_$_6910 to i64
  %cnd_$_6915 = icmp eq i64 %int_of_ptr_$_6914, 0
  br i1 %cnd_$_6915, label %thn_$_6912, label %mrg_$_6913
 thn_$_6912:
@@ -9639,7 +9639,7 @@ mrg_$_6913:
  %var_ptr_$_6919 = getelementptr %$locals_define$260, %$locals_define$260* %locals_$_91, i32 0, i32 3
  %load_$_6920 = load i8*, i8** %var_ptr_$_6919
  %record_ptr_$_6921 = bitcast i8* %load_$_6920 to %sexps$133*
- %int_of_ptr_$_6924 = ptrtoint i8* %load_$_6920 to i64
+ %int_of_ptr_$_6924 = ptrtoint i8** %load_$_6920 to i64
  %cnd_$_6925 = icmp eq i64 %int_of_ptr_$_6924, 0
  br i1 %cnd_$_6925, label %thn_$_6922, label %mrg_$_6923
 thn_$_6922:
@@ -9649,7 +9649,7 @@ mrg_$_6923:
  %field_ptr_$_6926 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_6921, i32 0, i32 1
  %load_$_6927 = load i8*, i8** %field_ptr_$_6926
  %record_ptr_$_6928 = bitcast i8* %load_$_6927 to %sexps$133*
- %int_of_ptr_$_6931 = ptrtoint i8* %load_$_6927 to i64
+ %int_of_ptr_$_6931 = ptrtoint i8** %load_$_6927 to i64
  %cnd_$_6932 = icmp eq i64 %int_of_ptr_$_6931, 0
  br i1 %cnd_$_6932, label %thn_$_6929, label %mrg_$_6930
 thn_$_6929:
@@ -9703,11 +9703,11 @@ thn_$_6937:
  br label %mrg_$_6939
 els_$_6938:
  %size_ptr_$_6980 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_6981 = ptrtoint %env$137* %size_ptr_$_6980 to i64
+ %size_$_6981 = ptrtoint %env$137** %size_ptr_$_6980 to i64
  %record_ptr_$_6982 = call i8* @allocRecord (i64 %size_$_6981)
  %rec_$_6983 = bitcast i8* %record_ptr_$_6982 to %env$137*
  %size_ptr_$_6984 = getelementptr %env_entry$138, %env_entry$138* null, i32 1
- %size_$_6985 = ptrtoint %env_entry$138* %size_ptr_$_6984 to i64
+ %size_$_6985 = ptrtoint %env_entry$138** %size_ptr_$_6984 to i64
  %record_ptr_$_6986 = call i8* @allocRecord (i64 %size_$_6985)
  %rec_$_6987 = bitcast i8* %record_ptr_$_6986 to %env_entry$138*
  %lnk_$_6988 = getelementptr %$locals_define$260, %$locals_define$260* %locals_$_91, i32 0, i32 0
@@ -9789,8 +9789,8 @@ define i8* @quasi$323 (%$locals_quasiquote$261* %$sl, i8* %args$326, i64 %level$
  store %$locals_quasiquote$261* %$sl, %$locals_quasiquote$261** %arg_$_7030
  %var_ptr_$_7039 = getelementptr %$locals_quasi$323, %$locals_quasi$323* %locals_$_92, i32 0, i32 7
  %res_$_7040 = load i8*, i8** %var_ptr_$_7039
- %left_int_$_7041 = ptrtoint i8* %res_$_7040 to i64
- %right_int_$_7042 = ptrtoint i8* null to i64
+ %left_int_$_7041 = ptrtoint i8** %res_$_7040 to i64
+ %right_int_$_7042 = ptrtoint i8** null to i64
  %cnd_$_7043 = icmp eq i64 %left_int_$_7041, %right_int_$_7042
  %zext_$_7044 = zext i1 %cnd_$_7043 to i64
  %cnd_$_7045 = icmp ne i64 %zext_$_7044, 0
@@ -9802,7 +9802,7 @@ els_$_7037:
  %var_ptr_$_7050 = getelementptr %$locals_quasi$323, %$locals_quasi$323* %locals_$_92, i32 0, i32 7
  %load_$_7051 = load i8*, i8** %var_ptr_$_7050
  %record_ptr_$_7052 = bitcast i8* %load_$_7051 to %sexps$133*
- %int_of_ptr_$_7055 = ptrtoint i8* %load_$_7051 to i64
+ %int_of_ptr_$_7055 = ptrtoint i8** %load_$_7051 to i64
  %cnd_$_7056 = icmp eq i64 %int_of_ptr_$_7055, 0
  br i1 %cnd_$_7056, label %thn_$_7053, label %mrg_$_7054
 thn_$_7053:
@@ -9811,8 +9811,8 @@ thn_$_7053:
 mrg_$_7054:
  %field_ptr_$_7057 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_7052, i32 0, i32 1
  %res_$_7058 = load i8*, i8** %field_ptr_$_7057
- %left_int_$_7059 = ptrtoint i8* %res_$_7058 to i64
- %right_int_$_7060 = ptrtoint i8* null to i64
+ %left_int_$_7059 = ptrtoint i8** %res_$_7058 to i64
+ %right_int_$_7060 = ptrtoint i8** null to i64
  %cnd_$_7061 = icmp ne i64 %left_int_$_7059, %right_int_$_7060
  %zext_$_7062 = zext i1 %cnd_$_7061 to i64
  %cnd_$_7063 = icmp ne i64 %zext_$_7062, 0
@@ -9821,7 +9821,7 @@ thn_$_7047:
  %var_ptr_$_7064 = getelementptr %$locals_quasi$323, %$locals_quasi$323* %locals_$_92, i32 0, i32 7
  %load_$_7065 = load i8*, i8** %var_ptr_$_7064
  %record_ptr_$_7066 = bitcast i8* %load_$_7065 to %sexps$133*
- %int_of_ptr_$_7069 = ptrtoint i8* %load_$_7065 to i64
+ %int_of_ptr_$_7069 = ptrtoint i8** %load_$_7065 to i64
  %cnd_$_7070 = icmp eq i64 %int_of_ptr_$_7069, 0
  br i1 %cnd_$_7070, label %thn_$_7067, label %mrg_$_7068
 thn_$_7067:
@@ -9831,7 +9831,7 @@ mrg_$_7068:
  %field_ptr_$_7071 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_7066, i32 0, i32 1
  %load_$_7072 = load i8*, i8** %field_ptr_$_7071
  %record_ptr_$_7073 = bitcast i8* %load_$_7072 to %sexps$133*
- %int_of_ptr_$_7076 = ptrtoint i8* %load_$_7072 to i64
+ %int_of_ptr_$_7076 = ptrtoint i8** %load_$_7072 to i64
  %cnd_$_7077 = icmp eq i64 %int_of_ptr_$_7076, 0
  br i1 %cnd_$_7077, label %thn_$_7074, label %mrg_$_7075
 thn_$_7074:
@@ -9840,8 +9840,8 @@ thn_$_7074:
 mrg_$_7075:
  %field_ptr_$_7078 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_7073, i32 0, i32 1
  %res_$_7079 = load i8*, i8** %field_ptr_$_7078
- %left_int_$_7080 = ptrtoint i8* %res_$_7079 to i64
- %right_int_$_7081 = ptrtoint i8* null to i64
+ %left_int_$_7080 = ptrtoint i8** %res_$_7079 to i64
+ %right_int_$_7081 = ptrtoint i8** null to i64
  %cnd_$_7082 = icmp ne i64 %left_int_$_7080, %right_int_$_7081
  %zext_$_7083 = zext i1 %cnd_$_7082 to i64
  store i64 %zext_$_7083, i64* %temp_$_7046
@@ -9885,7 +9885,7 @@ thn_$_7097:
  %var_ptr_$_7111 = getelementptr %$locals_quasi$323, %$locals_quasi$323* %locals_$_92, i32 0, i32 7
  %load_$_7112 = load i8*, i8** %var_ptr_$_7111
  %record_ptr_$_7113 = bitcast i8* %load_$_7112 to %sexps$133*
- %int_of_ptr_$_7116 = ptrtoint i8* %load_$_7112 to i64
+ %int_of_ptr_$_7116 = ptrtoint i8** %load_$_7112 to i64
  %cnd_$_7117 = icmp eq i64 %int_of_ptr_$_7116, 0
  br i1 %cnd_$_7117, label %thn_$_7114, label %mrg_$_7115
 thn_$_7114:
@@ -9913,7 +9913,7 @@ els_$_7098:
  %var_ptr_$_7137 = getelementptr %$locals_quasi$323, %$locals_quasi$323* %locals_$_92, i32 0, i32 7
  %load_$_7138 = load i8*, i8** %var_ptr_$_7137
  %record_ptr_$_7139 = bitcast i8* %load_$_7138 to %sexps$133*
- %int_of_ptr_$_7142 = ptrtoint i8* %load_$_7138 to i64
+ %int_of_ptr_$_7142 = ptrtoint i8** %load_$_7138 to i64
  %cnd_$_7143 = icmp eq i64 %int_of_ptr_$_7142, 0
  br i1 %cnd_$_7143, label %thn_$_7140, label %mrg_$_7141
 thn_$_7140:
@@ -9935,7 +9935,7 @@ thn_$_7128:
  %var_ptr_$_7154 = getelementptr %$locals_quasi$323, %$locals_quasi$323* %locals_$_92, i32 0, i32 7
  %load_$_7155 = load i8*, i8** %var_ptr_$_7154
  %record_ptr_$_7156 = bitcast i8* %load_$_7155 to %sexps$133*
- %int_of_ptr_$_7159 = ptrtoint i8* %load_$_7155 to i64
+ %int_of_ptr_$_7159 = ptrtoint i8** %load_$_7155 to i64
  %cnd_$_7160 = icmp eq i64 %int_of_ptr_$_7159, 0
  br i1 %cnd_$_7160, label %thn_$_7157, label %mrg_$_7158
 thn_$_7157:
@@ -9949,8 +9949,8 @@ mrg_$_7158:
  store i8* %ret_$_7163, i8** %temp_$_7164
  %var_ptr_$_7169 = getelementptr %$locals_quasi$323, %$locals_quasi$323* %locals_$_92, i32 0, i32 6
  %res_$_7170 = load i8*, i8** %var_ptr_$_7169
- %left_int_$_7171 = ptrtoint i8* %res_$_7170 to i64
- %right_int_$_7172 = ptrtoint i8* null to i64
+ %left_int_$_7171 = ptrtoint i8** %res_$_7170 to i64
+ %right_int_$_7172 = ptrtoint i8** null to i64
  %cnd_$_7173 = icmp eq i64 %left_int_$_7171, %right_int_$_7172
  %zext_$_7174 = zext i1 %cnd_$_7173 to i64
  %cnd_$_7175 = icmp ne i64 %zext_$_7174, 0
@@ -9959,7 +9959,7 @@ thn_$_7166:
  %var_ptr_$_7176 = getelementptr %$locals_quasi$323, %$locals_quasi$323* %locals_$_92, i32 0, i32 7
  %load_$_7177 = load i8*, i8** %var_ptr_$_7176
  %record_ptr_$_7178 = bitcast i8* %load_$_7177 to %sexps$133*
- %int_of_ptr_$_7181 = ptrtoint i8* %load_$_7177 to i64
+ %int_of_ptr_$_7181 = ptrtoint i8** %load_$_7177 to i64
  %cnd_$_7182 = icmp eq i64 %int_of_ptr_$_7181, 0
  br i1 %cnd_$_7182, label %thn_$_7179, label %mrg_$_7180
 thn_$_7179:
@@ -9974,7 +9974,7 @@ els_$_7167:
  %var_ptr_$_7185 = getelementptr %$locals_quasi$323, %$locals_quasi$323* %locals_$_92, i32 0, i32 6
  %load_$_7186 = load i8*, i8** %var_ptr_$_7185
  %record_ptr_$_7187 = bitcast i8* %load_$_7186 to %sexps$133*
- %int_of_ptr_$_7190 = ptrtoint i8* %load_$_7186 to i64
+ %int_of_ptr_$_7190 = ptrtoint i8** %load_$_7186 to i64
  %cnd_$_7191 = icmp eq i64 %int_of_ptr_$_7190, 0
  br i1 %cnd_$_7191, label %thn_$_7188, label %mrg_$_7189
 thn_$_7188:
@@ -10068,7 +10068,7 @@ thn_$_7251:
  %var_ptr_$_7278 = getelementptr %$locals_quasi$323, %$locals_quasi$323* %locals_$_92, i32 0, i32 1
  %load_$_7279 = load i8*, i8** %var_ptr_$_7278
  %record_ptr_$_7280 = bitcast i8* %load_$_7279 to %Function$135*
- %int_of_ptr_$_7283 = ptrtoint i8* %load_$_7279 to i64
+ %int_of_ptr_$_7283 = ptrtoint i8** %load_$_7279 to i64
  %cnd_$_7284 = icmp eq i64 %int_of_ptr_$_7283, 0
  br i1 %cnd_$_7284, label %thn_$_7281, label %mrg_$_7282
 thn_$_7281:
@@ -10094,7 +10094,7 @@ thn_$_7292:
  %var_ptr_$_7302 = getelementptr %$locals_quasi$323, %$locals_quasi$323* %locals_$_92, i32 0, i32 6
  %load_$_7303 = load i8*, i8** %var_ptr_$_7302
  %record_ptr_$_7304 = bitcast i8* %load_$_7303 to %sexps$133*
- %int_of_ptr_$_7307 = ptrtoint i8* %load_$_7303 to i64
+ %int_of_ptr_$_7307 = ptrtoint i8** %load_$_7303 to i64
  %cnd_$_7308 = icmp eq i64 %int_of_ptr_$_7307, 0
  br i1 %cnd_$_7308, label %thn_$_7305, label %mrg_$_7306
 thn_$_7305:
@@ -10256,7 +10256,7 @@ thn_$_7416:
  %var_ptr_$_7443 = getelementptr %$locals_quasi$323, %$locals_quasi$323* %locals_$_92, i32 0, i32 3
  %load_$_7444 = load i8*, i8** %var_ptr_$_7443
  %record_ptr_$_7445 = bitcast i8* %load_$_7444 to %Function$135*
- %int_of_ptr_$_7448 = ptrtoint i8* %load_$_7444 to i64
+ %int_of_ptr_$_7448 = ptrtoint i8** %load_$_7444 to i64
  %cnd_$_7449 = icmp eq i64 %int_of_ptr_$_7448, 0
  br i1 %cnd_$_7449, label %thn_$_7446, label %mrg_$_7447
 thn_$_7446:
@@ -10362,7 +10362,7 @@ els_$_7129:
  %var_ptr_$_7518 = getelementptr %$locals_quasi$323, %$locals_quasi$323* %locals_$_92, i32 0, i32 7
  %load_$_7519 = load i8*, i8** %var_ptr_$_7518
  %record_ptr_$_7520 = bitcast i8* %load_$_7519 to %sexps$133*
- %int_of_ptr_$_7523 = ptrtoint i8* %load_$_7519 to i64
+ %int_of_ptr_$_7523 = ptrtoint i8** %load_$_7519 to i64
  %cnd_$_7524 = icmp eq i64 %int_of_ptr_$_7523, 0
  br i1 %cnd_$_7524, label %thn_$_7521, label %mrg_$_7522
 thn_$_7521:
@@ -10399,8 +10399,8 @@ define i8* @unquote$324 (%$locals_quasiquote$261* %$sl, i8* %args$334, i64 %leve
  store %$locals_quasiquote$261* %$sl, %$locals_quasiquote$261** %arg_$_7532
  %var_ptr_$_7541 = getelementptr %$locals_unquote$324, %$locals_unquote$324* %locals_$_93, i32 0, i32 1
  %res_$_7542 = load i8*, i8** %var_ptr_$_7541
- %left_int_$_7543 = ptrtoint i8* %res_$_7542 to i64
- %right_int_$_7544 = ptrtoint i8* null to i64
+ %left_int_$_7543 = ptrtoint i8** %res_$_7542 to i64
+ %right_int_$_7544 = ptrtoint i8** null to i64
  %cnd_$_7545 = icmp eq i64 %left_int_$_7543, %right_int_$_7544
  %zext_$_7546 = zext i1 %cnd_$_7545 to i64
  %cnd_$_7547 = icmp ne i64 %zext_$_7546, 0
@@ -10412,7 +10412,7 @@ els_$_7539:
  %var_ptr_$_7552 = getelementptr %$locals_unquote$324, %$locals_unquote$324* %locals_$_93, i32 0, i32 1
  %load_$_7553 = load i8*, i8** %var_ptr_$_7552
  %record_ptr_$_7554 = bitcast i8* %load_$_7553 to %sexps$133*
- %int_of_ptr_$_7557 = ptrtoint i8* %load_$_7553 to i64
+ %int_of_ptr_$_7557 = ptrtoint i8** %load_$_7553 to i64
  %cnd_$_7558 = icmp eq i64 %int_of_ptr_$_7557, 0
  br i1 %cnd_$_7558, label %thn_$_7555, label %mrg_$_7556
 thn_$_7555:
@@ -10421,8 +10421,8 @@ thn_$_7555:
 mrg_$_7556:
  %field_ptr_$_7559 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_7554, i32 0, i32 1
  %res_$_7560 = load i8*, i8** %field_ptr_$_7559
- %left_int_$_7561 = ptrtoint i8* %res_$_7560 to i64
- %right_int_$_7562 = ptrtoint i8* null to i64
+ %left_int_$_7561 = ptrtoint i8** %res_$_7560 to i64
+ %right_int_$_7562 = ptrtoint i8** null to i64
  %cnd_$_7563 = icmp ne i64 %left_int_$_7561, %right_int_$_7562
  %zext_$_7564 = zext i1 %cnd_$_7563 to i64
  %cnd_$_7565 = icmp ne i64 %zext_$_7564, 0
@@ -10431,7 +10431,7 @@ thn_$_7549:
  %var_ptr_$_7566 = getelementptr %$locals_unquote$324, %$locals_unquote$324* %locals_$_93, i32 0, i32 1
  %load_$_7567 = load i8*, i8** %var_ptr_$_7566
  %record_ptr_$_7568 = bitcast i8* %load_$_7567 to %sexps$133*
- %int_of_ptr_$_7571 = ptrtoint i8* %load_$_7567 to i64
+ %int_of_ptr_$_7571 = ptrtoint i8** %load_$_7567 to i64
  %cnd_$_7572 = icmp eq i64 %int_of_ptr_$_7571, 0
  br i1 %cnd_$_7572, label %thn_$_7569, label %mrg_$_7570
 thn_$_7569:
@@ -10441,7 +10441,7 @@ mrg_$_7570:
  %field_ptr_$_7573 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_7568, i32 0, i32 1
  %load_$_7574 = load i8*, i8** %field_ptr_$_7573
  %record_ptr_$_7575 = bitcast i8* %load_$_7574 to %sexps$133*
- %int_of_ptr_$_7578 = ptrtoint i8* %load_$_7574 to i64
+ %int_of_ptr_$_7578 = ptrtoint i8** %load_$_7574 to i64
  %cnd_$_7579 = icmp eq i64 %int_of_ptr_$_7578, 0
  br i1 %cnd_$_7579, label %thn_$_7576, label %mrg_$_7577
 thn_$_7576:
@@ -10450,8 +10450,8 @@ thn_$_7576:
 mrg_$_7577:
  %field_ptr_$_7580 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_7575, i32 0, i32 1
  %res_$_7581 = load i8*, i8** %field_ptr_$_7580
- %left_int_$_7582 = ptrtoint i8* %res_$_7581 to i64
- %right_int_$_7583 = ptrtoint i8* null to i64
+ %left_int_$_7582 = ptrtoint i8** %res_$_7581 to i64
+ %right_int_$_7583 = ptrtoint i8** null to i64
  %cnd_$_7584 = icmp ne i64 %left_int_$_7582, %right_int_$_7583
  %zext_$_7585 = zext i1 %cnd_$_7584 to i64
  store i64 %zext_$_7585, i64* %temp_$_7548
@@ -10505,8 +10505,8 @@ define i8* @quasi_tail$325 (%$locals_quasiquote$261* %$sl, i8* %args$336, i64 %l
  store %$locals_quasiquote$261* %$sl, %$locals_quasiquote$261** %arg_$_7609
  %var_ptr_$_7614 = getelementptr %$locals_quasi_tail$325, %$locals_quasi_tail$325* %locals_$_94, i32 0, i32 1
  %res_$_7615 = load i8*, i8** %var_ptr_$_7614
- %left_int_$_7616 = ptrtoint i8* %res_$_7615 to i64
- %right_int_$_7617 = ptrtoint i8* null to i64
+ %left_int_$_7616 = ptrtoint i8** %res_$_7615 to i64
+ %right_int_$_7617 = ptrtoint i8** null to i64
  %cnd_$_7618 = icmp eq i64 %left_int_$_7616, %right_int_$_7617
  %zext_$_7619 = zext i1 %cnd_$_7618 to i64
  %cnd_$_7620 = icmp ne i64 %zext_$_7619, 0
@@ -10516,19 +10516,19 @@ thn_$_7611:
  br label %mrg_$_7613
 els_$_7612:
  %size_ptr_$_7621 = getelementptr %sexps$133, %sexps$133* null, i32 1
- %size_$_7622 = ptrtoint %sexps$133* %size_ptr_$_7621 to i64
+ %size_$_7622 = ptrtoint %sexps$133** %size_ptr_$_7621 to i64
  %record_ptr_$_7623 = call i8* @allocRecord (i64 %size_$_7622)
  %rec_$_7624 = bitcast i8* %record_ptr_$_7623 to %sexps$133*
  %lnk_$_7625 = getelementptr %$locals_quasi_tail$325, %$locals_quasi_tail$325* %locals_$_94, i32 0, i32 0
  %load_$_7626 = load %$locals_quasiquote$261*, %$locals_quasiquote$261** %lnk_$_7625
  %size_ptr_$_7627 = getelementptr %sexps$133, %sexps$133* null, i32 1
- %size_$_7628 = ptrtoint %sexps$133* %size_ptr_$_7627 to i64
+ %size_$_7628 = ptrtoint %sexps$133** %size_ptr_$_7627 to i64
  %record_ptr_$_7629 = call i8* @allocRecord (i64 %size_$_7628)
  %rec_$_7630 = bitcast i8* %record_ptr_$_7629 to %sexps$133*
  %var_ptr_$_7631 = getelementptr %$locals_quasi_tail$325, %$locals_quasi_tail$325* %locals_$_94, i32 0, i32 1
  %load_$_7632 = load i8*, i8** %var_ptr_$_7631
  %record_ptr_$_7633 = bitcast i8* %load_$_7632 to %sexps$133*
- %int_of_ptr_$_7636 = ptrtoint i8* %load_$_7632 to i64
+ %int_of_ptr_$_7636 = ptrtoint i8** %load_$_7632 to i64
  %cnd_$_7637 = icmp eq i64 %int_of_ptr_$_7636, 0
  br i1 %cnd_$_7637, label %thn_$_7634, label %mrg_$_7635
 thn_$_7634:
@@ -10551,7 +10551,7 @@ mrg_$_7635:
  %var_ptr_$_7648 = getelementptr %$locals_quasi_tail$325, %$locals_quasi_tail$325* %locals_$_94, i32 0, i32 1
  %load_$_7649 = load i8*, i8** %var_ptr_$_7648
  %record_ptr_$_7650 = bitcast i8* %load_$_7649 to %sexps$133*
- %int_of_ptr_$_7653 = ptrtoint i8* %load_$_7649 to i64
+ %int_of_ptr_$_7653 = ptrtoint i8** %load_$_7649 to i64
  %cnd_$_7654 = icmp eq i64 %int_of_ptr_$_7653, 0
  br i1 %cnd_$_7654, label %thn_$_7651, label %mrg_$_7652
 thn_$_7651:
@@ -10856,8 +10856,8 @@ define i64 @plus$342 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$389) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_7874
  %var_ptr_$_7879 = getelementptr %$locals_plus$342, %$locals_plus$342* %locals_$_98, i32 0, i32 2
  %res_$_7880 = load i8*, i8** %var_ptr_$_7879
- %left_int_$_7881 = ptrtoint i8* %res_$_7880 to i64
- %right_int_$_7882 = ptrtoint i8* null to i64
+ %left_int_$_7881 = ptrtoint i8** %res_$_7880 to i64
+ %right_int_$_7882 = ptrtoint i8** null to i64
  %cnd_$_7883 = icmp eq i64 %left_int_$_7881, %right_int_$_7882
  %zext_$_7884 = zext i1 %cnd_$_7883 to i64
  %cnd_$_7885 = icmp ne i64 %zext_$_7884, 0
@@ -10869,7 +10869,7 @@ els_$_7877:
  %var_ptr_$_7886 = getelementptr %$locals_plus$342, %$locals_plus$342* %locals_$_98, i32 0, i32 2
  %load_$_7887 = load i8*, i8** %var_ptr_$_7886
  %record_ptr_$_7888 = bitcast i8* %load_$_7887 to %sexps$133*
- %int_of_ptr_$_7891 = ptrtoint i8* %load_$_7887 to i64
+ %int_of_ptr_$_7891 = ptrtoint i8** %load_$_7887 to i64
  %cnd_$_7892 = icmp eq i64 %int_of_ptr_$_7891, 0
  br i1 %cnd_$_7892, label %thn_$_7889, label %mrg_$_7890
 thn_$_7889:
@@ -10902,7 +10902,7 @@ thn_$_7897:
  %var_ptr_$_7917 = getelementptr %$locals_plus$342, %$locals_plus$342* %locals_$_98, i32 0, i32 2
  %load_$_7918 = load i8*, i8** %var_ptr_$_7917
  %record_ptr_$_7919 = bitcast i8* %load_$_7918 to %sexps$133*
- %int_of_ptr_$_7922 = ptrtoint i8* %load_$_7918 to i64
+ %int_of_ptr_$_7922 = ptrtoint i8** %load_$_7918 to i64
  %cnd_$_7923 = icmp eq i64 %int_of_ptr_$_7922, 0
  br i1 %cnd_$_7923, label %thn_$_7920, label %mrg_$_7921
 thn_$_7920:
@@ -10961,8 +10961,8 @@ define i64 @minus$343 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$391) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_7957
  %var_ptr_$_7962 = getelementptr %$locals_minus$343, %$locals_minus$343* %locals_$_99, i32 0, i32 2
  %res_$_7963 = load i8*, i8** %var_ptr_$_7962
- %left_int_$_7964 = ptrtoint i8* %res_$_7963 to i64
- %right_int_$_7965 = ptrtoint i8* null to i64
+ %left_int_$_7964 = ptrtoint i8** %res_$_7963 to i64
+ %right_int_$_7965 = ptrtoint i8** null to i64
  %cnd_$_7966 = icmp eq i64 %left_int_$_7964, %right_int_$_7965
  %zext_$_7967 = zext i1 %cnd_$_7966 to i64
  %cnd_$_7968 = icmp ne i64 %zext_$_7967, 0
@@ -10974,7 +10974,7 @@ els_$_7960:
  %var_ptr_$_7969 = getelementptr %$locals_minus$343, %$locals_minus$343* %locals_$_99, i32 0, i32 2
  %load_$_7970 = load i8*, i8** %var_ptr_$_7969
  %record_ptr_$_7971 = bitcast i8* %load_$_7970 to %sexps$133*
- %int_of_ptr_$_7974 = ptrtoint i8* %load_$_7970 to i64
+ %int_of_ptr_$_7974 = ptrtoint i8** %load_$_7970 to i64
  %cnd_$_7975 = icmp eq i64 %int_of_ptr_$_7974, 0
  br i1 %cnd_$_7975, label %thn_$_7972, label %mrg_$_7973
 thn_$_7972:
@@ -11007,7 +11007,7 @@ thn_$_7980:
  %var_ptr_$_8000 = getelementptr %$locals_minus$343, %$locals_minus$343* %locals_$_99, i32 0, i32 2
  %load_$_8001 = load i8*, i8** %var_ptr_$_8000
  %record_ptr_$_8002 = bitcast i8* %load_$_8001 to %sexps$133*
- %int_of_ptr_$_8005 = ptrtoint i8* %load_$_8001 to i64
+ %int_of_ptr_$_8005 = ptrtoint i8** %load_$_8001 to i64
  %cnd_$_8006 = icmp eq i64 %int_of_ptr_$_8005, 0
  br i1 %cnd_$_8006, label %thn_$_8003, label %mrg_$_8004
 thn_$_8003:
@@ -11066,8 +11066,8 @@ define i64 @times$344 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$393) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_8040
  %var_ptr_$_8045 = getelementptr %$locals_times$344, %$locals_times$344* %locals_$_100, i32 0, i32 2
  %res_$_8046 = load i8*, i8** %var_ptr_$_8045
- %left_int_$_8047 = ptrtoint i8* %res_$_8046 to i64
- %right_int_$_8048 = ptrtoint i8* null to i64
+ %left_int_$_8047 = ptrtoint i8** %res_$_8046 to i64
+ %right_int_$_8048 = ptrtoint i8** null to i64
  %cnd_$_8049 = icmp eq i64 %left_int_$_8047, %right_int_$_8048
  %zext_$_8050 = zext i1 %cnd_$_8049 to i64
  %cnd_$_8051 = icmp ne i64 %zext_$_8050, 0
@@ -11079,7 +11079,7 @@ els_$_8043:
  %var_ptr_$_8052 = getelementptr %$locals_times$344, %$locals_times$344* %locals_$_100, i32 0, i32 2
  %load_$_8053 = load i8*, i8** %var_ptr_$_8052
  %record_ptr_$_8054 = bitcast i8* %load_$_8053 to %sexps$133*
- %int_of_ptr_$_8057 = ptrtoint i8* %load_$_8053 to i64
+ %int_of_ptr_$_8057 = ptrtoint i8** %load_$_8053 to i64
  %cnd_$_8058 = icmp eq i64 %int_of_ptr_$_8057, 0
  br i1 %cnd_$_8058, label %thn_$_8055, label %mrg_$_8056
 thn_$_8055:
@@ -11112,7 +11112,7 @@ thn_$_8063:
  %var_ptr_$_8083 = getelementptr %$locals_times$344, %$locals_times$344* %locals_$_100, i32 0, i32 2
  %load_$_8084 = load i8*, i8** %var_ptr_$_8083
  %record_ptr_$_8085 = bitcast i8* %load_$_8084 to %sexps$133*
- %int_of_ptr_$_8088 = ptrtoint i8* %load_$_8084 to i64
+ %int_of_ptr_$_8088 = ptrtoint i8** %load_$_8084 to i64
  %cnd_$_8089 = icmp eq i64 %int_of_ptr_$_8088, 0
  br i1 %cnd_$_8089, label %thn_$_8086, label %mrg_$_8087
 thn_$_8086:
@@ -11171,8 +11171,8 @@ define i64 @div$345 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$395) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_8123
  %var_ptr_$_8128 = getelementptr %$locals_div$345, %$locals_div$345* %locals_$_101, i32 0, i32 2
  %res_$_8129 = load i8*, i8** %var_ptr_$_8128
- %left_int_$_8130 = ptrtoint i8* %res_$_8129 to i64
- %right_int_$_8131 = ptrtoint i8* null to i64
+ %left_int_$_8130 = ptrtoint i8** %res_$_8129 to i64
+ %right_int_$_8131 = ptrtoint i8** null to i64
  %cnd_$_8132 = icmp eq i64 %left_int_$_8130, %right_int_$_8131
  %zext_$_8133 = zext i1 %cnd_$_8132 to i64
  %cnd_$_8134 = icmp ne i64 %zext_$_8133, 0
@@ -11190,7 +11190,7 @@ els_$_8126:
  %var_ptr_$_8142 = getelementptr %$locals_div$345, %$locals_div$345* %locals_$_101, i32 0, i32 2
  %load_$_8143 = load i8*, i8** %var_ptr_$_8142
  %record_ptr_$_8144 = bitcast i8* %load_$_8143 to %sexps$133*
- %int_of_ptr_$_8147 = ptrtoint i8* %load_$_8143 to i64
+ %int_of_ptr_$_8147 = ptrtoint i8** %load_$_8143 to i64
  %cnd_$_8148 = icmp eq i64 %int_of_ptr_$_8147, 0
  br i1 %cnd_$_8148, label %thn_$_8145, label %mrg_$_8146
 thn_$_8145:
@@ -11223,7 +11223,7 @@ thn_$_8153:
  %var_ptr_$_8175 = getelementptr %$locals_div$345, %$locals_div$345* %locals_$_101, i32 0, i32 2
  %load_$_8176 = load i8*, i8** %var_ptr_$_8175
  %record_ptr_$_8177 = bitcast i8* %load_$_8176 to %sexps$133*
- %int_of_ptr_$_8180 = ptrtoint i8* %load_$_8176 to i64
+ %int_of_ptr_$_8180 = ptrtoint i8** %load_$_8176 to i64
  %cnd_$_8181 = icmp eq i64 %int_of_ptr_$_8180, 0
  br i1 %cnd_$_8181, label %thn_$_8178, label %mrg_$_8179
 thn_$_8178:
@@ -11288,8 +11288,8 @@ define i64 @expt$346 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$397) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_8216
  %var_ptr_$_8221 = getelementptr %$locals_expt$346, %$locals_expt$346* %locals_$_102, i32 0, i32 2
  %res_$_8222 = load i8*, i8** %var_ptr_$_8221
- %left_int_$_8223 = ptrtoint i8* %res_$_8222 to i64
- %right_int_$_8224 = ptrtoint i8* null to i64
+ %left_int_$_8223 = ptrtoint i8** %res_$_8222 to i64
+ %right_int_$_8224 = ptrtoint i8** null to i64
  %cnd_$_8225 = icmp eq i64 %left_int_$_8223, %right_int_$_8224
  %zext_$_8226 = zext i1 %cnd_$_8225 to i64
  %cnd_$_8227 = icmp ne i64 %zext_$_8226, 0
@@ -11301,7 +11301,7 @@ els_$_8219:
  %var_ptr_$_8228 = getelementptr %$locals_expt$346, %$locals_expt$346* %locals_$_102, i32 0, i32 2
  %load_$_8229 = load i8*, i8** %var_ptr_$_8228
  %record_ptr_$_8230 = bitcast i8* %load_$_8229 to %sexps$133*
- %int_of_ptr_$_8233 = ptrtoint i8* %load_$_8229 to i64
+ %int_of_ptr_$_8233 = ptrtoint i8** %load_$_8229 to i64
  %cnd_$_8234 = icmp eq i64 %int_of_ptr_$_8233, 0
  br i1 %cnd_$_8234, label %thn_$_8231, label %mrg_$_8232
 thn_$_8231:
@@ -11334,7 +11334,7 @@ thn_$_8239:
  %var_ptr_$_8259 = getelementptr %$locals_expt$346, %$locals_expt$346* %locals_$_102, i32 0, i32 2
  %load_$_8260 = load i8*, i8** %var_ptr_$_8259
  %record_ptr_$_8261 = bitcast i8* %load_$_8260 to %sexps$133*
- %int_of_ptr_$_8264 = ptrtoint i8* %load_$_8260 to i64
+ %int_of_ptr_$_8264 = ptrtoint i8** %load_$_8260 to i64
  %cnd_$_8265 = icmp eq i64 %int_of_ptr_$_8264, 0
  br i1 %cnd_$_8265, label %thn_$_8262, label %mrg_$_8263
 thn_$_8262:
@@ -11396,8 +11396,8 @@ define i64 @aux$400 (%$locals_lt_int$347* %$sl, i64 %head$401, i8* %args$402) {
  store %$locals_lt_int$347* %$sl, %$locals_lt_int$347** %arg_$_8300
  %var_ptr_$_8305 = getelementptr %$locals_aux$400, %$locals_aux$400* %locals_$_103, i32 0, i32 3
  %res_$_8306 = load i8*, i8** %var_ptr_$_8305
- %left_int_$_8307 = ptrtoint i8* %res_$_8306 to i64
- %right_int_$_8308 = ptrtoint i8* null to i64
+ %left_int_$_8307 = ptrtoint i8** %res_$_8306 to i64
+ %right_int_$_8308 = ptrtoint i8** null to i64
  %cnd_$_8309 = icmp eq i64 %left_int_$_8307, %right_int_$_8308
  %zext_$_8310 = zext i1 %cnd_$_8309 to i64
  %cnd_$_8311 = icmp ne i64 %zext_$_8310, 0
@@ -11409,7 +11409,7 @@ els_$_8303:
  %var_ptr_$_8312 = getelementptr %$locals_aux$400, %$locals_aux$400* %locals_$_103, i32 0, i32 3
  %load_$_8313 = load i8*, i8** %var_ptr_$_8312
  %record_ptr_$_8314 = bitcast i8* %load_$_8313 to %sexps$133*
- %int_of_ptr_$_8317 = ptrtoint i8* %load_$_8313 to i64
+ %int_of_ptr_$_8317 = ptrtoint i8** %load_$_8313 to i64
  %cnd_$_8318 = icmp eq i64 %int_of_ptr_$_8317, 0
  br i1 %cnd_$_8318, label %thn_$_8315, label %mrg_$_8316
 thn_$_8315:
@@ -11446,7 +11446,7 @@ thn_$_8323:
  %var_ptr_$_8351 = getelementptr %$locals_aux$400, %$locals_aux$400* %locals_$_103, i32 0, i32 3
  %load_$_8352 = load i8*, i8** %var_ptr_$_8351
  %record_ptr_$_8353 = bitcast i8* %load_$_8352 to %sexps$133*
- %int_of_ptr_$_8356 = ptrtoint i8* %load_$_8352 to i64
+ %int_of_ptr_$_8356 = ptrtoint i8** %load_$_8352 to i64
  %cnd_$_8357 = icmp eq i64 %int_of_ptr_$_8356, 0
  br i1 %cnd_$_8357, label %thn_$_8354, label %mrg_$_8355
 thn_$_8354:
@@ -11535,8 +11535,8 @@ define i64 @lt_int$347 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$399) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_8413
  %var_ptr_$_8418 = getelementptr %$locals_lt_int$347, %$locals_lt_int$347* %locals_$_104, i32 0, i32 4
  %res_$_8419 = load i8*, i8** %var_ptr_$_8418
- %left_int_$_8420 = ptrtoint i8* %res_$_8419 to i64
- %right_int_$_8421 = ptrtoint i8* null to i64
+ %left_int_$_8420 = ptrtoint i8** %res_$_8419 to i64
+ %right_int_$_8421 = ptrtoint i8** null to i64
  %cnd_$_8422 = icmp eq i64 %left_int_$_8420, %right_int_$_8421
  %zext_$_8423 = zext i1 %cnd_$_8422 to i64
  %cnd_$_8424 = icmp ne i64 %zext_$_8423, 0
@@ -11548,7 +11548,7 @@ els_$_8416:
  %var_ptr_$_8425 = getelementptr %$locals_lt_int$347, %$locals_lt_int$347* %locals_$_104, i32 0, i32 4
  %load_$_8426 = load i8*, i8** %var_ptr_$_8425
  %record_ptr_$_8427 = bitcast i8* %load_$_8426 to %sexps$133*
- %int_of_ptr_$_8430 = ptrtoint i8* %load_$_8426 to i64
+ %int_of_ptr_$_8430 = ptrtoint i8** %load_$_8426 to i64
  %cnd_$_8431 = icmp eq i64 %int_of_ptr_$_8430, 0
  br i1 %cnd_$_8431, label %thn_$_8428, label %mrg_$_8429
 thn_$_8428:
@@ -11579,7 +11579,7 @@ thn_$_8436:
  %var_ptr_$_8454 = getelementptr %$locals_lt_int$347, %$locals_lt_int$347* %locals_$_104, i32 0, i32 4
  %load_$_8455 = load i8*, i8** %var_ptr_$_8454
  %record_ptr_$_8456 = bitcast i8* %load_$_8455 to %sexps$133*
- %int_of_ptr_$_8459 = ptrtoint i8* %load_$_8455 to i64
+ %int_of_ptr_$_8459 = ptrtoint i8** %load_$_8455 to i64
  %cnd_$_8460 = icmp eq i64 %int_of_ptr_$_8459, 0
  br i1 %cnd_$_8460, label %thn_$_8457, label %mrg_$_8458
 thn_$_8457:
@@ -11640,8 +11640,8 @@ define i64 @aux$406 (%$locals_leq_int$348* %$sl, i64 %head$407, i8* %args$408) {
  store %$locals_leq_int$348* %$sl, %$locals_leq_int$348** %arg_$_8494
  %var_ptr_$_8499 = getelementptr %$locals_aux$406, %$locals_aux$406* %locals_$_105, i32 0, i32 3
  %res_$_8500 = load i8*, i8** %var_ptr_$_8499
- %left_int_$_8501 = ptrtoint i8* %res_$_8500 to i64
- %right_int_$_8502 = ptrtoint i8* null to i64
+ %left_int_$_8501 = ptrtoint i8** %res_$_8500 to i64
+ %right_int_$_8502 = ptrtoint i8** null to i64
  %cnd_$_8503 = icmp eq i64 %left_int_$_8501, %right_int_$_8502
  %zext_$_8504 = zext i1 %cnd_$_8503 to i64
  %cnd_$_8505 = icmp ne i64 %zext_$_8504, 0
@@ -11653,7 +11653,7 @@ els_$_8497:
  %var_ptr_$_8506 = getelementptr %$locals_aux$406, %$locals_aux$406* %locals_$_105, i32 0, i32 3
  %load_$_8507 = load i8*, i8** %var_ptr_$_8506
  %record_ptr_$_8508 = bitcast i8* %load_$_8507 to %sexps$133*
- %int_of_ptr_$_8511 = ptrtoint i8* %load_$_8507 to i64
+ %int_of_ptr_$_8511 = ptrtoint i8** %load_$_8507 to i64
  %cnd_$_8512 = icmp eq i64 %int_of_ptr_$_8511, 0
  br i1 %cnd_$_8512, label %thn_$_8509, label %mrg_$_8510
 thn_$_8509:
@@ -11690,7 +11690,7 @@ thn_$_8517:
  %var_ptr_$_8545 = getelementptr %$locals_aux$406, %$locals_aux$406* %locals_$_105, i32 0, i32 3
  %load_$_8546 = load i8*, i8** %var_ptr_$_8545
  %record_ptr_$_8547 = bitcast i8* %load_$_8546 to %sexps$133*
- %int_of_ptr_$_8550 = ptrtoint i8* %load_$_8546 to i64
+ %int_of_ptr_$_8550 = ptrtoint i8** %load_$_8546 to i64
  %cnd_$_8551 = icmp eq i64 %int_of_ptr_$_8550, 0
  br i1 %cnd_$_8551, label %thn_$_8548, label %mrg_$_8549
 thn_$_8548:
@@ -11779,8 +11779,8 @@ define i64 @leq_int$348 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$405) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_8607
  %var_ptr_$_8612 = getelementptr %$locals_leq_int$348, %$locals_leq_int$348* %locals_$_106, i32 0, i32 4
  %res_$_8613 = load i8*, i8** %var_ptr_$_8612
- %left_int_$_8614 = ptrtoint i8* %res_$_8613 to i64
- %right_int_$_8615 = ptrtoint i8* null to i64
+ %left_int_$_8614 = ptrtoint i8** %res_$_8613 to i64
+ %right_int_$_8615 = ptrtoint i8** null to i64
  %cnd_$_8616 = icmp eq i64 %left_int_$_8614, %right_int_$_8615
  %zext_$_8617 = zext i1 %cnd_$_8616 to i64
  %cnd_$_8618 = icmp ne i64 %zext_$_8617, 0
@@ -11792,7 +11792,7 @@ els_$_8610:
  %var_ptr_$_8619 = getelementptr %$locals_leq_int$348, %$locals_leq_int$348* %locals_$_106, i32 0, i32 4
  %load_$_8620 = load i8*, i8** %var_ptr_$_8619
  %record_ptr_$_8621 = bitcast i8* %load_$_8620 to %sexps$133*
- %int_of_ptr_$_8624 = ptrtoint i8* %load_$_8620 to i64
+ %int_of_ptr_$_8624 = ptrtoint i8** %load_$_8620 to i64
  %cnd_$_8625 = icmp eq i64 %int_of_ptr_$_8624, 0
  br i1 %cnd_$_8625, label %thn_$_8622, label %mrg_$_8623
 thn_$_8622:
@@ -11823,7 +11823,7 @@ thn_$_8630:
  %var_ptr_$_8648 = getelementptr %$locals_leq_int$348, %$locals_leq_int$348* %locals_$_106, i32 0, i32 4
  %load_$_8649 = load i8*, i8** %var_ptr_$_8648
  %record_ptr_$_8650 = bitcast i8* %load_$_8649 to %sexps$133*
- %int_of_ptr_$_8653 = ptrtoint i8* %load_$_8649 to i64
+ %int_of_ptr_$_8653 = ptrtoint i8** %load_$_8649 to i64
  %cnd_$_8654 = icmp eq i64 %int_of_ptr_$_8653, 0
  br i1 %cnd_$_8654, label %thn_$_8651, label %mrg_$_8652
 thn_$_8651:
@@ -11884,8 +11884,8 @@ define i64 @aux$412 (%$locals_eq_int$349* %$sl, i64 %head$413, i8* %args$414) {
  store %$locals_eq_int$349* %$sl, %$locals_eq_int$349** %arg_$_8688
  %var_ptr_$_8693 = getelementptr %$locals_aux$412, %$locals_aux$412* %locals_$_107, i32 0, i32 3
  %res_$_8694 = load i8*, i8** %var_ptr_$_8693
- %left_int_$_8695 = ptrtoint i8* %res_$_8694 to i64
- %right_int_$_8696 = ptrtoint i8* null to i64
+ %left_int_$_8695 = ptrtoint i8** %res_$_8694 to i64
+ %right_int_$_8696 = ptrtoint i8** null to i64
  %cnd_$_8697 = icmp eq i64 %left_int_$_8695, %right_int_$_8696
  %zext_$_8698 = zext i1 %cnd_$_8697 to i64
  %cnd_$_8699 = icmp ne i64 %zext_$_8698, 0
@@ -11897,7 +11897,7 @@ els_$_8691:
  %var_ptr_$_8700 = getelementptr %$locals_aux$412, %$locals_aux$412* %locals_$_107, i32 0, i32 3
  %load_$_8701 = load i8*, i8** %var_ptr_$_8700
  %record_ptr_$_8702 = bitcast i8* %load_$_8701 to %sexps$133*
- %int_of_ptr_$_8705 = ptrtoint i8* %load_$_8701 to i64
+ %int_of_ptr_$_8705 = ptrtoint i8** %load_$_8701 to i64
  %cnd_$_8706 = icmp eq i64 %int_of_ptr_$_8705, 0
  br i1 %cnd_$_8706, label %thn_$_8703, label %mrg_$_8704
 thn_$_8703:
@@ -11927,7 +11927,7 @@ thn_$_8711:
  %var_ptr_$_8732 = getelementptr %$locals_aux$412, %$locals_aux$412* %locals_$_107, i32 0, i32 3
  %load_$_8733 = load i8*, i8** %var_ptr_$_8732
  %record_ptr_$_8734 = bitcast i8* %load_$_8733 to %sexps$133*
- %int_of_ptr_$_8737 = ptrtoint i8* %load_$_8733 to i64
+ %int_of_ptr_$_8737 = ptrtoint i8** %load_$_8733 to i64
  %cnd_$_8738 = icmp eq i64 %int_of_ptr_$_8737, 0
  br i1 %cnd_$_8738, label %thn_$_8735, label %mrg_$_8736
 thn_$_8735:
@@ -12016,8 +12016,8 @@ define i64 @eq_int$349 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$411) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_8794
  %var_ptr_$_8799 = getelementptr %$locals_eq_int$349, %$locals_eq_int$349* %locals_$_108, i32 0, i32 4
  %res_$_8800 = load i8*, i8** %var_ptr_$_8799
- %left_int_$_8801 = ptrtoint i8* %res_$_8800 to i64
- %right_int_$_8802 = ptrtoint i8* null to i64
+ %left_int_$_8801 = ptrtoint i8** %res_$_8800 to i64
+ %right_int_$_8802 = ptrtoint i8** null to i64
  %cnd_$_8803 = icmp eq i64 %left_int_$_8801, %right_int_$_8802
  %zext_$_8804 = zext i1 %cnd_$_8803 to i64
  %cnd_$_8805 = icmp ne i64 %zext_$_8804, 0
@@ -12029,7 +12029,7 @@ els_$_8797:
  %var_ptr_$_8806 = getelementptr %$locals_eq_int$349, %$locals_eq_int$349* %locals_$_108, i32 0, i32 4
  %load_$_8807 = load i8*, i8** %var_ptr_$_8806
  %record_ptr_$_8808 = bitcast i8* %load_$_8807 to %sexps$133*
- %int_of_ptr_$_8811 = ptrtoint i8* %load_$_8807 to i64
+ %int_of_ptr_$_8811 = ptrtoint i8** %load_$_8807 to i64
  %cnd_$_8812 = icmp eq i64 %int_of_ptr_$_8811, 0
  br i1 %cnd_$_8812, label %thn_$_8809, label %mrg_$_8810
 thn_$_8809:
@@ -12060,7 +12060,7 @@ thn_$_8817:
  %var_ptr_$_8835 = getelementptr %$locals_eq_int$349, %$locals_eq_int$349* %locals_$_108, i32 0, i32 4
  %load_$_8836 = load i8*, i8** %var_ptr_$_8835
  %record_ptr_$_8837 = bitcast i8* %load_$_8836 to %sexps$133*
- %int_of_ptr_$_8840 = ptrtoint i8* %load_$_8836 to i64
+ %int_of_ptr_$_8840 = ptrtoint i8** %load_$_8836 to i64
  %cnd_$_8841 = icmp eq i64 %int_of_ptr_$_8840, 0
  br i1 %cnd_$_8841, label %thn_$_8838, label %mrg_$_8839
 thn_$_8838:
@@ -12121,8 +12121,8 @@ define i64 @aux$418 (%$locals_neq_int$350* %$sl, i64 %head$419, i8* %args$420) {
  store %$locals_neq_int$350* %$sl, %$locals_neq_int$350** %arg_$_8875
  %var_ptr_$_8880 = getelementptr %$locals_aux$418, %$locals_aux$418* %locals_$_109, i32 0, i32 3
  %res_$_8881 = load i8*, i8** %var_ptr_$_8880
- %left_int_$_8882 = ptrtoint i8* %res_$_8881 to i64
- %right_int_$_8883 = ptrtoint i8* null to i64
+ %left_int_$_8882 = ptrtoint i8** %res_$_8881 to i64
+ %right_int_$_8883 = ptrtoint i8** null to i64
  %cnd_$_8884 = icmp eq i64 %left_int_$_8882, %right_int_$_8883
  %zext_$_8885 = zext i1 %cnd_$_8884 to i64
  %cnd_$_8886 = icmp ne i64 %zext_$_8885, 0
@@ -12134,7 +12134,7 @@ els_$_8878:
  %var_ptr_$_8887 = getelementptr %$locals_aux$418, %$locals_aux$418* %locals_$_109, i32 0, i32 3
  %load_$_8888 = load i8*, i8** %var_ptr_$_8887
  %record_ptr_$_8889 = bitcast i8* %load_$_8888 to %sexps$133*
- %int_of_ptr_$_8892 = ptrtoint i8* %load_$_8888 to i64
+ %int_of_ptr_$_8892 = ptrtoint i8** %load_$_8888 to i64
  %cnd_$_8893 = icmp eq i64 %int_of_ptr_$_8892, 0
  br i1 %cnd_$_8893, label %thn_$_8890, label %mrg_$_8891
 thn_$_8890:
@@ -12164,7 +12164,7 @@ thn_$_8898:
  %var_ptr_$_8919 = getelementptr %$locals_aux$418, %$locals_aux$418* %locals_$_109, i32 0, i32 3
  %load_$_8920 = load i8*, i8** %var_ptr_$_8919
  %record_ptr_$_8921 = bitcast i8* %load_$_8920 to %sexps$133*
- %int_of_ptr_$_8924 = ptrtoint i8* %load_$_8920 to i64
+ %int_of_ptr_$_8924 = ptrtoint i8** %load_$_8920 to i64
  %cnd_$_8925 = icmp eq i64 %int_of_ptr_$_8924, 0
  br i1 %cnd_$_8925, label %thn_$_8922, label %mrg_$_8923
 thn_$_8922:
@@ -12253,8 +12253,8 @@ define i64 @neq_int$350 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$417) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_8981
  %var_ptr_$_8986 = getelementptr %$locals_neq_int$350, %$locals_neq_int$350* %locals_$_110, i32 0, i32 4
  %res_$_8987 = load i8*, i8** %var_ptr_$_8986
- %left_int_$_8988 = ptrtoint i8* %res_$_8987 to i64
- %right_int_$_8989 = ptrtoint i8* null to i64
+ %left_int_$_8988 = ptrtoint i8** %res_$_8987 to i64
+ %right_int_$_8989 = ptrtoint i8** null to i64
  %cnd_$_8990 = icmp eq i64 %left_int_$_8988, %right_int_$_8989
  %zext_$_8991 = zext i1 %cnd_$_8990 to i64
  %cnd_$_8992 = icmp ne i64 %zext_$_8991, 0
@@ -12266,7 +12266,7 @@ els_$_8984:
  %var_ptr_$_8993 = getelementptr %$locals_neq_int$350, %$locals_neq_int$350* %locals_$_110, i32 0, i32 4
  %load_$_8994 = load i8*, i8** %var_ptr_$_8993
  %record_ptr_$_8995 = bitcast i8* %load_$_8994 to %sexps$133*
- %int_of_ptr_$_8998 = ptrtoint i8* %load_$_8994 to i64
+ %int_of_ptr_$_8998 = ptrtoint i8** %load_$_8994 to i64
  %cnd_$_8999 = icmp eq i64 %int_of_ptr_$_8998, 0
  br i1 %cnd_$_8999, label %thn_$_8996, label %mrg_$_8997
 thn_$_8996:
@@ -12297,7 +12297,7 @@ thn_$_9004:
  %var_ptr_$_9022 = getelementptr %$locals_neq_int$350, %$locals_neq_int$350* %locals_$_110, i32 0, i32 4
  %load_$_9023 = load i8*, i8** %var_ptr_$_9022
  %record_ptr_$_9024 = bitcast i8* %load_$_9023 to %sexps$133*
- %int_of_ptr_$_9027 = ptrtoint i8* %load_$_9023 to i64
+ %int_of_ptr_$_9027 = ptrtoint i8** %load_$_9023 to i64
  %cnd_$_9028 = icmp eq i64 %int_of_ptr_$_9027, 0
  br i1 %cnd_$_9028, label %thn_$_9025, label %mrg_$_9026
 thn_$_9025:
@@ -12358,8 +12358,8 @@ define i64 @aux$424 (%$locals_geq_int$351* %$sl, i64 %head$425, i8* %args$426) {
  store %$locals_geq_int$351* %$sl, %$locals_geq_int$351** %arg_$_9062
  %var_ptr_$_9067 = getelementptr %$locals_aux$424, %$locals_aux$424* %locals_$_111, i32 0, i32 3
  %res_$_9068 = load i8*, i8** %var_ptr_$_9067
- %left_int_$_9069 = ptrtoint i8* %res_$_9068 to i64
- %right_int_$_9070 = ptrtoint i8* null to i64
+ %left_int_$_9069 = ptrtoint i8** %res_$_9068 to i64
+ %right_int_$_9070 = ptrtoint i8** null to i64
  %cnd_$_9071 = icmp eq i64 %left_int_$_9069, %right_int_$_9070
  %zext_$_9072 = zext i1 %cnd_$_9071 to i64
  %cnd_$_9073 = icmp ne i64 %zext_$_9072, 0
@@ -12371,7 +12371,7 @@ els_$_9065:
  %var_ptr_$_9074 = getelementptr %$locals_aux$424, %$locals_aux$424* %locals_$_111, i32 0, i32 3
  %load_$_9075 = load i8*, i8** %var_ptr_$_9074
  %record_ptr_$_9076 = bitcast i8* %load_$_9075 to %sexps$133*
- %int_of_ptr_$_9079 = ptrtoint i8* %load_$_9075 to i64
+ %int_of_ptr_$_9079 = ptrtoint i8** %load_$_9075 to i64
  %cnd_$_9080 = icmp eq i64 %int_of_ptr_$_9079, 0
  br i1 %cnd_$_9080, label %thn_$_9077, label %mrg_$_9078
 thn_$_9077:
@@ -12408,7 +12408,7 @@ thn_$_9085:
  %var_ptr_$_9113 = getelementptr %$locals_aux$424, %$locals_aux$424* %locals_$_111, i32 0, i32 3
  %load_$_9114 = load i8*, i8** %var_ptr_$_9113
  %record_ptr_$_9115 = bitcast i8* %load_$_9114 to %sexps$133*
- %int_of_ptr_$_9118 = ptrtoint i8* %load_$_9114 to i64
+ %int_of_ptr_$_9118 = ptrtoint i8** %load_$_9114 to i64
  %cnd_$_9119 = icmp eq i64 %int_of_ptr_$_9118, 0
  br i1 %cnd_$_9119, label %thn_$_9116, label %mrg_$_9117
 thn_$_9116:
@@ -12497,8 +12497,8 @@ define i64 @geq_int$351 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$423) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_9175
  %var_ptr_$_9180 = getelementptr %$locals_geq_int$351, %$locals_geq_int$351* %locals_$_112, i32 0, i32 4
  %res_$_9181 = load i8*, i8** %var_ptr_$_9180
- %left_int_$_9182 = ptrtoint i8* %res_$_9181 to i64
- %right_int_$_9183 = ptrtoint i8* null to i64
+ %left_int_$_9182 = ptrtoint i8** %res_$_9181 to i64
+ %right_int_$_9183 = ptrtoint i8** null to i64
  %cnd_$_9184 = icmp eq i64 %left_int_$_9182, %right_int_$_9183
  %zext_$_9185 = zext i1 %cnd_$_9184 to i64
  %cnd_$_9186 = icmp ne i64 %zext_$_9185, 0
@@ -12510,7 +12510,7 @@ els_$_9178:
  %var_ptr_$_9187 = getelementptr %$locals_geq_int$351, %$locals_geq_int$351* %locals_$_112, i32 0, i32 4
  %load_$_9188 = load i8*, i8** %var_ptr_$_9187
  %record_ptr_$_9189 = bitcast i8* %load_$_9188 to %sexps$133*
- %int_of_ptr_$_9192 = ptrtoint i8* %load_$_9188 to i64
+ %int_of_ptr_$_9192 = ptrtoint i8** %load_$_9188 to i64
  %cnd_$_9193 = icmp eq i64 %int_of_ptr_$_9192, 0
  br i1 %cnd_$_9193, label %thn_$_9190, label %mrg_$_9191
 thn_$_9190:
@@ -12541,7 +12541,7 @@ thn_$_9198:
  %var_ptr_$_9216 = getelementptr %$locals_geq_int$351, %$locals_geq_int$351* %locals_$_112, i32 0, i32 4
  %load_$_9217 = load i8*, i8** %var_ptr_$_9216
  %record_ptr_$_9218 = bitcast i8* %load_$_9217 to %sexps$133*
- %int_of_ptr_$_9221 = ptrtoint i8* %load_$_9217 to i64
+ %int_of_ptr_$_9221 = ptrtoint i8** %load_$_9217 to i64
  %cnd_$_9222 = icmp eq i64 %int_of_ptr_$_9221, 0
  br i1 %cnd_$_9222, label %thn_$_9219, label %mrg_$_9220
 thn_$_9219:
@@ -12602,8 +12602,8 @@ define i64 @aux$430 (%$locals_gt_int$352* %$sl, i64 %head$431, i8* %args$432) {
  store %$locals_gt_int$352* %$sl, %$locals_gt_int$352** %arg_$_9256
  %var_ptr_$_9261 = getelementptr %$locals_aux$430, %$locals_aux$430* %locals_$_113, i32 0, i32 3
  %res_$_9262 = load i8*, i8** %var_ptr_$_9261
- %left_int_$_9263 = ptrtoint i8* %res_$_9262 to i64
- %right_int_$_9264 = ptrtoint i8* null to i64
+ %left_int_$_9263 = ptrtoint i8** %res_$_9262 to i64
+ %right_int_$_9264 = ptrtoint i8** null to i64
  %cnd_$_9265 = icmp eq i64 %left_int_$_9263, %right_int_$_9264
  %zext_$_9266 = zext i1 %cnd_$_9265 to i64
  %cnd_$_9267 = icmp ne i64 %zext_$_9266, 0
@@ -12615,7 +12615,7 @@ els_$_9259:
  %var_ptr_$_9268 = getelementptr %$locals_aux$430, %$locals_aux$430* %locals_$_113, i32 0, i32 3
  %load_$_9269 = load i8*, i8** %var_ptr_$_9268
  %record_ptr_$_9270 = bitcast i8* %load_$_9269 to %sexps$133*
- %int_of_ptr_$_9273 = ptrtoint i8* %load_$_9269 to i64
+ %int_of_ptr_$_9273 = ptrtoint i8** %load_$_9269 to i64
  %cnd_$_9274 = icmp eq i64 %int_of_ptr_$_9273, 0
  br i1 %cnd_$_9274, label %thn_$_9271, label %mrg_$_9272
 thn_$_9271:
@@ -12652,7 +12652,7 @@ thn_$_9279:
  %var_ptr_$_9307 = getelementptr %$locals_aux$430, %$locals_aux$430* %locals_$_113, i32 0, i32 3
  %load_$_9308 = load i8*, i8** %var_ptr_$_9307
  %record_ptr_$_9309 = bitcast i8* %load_$_9308 to %sexps$133*
- %int_of_ptr_$_9312 = ptrtoint i8* %load_$_9308 to i64
+ %int_of_ptr_$_9312 = ptrtoint i8** %load_$_9308 to i64
  %cnd_$_9313 = icmp eq i64 %int_of_ptr_$_9312, 0
  br i1 %cnd_$_9313, label %thn_$_9310, label %mrg_$_9311
 thn_$_9310:
@@ -12741,8 +12741,8 @@ define i64 @gt_int$352 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$429) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_9369
  %var_ptr_$_9374 = getelementptr %$locals_gt_int$352, %$locals_gt_int$352* %locals_$_114, i32 0, i32 4
  %res_$_9375 = load i8*, i8** %var_ptr_$_9374
- %left_int_$_9376 = ptrtoint i8* %res_$_9375 to i64
- %right_int_$_9377 = ptrtoint i8* null to i64
+ %left_int_$_9376 = ptrtoint i8** %res_$_9375 to i64
+ %right_int_$_9377 = ptrtoint i8** null to i64
  %cnd_$_9378 = icmp eq i64 %left_int_$_9376, %right_int_$_9377
  %zext_$_9379 = zext i1 %cnd_$_9378 to i64
  %cnd_$_9380 = icmp ne i64 %zext_$_9379, 0
@@ -12754,7 +12754,7 @@ els_$_9372:
  %var_ptr_$_9381 = getelementptr %$locals_gt_int$352, %$locals_gt_int$352* %locals_$_114, i32 0, i32 4
  %load_$_9382 = load i8*, i8** %var_ptr_$_9381
  %record_ptr_$_9383 = bitcast i8* %load_$_9382 to %sexps$133*
- %int_of_ptr_$_9386 = ptrtoint i8* %load_$_9382 to i64
+ %int_of_ptr_$_9386 = ptrtoint i8** %load_$_9382 to i64
  %cnd_$_9387 = icmp eq i64 %int_of_ptr_$_9386, 0
  br i1 %cnd_$_9387, label %thn_$_9384, label %mrg_$_9385
 thn_$_9384:
@@ -12785,7 +12785,7 @@ thn_$_9392:
  %var_ptr_$_9410 = getelementptr %$locals_gt_int$352, %$locals_gt_int$352* %locals_$_114, i32 0, i32 4
  %load_$_9411 = load i8*, i8** %var_ptr_$_9410
  %record_ptr_$_9412 = bitcast i8* %load_$_9411 to %sexps$133*
- %int_of_ptr_$_9415 = ptrtoint i8* %load_$_9411 to i64
+ %int_of_ptr_$_9415 = ptrtoint i8** %load_$_9411 to i64
  %cnd_$_9416 = icmp eq i64 %int_of_ptr_$_9415, 0
  br i1 %cnd_$_9416, label %thn_$_9413, label %mrg_$_9414
 thn_$_9413:
@@ -12845,8 +12845,8 @@ define i64 @min$353 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$435) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_9449
  %var_ptr_$_9454 = getelementptr %$locals_min$353, %$locals_min$353* %locals_$_115, i32 0, i32 3
  %res_$_9455 = load i8*, i8** %var_ptr_$_9454
- %left_int_$_9456 = ptrtoint i8* %res_$_9455 to i64
- %right_int_$_9457 = ptrtoint i8* null to i64
+ %left_int_$_9456 = ptrtoint i8** %res_$_9455 to i64
+ %right_int_$_9457 = ptrtoint i8** null to i64
  %cnd_$_9458 = icmp eq i64 %left_int_$_9456, %right_int_$_9457
  %zext_$_9459 = zext i1 %cnd_$_9458 to i64
  %cnd_$_9460 = icmp ne i64 %zext_$_9459, 0
@@ -12864,7 +12864,7 @@ els_$_9452:
  %var_ptr_$_9468 = getelementptr %$locals_min$353, %$locals_min$353* %locals_$_115, i32 0, i32 3
  %load_$_9469 = load i8*, i8** %var_ptr_$_9468
  %record_ptr_$_9470 = bitcast i8* %load_$_9469 to %sexps$133*
- %int_of_ptr_$_9473 = ptrtoint i8* %load_$_9469 to i64
+ %int_of_ptr_$_9473 = ptrtoint i8** %load_$_9469 to i64
  %cnd_$_9474 = icmp eq i64 %int_of_ptr_$_9473, 0
  br i1 %cnd_$_9474, label %thn_$_9471, label %mrg_$_9472
 thn_$_9471:
@@ -12888,7 +12888,7 @@ thn_$_9479:
  %var_ptr_$_9494 = getelementptr %$locals_min$353, %$locals_min$353* %locals_$_115, i32 0, i32 3
  %load_$_9495 = load i8*, i8** %var_ptr_$_9494
  %record_ptr_$_9496 = bitcast i8* %load_$_9495 to %sexps$133*
- %int_of_ptr_$_9499 = ptrtoint i8* %load_$_9495 to i64
+ %int_of_ptr_$_9499 = ptrtoint i8** %load_$_9495 to i64
  %cnd_$_9500 = icmp eq i64 %int_of_ptr_$_9499, 0
  br i1 %cnd_$_9500, label %thn_$_9497, label %mrg_$_9498
 thn_$_9497:
@@ -12897,8 +12897,8 @@ thn_$_9497:
 mrg_$_9498:
  %field_ptr_$_9501 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_9496, i32 0, i32 1
  %res_$_9502 = load i8*, i8** %field_ptr_$_9501
- %left_int_$_9503 = ptrtoint i8* %res_$_9502 to i64
- %right_int_$_9504 = ptrtoint i8* null to i64
+ %left_int_$_9503 = ptrtoint i8** %res_$_9502 to i64
+ %right_int_$_9504 = ptrtoint i8** null to i64
  %cnd_$_9505 = icmp ne i64 %left_int_$_9503, %right_int_$_9504
  %zext_$_9506 = zext i1 %cnd_$_9505 to i64
  %cnd_$_9507 = icmp ne i64 %zext_$_9506, 0
@@ -12909,7 +12909,7 @@ thn_$_9491:
  %var_ptr_$_9510 = getelementptr %$locals_min$353, %$locals_min$353* %locals_$_115, i32 0, i32 3
  %load_$_9511 = load i8*, i8** %var_ptr_$_9510
  %record_ptr_$_9512 = bitcast i8* %load_$_9511 to %sexps$133*
- %int_of_ptr_$_9515 = ptrtoint i8* %load_$_9511 to i64
+ %int_of_ptr_$_9515 = ptrtoint i8** %load_$_9511 to i64
  %cnd_$_9516 = icmp eq i64 %int_of_ptr_$_9515, 0
  br i1 %cnd_$_9516, label %thn_$_9513, label %mrg_$_9514
 thn_$_9513:
@@ -13015,8 +13015,8 @@ define i64 @max$354 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$438) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_9584
  %var_ptr_$_9589 = getelementptr %$locals_max$354, %$locals_max$354* %locals_$_116, i32 0, i32 3
  %res_$_9590 = load i8*, i8** %var_ptr_$_9589
- %left_int_$_9591 = ptrtoint i8* %res_$_9590 to i64
- %right_int_$_9592 = ptrtoint i8* null to i64
+ %left_int_$_9591 = ptrtoint i8** %res_$_9590 to i64
+ %right_int_$_9592 = ptrtoint i8** null to i64
  %cnd_$_9593 = icmp eq i64 %left_int_$_9591, %right_int_$_9592
  %zext_$_9594 = zext i1 %cnd_$_9593 to i64
  %cnd_$_9595 = icmp ne i64 %zext_$_9594, 0
@@ -13034,7 +13034,7 @@ els_$_9587:
  %var_ptr_$_9603 = getelementptr %$locals_max$354, %$locals_max$354* %locals_$_116, i32 0, i32 3
  %load_$_9604 = load i8*, i8** %var_ptr_$_9603
  %record_ptr_$_9605 = bitcast i8* %load_$_9604 to %sexps$133*
- %int_of_ptr_$_9608 = ptrtoint i8* %load_$_9604 to i64
+ %int_of_ptr_$_9608 = ptrtoint i8** %load_$_9604 to i64
  %cnd_$_9609 = icmp eq i64 %int_of_ptr_$_9608, 0
  br i1 %cnd_$_9609, label %thn_$_9606, label %mrg_$_9607
 thn_$_9606:
@@ -13058,7 +13058,7 @@ thn_$_9614:
  %var_ptr_$_9629 = getelementptr %$locals_max$354, %$locals_max$354* %locals_$_116, i32 0, i32 3
  %load_$_9630 = load i8*, i8** %var_ptr_$_9629
  %record_ptr_$_9631 = bitcast i8* %load_$_9630 to %sexps$133*
- %int_of_ptr_$_9634 = ptrtoint i8* %load_$_9630 to i64
+ %int_of_ptr_$_9634 = ptrtoint i8** %load_$_9630 to i64
  %cnd_$_9635 = icmp eq i64 %int_of_ptr_$_9634, 0
  br i1 %cnd_$_9635, label %thn_$_9632, label %mrg_$_9633
 thn_$_9632:
@@ -13067,8 +13067,8 @@ thn_$_9632:
 mrg_$_9633:
  %field_ptr_$_9636 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_9631, i32 0, i32 1
  %res_$_9637 = load i8*, i8** %field_ptr_$_9636
- %left_int_$_9638 = ptrtoint i8* %res_$_9637 to i64
- %right_int_$_9639 = ptrtoint i8* null to i64
+ %left_int_$_9638 = ptrtoint i8** %res_$_9637 to i64
+ %right_int_$_9639 = ptrtoint i8** null to i64
  %cnd_$_9640 = icmp ne i64 %left_int_$_9638, %right_int_$_9639
  %zext_$_9641 = zext i1 %cnd_$_9640 to i64
  %cnd_$_9642 = icmp ne i64 %zext_$_9641, 0
@@ -13079,7 +13079,7 @@ thn_$_9626:
  %var_ptr_$_9645 = getelementptr %$locals_max$354, %$locals_max$354* %locals_$_116, i32 0, i32 3
  %load_$_9646 = load i8*, i8** %var_ptr_$_9645
  %record_ptr_$_9647 = bitcast i8* %load_$_9646 to %sexps$133*
- %int_of_ptr_$_9650 = ptrtoint i8* %load_$_9646 to i64
+ %int_of_ptr_$_9650 = ptrtoint i8** %load_$_9646 to i64
  %cnd_$_9651 = icmp eq i64 %int_of_ptr_$_9650, 0
  br i1 %cnd_$_9651, label %thn_$_9648, label %mrg_$_9649
 thn_$_9648:
@@ -13183,8 +13183,8 @@ define i8* @progn$355 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$441) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_9719
  %var_ptr_$_9724 = getelementptr %$locals_progn$355, %$locals_progn$355* %locals_$_117, i32 0, i32 2
  %res_$_9725 = load i8*, i8** %var_ptr_$_9724
- %left_int_$_9726 = ptrtoint i8* %res_$_9725 to i64
- %right_int_$_9727 = ptrtoint i8* null to i64
+ %left_int_$_9726 = ptrtoint i8** %res_$_9725 to i64
+ %right_int_$_9727 = ptrtoint i8** null to i64
  %cnd_$_9728 = icmp eq i64 %left_int_$_9726, %right_int_$_9727
  %zext_$_9729 = zext i1 %cnd_$_9728 to i64
  %cnd_$_9730 = icmp ne i64 %zext_$_9729, 0
@@ -13202,7 +13202,7 @@ els_$_9722:
  %var_ptr_$_9738 = getelementptr %$locals_progn$355, %$locals_progn$355* %locals_$_117, i32 0, i32 2
  %load_$_9739 = load i8*, i8** %var_ptr_$_9738
  %record_ptr_$_9740 = bitcast i8* %load_$_9739 to %sexps$133*
- %int_of_ptr_$_9743 = ptrtoint i8* %load_$_9739 to i64
+ %int_of_ptr_$_9743 = ptrtoint i8** %load_$_9739 to i64
  %cnd_$_9744 = icmp eq i64 %int_of_ptr_$_9743, 0
  br i1 %cnd_$_9744, label %thn_$_9741, label %mrg_$_9742
 thn_$_9741:
@@ -13216,7 +13216,7 @@ mrg_$_9742:
  %var_ptr_$_9752 = getelementptr %$locals_progn$355, %$locals_progn$355* %locals_$_117, i32 0, i32 2
  %load_$_9753 = load i8*, i8** %var_ptr_$_9752
  %record_ptr_$_9754 = bitcast i8* %load_$_9753 to %sexps$133*
- %int_of_ptr_$_9757 = ptrtoint i8* %load_$_9753 to i64
+ %int_of_ptr_$_9757 = ptrtoint i8** %load_$_9753 to i64
  %cnd_$_9758 = icmp eq i64 %int_of_ptr_$_9757, 0
  br i1 %cnd_$_9758, label %thn_$_9755, label %mrg_$_9756
 thn_$_9755:
@@ -13225,8 +13225,8 @@ thn_$_9755:
 mrg_$_9756:
  %field_ptr_$_9759 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_9754, i32 0, i32 1
  %res_$_9760 = load i8*, i8** %field_ptr_$_9759
- %left_int_$_9761 = ptrtoint i8* %res_$_9760 to i64
- %right_int_$_9762 = ptrtoint i8* null to i64
+ %left_int_$_9761 = ptrtoint i8** %res_$_9760 to i64
+ %right_int_$_9762 = ptrtoint i8** null to i64
  %cnd_$_9763 = icmp eq i64 %left_int_$_9761, %right_int_$_9762
  %zext_$_9764 = zext i1 %cnd_$_9763 to i64
  %cnd_$_9765 = icmp ne i64 %zext_$_9764, 0
@@ -13242,7 +13242,7 @@ els_$_9750:
  %var_ptr_$_9770 = getelementptr %$locals_progn$355, %$locals_progn$355* %locals_$_117, i32 0, i32 2
  %load_$_9771 = load i8*, i8** %var_ptr_$_9770
  %record_ptr_$_9772 = bitcast i8* %load_$_9771 to %sexps$133*
- %int_of_ptr_$_9775 = ptrtoint i8* %load_$_9771 to i64
+ %int_of_ptr_$_9775 = ptrtoint i8** %load_$_9771 to i64
  %cnd_$_9776 = icmp eq i64 %int_of_ptr_$_9775, 0
  br i1 %cnd_$_9776, label %thn_$_9773, label %mrg_$_9774
 thn_$_9773:
@@ -13272,8 +13272,8 @@ define i8* @aux$446 (%$locals_map$356* %$sl, i8* %args$447) {
  store %$locals_map$356* %$sl, %$locals_map$356** %arg_$_9783
  %var_ptr_$_9788 = getelementptr %$locals_aux$446, %$locals_aux$446* %locals_$_118, i32 0, i32 1
  %res_$_9789 = load i8*, i8** %var_ptr_$_9788
- %left_int_$_9790 = ptrtoint i8* %res_$_9789 to i64
- %right_int_$_9791 = ptrtoint i8* null to i64
+ %left_int_$_9790 = ptrtoint i8** %res_$_9789 to i64
+ %right_int_$_9791 = ptrtoint i8** null to i64
  %cnd_$_9792 = icmp eq i64 %left_int_$_9790, %right_int_$_9791
  %zext_$_9793 = zext i1 %cnd_$_9792 to i64
  %cnd_$_9794 = icmp ne i64 %zext_$_9793, 0
@@ -13283,7 +13283,7 @@ thn_$_9785:
  br label %mrg_$_9787
 els_$_9786:
  %size_ptr_$_9795 = getelementptr %sexps$133, %sexps$133* null, i32 1
- %size_$_9796 = ptrtoint %sexps$133* %size_ptr_$_9795 to i64
+ %size_$_9796 = ptrtoint %sexps$133** %size_ptr_$_9795 to i64
  %record_ptr_$_9797 = call i8* @allocRecord (i64 %size_$_9796)
  %rec_$_9798 = bitcast i8* %record_ptr_$_9797 to %sexps$133*
  %lnk_$_9799 = getelementptr %$locals_aux$446, %$locals_aux$446* %locals_$_118, i32 0, i32 0
@@ -13304,13 +13304,13 @@ els_$_9786:
  %res_$_9814 = load i8*, i8** %var_ptr_$_9813
  %ret_$_9815 = call i8* @get_fun$157 (%$locals_tigermain* %load_$_9810, i8* %res_$_9814)
  %size_ptr_$_9816 = getelementptr %sexps$133, %sexps$133* null, i32 1
- %size_$_9817 = ptrtoint %sexps$133* %size_ptr_$_9816 to i64
+ %size_$_9817 = ptrtoint %sexps$133** %size_ptr_$_9816 to i64
  %record_ptr_$_9818 = call i8* @allocRecord (i64 %size_$_9817)
  %rec_$_9819 = bitcast i8* %record_ptr_$_9818 to %sexps$133*
  %var_ptr_$_9820 = getelementptr %$locals_aux$446, %$locals_aux$446* %locals_$_118, i32 0, i32 1
  %load_$_9821 = load i8*, i8** %var_ptr_$_9820
  %record_ptr_$_9822 = bitcast i8* %load_$_9821 to %sexps$133*
- %int_of_ptr_$_9825 = ptrtoint i8* %load_$_9821 to i64
+ %int_of_ptr_$_9825 = ptrtoint i8** %load_$_9821 to i64
  %cnd_$_9826 = icmp eq i64 %int_of_ptr_$_9825, 0
  br i1 %cnd_$_9826, label %thn_$_9823, label %mrg_$_9824
 thn_$_9823:
@@ -13337,7 +13337,7 @@ mrg_$_9824:
  %var_ptr_$_9841 = getelementptr %$locals_aux$446, %$locals_aux$446* %locals_$_118, i32 0, i32 1
  %load_$_9842 = load i8*, i8** %var_ptr_$_9841
  %record_ptr_$_9843 = bitcast i8* %load_$_9842 to %sexps$133*
- %int_of_ptr_$_9846 = ptrtoint i8* %load_$_9842 to i64
+ %int_of_ptr_$_9846 = ptrtoint i8** %load_$_9842 to i64
  %cnd_$_9847 = icmp eq i64 %int_of_ptr_$_9846, 0
  br i1 %cnd_$_9847, label %thn_$_9844, label %mrg_$_9845
 thn_$_9844:
@@ -13369,8 +13369,8 @@ define i8* @map$356 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$443) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_9854
  %var_ptr_$_9863 = getelementptr %$locals_map$356, %$locals_map$356* %locals_$_119, i32 0, i32 4
  %res_$_9864 = load i8*, i8** %var_ptr_$_9863
- %left_int_$_9865 = ptrtoint i8* %res_$_9864 to i64
- %right_int_$_9866 = ptrtoint i8* null to i64
+ %left_int_$_9865 = ptrtoint i8** %res_$_9864 to i64
+ %right_int_$_9866 = ptrtoint i8** null to i64
  %cnd_$_9867 = icmp eq i64 %left_int_$_9865, %right_int_$_9866
  %zext_$_9868 = zext i1 %cnd_$_9867 to i64
  %cnd_$_9869 = icmp ne i64 %zext_$_9868, 0
@@ -13382,7 +13382,7 @@ els_$_9861:
  %var_ptr_$_9874 = getelementptr %$locals_map$356, %$locals_map$356* %locals_$_119, i32 0, i32 4
  %load_$_9875 = load i8*, i8** %var_ptr_$_9874
  %record_ptr_$_9876 = bitcast i8* %load_$_9875 to %sexps$133*
- %int_of_ptr_$_9879 = ptrtoint i8* %load_$_9875 to i64
+ %int_of_ptr_$_9879 = ptrtoint i8** %load_$_9875 to i64
  %cnd_$_9880 = icmp eq i64 %int_of_ptr_$_9879, 0
  br i1 %cnd_$_9880, label %thn_$_9877, label %mrg_$_9878
 thn_$_9877:
@@ -13391,8 +13391,8 @@ thn_$_9877:
 mrg_$_9878:
  %field_ptr_$_9881 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_9876, i32 0, i32 1
  %res_$_9882 = load i8*, i8** %field_ptr_$_9881
- %left_int_$_9883 = ptrtoint i8* %res_$_9882 to i64
- %right_int_$_9884 = ptrtoint i8* null to i64
+ %left_int_$_9883 = ptrtoint i8** %res_$_9882 to i64
+ %right_int_$_9884 = ptrtoint i8** null to i64
  %cnd_$_9885 = icmp ne i64 %left_int_$_9883, %right_int_$_9884
  %zext_$_9886 = zext i1 %cnd_$_9885 to i64
  %cnd_$_9887 = icmp ne i64 %zext_$_9886, 0
@@ -13401,7 +13401,7 @@ thn_$_9871:
  %var_ptr_$_9888 = getelementptr %$locals_map$356, %$locals_map$356* %locals_$_119, i32 0, i32 4
  %load_$_9889 = load i8*, i8** %var_ptr_$_9888
  %record_ptr_$_9890 = bitcast i8* %load_$_9889 to %sexps$133*
- %int_of_ptr_$_9893 = ptrtoint i8* %load_$_9889 to i64
+ %int_of_ptr_$_9893 = ptrtoint i8** %load_$_9889 to i64
  %cnd_$_9894 = icmp eq i64 %int_of_ptr_$_9893, 0
  br i1 %cnd_$_9894, label %thn_$_9891, label %mrg_$_9892
 thn_$_9891:
@@ -13411,7 +13411,7 @@ mrg_$_9892:
  %field_ptr_$_9895 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_9890, i32 0, i32 1
  %load_$_9896 = load i8*, i8** %field_ptr_$_9895
  %record_ptr_$_9897 = bitcast i8* %load_$_9896 to %sexps$133*
- %int_of_ptr_$_9900 = ptrtoint i8* %load_$_9896 to i64
+ %int_of_ptr_$_9900 = ptrtoint i8** %load_$_9896 to i64
  %cnd_$_9901 = icmp eq i64 %int_of_ptr_$_9900, 0
  br i1 %cnd_$_9901, label %thn_$_9898, label %mrg_$_9899
 thn_$_9898:
@@ -13420,8 +13420,8 @@ thn_$_9898:
 mrg_$_9899:
  %field_ptr_$_9902 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_9897, i32 0, i32 1
  %res_$_9903 = load i8*, i8** %field_ptr_$_9902
- %left_int_$_9904 = ptrtoint i8* %res_$_9903 to i64
- %right_int_$_9905 = ptrtoint i8* null to i64
+ %left_int_$_9904 = ptrtoint i8** %res_$_9903 to i64
+ %right_int_$_9905 = ptrtoint i8** null to i64
  %cnd_$_9906 = icmp ne i64 %left_int_$_9904, %right_int_$_9905
  %zext_$_9907 = zext i1 %cnd_$_9906 to i64
  store i64 %zext_$_9907, i64* %temp_$_9870
@@ -13450,7 +13450,7 @@ els_$_9857:
  %var_ptr_$_9918 = getelementptr %$locals_map$356, %$locals_map$356* %locals_$_119, i32 0, i32 4
  %load_$_9919 = load i8*, i8** %var_ptr_$_9918
  %record_ptr_$_9920 = bitcast i8* %load_$_9919 to %sexps$133*
- %int_of_ptr_$_9923 = ptrtoint i8* %load_$_9919 to i64
+ %int_of_ptr_$_9923 = ptrtoint i8** %load_$_9919 to i64
  %cnd_$_9924 = icmp eq i64 %int_of_ptr_$_9923, 0
  br i1 %cnd_$_9924, label %thn_$_9921, label %mrg_$_9922
 thn_$_9921:
@@ -13464,7 +13464,7 @@ mrg_$_9922:
  %var_ptr_$_9928 = getelementptr %$locals_map$356, %$locals_map$356* %locals_$_119, i32 0, i32 4
  %load_$_9929 = load i8*, i8** %var_ptr_$_9928
  %record_ptr_$_9930 = bitcast i8* %load_$_9929 to %sexps$133*
- %int_of_ptr_$_9933 = ptrtoint i8* %load_$_9929 to i64
+ %int_of_ptr_$_9933 = ptrtoint i8** %load_$_9929 to i64
  %cnd_$_9934 = icmp eq i64 %int_of_ptr_$_9933, 0
  br i1 %cnd_$_9934, label %thn_$_9931, label %mrg_$_9932
 thn_$_9931:
@@ -13474,7 +13474,7 @@ mrg_$_9932:
  %field_ptr_$_9935 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_9930, i32 0, i32 1
  %load_$_9936 = load i8*, i8** %field_ptr_$_9935
  %record_ptr_$_9937 = bitcast i8* %load_$_9936 to %sexps$133*
- %int_of_ptr_$_9940 = ptrtoint i8* %load_$_9936 to i64
+ %int_of_ptr_$_9940 = ptrtoint i8** %load_$_9936 to i64
  %cnd_$_9941 = icmp eq i64 %int_of_ptr_$_9940, 0
  br i1 %cnd_$_9941, label %thn_$_9938, label %mrg_$_9939
 thn_$_9938:
@@ -13591,8 +13591,8 @@ define i8* @aux$452 (%$locals_foldr$357* %$sl, i8* %lst$453) {
  store %$locals_foldr$357* %$sl, %$locals_foldr$357** %arg_$_10033
  %var_ptr_$_10038 = getelementptr %$locals_aux$452, %$locals_aux$452* %locals_$_120, i32 0, i32 1
  %res_$_10039 = load i8*, i8** %var_ptr_$_10038
- %left_int_$_10040 = ptrtoint i8* %res_$_10039 to i64
- %right_int_$_10041 = ptrtoint i8* null to i64
+ %left_int_$_10040 = ptrtoint i8** %res_$_10039 to i64
+ %right_int_$_10041 = ptrtoint i8** null to i64
  %cnd_$_10042 = icmp eq i64 %left_int_$_10040, %right_int_$_10041
  %zext_$_10043 = zext i1 %cnd_$_10042 to i64
  %cnd_$_10044 = icmp ne i64 %zext_$_10043, 0
@@ -13623,13 +13623,13 @@ els_$_10036:
  %res_$_10064 = load i8*, i8** %var_ptr_$_10063
  %ret_$_10065 = call i8* @get_fun$157 (%$locals_tigermain* %load_$_10060, i8* %res_$_10064)
  %size_ptr_$_10066 = getelementptr %sexps$133, %sexps$133* null, i32 1
- %size_$_10067 = ptrtoint %sexps$133* %size_ptr_$_10066 to i64
+ %size_$_10067 = ptrtoint %sexps$133** %size_ptr_$_10066 to i64
  %record_ptr_$_10068 = call i8* @allocRecord (i64 %size_$_10067)
  %rec_$_10069 = bitcast i8* %record_ptr_$_10068 to %sexps$133*
  %var_ptr_$_10070 = getelementptr %$locals_aux$452, %$locals_aux$452* %locals_$_120, i32 0, i32 1
  %load_$_10071 = load i8*, i8** %var_ptr_$_10070
  %record_ptr_$_10072 = bitcast i8* %load_$_10071 to %sexps$133*
- %int_of_ptr_$_10075 = ptrtoint i8* %load_$_10071 to i64
+ %int_of_ptr_$_10075 = ptrtoint i8** %load_$_10071 to i64
  %cnd_$_10076 = icmp eq i64 %int_of_ptr_$_10075, 0
  br i1 %cnd_$_10076, label %thn_$_10073, label %mrg_$_10074
 thn_$_10073:
@@ -13641,7 +13641,7 @@ mrg_$_10074:
  %field_ptr_$_10079 = getelementptr %sexps$133, %sexps$133* %rec_$_10069, i32 0, i32 0
  store i8* %res_$_10078, i8** %field_ptr_$_10079
  %size_ptr_$_10080 = getelementptr %sexps$133, %sexps$133* null, i32 1
- %size_$_10081 = ptrtoint %sexps$133* %size_ptr_$_10080 to i64
+ %size_$_10081 = ptrtoint %sexps$133** %size_ptr_$_10080 to i64
  %record_ptr_$_10082 = call i8* @allocRecord (i64 %size_$_10081)
  %rec_$_10083 = bitcast i8* %record_ptr_$_10082 to %sexps$133*
  %lnk_$_10084 = getelementptr %$locals_aux$452, %$locals_aux$452* %locals_$_120, i32 0, i32 0
@@ -13649,7 +13649,7 @@ mrg_$_10074:
  %var_ptr_$_10086 = getelementptr %$locals_aux$452, %$locals_aux$452* %locals_$_120, i32 0, i32 1
  %load_$_10087 = load i8*, i8** %var_ptr_$_10086
  %record_ptr_$_10088 = bitcast i8* %load_$_10087 to %sexps$133*
- %int_of_ptr_$_10091 = ptrtoint i8* %load_$_10087 to i64
+ %int_of_ptr_$_10091 = ptrtoint i8** %load_$_10087 to i64
  %cnd_$_10092 = icmp eq i64 %int_of_ptr_$_10091, 0
  br i1 %cnd_$_10092, label %thn_$_10089, label %mrg_$_10090
 thn_$_10089:
@@ -13693,8 +13693,8 @@ define i8* @foldr$357 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$448) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_10108
  %var_ptr_$_10121 = getelementptr %$locals_foldr$357, %$locals_foldr$357* %locals_$_121, i32 0, i32 5
  %res_$_10122 = load i8*, i8** %var_ptr_$_10121
- %left_int_$_10123 = ptrtoint i8* %res_$_10122 to i64
- %right_int_$_10124 = ptrtoint i8* null to i64
+ %left_int_$_10123 = ptrtoint i8** %res_$_10122 to i64
+ %right_int_$_10124 = ptrtoint i8** null to i64
  %cnd_$_10125 = icmp eq i64 %left_int_$_10123, %right_int_$_10124
  %zext_$_10126 = zext i1 %cnd_$_10125 to i64
  %cnd_$_10127 = icmp ne i64 %zext_$_10126, 0
@@ -13706,7 +13706,7 @@ els_$_10119:
  %var_ptr_$_10128 = getelementptr %$locals_foldr$357, %$locals_foldr$357* %locals_$_121, i32 0, i32 5
  %load_$_10129 = load i8*, i8** %var_ptr_$_10128
  %record_ptr_$_10130 = bitcast i8* %load_$_10129 to %sexps$133*
- %int_of_ptr_$_10133 = ptrtoint i8* %load_$_10129 to i64
+ %int_of_ptr_$_10133 = ptrtoint i8** %load_$_10129 to i64
  %cnd_$_10134 = icmp eq i64 %int_of_ptr_$_10133, 0
  br i1 %cnd_$_10134, label %thn_$_10131, label %mrg_$_10132
 thn_$_10131:
@@ -13715,8 +13715,8 @@ thn_$_10131:
 mrg_$_10132:
  %field_ptr_$_10135 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10130, i32 0, i32 1
  %res_$_10136 = load i8*, i8** %field_ptr_$_10135
- %left_int_$_10137 = ptrtoint i8* %res_$_10136 to i64
- %right_int_$_10138 = ptrtoint i8* null to i64
+ %left_int_$_10137 = ptrtoint i8** %res_$_10136 to i64
+ %right_int_$_10138 = ptrtoint i8** null to i64
  %cnd_$_10139 = icmp eq i64 %left_int_$_10137, %right_int_$_10138
  %zext_$_10140 = zext i1 %cnd_$_10139 to i64
  store i64 %zext_$_10140, i64* %temp_$_10117
@@ -13732,7 +13732,7 @@ els_$_10115:
  %var_ptr_$_10147 = getelementptr %$locals_foldr$357, %$locals_foldr$357* %locals_$_121, i32 0, i32 5
  %load_$_10148 = load i8*, i8** %var_ptr_$_10147
  %record_ptr_$_10149 = bitcast i8* %load_$_10148 to %sexps$133*
- %int_of_ptr_$_10152 = ptrtoint i8* %load_$_10148 to i64
+ %int_of_ptr_$_10152 = ptrtoint i8** %load_$_10148 to i64
  %cnd_$_10153 = icmp eq i64 %int_of_ptr_$_10152, 0
  br i1 %cnd_$_10153, label %thn_$_10150, label %mrg_$_10151
 thn_$_10150:
@@ -13742,7 +13742,7 @@ mrg_$_10151:
  %field_ptr_$_10154 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10149, i32 0, i32 1
  %load_$_10155 = load i8*, i8** %field_ptr_$_10154
  %record_ptr_$_10156 = bitcast i8* %load_$_10155 to %sexps$133*
- %int_of_ptr_$_10159 = ptrtoint i8* %load_$_10155 to i64
+ %int_of_ptr_$_10159 = ptrtoint i8** %load_$_10155 to i64
  %cnd_$_10160 = icmp eq i64 %int_of_ptr_$_10159, 0
  br i1 %cnd_$_10160, label %thn_$_10157, label %mrg_$_10158
 thn_$_10157:
@@ -13751,8 +13751,8 @@ thn_$_10157:
 mrg_$_10158:
  %field_ptr_$_10161 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10156, i32 0, i32 1
  %res_$_10162 = load i8*, i8** %field_ptr_$_10161
- %left_int_$_10163 = ptrtoint i8* %res_$_10162 to i64
- %right_int_$_10164 = ptrtoint i8* null to i64
+ %left_int_$_10163 = ptrtoint i8** %res_$_10162 to i64
+ %right_int_$_10164 = ptrtoint i8** null to i64
  %cnd_$_10165 = icmp ne i64 %left_int_$_10163, %right_int_$_10164
  %zext_$_10166 = zext i1 %cnd_$_10165 to i64
  %cnd_$_10167 = icmp ne i64 %zext_$_10166, 0
@@ -13761,7 +13761,7 @@ thn_$_10144:
  %var_ptr_$_10168 = getelementptr %$locals_foldr$357, %$locals_foldr$357* %locals_$_121, i32 0, i32 5
  %load_$_10169 = load i8*, i8** %var_ptr_$_10168
  %record_ptr_$_10170 = bitcast i8* %load_$_10169 to %sexps$133*
- %int_of_ptr_$_10173 = ptrtoint i8* %load_$_10169 to i64
+ %int_of_ptr_$_10173 = ptrtoint i8** %load_$_10169 to i64
  %cnd_$_10174 = icmp eq i64 %int_of_ptr_$_10173, 0
  br i1 %cnd_$_10174, label %thn_$_10171, label %mrg_$_10172
 thn_$_10171:
@@ -13771,7 +13771,7 @@ mrg_$_10172:
  %field_ptr_$_10175 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10170, i32 0, i32 1
  %load_$_10176 = load i8*, i8** %field_ptr_$_10175
  %record_ptr_$_10177 = bitcast i8* %load_$_10176 to %sexps$133*
- %int_of_ptr_$_10180 = ptrtoint i8* %load_$_10176 to i64
+ %int_of_ptr_$_10180 = ptrtoint i8** %load_$_10176 to i64
  %cnd_$_10181 = icmp eq i64 %int_of_ptr_$_10180, 0
  br i1 %cnd_$_10181, label %thn_$_10178, label %mrg_$_10179
 thn_$_10178:
@@ -13781,7 +13781,7 @@ mrg_$_10179:
  %field_ptr_$_10182 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10177, i32 0, i32 1
  %load_$_10183 = load i8*, i8** %field_ptr_$_10182
  %record_ptr_$_10184 = bitcast i8* %load_$_10183 to %sexps$133*
- %int_of_ptr_$_10187 = ptrtoint i8* %load_$_10183 to i64
+ %int_of_ptr_$_10187 = ptrtoint i8** %load_$_10183 to i64
  %cnd_$_10188 = icmp eq i64 %int_of_ptr_$_10187, 0
  br i1 %cnd_$_10188, label %thn_$_10185, label %mrg_$_10186
 thn_$_10185:
@@ -13790,8 +13790,8 @@ thn_$_10185:
 mrg_$_10186:
  %field_ptr_$_10189 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10184, i32 0, i32 1
  %res_$_10190 = load i8*, i8** %field_ptr_$_10189
- %left_int_$_10191 = ptrtoint i8* %res_$_10190 to i64
- %right_int_$_10192 = ptrtoint i8* null to i64
+ %left_int_$_10191 = ptrtoint i8** %res_$_10190 to i64
+ %right_int_$_10192 = ptrtoint i8** null to i64
  %cnd_$_10193 = icmp ne i64 %left_int_$_10191, %right_int_$_10192
  %zext_$_10194 = zext i1 %cnd_$_10193 to i64
  store i64 %zext_$_10194, i64* %temp_$_10143
@@ -13820,7 +13820,7 @@ els_$_10111:
  %var_ptr_$_10205 = getelementptr %$locals_foldr$357, %$locals_foldr$357* %locals_$_121, i32 0, i32 5
  %load_$_10206 = load i8*, i8** %var_ptr_$_10205
  %record_ptr_$_10207 = bitcast i8* %load_$_10206 to %sexps$133*
- %int_of_ptr_$_10210 = ptrtoint i8* %load_$_10206 to i64
+ %int_of_ptr_$_10210 = ptrtoint i8** %load_$_10206 to i64
  %cnd_$_10211 = icmp eq i64 %int_of_ptr_$_10210, 0
  br i1 %cnd_$_10211, label %thn_$_10208, label %mrg_$_10209
 thn_$_10208:
@@ -13834,7 +13834,7 @@ mrg_$_10209:
  %var_ptr_$_10215 = getelementptr %$locals_foldr$357, %$locals_foldr$357* %locals_$_121, i32 0, i32 5
  %load_$_10216 = load i8*, i8** %var_ptr_$_10215
  %record_ptr_$_10217 = bitcast i8* %load_$_10216 to %sexps$133*
- %int_of_ptr_$_10220 = ptrtoint i8* %load_$_10216 to i64
+ %int_of_ptr_$_10220 = ptrtoint i8** %load_$_10216 to i64
  %cnd_$_10221 = icmp eq i64 %int_of_ptr_$_10220, 0
  br i1 %cnd_$_10221, label %thn_$_10218, label %mrg_$_10219
 thn_$_10218:
@@ -13844,7 +13844,7 @@ mrg_$_10219:
  %field_ptr_$_10222 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10217, i32 0, i32 1
  %load_$_10223 = load i8*, i8** %field_ptr_$_10222
  %record_ptr_$_10224 = bitcast i8* %load_$_10223 to %sexps$133*
- %int_of_ptr_$_10227 = ptrtoint i8* %load_$_10223 to i64
+ %int_of_ptr_$_10227 = ptrtoint i8** %load_$_10223 to i64
  %cnd_$_10228 = icmp eq i64 %int_of_ptr_$_10227, 0
  br i1 %cnd_$_10228, label %thn_$_10225, label %mrg_$_10226
 thn_$_10225:
@@ -13858,7 +13858,7 @@ mrg_$_10226:
  %var_ptr_$_10232 = getelementptr %$locals_foldr$357, %$locals_foldr$357* %locals_$_121, i32 0, i32 5
  %load_$_10233 = load i8*, i8** %var_ptr_$_10232
  %record_ptr_$_10234 = bitcast i8* %load_$_10233 to %sexps$133*
- %int_of_ptr_$_10237 = ptrtoint i8* %load_$_10233 to i64
+ %int_of_ptr_$_10237 = ptrtoint i8** %load_$_10233 to i64
  %cnd_$_10238 = icmp eq i64 %int_of_ptr_$_10237, 0
  br i1 %cnd_$_10238, label %thn_$_10235, label %mrg_$_10236
 thn_$_10235:
@@ -13868,7 +13868,7 @@ mrg_$_10236:
  %field_ptr_$_10239 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10234, i32 0, i32 1
  %load_$_10240 = load i8*, i8** %field_ptr_$_10239
  %record_ptr_$_10241 = bitcast i8* %load_$_10240 to %sexps$133*
- %int_of_ptr_$_10244 = ptrtoint i8* %load_$_10240 to i64
+ %int_of_ptr_$_10244 = ptrtoint i8** %load_$_10240 to i64
  %cnd_$_10245 = icmp eq i64 %int_of_ptr_$_10244, 0
  br i1 %cnd_$_10245, label %thn_$_10242, label %mrg_$_10243
 thn_$_10242:
@@ -13878,7 +13878,7 @@ mrg_$_10243:
  %field_ptr_$_10246 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10241, i32 0, i32 1
  %load_$_10247 = load i8*, i8** %field_ptr_$_10246
  %record_ptr_$_10248 = bitcast i8* %load_$_10247 to %sexps$133*
- %int_of_ptr_$_10251 = ptrtoint i8* %load_$_10247 to i64
+ %int_of_ptr_$_10251 = ptrtoint i8** %load_$_10247 to i64
  %cnd_$_10252 = icmp eq i64 %int_of_ptr_$_10251, 0
  br i1 %cnd_$_10252, label %thn_$_10249, label %mrg_$_10250
 thn_$_10249:
@@ -13997,8 +13997,8 @@ define i8* @aux$458 (%$locals_foldl$358* %$sl, i8* %lst$459, i8* %acc$460) {
  store %$locals_foldl$358* %$sl, %$locals_foldl$358** %arg_$_10345
  %var_ptr_$_10350 = getelementptr %$locals_aux$458, %$locals_aux$458* %locals_$_122, i32 0, i32 1
  %res_$_10351 = load i8*, i8** %var_ptr_$_10350
- %left_int_$_10352 = ptrtoint i8* %res_$_10351 to i64
- %right_int_$_10353 = ptrtoint i8* null to i64
+ %left_int_$_10352 = ptrtoint i8** %res_$_10351 to i64
+ %right_int_$_10353 = ptrtoint i8** null to i64
  %cnd_$_10354 = icmp eq i64 %left_int_$_10352, %right_int_$_10353
  %zext_$_10355 = zext i1 %cnd_$_10354 to i64
  %cnd_$_10356 = icmp ne i64 %zext_$_10355, 0
@@ -14014,7 +14014,7 @@ els_$_10348:
  %var_ptr_$_10361 = getelementptr %$locals_aux$458, %$locals_aux$458* %locals_$_122, i32 0, i32 1
  %load_$_10362 = load i8*, i8** %var_ptr_$_10361
  %record_ptr_$_10363 = bitcast i8* %load_$_10362 to %sexps$133*
- %int_of_ptr_$_10366 = ptrtoint i8* %load_$_10362 to i64
+ %int_of_ptr_$_10366 = ptrtoint i8** %load_$_10362 to i64
  %cnd_$_10367 = icmp eq i64 %int_of_ptr_$_10366, 0
  br i1 %cnd_$_10367, label %thn_$_10364, label %mrg_$_10365
 thn_$_10364:
@@ -14041,13 +14041,13 @@ mrg_$_10365:
  %res_$_10385 = load i8*, i8** %var_ptr_$_10384
  %ret_$_10386 = call i8* @get_fun$157 (%$locals_tigermain* %load_$_10381, i8* %res_$_10385)
  %size_ptr_$_10387 = getelementptr %sexps$133, %sexps$133* null, i32 1
- %size_$_10388 = ptrtoint %sexps$133* %size_ptr_$_10387 to i64
+ %size_$_10388 = ptrtoint %sexps$133** %size_ptr_$_10387 to i64
  %record_ptr_$_10389 = call i8* @allocRecord (i64 %size_$_10388)
  %rec_$_10390 = bitcast i8* %record_ptr_$_10389 to %sexps$133*
  %var_ptr_$_10391 = getelementptr %$locals_aux$458, %$locals_aux$458* %locals_$_122, i32 0, i32 1
  %load_$_10392 = load i8*, i8** %var_ptr_$_10391
  %record_ptr_$_10393 = bitcast i8* %load_$_10392 to %sexps$133*
- %int_of_ptr_$_10396 = ptrtoint i8* %load_$_10392 to i64
+ %int_of_ptr_$_10396 = ptrtoint i8** %load_$_10392 to i64
  %cnd_$_10397 = icmp eq i64 %int_of_ptr_$_10396, 0
  br i1 %cnd_$_10397, label %thn_$_10394, label %mrg_$_10395
 thn_$_10394:
@@ -14059,7 +14059,7 @@ mrg_$_10395:
  %field_ptr_$_10400 = getelementptr %sexps$133, %sexps$133* %rec_$_10390, i32 0, i32 0
  store i8* %res_$_10399, i8** %field_ptr_$_10400
  %size_ptr_$_10401 = getelementptr %sexps$133, %sexps$133* null, i32 1
- %size_$_10402 = ptrtoint %sexps$133* %size_ptr_$_10401 to i64
+ %size_$_10402 = ptrtoint %sexps$133** %size_ptr_$_10401 to i64
  %record_ptr_$_10403 = call i8* @allocRecord (i64 %size_$_10402)
  %rec_$_10404 = bitcast i8* %record_ptr_$_10403 to %sexps$133*
  %var_ptr_$_10405 = getelementptr %$locals_aux$458, %$locals_aux$458* %locals_$_122, i32 0, i32 2
@@ -14099,8 +14099,8 @@ define i8* @foldl$358 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$454) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_10420
  %var_ptr_$_10433 = getelementptr %$locals_foldl$358, %$locals_foldl$358* %locals_$_123, i32 0, i32 6
  %res_$_10434 = load i8*, i8** %var_ptr_$_10433
- %left_int_$_10435 = ptrtoint i8* %res_$_10434 to i64
- %right_int_$_10436 = ptrtoint i8* null to i64
+ %left_int_$_10435 = ptrtoint i8** %res_$_10434 to i64
+ %right_int_$_10436 = ptrtoint i8** null to i64
  %cnd_$_10437 = icmp eq i64 %left_int_$_10435, %right_int_$_10436
  %zext_$_10438 = zext i1 %cnd_$_10437 to i64
  %cnd_$_10439 = icmp ne i64 %zext_$_10438, 0
@@ -14112,7 +14112,7 @@ els_$_10431:
  %var_ptr_$_10440 = getelementptr %$locals_foldl$358, %$locals_foldl$358* %locals_$_123, i32 0, i32 6
  %load_$_10441 = load i8*, i8** %var_ptr_$_10440
  %record_ptr_$_10442 = bitcast i8* %load_$_10441 to %sexps$133*
- %int_of_ptr_$_10445 = ptrtoint i8* %load_$_10441 to i64
+ %int_of_ptr_$_10445 = ptrtoint i8** %load_$_10441 to i64
  %cnd_$_10446 = icmp eq i64 %int_of_ptr_$_10445, 0
  br i1 %cnd_$_10446, label %thn_$_10443, label %mrg_$_10444
 thn_$_10443:
@@ -14121,8 +14121,8 @@ thn_$_10443:
 mrg_$_10444:
  %field_ptr_$_10447 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10442, i32 0, i32 1
  %res_$_10448 = load i8*, i8** %field_ptr_$_10447
- %left_int_$_10449 = ptrtoint i8* %res_$_10448 to i64
- %right_int_$_10450 = ptrtoint i8* null to i64
+ %left_int_$_10449 = ptrtoint i8** %res_$_10448 to i64
+ %right_int_$_10450 = ptrtoint i8** null to i64
  %cnd_$_10451 = icmp eq i64 %left_int_$_10449, %right_int_$_10450
  %zext_$_10452 = zext i1 %cnd_$_10451 to i64
  store i64 %zext_$_10452, i64* %temp_$_10429
@@ -14138,7 +14138,7 @@ els_$_10427:
  %var_ptr_$_10459 = getelementptr %$locals_foldl$358, %$locals_foldl$358* %locals_$_123, i32 0, i32 6
  %load_$_10460 = load i8*, i8** %var_ptr_$_10459
  %record_ptr_$_10461 = bitcast i8* %load_$_10460 to %sexps$133*
- %int_of_ptr_$_10464 = ptrtoint i8* %load_$_10460 to i64
+ %int_of_ptr_$_10464 = ptrtoint i8** %load_$_10460 to i64
  %cnd_$_10465 = icmp eq i64 %int_of_ptr_$_10464, 0
  br i1 %cnd_$_10465, label %thn_$_10462, label %mrg_$_10463
 thn_$_10462:
@@ -14148,7 +14148,7 @@ mrg_$_10463:
  %field_ptr_$_10466 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10461, i32 0, i32 1
  %load_$_10467 = load i8*, i8** %field_ptr_$_10466
  %record_ptr_$_10468 = bitcast i8* %load_$_10467 to %sexps$133*
- %int_of_ptr_$_10471 = ptrtoint i8* %load_$_10467 to i64
+ %int_of_ptr_$_10471 = ptrtoint i8** %load_$_10467 to i64
  %cnd_$_10472 = icmp eq i64 %int_of_ptr_$_10471, 0
  br i1 %cnd_$_10472, label %thn_$_10469, label %mrg_$_10470
 thn_$_10469:
@@ -14157,8 +14157,8 @@ thn_$_10469:
 mrg_$_10470:
  %field_ptr_$_10473 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10468, i32 0, i32 1
  %res_$_10474 = load i8*, i8** %field_ptr_$_10473
- %left_int_$_10475 = ptrtoint i8* %res_$_10474 to i64
- %right_int_$_10476 = ptrtoint i8* null to i64
+ %left_int_$_10475 = ptrtoint i8** %res_$_10474 to i64
+ %right_int_$_10476 = ptrtoint i8** null to i64
  %cnd_$_10477 = icmp ne i64 %left_int_$_10475, %right_int_$_10476
  %zext_$_10478 = zext i1 %cnd_$_10477 to i64
  %cnd_$_10479 = icmp ne i64 %zext_$_10478, 0
@@ -14167,7 +14167,7 @@ thn_$_10456:
  %var_ptr_$_10480 = getelementptr %$locals_foldl$358, %$locals_foldl$358* %locals_$_123, i32 0, i32 6
  %load_$_10481 = load i8*, i8** %var_ptr_$_10480
  %record_ptr_$_10482 = bitcast i8* %load_$_10481 to %sexps$133*
- %int_of_ptr_$_10485 = ptrtoint i8* %load_$_10481 to i64
+ %int_of_ptr_$_10485 = ptrtoint i8** %load_$_10481 to i64
  %cnd_$_10486 = icmp eq i64 %int_of_ptr_$_10485, 0
  br i1 %cnd_$_10486, label %thn_$_10483, label %mrg_$_10484
 thn_$_10483:
@@ -14177,7 +14177,7 @@ mrg_$_10484:
  %field_ptr_$_10487 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10482, i32 0, i32 1
  %load_$_10488 = load i8*, i8** %field_ptr_$_10487
  %record_ptr_$_10489 = bitcast i8* %load_$_10488 to %sexps$133*
- %int_of_ptr_$_10492 = ptrtoint i8* %load_$_10488 to i64
+ %int_of_ptr_$_10492 = ptrtoint i8** %load_$_10488 to i64
  %cnd_$_10493 = icmp eq i64 %int_of_ptr_$_10492, 0
  br i1 %cnd_$_10493, label %thn_$_10490, label %mrg_$_10491
 thn_$_10490:
@@ -14187,7 +14187,7 @@ mrg_$_10491:
  %field_ptr_$_10494 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10489, i32 0, i32 1
  %load_$_10495 = load i8*, i8** %field_ptr_$_10494
  %record_ptr_$_10496 = bitcast i8* %load_$_10495 to %sexps$133*
- %int_of_ptr_$_10499 = ptrtoint i8* %load_$_10495 to i64
+ %int_of_ptr_$_10499 = ptrtoint i8** %load_$_10495 to i64
  %cnd_$_10500 = icmp eq i64 %int_of_ptr_$_10499, 0
  br i1 %cnd_$_10500, label %thn_$_10497, label %mrg_$_10498
 thn_$_10497:
@@ -14196,8 +14196,8 @@ thn_$_10497:
 mrg_$_10498:
  %field_ptr_$_10501 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10496, i32 0, i32 1
  %res_$_10502 = load i8*, i8** %field_ptr_$_10501
- %left_int_$_10503 = ptrtoint i8* %res_$_10502 to i64
- %right_int_$_10504 = ptrtoint i8* null to i64
+ %left_int_$_10503 = ptrtoint i8** %res_$_10502 to i64
+ %right_int_$_10504 = ptrtoint i8** null to i64
  %cnd_$_10505 = icmp ne i64 %left_int_$_10503, %right_int_$_10504
  %zext_$_10506 = zext i1 %cnd_$_10505 to i64
  store i64 %zext_$_10506, i64* %temp_$_10455
@@ -14226,7 +14226,7 @@ els_$_10423:
  %var_ptr_$_10517 = getelementptr %$locals_foldl$358, %$locals_foldl$358* %locals_$_123, i32 0, i32 6
  %load_$_10518 = load i8*, i8** %var_ptr_$_10517
  %record_ptr_$_10519 = bitcast i8* %load_$_10518 to %sexps$133*
- %int_of_ptr_$_10522 = ptrtoint i8* %load_$_10518 to i64
+ %int_of_ptr_$_10522 = ptrtoint i8** %load_$_10518 to i64
  %cnd_$_10523 = icmp eq i64 %int_of_ptr_$_10522, 0
  br i1 %cnd_$_10523, label %thn_$_10520, label %mrg_$_10521
 thn_$_10520:
@@ -14240,7 +14240,7 @@ mrg_$_10521:
  %var_ptr_$_10527 = getelementptr %$locals_foldl$358, %$locals_foldl$358* %locals_$_123, i32 0, i32 6
  %load_$_10528 = load i8*, i8** %var_ptr_$_10527
  %record_ptr_$_10529 = bitcast i8* %load_$_10528 to %sexps$133*
- %int_of_ptr_$_10532 = ptrtoint i8* %load_$_10528 to i64
+ %int_of_ptr_$_10532 = ptrtoint i8** %load_$_10528 to i64
  %cnd_$_10533 = icmp eq i64 %int_of_ptr_$_10532, 0
  br i1 %cnd_$_10533, label %thn_$_10530, label %mrg_$_10531
 thn_$_10530:
@@ -14250,7 +14250,7 @@ mrg_$_10531:
  %field_ptr_$_10534 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10529, i32 0, i32 1
  %load_$_10535 = load i8*, i8** %field_ptr_$_10534
  %record_ptr_$_10536 = bitcast i8* %load_$_10535 to %sexps$133*
- %int_of_ptr_$_10539 = ptrtoint i8* %load_$_10535 to i64
+ %int_of_ptr_$_10539 = ptrtoint i8** %load_$_10535 to i64
  %cnd_$_10540 = icmp eq i64 %int_of_ptr_$_10539, 0
  br i1 %cnd_$_10540, label %thn_$_10537, label %mrg_$_10538
 thn_$_10537:
@@ -14264,7 +14264,7 @@ mrg_$_10538:
  %var_ptr_$_10544 = getelementptr %$locals_foldl$358, %$locals_foldl$358* %locals_$_123, i32 0, i32 6
  %load_$_10545 = load i8*, i8** %var_ptr_$_10544
  %record_ptr_$_10546 = bitcast i8* %load_$_10545 to %sexps$133*
- %int_of_ptr_$_10549 = ptrtoint i8* %load_$_10545 to i64
+ %int_of_ptr_$_10549 = ptrtoint i8** %load_$_10545 to i64
  %cnd_$_10550 = icmp eq i64 %int_of_ptr_$_10549, 0
  br i1 %cnd_$_10550, label %thn_$_10547, label %mrg_$_10548
 thn_$_10547:
@@ -14274,7 +14274,7 @@ mrg_$_10548:
  %field_ptr_$_10551 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10546, i32 0, i32 1
  %load_$_10552 = load i8*, i8** %field_ptr_$_10551
  %record_ptr_$_10553 = bitcast i8* %load_$_10552 to %sexps$133*
- %int_of_ptr_$_10556 = ptrtoint i8* %load_$_10552 to i64
+ %int_of_ptr_$_10556 = ptrtoint i8** %load_$_10552 to i64
  %cnd_$_10557 = icmp eq i64 %int_of_ptr_$_10556, 0
  br i1 %cnd_$_10557, label %thn_$_10554, label %mrg_$_10555
 thn_$_10554:
@@ -14284,7 +14284,7 @@ mrg_$_10555:
  %field_ptr_$_10558 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10553, i32 0, i32 1
  %load_$_10559 = load i8*, i8** %field_ptr_$_10558
  %record_ptr_$_10560 = bitcast i8* %load_$_10559 to %sexps$133*
- %int_of_ptr_$_10563 = ptrtoint i8* %load_$_10559 to i64
+ %int_of_ptr_$_10563 = ptrtoint i8** %load_$_10559 to i64
  %cnd_$_10564 = icmp eq i64 %int_of_ptr_$_10563, 0
  br i1 %cnd_$_10564, label %thn_$_10561, label %mrg_$_10562
 thn_$_10561:
@@ -14405,8 +14405,8 @@ define i64 @orb$359 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$461) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_10658
  %var_ptr_$_10663 = getelementptr %$locals_orb$359, %$locals_orb$359* %locals_$_124, i32 0, i32 2
  %res_$_10664 = load i8*, i8** %var_ptr_$_10663
- %left_int_$_10665 = ptrtoint i8* %res_$_10664 to i64
- %right_int_$_10666 = ptrtoint i8* null to i64
+ %left_int_$_10665 = ptrtoint i8** %res_$_10664 to i64
+ %right_int_$_10666 = ptrtoint i8** null to i64
  %cnd_$_10667 = icmp eq i64 %left_int_$_10665, %right_int_$_10666
  %zext_$_10668 = zext i1 %cnd_$_10667 to i64
  %cnd_$_10669 = icmp ne i64 %zext_$_10668, 0
@@ -14418,7 +14418,7 @@ els_$_10661:
  %var_ptr_$_10670 = getelementptr %$locals_orb$359, %$locals_orb$359* %locals_$_124, i32 0, i32 2
  %load_$_10671 = load i8*, i8** %var_ptr_$_10670
  %record_ptr_$_10672 = bitcast i8* %load_$_10671 to %sexps$133*
- %int_of_ptr_$_10675 = ptrtoint i8* %load_$_10671 to i64
+ %int_of_ptr_$_10675 = ptrtoint i8** %load_$_10671 to i64
  %cnd_$_10676 = icmp eq i64 %int_of_ptr_$_10675, 0
  br i1 %cnd_$_10676, label %thn_$_10673, label %mrg_$_10674
 thn_$_10673:
@@ -14444,7 +14444,7 @@ thn_$_10681:
  %var_ptr_$_10698 = getelementptr %$locals_orb$359, %$locals_orb$359* %locals_$_124, i32 0, i32 2
  %load_$_10699 = load i8*, i8** %var_ptr_$_10698
  %record_ptr_$_10700 = bitcast i8* %load_$_10699 to %sexps$133*
- %int_of_ptr_$_10703 = ptrtoint i8* %load_$_10699 to i64
+ %int_of_ptr_$_10703 = ptrtoint i8** %load_$_10699 to i64
  %cnd_$_10704 = icmp eq i64 %int_of_ptr_$_10703, 0
  br i1 %cnd_$_10704, label %thn_$_10701, label %mrg_$_10702
 thn_$_10701:
@@ -14520,8 +14520,8 @@ define i64 @andb$360 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$463) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_10746
  %var_ptr_$_10751 = getelementptr %$locals_andb$360, %$locals_andb$360* %locals_$_125, i32 0, i32 2
  %res_$_10752 = load i8*, i8** %var_ptr_$_10751
- %left_int_$_10753 = ptrtoint i8* %res_$_10752 to i64
- %right_int_$_10754 = ptrtoint i8* null to i64
+ %left_int_$_10753 = ptrtoint i8** %res_$_10752 to i64
+ %right_int_$_10754 = ptrtoint i8** null to i64
  %cnd_$_10755 = icmp eq i64 %left_int_$_10753, %right_int_$_10754
  %zext_$_10756 = zext i1 %cnd_$_10755 to i64
  %cnd_$_10757 = icmp ne i64 %zext_$_10756, 0
@@ -14533,7 +14533,7 @@ els_$_10749:
  %var_ptr_$_10758 = getelementptr %$locals_andb$360, %$locals_andb$360* %locals_$_125, i32 0, i32 2
  %load_$_10759 = load i8*, i8** %var_ptr_$_10758
  %record_ptr_$_10760 = bitcast i8* %load_$_10759 to %sexps$133*
- %int_of_ptr_$_10763 = ptrtoint i8* %load_$_10759 to i64
+ %int_of_ptr_$_10763 = ptrtoint i8** %load_$_10759 to i64
  %cnd_$_10764 = icmp eq i64 %int_of_ptr_$_10763, 0
  br i1 %cnd_$_10764, label %thn_$_10761, label %mrg_$_10762
 thn_$_10761:
@@ -14559,7 +14559,7 @@ thn_$_10769:
  %var_ptr_$_10786 = getelementptr %$locals_andb$360, %$locals_andb$360* %locals_$_125, i32 0, i32 2
  %load_$_10787 = load i8*, i8** %var_ptr_$_10786
  %record_ptr_$_10788 = bitcast i8* %load_$_10787 to %sexps$133*
- %int_of_ptr_$_10791 = ptrtoint i8* %load_$_10787 to i64
+ %int_of_ptr_$_10791 = ptrtoint i8** %load_$_10787 to i64
  %cnd_$_10792 = icmp eq i64 %int_of_ptr_$_10791, 0
  br i1 %cnd_$_10792, label %thn_$_10789, label %mrg_$_10790
 thn_$_10789:
@@ -14636,8 +14636,8 @@ define i64 @notb$361 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$465) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_10834
  %var_ptr_$_10839 = getelementptr %$locals_notb$361, %$locals_notb$361* %locals_$_126, i32 0, i32 2
  %res_$_10840 = load i8*, i8** %var_ptr_$_10839
- %left_int_$_10841 = ptrtoint i8* %res_$_10840 to i64
- %right_int_$_10842 = ptrtoint i8* null to i64
+ %left_int_$_10841 = ptrtoint i8** %res_$_10840 to i64
+ %right_int_$_10842 = ptrtoint i8** null to i64
  %cnd_$_10843 = icmp eq i64 %left_int_$_10841, %right_int_$_10842
  %zext_$_10844 = zext i1 %cnd_$_10843 to i64
  %cnd_$_10845 = icmp ne i64 %zext_$_10844, 0
@@ -14655,7 +14655,7 @@ els_$_10837:
  %var_ptr_$_10853 = getelementptr %$locals_notb$361, %$locals_notb$361* %locals_$_126, i32 0, i32 2
  %load_$_10854 = load i8*, i8** %var_ptr_$_10853
  %record_ptr_$_10855 = bitcast i8* %load_$_10854 to %sexps$133*
- %int_of_ptr_$_10858 = ptrtoint i8* %load_$_10854 to i64
+ %int_of_ptr_$_10858 = ptrtoint i8** %load_$_10854 to i64
  %cnd_$_10859 = icmp eq i64 %int_of_ptr_$_10858, 0
  br i1 %cnd_$_10859, label %thn_$_10856, label %mrg_$_10857
 thn_$_10856:
@@ -14679,7 +14679,7 @@ thn_$_10868:
  %var_ptr_$_10879 = getelementptr %$locals_notb$361, %$locals_notb$361* %locals_$_126, i32 0, i32 2
  %load_$_10880 = load i8*, i8** %var_ptr_$_10879
  %record_ptr_$_10881 = bitcast i8* %load_$_10880 to %sexps$133*
- %int_of_ptr_$_10884 = ptrtoint i8* %load_$_10880 to i64
+ %int_of_ptr_$_10884 = ptrtoint i8** %load_$_10880 to i64
  %cnd_$_10885 = icmp eq i64 %int_of_ptr_$_10884, 0
  br i1 %cnd_$_10885, label %thn_$_10882, label %mrg_$_10883
 thn_$_10882:
@@ -14688,8 +14688,8 @@ thn_$_10882:
 mrg_$_10883:
  %field_ptr_$_10886 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_10881, i32 0, i32 1
  %res_$_10887 = load i8*, i8** %field_ptr_$_10886
- %left_int_$_10888 = ptrtoint i8* %res_$_10887 to i64
- %right_int_$_10889 = ptrtoint i8* null to i64
+ %left_int_$_10888 = ptrtoint i8** %res_$_10887 to i64
+ %right_int_$_10889 = ptrtoint i8** null to i64
  %cnd_$_10890 = icmp eq i64 %left_int_$_10888, %right_int_$_10889
  %zext_$_10891 = zext i1 %cnd_$_10890 to i64
  store i64 %zext_$_10891, i64* %temp_$_10867
@@ -14788,8 +14788,8 @@ define i64 @aux$468 (%$locals_lt_str$362* %$sl, i8* %head$469, i8* %args$470) {
  store %$locals_lt_str$362* %$sl, %$locals_lt_str$362** %arg_$_10957
  %var_ptr_$_10962 = getelementptr %$locals_aux$468, %$locals_aux$468* %locals_$_127, i32 0, i32 3
  %res_$_10963 = load i8*, i8** %var_ptr_$_10962
- %left_int_$_10964 = ptrtoint i8* %res_$_10963 to i64
- %right_int_$_10965 = ptrtoint i8* null to i64
+ %left_int_$_10964 = ptrtoint i8** %res_$_10963 to i64
+ %right_int_$_10965 = ptrtoint i8** null to i64
  %cnd_$_10966 = icmp eq i64 %left_int_$_10964, %right_int_$_10965
  %zext_$_10967 = zext i1 %cnd_$_10966 to i64
  %cnd_$_10968 = icmp ne i64 %zext_$_10967, 0
@@ -14801,7 +14801,7 @@ els_$_10960:
  %var_ptr_$_10969 = getelementptr %$locals_aux$468, %$locals_aux$468* %locals_$_127, i32 0, i32 3
  %load_$_10970 = load i8*, i8** %var_ptr_$_10969
  %record_ptr_$_10971 = bitcast i8* %load_$_10970 to %sexps$133*
- %int_of_ptr_$_10974 = ptrtoint i8* %load_$_10970 to i64
+ %int_of_ptr_$_10974 = ptrtoint i8** %load_$_10970 to i64
  %cnd_$_10975 = icmp eq i64 %int_of_ptr_$_10974, 0
  br i1 %cnd_$_10975, label %thn_$_10972, label %mrg_$_10973
 thn_$_10972:
@@ -14838,7 +14838,7 @@ thn_$_10980:
  %var_ptr_$_11008 = getelementptr %$locals_aux$468, %$locals_aux$468* %locals_$_127, i32 0, i32 3
  %load_$_11009 = load i8*, i8** %var_ptr_$_11008
  %record_ptr_$_11010 = bitcast i8* %load_$_11009 to %sexps$133*
- %int_of_ptr_$_11013 = ptrtoint i8* %load_$_11009 to i64
+ %int_of_ptr_$_11013 = ptrtoint i8** %load_$_11009 to i64
  %cnd_$_11014 = icmp eq i64 %int_of_ptr_$_11013, 0
  br i1 %cnd_$_11014, label %thn_$_11011, label %mrg_$_11012
 thn_$_11011:
@@ -14926,8 +14926,8 @@ define i64 @lt_str$362 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$467) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_11069
  %var_ptr_$_11074 = getelementptr %$locals_lt_str$362, %$locals_lt_str$362* %locals_$_128, i32 0, i32 4
  %res_$_11075 = load i8*, i8** %var_ptr_$_11074
- %left_int_$_11076 = ptrtoint i8* %res_$_11075 to i64
- %right_int_$_11077 = ptrtoint i8* null to i64
+ %left_int_$_11076 = ptrtoint i8** %res_$_11075 to i64
+ %right_int_$_11077 = ptrtoint i8** null to i64
  %cnd_$_11078 = icmp eq i64 %left_int_$_11076, %right_int_$_11077
  %zext_$_11079 = zext i1 %cnd_$_11078 to i64
  %cnd_$_11080 = icmp ne i64 %zext_$_11079, 0
@@ -14939,7 +14939,7 @@ els_$_11072:
  %var_ptr_$_11081 = getelementptr %$locals_lt_str$362, %$locals_lt_str$362* %locals_$_128, i32 0, i32 4
  %load_$_11082 = load i8*, i8** %var_ptr_$_11081
  %record_ptr_$_11083 = bitcast i8* %load_$_11082 to %sexps$133*
- %int_of_ptr_$_11086 = ptrtoint i8* %load_$_11082 to i64
+ %int_of_ptr_$_11086 = ptrtoint i8** %load_$_11082 to i64
  %cnd_$_11087 = icmp eq i64 %int_of_ptr_$_11086, 0
  br i1 %cnd_$_11087, label %thn_$_11084, label %mrg_$_11085
 thn_$_11084:
@@ -14970,7 +14970,7 @@ thn_$_11092:
  %var_ptr_$_11110 = getelementptr %$locals_lt_str$362, %$locals_lt_str$362* %locals_$_128, i32 0, i32 4
  %load_$_11111 = load i8*, i8** %var_ptr_$_11110
  %record_ptr_$_11112 = bitcast i8* %load_$_11111 to %sexps$133*
- %int_of_ptr_$_11115 = ptrtoint i8* %load_$_11111 to i64
+ %int_of_ptr_$_11115 = ptrtoint i8** %load_$_11111 to i64
  %cnd_$_11116 = icmp eq i64 %int_of_ptr_$_11115, 0
  br i1 %cnd_$_11116, label %thn_$_11113, label %mrg_$_11114
 thn_$_11113:
@@ -15031,8 +15031,8 @@ define i64 @aux$474 (%$locals_leq_str$363* %$sl, i8* %head$475, i8* %args$476) {
  store %$locals_leq_str$363* %$sl, %$locals_leq_str$363** %arg_$_11150
  %var_ptr_$_11155 = getelementptr %$locals_aux$474, %$locals_aux$474* %locals_$_129, i32 0, i32 3
  %res_$_11156 = load i8*, i8** %var_ptr_$_11155
- %left_int_$_11157 = ptrtoint i8* %res_$_11156 to i64
- %right_int_$_11158 = ptrtoint i8* null to i64
+ %left_int_$_11157 = ptrtoint i8** %res_$_11156 to i64
+ %right_int_$_11158 = ptrtoint i8** null to i64
  %cnd_$_11159 = icmp eq i64 %left_int_$_11157, %right_int_$_11158
  %zext_$_11160 = zext i1 %cnd_$_11159 to i64
  %cnd_$_11161 = icmp ne i64 %zext_$_11160, 0
@@ -15044,7 +15044,7 @@ els_$_11153:
  %var_ptr_$_11162 = getelementptr %$locals_aux$474, %$locals_aux$474* %locals_$_129, i32 0, i32 3
  %load_$_11163 = load i8*, i8** %var_ptr_$_11162
  %record_ptr_$_11164 = bitcast i8* %load_$_11163 to %sexps$133*
- %int_of_ptr_$_11167 = ptrtoint i8* %load_$_11163 to i64
+ %int_of_ptr_$_11167 = ptrtoint i8** %load_$_11163 to i64
  %cnd_$_11168 = icmp eq i64 %int_of_ptr_$_11167, 0
  br i1 %cnd_$_11168, label %thn_$_11165, label %mrg_$_11166
 thn_$_11165:
@@ -15081,7 +15081,7 @@ thn_$_11173:
  %var_ptr_$_11201 = getelementptr %$locals_aux$474, %$locals_aux$474* %locals_$_129, i32 0, i32 3
  %load_$_11202 = load i8*, i8** %var_ptr_$_11201
  %record_ptr_$_11203 = bitcast i8* %load_$_11202 to %sexps$133*
- %int_of_ptr_$_11206 = ptrtoint i8* %load_$_11202 to i64
+ %int_of_ptr_$_11206 = ptrtoint i8** %load_$_11202 to i64
  %cnd_$_11207 = icmp eq i64 %int_of_ptr_$_11206, 0
  br i1 %cnd_$_11207, label %thn_$_11204, label %mrg_$_11205
 thn_$_11204:
@@ -15169,8 +15169,8 @@ define i64 @leq_str$363 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$473) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_11262
  %var_ptr_$_11267 = getelementptr %$locals_leq_str$363, %$locals_leq_str$363* %locals_$_130, i32 0, i32 4
  %res_$_11268 = load i8*, i8** %var_ptr_$_11267
- %left_int_$_11269 = ptrtoint i8* %res_$_11268 to i64
- %right_int_$_11270 = ptrtoint i8* null to i64
+ %left_int_$_11269 = ptrtoint i8** %res_$_11268 to i64
+ %right_int_$_11270 = ptrtoint i8** null to i64
  %cnd_$_11271 = icmp eq i64 %left_int_$_11269, %right_int_$_11270
  %zext_$_11272 = zext i1 %cnd_$_11271 to i64
  %cnd_$_11273 = icmp ne i64 %zext_$_11272, 0
@@ -15182,7 +15182,7 @@ els_$_11265:
  %var_ptr_$_11274 = getelementptr %$locals_leq_str$363, %$locals_leq_str$363* %locals_$_130, i32 0, i32 4
  %load_$_11275 = load i8*, i8** %var_ptr_$_11274
  %record_ptr_$_11276 = bitcast i8* %load_$_11275 to %sexps$133*
- %int_of_ptr_$_11279 = ptrtoint i8* %load_$_11275 to i64
+ %int_of_ptr_$_11279 = ptrtoint i8** %load_$_11275 to i64
  %cnd_$_11280 = icmp eq i64 %int_of_ptr_$_11279, 0
  br i1 %cnd_$_11280, label %thn_$_11277, label %mrg_$_11278
 thn_$_11277:
@@ -15213,7 +15213,7 @@ thn_$_11285:
  %var_ptr_$_11303 = getelementptr %$locals_leq_str$363, %$locals_leq_str$363* %locals_$_130, i32 0, i32 4
  %load_$_11304 = load i8*, i8** %var_ptr_$_11303
  %record_ptr_$_11305 = bitcast i8* %load_$_11304 to %sexps$133*
- %int_of_ptr_$_11308 = ptrtoint i8* %load_$_11304 to i64
+ %int_of_ptr_$_11308 = ptrtoint i8** %load_$_11304 to i64
  %cnd_$_11309 = icmp eq i64 %int_of_ptr_$_11308, 0
  br i1 %cnd_$_11309, label %thn_$_11306, label %mrg_$_11307
 thn_$_11306:
@@ -15274,8 +15274,8 @@ define i64 @aux$480 (%$locals_eq_str$364* %$sl, i8* %head$481, i8* %args$482) {
  store %$locals_eq_str$364* %$sl, %$locals_eq_str$364** %arg_$_11343
  %var_ptr_$_11348 = getelementptr %$locals_aux$480, %$locals_aux$480* %locals_$_131, i32 0, i32 3
  %res_$_11349 = load i8*, i8** %var_ptr_$_11348
- %left_int_$_11350 = ptrtoint i8* %res_$_11349 to i64
- %right_int_$_11351 = ptrtoint i8* null to i64
+ %left_int_$_11350 = ptrtoint i8** %res_$_11349 to i64
+ %right_int_$_11351 = ptrtoint i8** null to i64
  %cnd_$_11352 = icmp eq i64 %left_int_$_11350, %right_int_$_11351
  %zext_$_11353 = zext i1 %cnd_$_11352 to i64
  %cnd_$_11354 = icmp ne i64 %zext_$_11353, 0
@@ -15287,7 +15287,7 @@ els_$_11346:
  %var_ptr_$_11355 = getelementptr %$locals_aux$480, %$locals_aux$480* %locals_$_131, i32 0, i32 3
  %load_$_11356 = load i8*, i8** %var_ptr_$_11355
  %record_ptr_$_11357 = bitcast i8* %load_$_11356 to %sexps$133*
- %int_of_ptr_$_11360 = ptrtoint i8* %load_$_11356 to i64
+ %int_of_ptr_$_11360 = ptrtoint i8** %load_$_11356 to i64
  %cnd_$_11361 = icmp eq i64 %int_of_ptr_$_11360, 0
  br i1 %cnd_$_11361, label %thn_$_11358, label %mrg_$_11359
 thn_$_11358:
@@ -15317,7 +15317,7 @@ thn_$_11366:
  %var_ptr_$_11387 = getelementptr %$locals_aux$480, %$locals_aux$480* %locals_$_131, i32 0, i32 3
  %load_$_11388 = load i8*, i8** %var_ptr_$_11387
  %record_ptr_$_11389 = bitcast i8* %load_$_11388 to %sexps$133*
- %int_of_ptr_$_11392 = ptrtoint i8* %load_$_11388 to i64
+ %int_of_ptr_$_11392 = ptrtoint i8** %load_$_11388 to i64
  %cnd_$_11393 = icmp eq i64 %int_of_ptr_$_11392, 0
  br i1 %cnd_$_11393, label %thn_$_11390, label %mrg_$_11391
 thn_$_11390:
@@ -15405,8 +15405,8 @@ define i64 @eq_str$364 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$479) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_11448
  %var_ptr_$_11453 = getelementptr %$locals_eq_str$364, %$locals_eq_str$364* %locals_$_132, i32 0, i32 4
  %res_$_11454 = load i8*, i8** %var_ptr_$_11453
- %left_int_$_11455 = ptrtoint i8* %res_$_11454 to i64
- %right_int_$_11456 = ptrtoint i8* null to i64
+ %left_int_$_11455 = ptrtoint i8** %res_$_11454 to i64
+ %right_int_$_11456 = ptrtoint i8** null to i64
  %cnd_$_11457 = icmp eq i64 %left_int_$_11455, %right_int_$_11456
  %zext_$_11458 = zext i1 %cnd_$_11457 to i64
  %cnd_$_11459 = icmp ne i64 %zext_$_11458, 0
@@ -15418,7 +15418,7 @@ els_$_11451:
  %var_ptr_$_11460 = getelementptr %$locals_eq_str$364, %$locals_eq_str$364* %locals_$_132, i32 0, i32 4
  %load_$_11461 = load i8*, i8** %var_ptr_$_11460
  %record_ptr_$_11462 = bitcast i8* %load_$_11461 to %sexps$133*
- %int_of_ptr_$_11465 = ptrtoint i8* %load_$_11461 to i64
+ %int_of_ptr_$_11465 = ptrtoint i8** %load_$_11461 to i64
  %cnd_$_11466 = icmp eq i64 %int_of_ptr_$_11465, 0
  br i1 %cnd_$_11466, label %thn_$_11463, label %mrg_$_11464
 thn_$_11463:
@@ -15449,7 +15449,7 @@ thn_$_11471:
  %var_ptr_$_11489 = getelementptr %$locals_eq_str$364, %$locals_eq_str$364* %locals_$_132, i32 0, i32 4
  %load_$_11490 = load i8*, i8** %var_ptr_$_11489
  %record_ptr_$_11491 = bitcast i8* %load_$_11490 to %sexps$133*
- %int_of_ptr_$_11494 = ptrtoint i8* %load_$_11490 to i64
+ %int_of_ptr_$_11494 = ptrtoint i8** %load_$_11490 to i64
  %cnd_$_11495 = icmp eq i64 %int_of_ptr_$_11494, 0
  br i1 %cnd_$_11495, label %thn_$_11492, label %mrg_$_11493
 thn_$_11492:
@@ -15510,8 +15510,8 @@ define i64 @aux$486 (%$locals_neq_str$365* %$sl, i8* %head$487, i8* %args$488) {
  store %$locals_neq_str$365* %$sl, %$locals_neq_str$365** %arg_$_11529
  %var_ptr_$_11534 = getelementptr %$locals_aux$486, %$locals_aux$486* %locals_$_133, i32 0, i32 3
  %res_$_11535 = load i8*, i8** %var_ptr_$_11534
- %left_int_$_11536 = ptrtoint i8* %res_$_11535 to i64
- %right_int_$_11537 = ptrtoint i8* null to i64
+ %left_int_$_11536 = ptrtoint i8** %res_$_11535 to i64
+ %right_int_$_11537 = ptrtoint i8** null to i64
  %cnd_$_11538 = icmp eq i64 %left_int_$_11536, %right_int_$_11537
  %zext_$_11539 = zext i1 %cnd_$_11538 to i64
  %cnd_$_11540 = icmp ne i64 %zext_$_11539, 0
@@ -15523,7 +15523,7 @@ els_$_11532:
  %var_ptr_$_11541 = getelementptr %$locals_aux$486, %$locals_aux$486* %locals_$_133, i32 0, i32 3
  %load_$_11542 = load i8*, i8** %var_ptr_$_11541
  %record_ptr_$_11543 = bitcast i8* %load_$_11542 to %sexps$133*
- %int_of_ptr_$_11546 = ptrtoint i8* %load_$_11542 to i64
+ %int_of_ptr_$_11546 = ptrtoint i8** %load_$_11542 to i64
  %cnd_$_11547 = icmp eq i64 %int_of_ptr_$_11546, 0
  br i1 %cnd_$_11547, label %thn_$_11544, label %mrg_$_11545
 thn_$_11544:
@@ -15553,7 +15553,7 @@ thn_$_11552:
  %var_ptr_$_11573 = getelementptr %$locals_aux$486, %$locals_aux$486* %locals_$_133, i32 0, i32 3
  %load_$_11574 = load i8*, i8** %var_ptr_$_11573
  %record_ptr_$_11575 = bitcast i8* %load_$_11574 to %sexps$133*
- %int_of_ptr_$_11578 = ptrtoint i8* %load_$_11574 to i64
+ %int_of_ptr_$_11578 = ptrtoint i8** %load_$_11574 to i64
  %cnd_$_11579 = icmp eq i64 %int_of_ptr_$_11578, 0
  br i1 %cnd_$_11579, label %thn_$_11576, label %mrg_$_11577
 thn_$_11576:
@@ -15641,8 +15641,8 @@ define i64 @neq_str$365 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$485) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_11634
  %var_ptr_$_11639 = getelementptr %$locals_neq_str$365, %$locals_neq_str$365* %locals_$_134, i32 0, i32 4
  %res_$_11640 = load i8*, i8** %var_ptr_$_11639
- %left_int_$_11641 = ptrtoint i8* %res_$_11640 to i64
- %right_int_$_11642 = ptrtoint i8* null to i64
+ %left_int_$_11641 = ptrtoint i8** %res_$_11640 to i64
+ %right_int_$_11642 = ptrtoint i8** null to i64
  %cnd_$_11643 = icmp eq i64 %left_int_$_11641, %right_int_$_11642
  %zext_$_11644 = zext i1 %cnd_$_11643 to i64
  %cnd_$_11645 = icmp ne i64 %zext_$_11644, 0
@@ -15654,7 +15654,7 @@ els_$_11637:
  %var_ptr_$_11646 = getelementptr %$locals_neq_str$365, %$locals_neq_str$365* %locals_$_134, i32 0, i32 4
  %load_$_11647 = load i8*, i8** %var_ptr_$_11646
  %record_ptr_$_11648 = bitcast i8* %load_$_11647 to %sexps$133*
- %int_of_ptr_$_11651 = ptrtoint i8* %load_$_11647 to i64
+ %int_of_ptr_$_11651 = ptrtoint i8** %load_$_11647 to i64
  %cnd_$_11652 = icmp eq i64 %int_of_ptr_$_11651, 0
  br i1 %cnd_$_11652, label %thn_$_11649, label %mrg_$_11650
 thn_$_11649:
@@ -15685,7 +15685,7 @@ thn_$_11657:
  %var_ptr_$_11675 = getelementptr %$locals_neq_str$365, %$locals_neq_str$365* %locals_$_134, i32 0, i32 4
  %load_$_11676 = load i8*, i8** %var_ptr_$_11675
  %record_ptr_$_11677 = bitcast i8* %load_$_11676 to %sexps$133*
- %int_of_ptr_$_11680 = ptrtoint i8* %load_$_11676 to i64
+ %int_of_ptr_$_11680 = ptrtoint i8** %load_$_11676 to i64
  %cnd_$_11681 = icmp eq i64 %int_of_ptr_$_11680, 0
  br i1 %cnd_$_11681, label %thn_$_11678, label %mrg_$_11679
 thn_$_11678:
@@ -15746,8 +15746,8 @@ define i64 @aux$492 (%$locals_geq_str$366* %$sl, i8* %head$493, i8* %args$494) {
  store %$locals_geq_str$366* %$sl, %$locals_geq_str$366** %arg_$_11715
  %var_ptr_$_11720 = getelementptr %$locals_aux$492, %$locals_aux$492* %locals_$_135, i32 0, i32 3
  %res_$_11721 = load i8*, i8** %var_ptr_$_11720
- %left_int_$_11722 = ptrtoint i8* %res_$_11721 to i64
- %right_int_$_11723 = ptrtoint i8* null to i64
+ %left_int_$_11722 = ptrtoint i8** %res_$_11721 to i64
+ %right_int_$_11723 = ptrtoint i8** null to i64
  %cnd_$_11724 = icmp eq i64 %left_int_$_11722, %right_int_$_11723
  %zext_$_11725 = zext i1 %cnd_$_11724 to i64
  %cnd_$_11726 = icmp ne i64 %zext_$_11725, 0
@@ -15759,7 +15759,7 @@ els_$_11718:
  %var_ptr_$_11727 = getelementptr %$locals_aux$492, %$locals_aux$492* %locals_$_135, i32 0, i32 3
  %load_$_11728 = load i8*, i8** %var_ptr_$_11727
  %record_ptr_$_11729 = bitcast i8* %load_$_11728 to %sexps$133*
- %int_of_ptr_$_11732 = ptrtoint i8* %load_$_11728 to i64
+ %int_of_ptr_$_11732 = ptrtoint i8** %load_$_11728 to i64
  %cnd_$_11733 = icmp eq i64 %int_of_ptr_$_11732, 0
  br i1 %cnd_$_11733, label %thn_$_11730, label %mrg_$_11731
 thn_$_11730:
@@ -15796,7 +15796,7 @@ thn_$_11738:
  %var_ptr_$_11766 = getelementptr %$locals_aux$492, %$locals_aux$492* %locals_$_135, i32 0, i32 3
  %load_$_11767 = load i8*, i8** %var_ptr_$_11766
  %record_ptr_$_11768 = bitcast i8* %load_$_11767 to %sexps$133*
- %int_of_ptr_$_11771 = ptrtoint i8* %load_$_11767 to i64
+ %int_of_ptr_$_11771 = ptrtoint i8** %load_$_11767 to i64
  %cnd_$_11772 = icmp eq i64 %int_of_ptr_$_11771, 0
  br i1 %cnd_$_11772, label %thn_$_11769, label %mrg_$_11770
 thn_$_11769:
@@ -15884,8 +15884,8 @@ define i64 @geq_str$366 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$491) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_11827
  %var_ptr_$_11832 = getelementptr %$locals_geq_str$366, %$locals_geq_str$366* %locals_$_136, i32 0, i32 4
  %res_$_11833 = load i8*, i8** %var_ptr_$_11832
- %left_int_$_11834 = ptrtoint i8* %res_$_11833 to i64
- %right_int_$_11835 = ptrtoint i8* null to i64
+ %left_int_$_11834 = ptrtoint i8** %res_$_11833 to i64
+ %right_int_$_11835 = ptrtoint i8** null to i64
  %cnd_$_11836 = icmp eq i64 %left_int_$_11834, %right_int_$_11835
  %zext_$_11837 = zext i1 %cnd_$_11836 to i64
  %cnd_$_11838 = icmp ne i64 %zext_$_11837, 0
@@ -15897,7 +15897,7 @@ els_$_11830:
  %var_ptr_$_11839 = getelementptr %$locals_geq_str$366, %$locals_geq_str$366* %locals_$_136, i32 0, i32 4
  %load_$_11840 = load i8*, i8** %var_ptr_$_11839
  %record_ptr_$_11841 = bitcast i8* %load_$_11840 to %sexps$133*
- %int_of_ptr_$_11844 = ptrtoint i8* %load_$_11840 to i64
+ %int_of_ptr_$_11844 = ptrtoint i8** %load_$_11840 to i64
  %cnd_$_11845 = icmp eq i64 %int_of_ptr_$_11844, 0
  br i1 %cnd_$_11845, label %thn_$_11842, label %mrg_$_11843
 thn_$_11842:
@@ -15928,7 +15928,7 @@ thn_$_11850:
  %var_ptr_$_11868 = getelementptr %$locals_geq_str$366, %$locals_geq_str$366* %locals_$_136, i32 0, i32 4
  %load_$_11869 = load i8*, i8** %var_ptr_$_11868
  %record_ptr_$_11870 = bitcast i8* %load_$_11869 to %sexps$133*
- %int_of_ptr_$_11873 = ptrtoint i8* %load_$_11869 to i64
+ %int_of_ptr_$_11873 = ptrtoint i8** %load_$_11869 to i64
  %cnd_$_11874 = icmp eq i64 %int_of_ptr_$_11873, 0
  br i1 %cnd_$_11874, label %thn_$_11871, label %mrg_$_11872
 thn_$_11871:
@@ -15989,8 +15989,8 @@ define i64 @aux$498 (%$locals_gt_str$367* %$sl, i8* %head$499, i8* %args$500) {
  store %$locals_gt_str$367* %$sl, %$locals_gt_str$367** %arg_$_11908
  %var_ptr_$_11913 = getelementptr %$locals_aux$498, %$locals_aux$498* %locals_$_137, i32 0, i32 3
  %res_$_11914 = load i8*, i8** %var_ptr_$_11913
- %left_int_$_11915 = ptrtoint i8* %res_$_11914 to i64
- %right_int_$_11916 = ptrtoint i8* null to i64
+ %left_int_$_11915 = ptrtoint i8** %res_$_11914 to i64
+ %right_int_$_11916 = ptrtoint i8** null to i64
  %cnd_$_11917 = icmp eq i64 %left_int_$_11915, %right_int_$_11916
  %zext_$_11918 = zext i1 %cnd_$_11917 to i64
  %cnd_$_11919 = icmp ne i64 %zext_$_11918, 0
@@ -16002,7 +16002,7 @@ els_$_11911:
  %var_ptr_$_11920 = getelementptr %$locals_aux$498, %$locals_aux$498* %locals_$_137, i32 0, i32 3
  %load_$_11921 = load i8*, i8** %var_ptr_$_11920
  %record_ptr_$_11922 = bitcast i8* %load_$_11921 to %sexps$133*
- %int_of_ptr_$_11925 = ptrtoint i8* %load_$_11921 to i64
+ %int_of_ptr_$_11925 = ptrtoint i8** %load_$_11921 to i64
  %cnd_$_11926 = icmp eq i64 %int_of_ptr_$_11925, 0
  br i1 %cnd_$_11926, label %thn_$_11923, label %mrg_$_11924
 thn_$_11923:
@@ -16039,7 +16039,7 @@ thn_$_11931:
  %var_ptr_$_11959 = getelementptr %$locals_aux$498, %$locals_aux$498* %locals_$_137, i32 0, i32 3
  %load_$_11960 = load i8*, i8** %var_ptr_$_11959
  %record_ptr_$_11961 = bitcast i8* %load_$_11960 to %sexps$133*
- %int_of_ptr_$_11964 = ptrtoint i8* %load_$_11960 to i64
+ %int_of_ptr_$_11964 = ptrtoint i8** %load_$_11960 to i64
  %cnd_$_11965 = icmp eq i64 %int_of_ptr_$_11964, 0
  br i1 %cnd_$_11965, label %thn_$_11962, label %mrg_$_11963
 thn_$_11962:
@@ -16127,8 +16127,8 @@ define i64 @gt_str$367 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$497) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_12020
  %var_ptr_$_12025 = getelementptr %$locals_gt_str$367, %$locals_gt_str$367* %locals_$_138, i32 0, i32 4
  %res_$_12026 = load i8*, i8** %var_ptr_$_12025
- %left_int_$_12027 = ptrtoint i8* %res_$_12026 to i64
- %right_int_$_12028 = ptrtoint i8* null to i64
+ %left_int_$_12027 = ptrtoint i8** %res_$_12026 to i64
+ %right_int_$_12028 = ptrtoint i8** null to i64
  %cnd_$_12029 = icmp eq i64 %left_int_$_12027, %right_int_$_12028
  %zext_$_12030 = zext i1 %cnd_$_12029 to i64
  %cnd_$_12031 = icmp ne i64 %zext_$_12030, 0
@@ -16140,7 +16140,7 @@ els_$_12023:
  %var_ptr_$_12032 = getelementptr %$locals_gt_str$367, %$locals_gt_str$367* %locals_$_138, i32 0, i32 4
  %load_$_12033 = load i8*, i8** %var_ptr_$_12032
  %record_ptr_$_12034 = bitcast i8* %load_$_12033 to %sexps$133*
- %int_of_ptr_$_12037 = ptrtoint i8* %load_$_12033 to i64
+ %int_of_ptr_$_12037 = ptrtoint i8** %load_$_12033 to i64
  %cnd_$_12038 = icmp eq i64 %int_of_ptr_$_12037, 0
  br i1 %cnd_$_12038, label %thn_$_12035, label %mrg_$_12036
 thn_$_12035:
@@ -16171,7 +16171,7 @@ thn_$_12043:
  %var_ptr_$_12061 = getelementptr %$locals_gt_str$367, %$locals_gt_str$367* %locals_$_138, i32 0, i32 4
  %load_$_12062 = load i8*, i8** %var_ptr_$_12061
  %record_ptr_$_12063 = bitcast i8* %load_$_12062 to %sexps$133*
- %int_of_ptr_$_12066 = ptrtoint i8* %load_$_12062 to i64
+ %int_of_ptr_$_12066 = ptrtoint i8** %load_$_12062 to i64
  %cnd_$_12067 = icmp eq i64 %int_of_ptr_$_12066, 0
  br i1 %cnd_$_12067, label %thn_$_12064, label %mrg_$_12065
 thn_$_12064:
@@ -16229,8 +16229,8 @@ define i8* @append_str$368 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$503
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_12100
  %var_ptr_$_12105 = getelementptr %$locals_append_str$368, %$locals_append_str$368* %locals_$_139, i32 0, i32 2
  %res_$_12106 = load i8*, i8** %var_ptr_$_12105
- %left_int_$_12107 = ptrtoint i8* %res_$_12106 to i64
- %right_int_$_12108 = ptrtoint i8* null to i64
+ %left_int_$_12107 = ptrtoint i8** %res_$_12106 to i64
+ %right_int_$_12108 = ptrtoint i8** null to i64
  %cnd_$_12109 = icmp eq i64 %left_int_$_12107, %right_int_$_12108
  %zext_$_12110 = zext i1 %cnd_$_12109 to i64
  %cnd_$_12111 = icmp ne i64 %zext_$_12110, 0
@@ -16243,7 +16243,7 @@ els_$_12103:
  %var_ptr_$_12114 = getelementptr %$locals_append_str$368, %$locals_append_str$368* %locals_$_139, i32 0, i32 2
  %load_$_12115 = load i8*, i8** %var_ptr_$_12114
  %record_ptr_$_12116 = bitcast i8* %load_$_12115 to %sexps$133*
- %int_of_ptr_$_12119 = ptrtoint i8* %load_$_12115 to i64
+ %int_of_ptr_$_12119 = ptrtoint i8** %load_$_12115 to i64
  %cnd_$_12120 = icmp eq i64 %int_of_ptr_$_12119, 0
  br i1 %cnd_$_12120, label %thn_$_12117, label %mrg_$_12118
 thn_$_12117:
@@ -16280,7 +16280,7 @@ thn_$_12125:
  %var_ptr_$_12150 = getelementptr %$locals_append_str$368, %$locals_append_str$368* %locals_$_139, i32 0, i32 2
  %load_$_12151 = load i8*, i8** %var_ptr_$_12150
  %record_ptr_$_12152 = bitcast i8* %load_$_12151 to %sexps$133*
- %int_of_ptr_$_12155 = ptrtoint i8* %load_$_12151 to i64
+ %int_of_ptr_$_12155 = ptrtoint i8** %load_$_12151 to i64
  %cnd_$_12156 = icmp eq i64 %int_of_ptr_$_12155, 0
  br i1 %cnd_$_12156, label %thn_$_12153, label %mrg_$_12154
 thn_$_12153:
@@ -16342,8 +16342,8 @@ define i64 @str_to_int$369 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$505
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_12192
  %var_ptr_$_12201 = getelementptr %$locals_str_to_int$369, %$locals_str_to_int$369* %locals_$_140, i32 0, i32 2
  %res_$_12202 = load i8*, i8** %var_ptr_$_12201
- %left_int_$_12203 = ptrtoint i8* %res_$_12202 to i64
- %right_int_$_12204 = ptrtoint i8* null to i64
+ %left_int_$_12203 = ptrtoint i8** %res_$_12202 to i64
+ %right_int_$_12204 = ptrtoint i8** null to i64
  %cnd_$_12205 = icmp eq i64 %left_int_$_12203, %right_int_$_12204
  %zext_$_12206 = zext i1 %cnd_$_12205 to i64
  %cnd_$_12207 = icmp ne i64 %zext_$_12206, 0
@@ -16355,7 +16355,7 @@ els_$_12199:
  %var_ptr_$_12212 = getelementptr %$locals_str_to_int$369, %$locals_str_to_int$369* %locals_$_140, i32 0, i32 2
  %load_$_12213 = load i8*, i8** %var_ptr_$_12212
  %record_ptr_$_12214 = bitcast i8* %load_$_12213 to %sexps$133*
- %int_of_ptr_$_12217 = ptrtoint i8* %load_$_12213 to i64
+ %int_of_ptr_$_12217 = ptrtoint i8** %load_$_12213 to i64
  %cnd_$_12218 = icmp eq i64 %int_of_ptr_$_12217, 0
  br i1 %cnd_$_12218, label %thn_$_12215, label %mrg_$_12216
 thn_$_12215:
@@ -16364,8 +16364,8 @@ thn_$_12215:
 mrg_$_12216:
  %field_ptr_$_12219 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12214, i32 0, i32 1
  %res_$_12220 = load i8*, i8** %field_ptr_$_12219
- %left_int_$_12221 = ptrtoint i8* %res_$_12220 to i64
- %right_int_$_12222 = ptrtoint i8* null to i64
+ %left_int_$_12221 = ptrtoint i8** %res_$_12220 to i64
+ %right_int_$_12222 = ptrtoint i8** null to i64
  %cnd_$_12223 = icmp ne i64 %left_int_$_12221, %right_int_$_12222
  %zext_$_12224 = zext i1 %cnd_$_12223 to i64
  %cnd_$_12225 = icmp ne i64 %zext_$_12224, 0
@@ -16374,7 +16374,7 @@ thn_$_12209:
  %var_ptr_$_12226 = getelementptr %$locals_str_to_int$369, %$locals_str_to_int$369* %locals_$_140, i32 0, i32 2
  %load_$_12227 = load i8*, i8** %var_ptr_$_12226
  %record_ptr_$_12228 = bitcast i8* %load_$_12227 to %sexps$133*
- %int_of_ptr_$_12231 = ptrtoint i8* %load_$_12227 to i64
+ %int_of_ptr_$_12231 = ptrtoint i8** %load_$_12227 to i64
  %cnd_$_12232 = icmp eq i64 %int_of_ptr_$_12231, 0
  br i1 %cnd_$_12232, label %thn_$_12229, label %mrg_$_12230
 thn_$_12229:
@@ -16384,7 +16384,7 @@ mrg_$_12230:
  %field_ptr_$_12233 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12228, i32 0, i32 1
  %load_$_12234 = load i8*, i8** %field_ptr_$_12233
  %record_ptr_$_12235 = bitcast i8* %load_$_12234 to %sexps$133*
- %int_of_ptr_$_12238 = ptrtoint i8* %load_$_12234 to i64
+ %int_of_ptr_$_12238 = ptrtoint i8** %load_$_12234 to i64
  %cnd_$_12239 = icmp eq i64 %int_of_ptr_$_12238, 0
  br i1 %cnd_$_12239, label %thn_$_12236, label %mrg_$_12237
 thn_$_12236:
@@ -16393,8 +16393,8 @@ thn_$_12236:
 mrg_$_12237:
  %field_ptr_$_12240 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12235, i32 0, i32 1
  %res_$_12241 = load i8*, i8** %field_ptr_$_12240
- %left_int_$_12242 = ptrtoint i8* %res_$_12241 to i64
- %right_int_$_12243 = ptrtoint i8* null to i64
+ %left_int_$_12242 = ptrtoint i8** %res_$_12241 to i64
+ %right_int_$_12243 = ptrtoint i8** null to i64
  %cnd_$_12244 = icmp ne i64 %left_int_$_12242, %right_int_$_12243
  %zext_$_12245 = zext i1 %cnd_$_12244 to i64
  store i64 %zext_$_12245, i64* %temp_$_12208
@@ -16423,7 +16423,7 @@ els_$_12195:
  %var_ptr_$_12256 = getelementptr %$locals_str_to_int$369, %$locals_str_to_int$369* %locals_$_140, i32 0, i32 2
  %load_$_12257 = load i8*, i8** %var_ptr_$_12256
  %record_ptr_$_12258 = bitcast i8* %load_$_12257 to %sexps$133*
- %int_of_ptr_$_12261 = ptrtoint i8* %load_$_12257 to i64
+ %int_of_ptr_$_12261 = ptrtoint i8** %load_$_12257 to i64
  %cnd_$_12262 = icmp eq i64 %int_of_ptr_$_12261, 0
  br i1 %cnd_$_12262, label %thn_$_12259, label %mrg_$_12260
 thn_$_12259:
@@ -16506,8 +16506,8 @@ define i8* @int_to_str$370 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$507
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_12319
  %var_ptr_$_12328 = getelementptr %$locals_int_to_str$370, %$locals_int_to_str$370* %locals_$_141, i32 0, i32 2
  %res_$_12329 = load i8*, i8** %var_ptr_$_12328
- %left_int_$_12330 = ptrtoint i8* %res_$_12329 to i64
- %right_int_$_12331 = ptrtoint i8* null to i64
+ %left_int_$_12330 = ptrtoint i8** %res_$_12329 to i64
+ %right_int_$_12331 = ptrtoint i8** null to i64
  %cnd_$_12332 = icmp eq i64 %left_int_$_12330, %right_int_$_12331
  %zext_$_12333 = zext i1 %cnd_$_12332 to i64
  %cnd_$_12334 = icmp ne i64 %zext_$_12333, 0
@@ -16519,7 +16519,7 @@ els_$_12326:
  %var_ptr_$_12339 = getelementptr %$locals_int_to_str$370, %$locals_int_to_str$370* %locals_$_141, i32 0, i32 2
  %load_$_12340 = load i8*, i8** %var_ptr_$_12339
  %record_ptr_$_12341 = bitcast i8* %load_$_12340 to %sexps$133*
- %int_of_ptr_$_12344 = ptrtoint i8* %load_$_12340 to i64
+ %int_of_ptr_$_12344 = ptrtoint i8** %load_$_12340 to i64
  %cnd_$_12345 = icmp eq i64 %int_of_ptr_$_12344, 0
  br i1 %cnd_$_12345, label %thn_$_12342, label %mrg_$_12343
 thn_$_12342:
@@ -16528,8 +16528,8 @@ thn_$_12342:
 mrg_$_12343:
  %field_ptr_$_12346 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12341, i32 0, i32 1
  %res_$_12347 = load i8*, i8** %field_ptr_$_12346
- %left_int_$_12348 = ptrtoint i8* %res_$_12347 to i64
- %right_int_$_12349 = ptrtoint i8* null to i64
+ %left_int_$_12348 = ptrtoint i8** %res_$_12347 to i64
+ %right_int_$_12349 = ptrtoint i8** null to i64
  %cnd_$_12350 = icmp ne i64 %left_int_$_12348, %right_int_$_12349
  %zext_$_12351 = zext i1 %cnd_$_12350 to i64
  %cnd_$_12352 = icmp ne i64 %zext_$_12351, 0
@@ -16538,7 +16538,7 @@ thn_$_12336:
  %var_ptr_$_12353 = getelementptr %$locals_int_to_str$370, %$locals_int_to_str$370* %locals_$_141, i32 0, i32 2
  %load_$_12354 = load i8*, i8** %var_ptr_$_12353
  %record_ptr_$_12355 = bitcast i8* %load_$_12354 to %sexps$133*
- %int_of_ptr_$_12358 = ptrtoint i8* %load_$_12354 to i64
+ %int_of_ptr_$_12358 = ptrtoint i8** %load_$_12354 to i64
  %cnd_$_12359 = icmp eq i64 %int_of_ptr_$_12358, 0
  br i1 %cnd_$_12359, label %thn_$_12356, label %mrg_$_12357
 thn_$_12356:
@@ -16548,7 +16548,7 @@ mrg_$_12357:
  %field_ptr_$_12360 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12355, i32 0, i32 1
  %load_$_12361 = load i8*, i8** %field_ptr_$_12360
  %record_ptr_$_12362 = bitcast i8* %load_$_12361 to %sexps$133*
- %int_of_ptr_$_12365 = ptrtoint i8* %load_$_12361 to i64
+ %int_of_ptr_$_12365 = ptrtoint i8** %load_$_12361 to i64
  %cnd_$_12366 = icmp eq i64 %int_of_ptr_$_12365, 0
  br i1 %cnd_$_12366, label %thn_$_12363, label %mrg_$_12364
 thn_$_12363:
@@ -16557,8 +16557,8 @@ thn_$_12363:
 mrg_$_12364:
  %field_ptr_$_12367 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12362, i32 0, i32 1
  %res_$_12368 = load i8*, i8** %field_ptr_$_12367
- %left_int_$_12369 = ptrtoint i8* %res_$_12368 to i64
- %right_int_$_12370 = ptrtoint i8* null to i64
+ %left_int_$_12369 = ptrtoint i8** %res_$_12368 to i64
+ %right_int_$_12370 = ptrtoint i8** null to i64
  %cnd_$_12371 = icmp ne i64 %left_int_$_12369, %right_int_$_12370
  %zext_$_12372 = zext i1 %cnd_$_12371 to i64
  store i64 %zext_$_12372, i64* %temp_$_12335
@@ -16588,7 +16588,7 @@ els_$_12322:
  %var_ptr_$_12385 = getelementptr %$locals_int_to_str$370, %$locals_int_to_str$370* %locals_$_141, i32 0, i32 2
  %load_$_12386 = load i8*, i8** %var_ptr_$_12385
  %record_ptr_$_12387 = bitcast i8* %load_$_12386 to %sexps$133*
- %int_of_ptr_$_12390 = ptrtoint i8* %load_$_12386 to i64
+ %int_of_ptr_$_12390 = ptrtoint i8** %load_$_12386 to i64
  %cnd_$_12391 = icmp eq i64 %int_of_ptr_$_12390, 0
  br i1 %cnd_$_12391, label %thn_$_12388, label %mrg_$_12389
 thn_$_12388:
@@ -16676,8 +16676,8 @@ define i8* @substring_$371 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$509
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_12450
  %var_ptr_$_12467 = getelementptr %$locals_substring_$371, %$locals_substring_$371* %locals_$_142, i32 0, i32 4
  %res_$_12468 = load i8*, i8** %var_ptr_$_12467
- %left_int_$_12469 = ptrtoint i8* %res_$_12468 to i64
- %right_int_$_12470 = ptrtoint i8* null to i64
+ %left_int_$_12469 = ptrtoint i8** %res_$_12468 to i64
+ %right_int_$_12470 = ptrtoint i8** null to i64
  %cnd_$_12471 = icmp eq i64 %left_int_$_12469, %right_int_$_12470
  %zext_$_12472 = zext i1 %cnd_$_12471 to i64
  %cnd_$_12473 = icmp ne i64 %zext_$_12472, 0
@@ -16689,7 +16689,7 @@ els_$_12465:
  %var_ptr_$_12474 = getelementptr %$locals_substring_$371, %$locals_substring_$371* %locals_$_142, i32 0, i32 4
  %load_$_12475 = load i8*, i8** %var_ptr_$_12474
  %record_ptr_$_12476 = bitcast i8* %load_$_12475 to %sexps$133*
- %int_of_ptr_$_12479 = ptrtoint i8* %load_$_12475 to i64
+ %int_of_ptr_$_12479 = ptrtoint i8** %load_$_12475 to i64
  %cnd_$_12480 = icmp eq i64 %int_of_ptr_$_12479, 0
  br i1 %cnd_$_12480, label %thn_$_12477, label %mrg_$_12478
 thn_$_12477:
@@ -16698,8 +16698,8 @@ thn_$_12477:
 mrg_$_12478:
  %field_ptr_$_12481 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12476, i32 0, i32 1
  %res_$_12482 = load i8*, i8** %field_ptr_$_12481
- %left_int_$_12483 = ptrtoint i8* %res_$_12482 to i64
- %right_int_$_12484 = ptrtoint i8* null to i64
+ %left_int_$_12483 = ptrtoint i8** %res_$_12482 to i64
+ %right_int_$_12484 = ptrtoint i8** null to i64
  %cnd_$_12485 = icmp eq i64 %left_int_$_12483, %right_int_$_12484
  %zext_$_12486 = zext i1 %cnd_$_12485 to i64
  store i64 %zext_$_12486, i64* %temp_$_12463
@@ -16715,7 +16715,7 @@ els_$_12461:
  %var_ptr_$_12489 = getelementptr %$locals_substring_$371, %$locals_substring_$371* %locals_$_142, i32 0, i32 4
  %load_$_12490 = load i8*, i8** %var_ptr_$_12489
  %record_ptr_$_12491 = bitcast i8* %load_$_12490 to %sexps$133*
- %int_of_ptr_$_12494 = ptrtoint i8* %load_$_12490 to i64
+ %int_of_ptr_$_12494 = ptrtoint i8** %load_$_12490 to i64
  %cnd_$_12495 = icmp eq i64 %int_of_ptr_$_12494, 0
  br i1 %cnd_$_12495, label %thn_$_12492, label %mrg_$_12493
 thn_$_12492:
@@ -16725,7 +16725,7 @@ mrg_$_12493:
  %field_ptr_$_12496 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12491, i32 0, i32 1
  %load_$_12497 = load i8*, i8** %field_ptr_$_12496
  %record_ptr_$_12498 = bitcast i8* %load_$_12497 to %sexps$133*
- %int_of_ptr_$_12501 = ptrtoint i8* %load_$_12497 to i64
+ %int_of_ptr_$_12501 = ptrtoint i8** %load_$_12497 to i64
  %cnd_$_12502 = icmp eq i64 %int_of_ptr_$_12501, 0
  br i1 %cnd_$_12502, label %thn_$_12499, label %mrg_$_12500
 thn_$_12499:
@@ -16734,8 +16734,8 @@ thn_$_12499:
 mrg_$_12500:
  %field_ptr_$_12503 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12498, i32 0, i32 1
  %res_$_12504 = load i8*, i8** %field_ptr_$_12503
- %left_int_$_12505 = ptrtoint i8* %res_$_12504 to i64
- %right_int_$_12506 = ptrtoint i8* null to i64
+ %left_int_$_12505 = ptrtoint i8** %res_$_12504 to i64
+ %right_int_$_12506 = ptrtoint i8** null to i64
  %cnd_$_12507 = icmp eq i64 %left_int_$_12505, %right_int_$_12506
  %zext_$_12508 = zext i1 %cnd_$_12507 to i64
  store i64 %zext_$_12508, i64* %temp_$_12459
@@ -16751,7 +16751,7 @@ els_$_12457:
  %var_ptr_$_12515 = getelementptr %$locals_substring_$371, %$locals_substring_$371* %locals_$_142, i32 0, i32 4
  %load_$_12516 = load i8*, i8** %var_ptr_$_12515
  %record_ptr_$_12517 = bitcast i8* %load_$_12516 to %sexps$133*
- %int_of_ptr_$_12520 = ptrtoint i8* %load_$_12516 to i64
+ %int_of_ptr_$_12520 = ptrtoint i8** %load_$_12516 to i64
  %cnd_$_12521 = icmp eq i64 %int_of_ptr_$_12520, 0
  br i1 %cnd_$_12521, label %thn_$_12518, label %mrg_$_12519
 thn_$_12518:
@@ -16761,7 +16761,7 @@ mrg_$_12519:
  %field_ptr_$_12522 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12517, i32 0, i32 1
  %load_$_12523 = load i8*, i8** %field_ptr_$_12522
  %record_ptr_$_12524 = bitcast i8* %load_$_12523 to %sexps$133*
- %int_of_ptr_$_12527 = ptrtoint i8* %load_$_12523 to i64
+ %int_of_ptr_$_12527 = ptrtoint i8** %load_$_12523 to i64
  %cnd_$_12528 = icmp eq i64 %int_of_ptr_$_12527, 0
  br i1 %cnd_$_12528, label %thn_$_12525, label %mrg_$_12526
 thn_$_12525:
@@ -16770,8 +16770,8 @@ thn_$_12525:
 mrg_$_12526:
  %field_ptr_$_12529 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12524, i32 0, i32 1
  %res_$_12530 = load i8*, i8** %field_ptr_$_12529
- %left_int_$_12531 = ptrtoint i8* %res_$_12530 to i64
- %right_int_$_12532 = ptrtoint i8* null to i64
+ %left_int_$_12531 = ptrtoint i8** %res_$_12530 to i64
+ %right_int_$_12532 = ptrtoint i8** null to i64
  %cnd_$_12533 = icmp ne i64 %left_int_$_12531, %right_int_$_12532
  %zext_$_12534 = zext i1 %cnd_$_12533 to i64
  %cnd_$_12535 = icmp ne i64 %zext_$_12534, 0
@@ -16780,7 +16780,7 @@ thn_$_12512:
  %var_ptr_$_12536 = getelementptr %$locals_substring_$371, %$locals_substring_$371* %locals_$_142, i32 0, i32 4
  %load_$_12537 = load i8*, i8** %var_ptr_$_12536
  %record_ptr_$_12538 = bitcast i8* %load_$_12537 to %sexps$133*
- %int_of_ptr_$_12541 = ptrtoint i8* %load_$_12537 to i64
+ %int_of_ptr_$_12541 = ptrtoint i8** %load_$_12537 to i64
  %cnd_$_12542 = icmp eq i64 %int_of_ptr_$_12541, 0
  br i1 %cnd_$_12542, label %thn_$_12539, label %mrg_$_12540
 thn_$_12539:
@@ -16790,7 +16790,7 @@ mrg_$_12540:
  %field_ptr_$_12543 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12538, i32 0, i32 1
  %load_$_12544 = load i8*, i8** %field_ptr_$_12543
  %record_ptr_$_12545 = bitcast i8* %load_$_12544 to %sexps$133*
- %int_of_ptr_$_12548 = ptrtoint i8* %load_$_12544 to i64
+ %int_of_ptr_$_12548 = ptrtoint i8** %load_$_12544 to i64
  %cnd_$_12549 = icmp eq i64 %int_of_ptr_$_12548, 0
  br i1 %cnd_$_12549, label %thn_$_12546, label %mrg_$_12547
 thn_$_12546:
@@ -16800,7 +16800,7 @@ mrg_$_12547:
  %field_ptr_$_12550 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12545, i32 0, i32 1
  %load_$_12551 = load i8*, i8** %field_ptr_$_12550
  %record_ptr_$_12552 = bitcast i8* %load_$_12551 to %sexps$133*
- %int_of_ptr_$_12555 = ptrtoint i8* %load_$_12551 to i64
+ %int_of_ptr_$_12555 = ptrtoint i8** %load_$_12551 to i64
  %cnd_$_12556 = icmp eq i64 %int_of_ptr_$_12555, 0
  br i1 %cnd_$_12556, label %thn_$_12553, label %mrg_$_12554
 thn_$_12553:
@@ -16809,8 +16809,8 @@ thn_$_12553:
 mrg_$_12554:
  %field_ptr_$_12557 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12552, i32 0, i32 1
  %res_$_12558 = load i8*, i8** %field_ptr_$_12557
- %left_int_$_12559 = ptrtoint i8* %res_$_12558 to i64
- %right_int_$_12560 = ptrtoint i8* null to i64
+ %left_int_$_12559 = ptrtoint i8** %res_$_12558 to i64
+ %right_int_$_12560 = ptrtoint i8** null to i64
  %cnd_$_12561 = icmp ne i64 %left_int_$_12559, %right_int_$_12560
  %zext_$_12562 = zext i1 %cnd_$_12561 to i64
  store i64 %zext_$_12562, i64* %temp_$_12511
@@ -16840,7 +16840,7 @@ els_$_12453:
  %var_ptr_$_12575 = getelementptr %$locals_substring_$371, %$locals_substring_$371* %locals_$_142, i32 0, i32 4
  %load_$_12576 = load i8*, i8** %var_ptr_$_12575
  %record_ptr_$_12577 = bitcast i8* %load_$_12576 to %sexps$133*
- %int_of_ptr_$_12580 = ptrtoint i8* %load_$_12576 to i64
+ %int_of_ptr_$_12580 = ptrtoint i8** %load_$_12576 to i64
  %cnd_$_12581 = icmp eq i64 %int_of_ptr_$_12580, 0
  br i1 %cnd_$_12581, label %thn_$_12578, label %mrg_$_12579
 thn_$_12578:
@@ -16854,7 +16854,7 @@ mrg_$_12579:
  %var_ptr_$_12585 = getelementptr %$locals_substring_$371, %$locals_substring_$371* %locals_$_142, i32 0, i32 4
  %load_$_12586 = load i8*, i8** %var_ptr_$_12585
  %record_ptr_$_12587 = bitcast i8* %load_$_12586 to %sexps$133*
- %int_of_ptr_$_12590 = ptrtoint i8* %load_$_12586 to i64
+ %int_of_ptr_$_12590 = ptrtoint i8** %load_$_12586 to i64
  %cnd_$_12591 = icmp eq i64 %int_of_ptr_$_12590, 0
  br i1 %cnd_$_12591, label %thn_$_12588, label %mrg_$_12589
 thn_$_12588:
@@ -16864,7 +16864,7 @@ mrg_$_12589:
  %field_ptr_$_12592 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12587, i32 0, i32 1
  %load_$_12593 = load i8*, i8** %field_ptr_$_12592
  %record_ptr_$_12594 = bitcast i8* %load_$_12593 to %sexps$133*
- %int_of_ptr_$_12597 = ptrtoint i8* %load_$_12593 to i64
+ %int_of_ptr_$_12597 = ptrtoint i8** %load_$_12593 to i64
  %cnd_$_12598 = icmp eq i64 %int_of_ptr_$_12597, 0
  br i1 %cnd_$_12598, label %thn_$_12595, label %mrg_$_12596
 thn_$_12595:
@@ -16878,7 +16878,7 @@ mrg_$_12596:
  %var_ptr_$_12602 = getelementptr %$locals_substring_$371, %$locals_substring_$371* %locals_$_142, i32 0, i32 4
  %load_$_12603 = load i8*, i8** %var_ptr_$_12602
  %record_ptr_$_12604 = bitcast i8* %load_$_12603 to %sexps$133*
- %int_of_ptr_$_12607 = ptrtoint i8* %load_$_12603 to i64
+ %int_of_ptr_$_12607 = ptrtoint i8** %load_$_12603 to i64
  %cnd_$_12608 = icmp eq i64 %int_of_ptr_$_12607, 0
  br i1 %cnd_$_12608, label %thn_$_12605, label %mrg_$_12606
 thn_$_12605:
@@ -16888,7 +16888,7 @@ mrg_$_12606:
  %field_ptr_$_12609 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12604, i32 0, i32 1
  %load_$_12610 = load i8*, i8** %field_ptr_$_12609
  %record_ptr_$_12611 = bitcast i8* %load_$_12610 to %sexps$133*
- %int_of_ptr_$_12614 = ptrtoint i8* %load_$_12610 to i64
+ %int_of_ptr_$_12614 = ptrtoint i8** %load_$_12610 to i64
  %cnd_$_12615 = icmp eq i64 %int_of_ptr_$_12614, 0
  br i1 %cnd_$_12615, label %thn_$_12612, label %mrg_$_12613
 thn_$_12612:
@@ -16898,7 +16898,7 @@ mrg_$_12613:
  %field_ptr_$_12616 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12611, i32 0, i32 1
  %load_$_12617 = load i8*, i8** %field_ptr_$_12616
  %record_ptr_$_12618 = bitcast i8* %load_$_12617 to %sexps$133*
- %int_of_ptr_$_12621 = ptrtoint i8* %load_$_12617 to i64
+ %int_of_ptr_$_12621 = ptrtoint i8** %load_$_12617 to i64
  %cnd_$_12622 = icmp eq i64 %int_of_ptr_$_12621, 0
  br i1 %cnd_$_12622, label %thn_$_12619, label %mrg_$_12620
 thn_$_12619:
@@ -17063,8 +17063,8 @@ define i8* @print_$372 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$513) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_12760
  %var_ptr_$_12765 = getelementptr %$locals_print_$372, %$locals_print_$372* %locals_$_143, i32 0, i32 2
  %res_$_12766 = load i8*, i8** %var_ptr_$_12765
- %left_int_$_12767 = ptrtoint i8* %res_$_12766 to i64
- %right_int_$_12768 = ptrtoint i8* null to i64
+ %left_int_$_12767 = ptrtoint i8** %res_$_12766 to i64
+ %right_int_$_12768 = ptrtoint i8** null to i64
  %cnd_$_12769 = icmp eq i64 %left_int_$_12767, %right_int_$_12768
  %zext_$_12770 = zext i1 %cnd_$_12769 to i64
  %cnd_$_12771 = icmp ne i64 %zext_$_12770, 0
@@ -17076,7 +17076,7 @@ els_$_12763:
  %var_ptr_$_12772 = getelementptr %$locals_print_$372, %$locals_print_$372* %locals_$_143, i32 0, i32 2
  %load_$_12773 = load i8*, i8** %var_ptr_$_12772
  %record_ptr_$_12774 = bitcast i8* %load_$_12773 to %sexps$133*
- %int_of_ptr_$_12777 = ptrtoint i8* %load_$_12773 to i64
+ %int_of_ptr_$_12777 = ptrtoint i8** %load_$_12773 to i64
  %cnd_$_12778 = icmp eq i64 %int_of_ptr_$_12777, 0
  br i1 %cnd_$_12778, label %thn_$_12775, label %mrg_$_12776
 thn_$_12775:
@@ -17130,7 +17130,7 @@ mrg_$_12784:
  %var_ptr_$_12819 = getelementptr %$locals_print_$372, %$locals_print_$372* %locals_$_143, i32 0, i32 2
  %load_$_12820 = load i8*, i8** %var_ptr_$_12819
  %record_ptr_$_12821 = bitcast i8* %load_$_12820 to %sexps$133*
- %int_of_ptr_$_12824 = ptrtoint i8* %load_$_12820 to i64
+ %int_of_ptr_$_12824 = ptrtoint i8** %load_$_12820 to i64
  %cnd_$_12825 = icmp eq i64 %int_of_ptr_$_12824, 0
  br i1 %cnd_$_12825, label %thn_$_12822, label %mrg_$_12823
 thn_$_12822:
@@ -17156,8 +17156,8 @@ define i8* @newline$373 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$515) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_12831
  %var_ptr_$_12836 = getelementptr %$locals_newline$373, %$locals_newline$373* %locals_$_144, i32 0, i32 1
  %res_$_12837 = load i8*, i8** %var_ptr_$_12836
- %left_int_$_12838 = ptrtoint i8* %res_$_12837 to i64
- %right_int_$_12839 = ptrtoint i8* null to i64
+ %left_int_$_12838 = ptrtoint i8** %res_$_12837 to i64
+ %right_int_$_12839 = ptrtoint i8** null to i64
  %cnd_$_12840 = icmp eq i64 %left_int_$_12838, %right_int_$_12839
  %zext_$_12841 = zext i1 %cnd_$_12840 to i64
  %cnd_$_12842 = icmp ne i64 %zext_$_12841, 0
@@ -17194,8 +17194,8 @@ define i8* @read_char_$374 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$516
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_12859
  %var_ptr_$_12864 = getelementptr %$locals_read_char_$374, %$locals_read_char_$374* %locals_$_145, i32 0, i32 1
  %res_$_12865 = load i8*, i8** %var_ptr_$_12864
- %left_int_$_12866 = ptrtoint i8* %res_$_12865 to i64
- %right_int_$_12867 = ptrtoint i8* null to i64
+ %left_int_$_12866 = ptrtoint i8** %res_$_12865 to i64
+ %right_int_$_12867 = ptrtoint i8** null to i64
  %cnd_$_12868 = icmp eq i64 %left_int_$_12866, %right_int_$_12867
  %zext_$_12869 = zext i1 %cnd_$_12868 to i64
  %cnd_$_12870 = icmp ne i64 %zext_$_12869, 0
@@ -17232,8 +17232,8 @@ define i8* @read_line_$375 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$517
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_12888
  %var_ptr_$_12893 = getelementptr %$locals_read_line_$375, %$locals_read_line_$375* %locals_$_146, i32 0, i32 3
  %res_$_12894 = load i8*, i8** %var_ptr_$_12893
- %left_int_$_12895 = ptrtoint i8* %res_$_12894 to i64
- %right_int_$_12896 = ptrtoint i8* null to i64
+ %left_int_$_12895 = ptrtoint i8** %res_$_12894 to i64
+ %right_int_$_12896 = ptrtoint i8** null to i64
  %cnd_$_12897 = icmp eq i64 %left_int_$_12895, %right_int_$_12896
  %zext_$_12898 = zext i1 %cnd_$_12897 to i64
  %cnd_$_12899 = icmp ne i64 %zext_$_12898, 0
@@ -17310,8 +17310,8 @@ define i64 @ord_$376 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$520) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_12950
  %var_ptr_$_12959 = getelementptr %$locals_ord_$376, %$locals_ord_$376* %locals_$_147, i32 0, i32 2
  %res_$_12960 = load i8*, i8** %var_ptr_$_12959
- %left_int_$_12961 = ptrtoint i8* %res_$_12960 to i64
- %right_int_$_12962 = ptrtoint i8* null to i64
+ %left_int_$_12961 = ptrtoint i8** %res_$_12960 to i64
+ %right_int_$_12962 = ptrtoint i8** null to i64
  %cnd_$_12963 = icmp eq i64 %left_int_$_12961, %right_int_$_12962
  %zext_$_12964 = zext i1 %cnd_$_12963 to i64
  %cnd_$_12965 = icmp ne i64 %zext_$_12964, 0
@@ -17323,7 +17323,7 @@ els_$_12957:
  %var_ptr_$_12970 = getelementptr %$locals_ord_$376, %$locals_ord_$376* %locals_$_147, i32 0, i32 2
  %load_$_12971 = load i8*, i8** %var_ptr_$_12970
  %record_ptr_$_12972 = bitcast i8* %load_$_12971 to %sexps$133*
- %int_of_ptr_$_12975 = ptrtoint i8* %load_$_12971 to i64
+ %int_of_ptr_$_12975 = ptrtoint i8** %load_$_12971 to i64
  %cnd_$_12976 = icmp eq i64 %int_of_ptr_$_12975, 0
  br i1 %cnd_$_12976, label %thn_$_12973, label %mrg_$_12974
 thn_$_12973:
@@ -17332,8 +17332,8 @@ thn_$_12973:
 mrg_$_12974:
  %field_ptr_$_12977 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12972, i32 0, i32 1
  %res_$_12978 = load i8*, i8** %field_ptr_$_12977
- %left_int_$_12979 = ptrtoint i8* %res_$_12978 to i64
- %right_int_$_12980 = ptrtoint i8* null to i64
+ %left_int_$_12979 = ptrtoint i8** %res_$_12978 to i64
+ %right_int_$_12980 = ptrtoint i8** null to i64
  %cnd_$_12981 = icmp ne i64 %left_int_$_12979, %right_int_$_12980
  %zext_$_12982 = zext i1 %cnd_$_12981 to i64
  %cnd_$_12983 = icmp ne i64 %zext_$_12982, 0
@@ -17342,7 +17342,7 @@ thn_$_12967:
  %var_ptr_$_12984 = getelementptr %$locals_ord_$376, %$locals_ord_$376* %locals_$_147, i32 0, i32 2
  %load_$_12985 = load i8*, i8** %var_ptr_$_12984
  %record_ptr_$_12986 = bitcast i8* %load_$_12985 to %sexps$133*
- %int_of_ptr_$_12989 = ptrtoint i8* %load_$_12985 to i64
+ %int_of_ptr_$_12989 = ptrtoint i8** %load_$_12985 to i64
  %cnd_$_12990 = icmp eq i64 %int_of_ptr_$_12989, 0
  br i1 %cnd_$_12990, label %thn_$_12987, label %mrg_$_12988
 thn_$_12987:
@@ -17352,7 +17352,7 @@ mrg_$_12988:
  %field_ptr_$_12991 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12986, i32 0, i32 1
  %load_$_12992 = load i8*, i8** %field_ptr_$_12991
  %record_ptr_$_12993 = bitcast i8* %load_$_12992 to %sexps$133*
- %int_of_ptr_$_12996 = ptrtoint i8* %load_$_12992 to i64
+ %int_of_ptr_$_12996 = ptrtoint i8** %load_$_12992 to i64
  %cnd_$_12997 = icmp eq i64 %int_of_ptr_$_12996, 0
  br i1 %cnd_$_12997, label %thn_$_12994, label %mrg_$_12995
 thn_$_12994:
@@ -17361,8 +17361,8 @@ thn_$_12994:
 mrg_$_12995:
  %field_ptr_$_12998 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_12993, i32 0, i32 1
  %res_$_12999 = load i8*, i8** %field_ptr_$_12998
- %left_int_$_13000 = ptrtoint i8* %res_$_12999 to i64
- %right_int_$_13001 = ptrtoint i8* null to i64
+ %left_int_$_13000 = ptrtoint i8** %res_$_12999 to i64
+ %right_int_$_13001 = ptrtoint i8** null to i64
  %cnd_$_13002 = icmp ne i64 %left_int_$_13000, %right_int_$_13001
  %zext_$_13003 = zext i1 %cnd_$_13002 to i64
  store i64 %zext_$_13003, i64* %temp_$_12966
@@ -17391,7 +17391,7 @@ els_$_12953:
  %var_ptr_$_13014 = getelementptr %$locals_ord_$376, %$locals_ord_$376* %locals_$_147, i32 0, i32 2
  %load_$_13015 = load i8*, i8** %var_ptr_$_13014
  %record_ptr_$_13016 = bitcast i8* %load_$_13015 to %sexps$133*
- %int_of_ptr_$_13019 = ptrtoint i8* %load_$_13015 to i64
+ %int_of_ptr_$_13019 = ptrtoint i8** %load_$_13015 to i64
  %cnd_$_13020 = icmp eq i64 %int_of_ptr_$_13019, 0
  br i1 %cnd_$_13020, label %thn_$_13017, label %mrg_$_13018
 thn_$_13017:
@@ -17474,8 +17474,8 @@ define i8* @chr_$377 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$522) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_13078
  %var_ptr_$_13087 = getelementptr %$locals_chr_$377, %$locals_chr_$377* %locals_$_148, i32 0, i32 2
  %res_$_13088 = load i8*, i8** %var_ptr_$_13087
- %left_int_$_13089 = ptrtoint i8* %res_$_13088 to i64
- %right_int_$_13090 = ptrtoint i8* null to i64
+ %left_int_$_13089 = ptrtoint i8** %res_$_13088 to i64
+ %right_int_$_13090 = ptrtoint i8** null to i64
  %cnd_$_13091 = icmp eq i64 %left_int_$_13089, %right_int_$_13090
  %zext_$_13092 = zext i1 %cnd_$_13091 to i64
  %cnd_$_13093 = icmp ne i64 %zext_$_13092, 0
@@ -17487,7 +17487,7 @@ els_$_13085:
  %var_ptr_$_13098 = getelementptr %$locals_chr_$377, %$locals_chr_$377* %locals_$_148, i32 0, i32 2
  %load_$_13099 = load i8*, i8** %var_ptr_$_13098
  %record_ptr_$_13100 = bitcast i8* %load_$_13099 to %sexps$133*
- %int_of_ptr_$_13103 = ptrtoint i8* %load_$_13099 to i64
+ %int_of_ptr_$_13103 = ptrtoint i8** %load_$_13099 to i64
  %cnd_$_13104 = icmp eq i64 %int_of_ptr_$_13103, 0
  br i1 %cnd_$_13104, label %thn_$_13101, label %mrg_$_13102
 thn_$_13101:
@@ -17496,8 +17496,8 @@ thn_$_13101:
 mrg_$_13102:
  %field_ptr_$_13105 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13100, i32 0, i32 1
  %res_$_13106 = load i8*, i8** %field_ptr_$_13105
- %left_int_$_13107 = ptrtoint i8* %res_$_13106 to i64
- %right_int_$_13108 = ptrtoint i8* null to i64
+ %left_int_$_13107 = ptrtoint i8** %res_$_13106 to i64
+ %right_int_$_13108 = ptrtoint i8** null to i64
  %cnd_$_13109 = icmp ne i64 %left_int_$_13107, %right_int_$_13108
  %zext_$_13110 = zext i1 %cnd_$_13109 to i64
  %cnd_$_13111 = icmp ne i64 %zext_$_13110, 0
@@ -17506,7 +17506,7 @@ thn_$_13095:
  %var_ptr_$_13112 = getelementptr %$locals_chr_$377, %$locals_chr_$377* %locals_$_148, i32 0, i32 2
  %load_$_13113 = load i8*, i8** %var_ptr_$_13112
  %record_ptr_$_13114 = bitcast i8* %load_$_13113 to %sexps$133*
- %int_of_ptr_$_13117 = ptrtoint i8* %load_$_13113 to i64
+ %int_of_ptr_$_13117 = ptrtoint i8** %load_$_13113 to i64
  %cnd_$_13118 = icmp eq i64 %int_of_ptr_$_13117, 0
  br i1 %cnd_$_13118, label %thn_$_13115, label %mrg_$_13116
 thn_$_13115:
@@ -17516,7 +17516,7 @@ mrg_$_13116:
  %field_ptr_$_13119 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13114, i32 0, i32 1
  %load_$_13120 = load i8*, i8** %field_ptr_$_13119
  %record_ptr_$_13121 = bitcast i8* %load_$_13120 to %sexps$133*
- %int_of_ptr_$_13124 = ptrtoint i8* %load_$_13120 to i64
+ %int_of_ptr_$_13124 = ptrtoint i8** %load_$_13120 to i64
  %cnd_$_13125 = icmp eq i64 %int_of_ptr_$_13124, 0
  br i1 %cnd_$_13125, label %thn_$_13122, label %mrg_$_13123
 thn_$_13122:
@@ -17525,8 +17525,8 @@ thn_$_13122:
 mrg_$_13123:
  %field_ptr_$_13126 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13121, i32 0, i32 1
  %res_$_13127 = load i8*, i8** %field_ptr_$_13126
- %left_int_$_13128 = ptrtoint i8* %res_$_13127 to i64
- %right_int_$_13129 = ptrtoint i8* null to i64
+ %left_int_$_13128 = ptrtoint i8** %res_$_13127 to i64
+ %right_int_$_13129 = ptrtoint i8** null to i64
  %cnd_$_13130 = icmp ne i64 %left_int_$_13128, %right_int_$_13129
  %zext_$_13131 = zext i1 %cnd_$_13130 to i64
  store i64 %zext_$_13131, i64* %temp_$_13094
@@ -17556,7 +17556,7 @@ els_$_13081:
  %var_ptr_$_13144 = getelementptr %$locals_chr_$377, %$locals_chr_$377* %locals_$_148, i32 0, i32 2
  %load_$_13145 = load i8*, i8** %var_ptr_$_13144
  %record_ptr_$_13146 = bitcast i8* %load_$_13145 to %sexps$133*
- %int_of_ptr_$_13149 = ptrtoint i8* %load_$_13145 to i64
+ %int_of_ptr_$_13149 = ptrtoint i8** %load_$_13145 to i64
  %cnd_$_13150 = icmp eq i64 %int_of_ptr_$_13149, 0
  br i1 %cnd_$_13150, label %thn_$_13147, label %mrg_$_13148
 thn_$_13147:
@@ -17650,8 +17650,8 @@ define i8* @cons$379 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$525) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_13214
  %var_ptr_$_13219 = getelementptr %$locals_cons$379, %$locals_cons$379* %locals_$_150, i32 0, i32 2
  %res_$_13220 = load i8*, i8** %var_ptr_$_13219
- %left_int_$_13221 = ptrtoint i8* %res_$_13220 to i64
- %right_int_$_13222 = ptrtoint i8* null to i64
+ %left_int_$_13221 = ptrtoint i8** %res_$_13220 to i64
+ %right_int_$_13222 = ptrtoint i8** null to i64
  %cnd_$_13223 = icmp eq i64 %left_int_$_13221, %right_int_$_13222
  %zext_$_13224 = zext i1 %cnd_$_13223 to i64
  %cnd_$_13225 = icmp ne i64 %zext_$_13224, 0
@@ -17669,7 +17669,7 @@ els_$_13217:
  %var_ptr_$_13233 = getelementptr %$locals_cons$379, %$locals_cons$379* %locals_$_150, i32 0, i32 2
  %load_$_13234 = load i8*, i8** %var_ptr_$_13233
  %record_ptr_$_13235 = bitcast i8* %load_$_13234 to %sexps$133*
- %int_of_ptr_$_13238 = ptrtoint i8* %load_$_13234 to i64
+ %int_of_ptr_$_13238 = ptrtoint i8** %load_$_13234 to i64
  %cnd_$_13239 = icmp eq i64 %int_of_ptr_$_13238, 0
  br i1 %cnd_$_13239, label %thn_$_13236, label %mrg_$_13237
 thn_$_13236:
@@ -17683,7 +17683,7 @@ mrg_$_13237:
  %var_ptr_$_13247 = getelementptr %$locals_cons$379, %$locals_cons$379* %locals_$_150, i32 0, i32 2
  %load_$_13248 = load i8*, i8** %var_ptr_$_13247
  %record_ptr_$_13249 = bitcast i8* %load_$_13248 to %sexps$133*
- %int_of_ptr_$_13252 = ptrtoint i8* %load_$_13248 to i64
+ %int_of_ptr_$_13252 = ptrtoint i8** %load_$_13248 to i64
  %cnd_$_13253 = icmp eq i64 %int_of_ptr_$_13252, 0
  br i1 %cnd_$_13253, label %thn_$_13250, label %mrg_$_13251
 thn_$_13250:
@@ -17692,8 +17692,8 @@ thn_$_13250:
 mrg_$_13251:
  %field_ptr_$_13254 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13249, i32 0, i32 1
  %res_$_13255 = load i8*, i8** %field_ptr_$_13254
- %left_int_$_13256 = ptrtoint i8* %res_$_13255 to i64
- %right_int_$_13257 = ptrtoint i8* null to i64
+ %left_int_$_13256 = ptrtoint i8** %res_$_13255 to i64
+ %right_int_$_13257 = ptrtoint i8** null to i64
  %cnd_$_13258 = icmp eq i64 %left_int_$_13256, %right_int_$_13257
  %zext_$_13259 = zext i1 %cnd_$_13258 to i64
  %cnd_$_13260 = icmp ne i64 %zext_$_13259, 0
@@ -17751,7 +17751,7 @@ mrg_$_13264:
  br label %mrg_$_13246
 els_$_13245:
  %size_ptr_$_13307 = getelementptr %sexps$133, %sexps$133* null, i32 1
- %size_$_13308 = ptrtoint %sexps$133* %size_ptr_$_13307 to i64
+ %size_$_13308 = ptrtoint %sexps$133** %size_ptr_$_13307 to i64
  %record_ptr_$_13309 = call i8* @allocRecord (i64 %size_$_13308)
  %rec_$_13310 = bitcast i8* %record_ptr_$_13309 to %sexps$133*
  %var_ptr_$_13311 = getelementptr %$locals_cons$379, %$locals_cons$379* %locals_$_150, i32 0, i32 1
@@ -17763,7 +17763,7 @@ els_$_13245:
  %var_ptr_$_13316 = getelementptr %$locals_cons$379, %$locals_cons$379* %locals_$_150, i32 0, i32 2
  %load_$_13317 = load i8*, i8** %var_ptr_$_13316
  %record_ptr_$_13318 = bitcast i8* %load_$_13317 to %sexps$133*
- %int_of_ptr_$_13321 = ptrtoint i8* %load_$_13317 to i64
+ %int_of_ptr_$_13321 = ptrtoint i8** %load_$_13317 to i64
  %cnd_$_13322 = icmp eq i64 %int_of_ptr_$_13321, 0
  br i1 %cnd_$_13322, label %thn_$_13319, label %mrg_$_13320
 thn_$_13319:
@@ -17798,8 +17798,8 @@ define i8* @car$380 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$527) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_13330
  %var_ptr_$_13339 = getelementptr %$locals_car$380, %$locals_car$380* %locals_$_151, i32 0, i32 3
  %res_$_13340 = load i8*, i8** %var_ptr_$_13339
- %left_int_$_13341 = ptrtoint i8* %res_$_13340 to i64
- %right_int_$_13342 = ptrtoint i8* null to i64
+ %left_int_$_13341 = ptrtoint i8** %res_$_13340 to i64
+ %right_int_$_13342 = ptrtoint i8** null to i64
  %cnd_$_13343 = icmp eq i64 %left_int_$_13341, %right_int_$_13342
  %zext_$_13344 = zext i1 %cnd_$_13343 to i64
  %cnd_$_13345 = icmp ne i64 %zext_$_13344, 0
@@ -17811,7 +17811,7 @@ els_$_13337:
  %var_ptr_$_13350 = getelementptr %$locals_car$380, %$locals_car$380* %locals_$_151, i32 0, i32 3
  %load_$_13351 = load i8*, i8** %var_ptr_$_13350
  %record_ptr_$_13352 = bitcast i8* %load_$_13351 to %sexps$133*
- %int_of_ptr_$_13355 = ptrtoint i8* %load_$_13351 to i64
+ %int_of_ptr_$_13355 = ptrtoint i8** %load_$_13351 to i64
  %cnd_$_13356 = icmp eq i64 %int_of_ptr_$_13355, 0
  br i1 %cnd_$_13356, label %thn_$_13353, label %mrg_$_13354
 thn_$_13353:
@@ -17820,8 +17820,8 @@ thn_$_13353:
 mrg_$_13354:
  %field_ptr_$_13357 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13352, i32 0, i32 1
  %res_$_13358 = load i8*, i8** %field_ptr_$_13357
- %left_int_$_13359 = ptrtoint i8* %res_$_13358 to i64
- %right_int_$_13360 = ptrtoint i8* null to i64
+ %left_int_$_13359 = ptrtoint i8** %res_$_13358 to i64
+ %right_int_$_13360 = ptrtoint i8** null to i64
  %cnd_$_13361 = icmp ne i64 %left_int_$_13359, %right_int_$_13360
  %zext_$_13362 = zext i1 %cnd_$_13361 to i64
  %cnd_$_13363 = icmp ne i64 %zext_$_13362, 0
@@ -17830,7 +17830,7 @@ thn_$_13347:
  %var_ptr_$_13364 = getelementptr %$locals_car$380, %$locals_car$380* %locals_$_151, i32 0, i32 3
  %load_$_13365 = load i8*, i8** %var_ptr_$_13364
  %record_ptr_$_13366 = bitcast i8* %load_$_13365 to %sexps$133*
- %int_of_ptr_$_13369 = ptrtoint i8* %load_$_13365 to i64
+ %int_of_ptr_$_13369 = ptrtoint i8** %load_$_13365 to i64
  %cnd_$_13370 = icmp eq i64 %int_of_ptr_$_13369, 0
  br i1 %cnd_$_13370, label %thn_$_13367, label %mrg_$_13368
 thn_$_13367:
@@ -17840,7 +17840,7 @@ mrg_$_13368:
  %field_ptr_$_13371 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13366, i32 0, i32 1
  %load_$_13372 = load i8*, i8** %field_ptr_$_13371
  %record_ptr_$_13373 = bitcast i8* %load_$_13372 to %sexps$133*
- %int_of_ptr_$_13376 = ptrtoint i8* %load_$_13372 to i64
+ %int_of_ptr_$_13376 = ptrtoint i8** %load_$_13372 to i64
  %cnd_$_13377 = icmp eq i64 %int_of_ptr_$_13376, 0
  br i1 %cnd_$_13377, label %thn_$_13374, label %mrg_$_13375
 thn_$_13374:
@@ -17849,8 +17849,8 @@ thn_$_13374:
 mrg_$_13375:
  %field_ptr_$_13378 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13373, i32 0, i32 1
  %res_$_13379 = load i8*, i8** %field_ptr_$_13378
- %left_int_$_13380 = ptrtoint i8* %res_$_13379 to i64
- %right_int_$_13381 = ptrtoint i8* null to i64
+ %left_int_$_13380 = ptrtoint i8** %res_$_13379 to i64
+ %right_int_$_13381 = ptrtoint i8** null to i64
  %cnd_$_13382 = icmp ne i64 %left_int_$_13380, %right_int_$_13381
  %zext_$_13383 = zext i1 %cnd_$_13382 to i64
  store i64 %zext_$_13383, i64* %temp_$_13346
@@ -17879,7 +17879,7 @@ els_$_13333:
  %var_ptr_$_13394 = getelementptr %$locals_car$380, %$locals_car$380* %locals_$_151, i32 0, i32 3
  %load_$_13395 = load i8*, i8** %var_ptr_$_13394
  %record_ptr_$_13396 = bitcast i8* %load_$_13395 to %sexps$133*
- %int_of_ptr_$_13399 = ptrtoint i8* %load_$_13395 to i64
+ %int_of_ptr_$_13399 = ptrtoint i8** %load_$_13395 to i64
  %cnd_$_13400 = icmp eq i64 %int_of_ptr_$_13399, 0
  br i1 %cnd_$_13400, label %thn_$_13397, label %mrg_$_13398
 thn_$_13397:
@@ -17912,7 +17912,7 @@ thn_$_13405:
  %var_ptr_$_13424 = getelementptr %$locals_car$380, %$locals_car$380* %locals_$_151, i32 0, i32 1
  %load_$_13425 = load i8*, i8** %var_ptr_$_13424
  %record_ptr_$_13426 = bitcast i8* %load_$_13425 to %sexps$133*
- %int_of_ptr_$_13429 = ptrtoint i8* %load_$_13425 to i64
+ %int_of_ptr_$_13429 = ptrtoint i8** %load_$_13425 to i64
  %cnd_$_13430 = icmp eq i64 %int_of_ptr_$_13429, 0
  br i1 %cnd_$_13430, label %thn_$_13427, label %mrg_$_13428
 thn_$_13427:
@@ -17972,8 +17972,8 @@ define i8* @cdr$381 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$530) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_13462
  %var_ptr_$_13471 = getelementptr %$locals_cdr$381, %$locals_cdr$381* %locals_$_152, i32 0, i32 3
  %res_$_13472 = load i8*, i8** %var_ptr_$_13471
- %left_int_$_13473 = ptrtoint i8* %res_$_13472 to i64
- %right_int_$_13474 = ptrtoint i8* null to i64
+ %left_int_$_13473 = ptrtoint i8** %res_$_13472 to i64
+ %right_int_$_13474 = ptrtoint i8** null to i64
  %cnd_$_13475 = icmp eq i64 %left_int_$_13473, %right_int_$_13474
  %zext_$_13476 = zext i1 %cnd_$_13475 to i64
  %cnd_$_13477 = icmp ne i64 %zext_$_13476, 0
@@ -17985,7 +17985,7 @@ els_$_13469:
  %var_ptr_$_13482 = getelementptr %$locals_cdr$381, %$locals_cdr$381* %locals_$_152, i32 0, i32 3
  %load_$_13483 = load i8*, i8** %var_ptr_$_13482
  %record_ptr_$_13484 = bitcast i8* %load_$_13483 to %sexps$133*
- %int_of_ptr_$_13487 = ptrtoint i8* %load_$_13483 to i64
+ %int_of_ptr_$_13487 = ptrtoint i8** %load_$_13483 to i64
  %cnd_$_13488 = icmp eq i64 %int_of_ptr_$_13487, 0
  br i1 %cnd_$_13488, label %thn_$_13485, label %mrg_$_13486
 thn_$_13485:
@@ -17994,8 +17994,8 @@ thn_$_13485:
 mrg_$_13486:
  %field_ptr_$_13489 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13484, i32 0, i32 1
  %res_$_13490 = load i8*, i8** %field_ptr_$_13489
- %left_int_$_13491 = ptrtoint i8* %res_$_13490 to i64
- %right_int_$_13492 = ptrtoint i8* null to i64
+ %left_int_$_13491 = ptrtoint i8** %res_$_13490 to i64
+ %right_int_$_13492 = ptrtoint i8** null to i64
  %cnd_$_13493 = icmp ne i64 %left_int_$_13491, %right_int_$_13492
  %zext_$_13494 = zext i1 %cnd_$_13493 to i64
  %cnd_$_13495 = icmp ne i64 %zext_$_13494, 0
@@ -18004,7 +18004,7 @@ thn_$_13479:
  %var_ptr_$_13496 = getelementptr %$locals_cdr$381, %$locals_cdr$381* %locals_$_152, i32 0, i32 3
  %load_$_13497 = load i8*, i8** %var_ptr_$_13496
  %record_ptr_$_13498 = bitcast i8* %load_$_13497 to %sexps$133*
- %int_of_ptr_$_13501 = ptrtoint i8* %load_$_13497 to i64
+ %int_of_ptr_$_13501 = ptrtoint i8** %load_$_13497 to i64
  %cnd_$_13502 = icmp eq i64 %int_of_ptr_$_13501, 0
  br i1 %cnd_$_13502, label %thn_$_13499, label %mrg_$_13500
 thn_$_13499:
@@ -18014,7 +18014,7 @@ mrg_$_13500:
  %field_ptr_$_13503 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13498, i32 0, i32 1
  %load_$_13504 = load i8*, i8** %field_ptr_$_13503
  %record_ptr_$_13505 = bitcast i8* %load_$_13504 to %sexps$133*
- %int_of_ptr_$_13508 = ptrtoint i8* %load_$_13504 to i64
+ %int_of_ptr_$_13508 = ptrtoint i8** %load_$_13504 to i64
  %cnd_$_13509 = icmp eq i64 %int_of_ptr_$_13508, 0
  br i1 %cnd_$_13509, label %thn_$_13506, label %mrg_$_13507
 thn_$_13506:
@@ -18023,8 +18023,8 @@ thn_$_13506:
 mrg_$_13507:
  %field_ptr_$_13510 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13505, i32 0, i32 1
  %res_$_13511 = load i8*, i8** %field_ptr_$_13510
- %left_int_$_13512 = ptrtoint i8* %res_$_13511 to i64
- %right_int_$_13513 = ptrtoint i8* null to i64
+ %left_int_$_13512 = ptrtoint i8** %res_$_13511 to i64
+ %right_int_$_13513 = ptrtoint i8** null to i64
  %cnd_$_13514 = icmp ne i64 %left_int_$_13512, %right_int_$_13513
  %zext_$_13515 = zext i1 %cnd_$_13514 to i64
  store i64 %zext_$_13515, i64* %temp_$_13478
@@ -18053,7 +18053,7 @@ els_$_13465:
  %var_ptr_$_13526 = getelementptr %$locals_cdr$381, %$locals_cdr$381* %locals_$_152, i32 0, i32 3
  %load_$_13527 = load i8*, i8** %var_ptr_$_13526
  %record_ptr_$_13528 = bitcast i8* %load_$_13527 to %sexps$133*
- %int_of_ptr_$_13531 = ptrtoint i8* %load_$_13527 to i64
+ %int_of_ptr_$_13531 = ptrtoint i8** %load_$_13527 to i64
  %cnd_$_13532 = icmp eq i64 %int_of_ptr_$_13531, 0
  br i1 %cnd_$_13532, label %thn_$_13529, label %mrg_$_13530
 thn_$_13529:
@@ -18085,8 +18085,8 @@ thn_$_13537:
  store i8* %ret_$_13554, i8** %temp_$_13555
  %var_ptr_$_13560 = getelementptr %$locals_cdr$381, %$locals_cdr$381* %locals_$_152, i32 0, i32 1
  %res_$_13561 = load i8*, i8** %var_ptr_$_13560
- %left_int_$_13562 = ptrtoint i8* %res_$_13561 to i64
- %right_int_$_13563 = ptrtoint i8* null to i64
+ %left_int_$_13562 = ptrtoint i8** %res_$_13561 to i64
+ %right_int_$_13563 = ptrtoint i8** null to i64
  %cnd_$_13564 = icmp ne i64 %left_int_$_13562, %right_int_$_13563
  %zext_$_13565 = zext i1 %cnd_$_13564 to i64
  %cnd_$_13566 = icmp ne i64 %zext_$_13565, 0
@@ -18095,7 +18095,7 @@ thn_$_13557:
  %var_ptr_$_13567 = getelementptr %$locals_cdr$381, %$locals_cdr$381* %locals_$_152, i32 0, i32 1
  %load_$_13568 = load i8*, i8** %var_ptr_$_13567
  %record_ptr_$_13569 = bitcast i8* %load_$_13568 to %sexps$133*
- %int_of_ptr_$_13572 = ptrtoint i8* %load_$_13568 to i64
+ %int_of_ptr_$_13572 = ptrtoint i8** %load_$_13568 to i64
  %cnd_$_13573 = icmp eq i64 %int_of_ptr_$_13572, 0
  br i1 %cnd_$_13573, label %thn_$_13570, label %mrg_$_13571
 thn_$_13570:
@@ -18166,8 +18166,8 @@ define i64 @intp$382 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$533) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_13613
  %var_ptr_$_13622 = getelementptr %$locals_intp$382, %$locals_intp$382* %locals_$_153, i32 0, i32 2
  %res_$_13623 = load i8*, i8** %var_ptr_$_13622
- %left_int_$_13624 = ptrtoint i8* %res_$_13623 to i64
- %right_int_$_13625 = ptrtoint i8* null to i64
+ %left_int_$_13624 = ptrtoint i8** %res_$_13623 to i64
+ %right_int_$_13625 = ptrtoint i8** null to i64
  %cnd_$_13626 = icmp eq i64 %left_int_$_13624, %right_int_$_13625
  %zext_$_13627 = zext i1 %cnd_$_13626 to i64
  %cnd_$_13628 = icmp ne i64 %zext_$_13627, 0
@@ -18179,7 +18179,7 @@ els_$_13620:
  %var_ptr_$_13633 = getelementptr %$locals_intp$382, %$locals_intp$382* %locals_$_153, i32 0, i32 2
  %load_$_13634 = load i8*, i8** %var_ptr_$_13633
  %record_ptr_$_13635 = bitcast i8* %load_$_13634 to %sexps$133*
- %int_of_ptr_$_13638 = ptrtoint i8* %load_$_13634 to i64
+ %int_of_ptr_$_13638 = ptrtoint i8** %load_$_13634 to i64
  %cnd_$_13639 = icmp eq i64 %int_of_ptr_$_13638, 0
  br i1 %cnd_$_13639, label %thn_$_13636, label %mrg_$_13637
 thn_$_13636:
@@ -18188,8 +18188,8 @@ thn_$_13636:
 mrg_$_13637:
  %field_ptr_$_13640 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13635, i32 0, i32 1
  %res_$_13641 = load i8*, i8** %field_ptr_$_13640
- %left_int_$_13642 = ptrtoint i8* %res_$_13641 to i64
- %right_int_$_13643 = ptrtoint i8* null to i64
+ %left_int_$_13642 = ptrtoint i8** %res_$_13641 to i64
+ %right_int_$_13643 = ptrtoint i8** null to i64
  %cnd_$_13644 = icmp ne i64 %left_int_$_13642, %right_int_$_13643
  %zext_$_13645 = zext i1 %cnd_$_13644 to i64
  %cnd_$_13646 = icmp ne i64 %zext_$_13645, 0
@@ -18198,7 +18198,7 @@ thn_$_13630:
  %var_ptr_$_13647 = getelementptr %$locals_intp$382, %$locals_intp$382* %locals_$_153, i32 0, i32 2
  %load_$_13648 = load i8*, i8** %var_ptr_$_13647
  %record_ptr_$_13649 = bitcast i8* %load_$_13648 to %sexps$133*
- %int_of_ptr_$_13652 = ptrtoint i8* %load_$_13648 to i64
+ %int_of_ptr_$_13652 = ptrtoint i8** %load_$_13648 to i64
  %cnd_$_13653 = icmp eq i64 %int_of_ptr_$_13652, 0
  br i1 %cnd_$_13653, label %thn_$_13650, label %mrg_$_13651
 thn_$_13650:
@@ -18208,7 +18208,7 @@ mrg_$_13651:
  %field_ptr_$_13654 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13649, i32 0, i32 1
  %load_$_13655 = load i8*, i8** %field_ptr_$_13654
  %record_ptr_$_13656 = bitcast i8* %load_$_13655 to %sexps$133*
- %int_of_ptr_$_13659 = ptrtoint i8* %load_$_13655 to i64
+ %int_of_ptr_$_13659 = ptrtoint i8** %load_$_13655 to i64
  %cnd_$_13660 = icmp eq i64 %int_of_ptr_$_13659, 0
  br i1 %cnd_$_13660, label %thn_$_13657, label %mrg_$_13658
 thn_$_13657:
@@ -18217,8 +18217,8 @@ thn_$_13657:
 mrg_$_13658:
  %field_ptr_$_13661 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13656, i32 0, i32 1
  %res_$_13662 = load i8*, i8** %field_ptr_$_13661
- %left_int_$_13663 = ptrtoint i8* %res_$_13662 to i64
- %right_int_$_13664 = ptrtoint i8* null to i64
+ %left_int_$_13663 = ptrtoint i8** %res_$_13662 to i64
+ %right_int_$_13664 = ptrtoint i8** null to i64
  %cnd_$_13665 = icmp ne i64 %left_int_$_13663, %right_int_$_13664
  %zext_$_13666 = zext i1 %cnd_$_13665 to i64
  store i64 %zext_$_13666, i64* %temp_$_13629
@@ -18247,7 +18247,7 @@ els_$_13616:
  %var_ptr_$_13677 = getelementptr %$locals_intp$382, %$locals_intp$382* %locals_$_153, i32 0, i32 2
  %load_$_13678 = load i8*, i8** %var_ptr_$_13677
  %record_ptr_$_13679 = bitcast i8* %load_$_13678 to %sexps$133*
- %int_of_ptr_$_13682 = ptrtoint i8* %load_$_13678 to i64
+ %int_of_ptr_$_13682 = ptrtoint i8** %load_$_13678 to i64
  %cnd_$_13683 = icmp eq i64 %int_of_ptr_$_13682, 0
  br i1 %cnd_$_13683, label %thn_$_13680, label %mrg_$_13681
 thn_$_13680:
@@ -18283,8 +18283,8 @@ define i64 @stringp$383 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$535) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_13696
  %var_ptr_$_13705 = getelementptr %$locals_stringp$383, %$locals_stringp$383* %locals_$_154, i32 0, i32 2
  %res_$_13706 = load i8*, i8** %var_ptr_$_13705
- %left_int_$_13707 = ptrtoint i8* %res_$_13706 to i64
- %right_int_$_13708 = ptrtoint i8* null to i64
+ %left_int_$_13707 = ptrtoint i8** %res_$_13706 to i64
+ %right_int_$_13708 = ptrtoint i8** null to i64
  %cnd_$_13709 = icmp eq i64 %left_int_$_13707, %right_int_$_13708
  %zext_$_13710 = zext i1 %cnd_$_13709 to i64
  %cnd_$_13711 = icmp ne i64 %zext_$_13710, 0
@@ -18296,7 +18296,7 @@ els_$_13703:
  %var_ptr_$_13716 = getelementptr %$locals_stringp$383, %$locals_stringp$383* %locals_$_154, i32 0, i32 2
  %load_$_13717 = load i8*, i8** %var_ptr_$_13716
  %record_ptr_$_13718 = bitcast i8* %load_$_13717 to %sexps$133*
- %int_of_ptr_$_13721 = ptrtoint i8* %load_$_13717 to i64
+ %int_of_ptr_$_13721 = ptrtoint i8** %load_$_13717 to i64
  %cnd_$_13722 = icmp eq i64 %int_of_ptr_$_13721, 0
  br i1 %cnd_$_13722, label %thn_$_13719, label %mrg_$_13720
 thn_$_13719:
@@ -18305,8 +18305,8 @@ thn_$_13719:
 mrg_$_13720:
  %field_ptr_$_13723 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13718, i32 0, i32 1
  %res_$_13724 = load i8*, i8** %field_ptr_$_13723
- %left_int_$_13725 = ptrtoint i8* %res_$_13724 to i64
- %right_int_$_13726 = ptrtoint i8* null to i64
+ %left_int_$_13725 = ptrtoint i8** %res_$_13724 to i64
+ %right_int_$_13726 = ptrtoint i8** null to i64
  %cnd_$_13727 = icmp ne i64 %left_int_$_13725, %right_int_$_13726
  %zext_$_13728 = zext i1 %cnd_$_13727 to i64
  %cnd_$_13729 = icmp ne i64 %zext_$_13728, 0
@@ -18315,7 +18315,7 @@ thn_$_13713:
  %var_ptr_$_13730 = getelementptr %$locals_stringp$383, %$locals_stringp$383* %locals_$_154, i32 0, i32 2
  %load_$_13731 = load i8*, i8** %var_ptr_$_13730
  %record_ptr_$_13732 = bitcast i8* %load_$_13731 to %sexps$133*
- %int_of_ptr_$_13735 = ptrtoint i8* %load_$_13731 to i64
+ %int_of_ptr_$_13735 = ptrtoint i8** %load_$_13731 to i64
  %cnd_$_13736 = icmp eq i64 %int_of_ptr_$_13735, 0
  br i1 %cnd_$_13736, label %thn_$_13733, label %mrg_$_13734
 thn_$_13733:
@@ -18325,7 +18325,7 @@ mrg_$_13734:
  %field_ptr_$_13737 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13732, i32 0, i32 1
  %load_$_13738 = load i8*, i8** %field_ptr_$_13737
  %record_ptr_$_13739 = bitcast i8* %load_$_13738 to %sexps$133*
- %int_of_ptr_$_13742 = ptrtoint i8* %load_$_13738 to i64
+ %int_of_ptr_$_13742 = ptrtoint i8** %load_$_13738 to i64
  %cnd_$_13743 = icmp eq i64 %int_of_ptr_$_13742, 0
  br i1 %cnd_$_13743, label %thn_$_13740, label %mrg_$_13741
 thn_$_13740:
@@ -18334,8 +18334,8 @@ thn_$_13740:
 mrg_$_13741:
  %field_ptr_$_13744 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13739, i32 0, i32 1
  %res_$_13745 = load i8*, i8** %field_ptr_$_13744
- %left_int_$_13746 = ptrtoint i8* %res_$_13745 to i64
- %right_int_$_13747 = ptrtoint i8* null to i64
+ %left_int_$_13746 = ptrtoint i8** %res_$_13745 to i64
+ %right_int_$_13747 = ptrtoint i8** null to i64
  %cnd_$_13748 = icmp ne i64 %left_int_$_13746, %right_int_$_13747
  %zext_$_13749 = zext i1 %cnd_$_13748 to i64
  store i64 %zext_$_13749, i64* %temp_$_13712
@@ -18364,7 +18364,7 @@ els_$_13699:
  %var_ptr_$_13760 = getelementptr %$locals_stringp$383, %$locals_stringp$383* %locals_$_154, i32 0, i32 2
  %load_$_13761 = load i8*, i8** %var_ptr_$_13760
  %record_ptr_$_13762 = bitcast i8* %load_$_13761 to %sexps$133*
- %int_of_ptr_$_13765 = ptrtoint i8* %load_$_13761 to i64
+ %int_of_ptr_$_13765 = ptrtoint i8** %load_$_13761 to i64
  %cnd_$_13766 = icmp eq i64 %int_of_ptr_$_13765, 0
  br i1 %cnd_$_13766, label %thn_$_13763, label %mrg_$_13764
 thn_$_13763:
@@ -18400,8 +18400,8 @@ define i64 @listp$384 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$537) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_13779
  %var_ptr_$_13788 = getelementptr %$locals_listp$384, %$locals_listp$384* %locals_$_155, i32 0, i32 2
  %res_$_13789 = load i8*, i8** %var_ptr_$_13788
- %left_int_$_13790 = ptrtoint i8* %res_$_13789 to i64
- %right_int_$_13791 = ptrtoint i8* null to i64
+ %left_int_$_13790 = ptrtoint i8** %res_$_13789 to i64
+ %right_int_$_13791 = ptrtoint i8** null to i64
  %cnd_$_13792 = icmp eq i64 %left_int_$_13790, %right_int_$_13791
  %zext_$_13793 = zext i1 %cnd_$_13792 to i64
  %cnd_$_13794 = icmp ne i64 %zext_$_13793, 0
@@ -18413,7 +18413,7 @@ els_$_13786:
  %var_ptr_$_13799 = getelementptr %$locals_listp$384, %$locals_listp$384* %locals_$_155, i32 0, i32 2
  %load_$_13800 = load i8*, i8** %var_ptr_$_13799
  %record_ptr_$_13801 = bitcast i8* %load_$_13800 to %sexps$133*
- %int_of_ptr_$_13804 = ptrtoint i8* %load_$_13800 to i64
+ %int_of_ptr_$_13804 = ptrtoint i8** %load_$_13800 to i64
  %cnd_$_13805 = icmp eq i64 %int_of_ptr_$_13804, 0
  br i1 %cnd_$_13805, label %thn_$_13802, label %mrg_$_13803
 thn_$_13802:
@@ -18422,8 +18422,8 @@ thn_$_13802:
 mrg_$_13803:
  %field_ptr_$_13806 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13801, i32 0, i32 1
  %res_$_13807 = load i8*, i8** %field_ptr_$_13806
- %left_int_$_13808 = ptrtoint i8* %res_$_13807 to i64
- %right_int_$_13809 = ptrtoint i8* null to i64
+ %left_int_$_13808 = ptrtoint i8** %res_$_13807 to i64
+ %right_int_$_13809 = ptrtoint i8** null to i64
  %cnd_$_13810 = icmp ne i64 %left_int_$_13808, %right_int_$_13809
  %zext_$_13811 = zext i1 %cnd_$_13810 to i64
  %cnd_$_13812 = icmp ne i64 %zext_$_13811, 0
@@ -18432,7 +18432,7 @@ thn_$_13796:
  %var_ptr_$_13813 = getelementptr %$locals_listp$384, %$locals_listp$384* %locals_$_155, i32 0, i32 2
  %load_$_13814 = load i8*, i8** %var_ptr_$_13813
  %record_ptr_$_13815 = bitcast i8* %load_$_13814 to %sexps$133*
- %int_of_ptr_$_13818 = ptrtoint i8* %load_$_13814 to i64
+ %int_of_ptr_$_13818 = ptrtoint i8** %load_$_13814 to i64
  %cnd_$_13819 = icmp eq i64 %int_of_ptr_$_13818, 0
  br i1 %cnd_$_13819, label %thn_$_13816, label %mrg_$_13817
 thn_$_13816:
@@ -18442,7 +18442,7 @@ mrg_$_13817:
  %field_ptr_$_13820 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13815, i32 0, i32 1
  %load_$_13821 = load i8*, i8** %field_ptr_$_13820
  %record_ptr_$_13822 = bitcast i8* %load_$_13821 to %sexps$133*
- %int_of_ptr_$_13825 = ptrtoint i8* %load_$_13821 to i64
+ %int_of_ptr_$_13825 = ptrtoint i8** %load_$_13821 to i64
  %cnd_$_13826 = icmp eq i64 %int_of_ptr_$_13825, 0
  br i1 %cnd_$_13826, label %thn_$_13823, label %mrg_$_13824
 thn_$_13823:
@@ -18451,8 +18451,8 @@ thn_$_13823:
 mrg_$_13824:
  %field_ptr_$_13827 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13822, i32 0, i32 1
  %res_$_13828 = load i8*, i8** %field_ptr_$_13827
- %left_int_$_13829 = ptrtoint i8* %res_$_13828 to i64
- %right_int_$_13830 = ptrtoint i8* null to i64
+ %left_int_$_13829 = ptrtoint i8** %res_$_13828 to i64
+ %right_int_$_13830 = ptrtoint i8** null to i64
  %cnd_$_13831 = icmp ne i64 %left_int_$_13829, %right_int_$_13830
  %zext_$_13832 = zext i1 %cnd_$_13831 to i64
  store i64 %zext_$_13832, i64* %temp_$_13795
@@ -18481,7 +18481,7 @@ els_$_13782:
  %var_ptr_$_13843 = getelementptr %$locals_listp$384, %$locals_listp$384* %locals_$_155, i32 0, i32 2
  %load_$_13844 = load i8*, i8** %var_ptr_$_13843
  %record_ptr_$_13845 = bitcast i8* %load_$_13844 to %sexps$133*
- %int_of_ptr_$_13848 = ptrtoint i8* %load_$_13844 to i64
+ %int_of_ptr_$_13848 = ptrtoint i8** %load_$_13844 to i64
  %cnd_$_13849 = icmp eq i64 %int_of_ptr_$_13848, 0
  br i1 %cnd_$_13849, label %thn_$_13846, label %mrg_$_13847
 thn_$_13846:
@@ -18518,8 +18518,8 @@ define i64 @nilp$385 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$539) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_13862
  %var_ptr_$_13871 = getelementptr %$locals_nilp$385, %$locals_nilp$385* %locals_$_156, i32 0, i32 2
  %res_$_13872 = load i8*, i8** %var_ptr_$_13871
- %left_int_$_13873 = ptrtoint i8* %res_$_13872 to i64
- %right_int_$_13874 = ptrtoint i8* null to i64
+ %left_int_$_13873 = ptrtoint i8** %res_$_13872 to i64
+ %right_int_$_13874 = ptrtoint i8** null to i64
  %cnd_$_13875 = icmp eq i64 %left_int_$_13873, %right_int_$_13874
  %zext_$_13876 = zext i1 %cnd_$_13875 to i64
  %cnd_$_13877 = icmp ne i64 %zext_$_13876, 0
@@ -18531,7 +18531,7 @@ els_$_13869:
  %var_ptr_$_13882 = getelementptr %$locals_nilp$385, %$locals_nilp$385* %locals_$_156, i32 0, i32 2
  %load_$_13883 = load i8*, i8** %var_ptr_$_13882
  %record_ptr_$_13884 = bitcast i8* %load_$_13883 to %sexps$133*
- %int_of_ptr_$_13887 = ptrtoint i8* %load_$_13883 to i64
+ %int_of_ptr_$_13887 = ptrtoint i8** %load_$_13883 to i64
  %cnd_$_13888 = icmp eq i64 %int_of_ptr_$_13887, 0
  br i1 %cnd_$_13888, label %thn_$_13885, label %mrg_$_13886
 thn_$_13885:
@@ -18540,8 +18540,8 @@ thn_$_13885:
 mrg_$_13886:
  %field_ptr_$_13889 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13884, i32 0, i32 1
  %res_$_13890 = load i8*, i8** %field_ptr_$_13889
- %left_int_$_13891 = ptrtoint i8* %res_$_13890 to i64
- %right_int_$_13892 = ptrtoint i8* null to i64
+ %left_int_$_13891 = ptrtoint i8** %res_$_13890 to i64
+ %right_int_$_13892 = ptrtoint i8** null to i64
  %cnd_$_13893 = icmp ne i64 %left_int_$_13891, %right_int_$_13892
  %zext_$_13894 = zext i1 %cnd_$_13893 to i64
  %cnd_$_13895 = icmp ne i64 %zext_$_13894, 0
@@ -18550,7 +18550,7 @@ thn_$_13879:
  %var_ptr_$_13896 = getelementptr %$locals_nilp$385, %$locals_nilp$385* %locals_$_156, i32 0, i32 2
  %load_$_13897 = load i8*, i8** %var_ptr_$_13896
  %record_ptr_$_13898 = bitcast i8* %load_$_13897 to %sexps$133*
- %int_of_ptr_$_13901 = ptrtoint i8* %load_$_13897 to i64
+ %int_of_ptr_$_13901 = ptrtoint i8** %load_$_13897 to i64
  %cnd_$_13902 = icmp eq i64 %int_of_ptr_$_13901, 0
  br i1 %cnd_$_13902, label %thn_$_13899, label %mrg_$_13900
 thn_$_13899:
@@ -18560,7 +18560,7 @@ mrg_$_13900:
  %field_ptr_$_13903 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13898, i32 0, i32 1
  %load_$_13904 = load i8*, i8** %field_ptr_$_13903
  %record_ptr_$_13905 = bitcast i8* %load_$_13904 to %sexps$133*
- %int_of_ptr_$_13908 = ptrtoint i8* %load_$_13904 to i64
+ %int_of_ptr_$_13908 = ptrtoint i8** %load_$_13904 to i64
  %cnd_$_13909 = icmp eq i64 %int_of_ptr_$_13908, 0
  br i1 %cnd_$_13909, label %thn_$_13906, label %mrg_$_13907
 thn_$_13906:
@@ -18569,8 +18569,8 @@ thn_$_13906:
 mrg_$_13907:
  %field_ptr_$_13910 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13905, i32 0, i32 1
  %res_$_13911 = load i8*, i8** %field_ptr_$_13910
- %left_int_$_13912 = ptrtoint i8* %res_$_13911 to i64
- %right_int_$_13913 = ptrtoint i8* null to i64
+ %left_int_$_13912 = ptrtoint i8** %res_$_13911 to i64
+ %right_int_$_13913 = ptrtoint i8** null to i64
  %cnd_$_13914 = icmp ne i64 %left_int_$_13912, %right_int_$_13913
  %zext_$_13915 = zext i1 %cnd_$_13914 to i64
  store i64 %zext_$_13915, i64* %temp_$_13878
@@ -18599,7 +18599,7 @@ els_$_13865:
  %var_ptr_$_13926 = getelementptr %$locals_nilp$385, %$locals_nilp$385* %locals_$_156, i32 0, i32 2
  %load_$_13927 = load i8*, i8** %var_ptr_$_13926
  %record_ptr_$_13928 = bitcast i8* %load_$_13927 to %sexps$133*
- %int_of_ptr_$_13931 = ptrtoint i8* %load_$_13927 to i64
+ %int_of_ptr_$_13931 = ptrtoint i8** %load_$_13927 to i64
  %cnd_$_13932 = icmp eq i64 %int_of_ptr_$_13931, 0
  br i1 %cnd_$_13932, label %thn_$_13929, label %mrg_$_13930
 thn_$_13929:
@@ -18627,8 +18627,8 @@ thn_$_13937:
  %var_ptr_$_13952 = getelementptr %$locals_nilp$385, %$locals_nilp$385* %locals_$_156, i32 0, i32 1
  %res_$_13953 = load i8*, i8** %var_ptr_$_13952
  %ret_$_13954 = call i8* @get_sexps$158 (%$locals_tigermain* %load_$_13951, i8* %res_$_13953)
- %left_int_$_13955 = ptrtoint i8* %ret_$_13954 to i64
- %right_int_$_13956 = ptrtoint i8* null to i64
+ %left_int_$_13955 = ptrtoint i8** %ret_$_13954 to i64
+ %right_int_$_13956 = ptrtoint i8** null to i64
  %cnd_$_13957 = icmp eq i64 %left_int_$_13955, %right_int_$_13956
  %zext_$_13958 = zext i1 %cnd_$_13957 to i64
  store i64 %zext_$_13958, i64* %temp_$_13936
@@ -18656,8 +18656,8 @@ define i64 @funp$386 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$541) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_13962
  %var_ptr_$_13971 = getelementptr %$locals_funp$386, %$locals_funp$386* %locals_$_157, i32 0, i32 2
  %res_$_13972 = load i8*, i8** %var_ptr_$_13971
- %left_int_$_13973 = ptrtoint i8* %res_$_13972 to i64
- %right_int_$_13974 = ptrtoint i8* null to i64
+ %left_int_$_13973 = ptrtoint i8** %res_$_13972 to i64
+ %right_int_$_13974 = ptrtoint i8** null to i64
  %cnd_$_13975 = icmp eq i64 %left_int_$_13973, %right_int_$_13974
  %zext_$_13976 = zext i1 %cnd_$_13975 to i64
  %cnd_$_13977 = icmp ne i64 %zext_$_13976, 0
@@ -18669,7 +18669,7 @@ els_$_13969:
  %var_ptr_$_13982 = getelementptr %$locals_funp$386, %$locals_funp$386* %locals_$_157, i32 0, i32 2
  %load_$_13983 = load i8*, i8** %var_ptr_$_13982
  %record_ptr_$_13984 = bitcast i8* %load_$_13983 to %sexps$133*
- %int_of_ptr_$_13987 = ptrtoint i8* %load_$_13983 to i64
+ %int_of_ptr_$_13987 = ptrtoint i8** %load_$_13983 to i64
  %cnd_$_13988 = icmp eq i64 %int_of_ptr_$_13987, 0
  br i1 %cnd_$_13988, label %thn_$_13985, label %mrg_$_13986
 thn_$_13985:
@@ -18678,8 +18678,8 @@ thn_$_13985:
 mrg_$_13986:
  %field_ptr_$_13989 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13984, i32 0, i32 1
  %res_$_13990 = load i8*, i8** %field_ptr_$_13989
- %left_int_$_13991 = ptrtoint i8* %res_$_13990 to i64
- %right_int_$_13992 = ptrtoint i8* null to i64
+ %left_int_$_13991 = ptrtoint i8** %res_$_13990 to i64
+ %right_int_$_13992 = ptrtoint i8** null to i64
  %cnd_$_13993 = icmp ne i64 %left_int_$_13991, %right_int_$_13992
  %zext_$_13994 = zext i1 %cnd_$_13993 to i64
  %cnd_$_13995 = icmp ne i64 %zext_$_13994, 0
@@ -18688,7 +18688,7 @@ thn_$_13979:
  %var_ptr_$_13996 = getelementptr %$locals_funp$386, %$locals_funp$386* %locals_$_157, i32 0, i32 2
  %load_$_13997 = load i8*, i8** %var_ptr_$_13996
  %record_ptr_$_13998 = bitcast i8* %load_$_13997 to %sexps$133*
- %int_of_ptr_$_14001 = ptrtoint i8* %load_$_13997 to i64
+ %int_of_ptr_$_14001 = ptrtoint i8** %load_$_13997 to i64
  %cnd_$_14002 = icmp eq i64 %int_of_ptr_$_14001, 0
  br i1 %cnd_$_14002, label %thn_$_13999, label %mrg_$_14000
 thn_$_13999:
@@ -18698,7 +18698,7 @@ mrg_$_14000:
  %field_ptr_$_14003 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_13998, i32 0, i32 1
  %load_$_14004 = load i8*, i8** %field_ptr_$_14003
  %record_ptr_$_14005 = bitcast i8* %load_$_14004 to %sexps$133*
- %int_of_ptr_$_14008 = ptrtoint i8* %load_$_14004 to i64
+ %int_of_ptr_$_14008 = ptrtoint i8** %load_$_14004 to i64
  %cnd_$_14009 = icmp eq i64 %int_of_ptr_$_14008, 0
  br i1 %cnd_$_14009, label %thn_$_14006, label %mrg_$_14007
 thn_$_14006:
@@ -18707,8 +18707,8 @@ thn_$_14006:
 mrg_$_14007:
  %field_ptr_$_14010 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_14005, i32 0, i32 1
  %res_$_14011 = load i8*, i8** %field_ptr_$_14010
- %left_int_$_14012 = ptrtoint i8* %res_$_14011 to i64
- %right_int_$_14013 = ptrtoint i8* null to i64
+ %left_int_$_14012 = ptrtoint i8** %res_$_14011 to i64
+ %right_int_$_14013 = ptrtoint i8** null to i64
  %cnd_$_14014 = icmp ne i64 %left_int_$_14012, %right_int_$_14013
  %zext_$_14015 = zext i1 %cnd_$_14014 to i64
  store i64 %zext_$_14015, i64* %temp_$_13978
@@ -18737,7 +18737,7 @@ els_$_13965:
  %var_ptr_$_14026 = getelementptr %$locals_funp$386, %$locals_funp$386* %locals_$_157, i32 0, i32 2
  %load_$_14027 = load i8*, i8** %var_ptr_$_14026
  %record_ptr_$_14028 = bitcast i8* %load_$_14027 to %sexps$133*
- %int_of_ptr_$_14031 = ptrtoint i8* %load_$_14027 to i64
+ %int_of_ptr_$_14031 = ptrtoint i8** %load_$_14027 to i64
  %cnd_$_14032 = icmp eq i64 %int_of_ptr_$_14031, 0
  br i1 %cnd_$_14032, label %thn_$_14029, label %mrg_$_14030
 thn_$_14029:
@@ -18774,8 +18774,8 @@ define i8* @exit_$387 (%$locals_apply_internal_cbv$222* %$sl, i8* %args$543) {
  store %$locals_apply_internal_cbv$222* %$sl, %$locals_apply_internal_cbv$222** %arg_$_14045
  %var_ptr_$_14054 = getelementptr %$locals_exit_$387, %$locals_exit_$387* %locals_$_158, i32 0, i32 2
  %res_$_14055 = load i8*, i8** %var_ptr_$_14054
- %left_int_$_14056 = ptrtoint i8* %res_$_14055 to i64
- %right_int_$_14057 = ptrtoint i8* null to i64
+ %left_int_$_14056 = ptrtoint i8** %res_$_14055 to i64
+ %right_int_$_14057 = ptrtoint i8** null to i64
  %cnd_$_14058 = icmp ne i64 %left_int_$_14056, %right_int_$_14057
  %zext_$_14059 = zext i1 %cnd_$_14058 to i64
  %cnd_$_14060 = icmp ne i64 %zext_$_14059, 0
@@ -18784,7 +18784,7 @@ thn_$_14051:
  %var_ptr_$_14061 = getelementptr %$locals_exit_$387, %$locals_exit_$387* %locals_$_158, i32 0, i32 2
  %load_$_14062 = load i8*, i8** %var_ptr_$_14061
  %record_ptr_$_14063 = bitcast i8* %load_$_14062 to %sexps$133*
- %int_of_ptr_$_14066 = ptrtoint i8* %load_$_14062 to i64
+ %int_of_ptr_$_14066 = ptrtoint i8** %load_$_14062 to i64
  %cnd_$_14067 = icmp eq i64 %int_of_ptr_$_14066, 0
  br i1 %cnd_$_14067, label %thn_$_14064, label %mrg_$_14065
 thn_$_14064:
@@ -18793,8 +18793,8 @@ thn_$_14064:
 mrg_$_14065:
  %field_ptr_$_14068 = getelementptr %sexps$133, %sexps$133* %record_ptr_$_14063, i32 0, i32 1
  %res_$_14069 = load i8*, i8** %field_ptr_$_14068
- %left_int_$_14070 = ptrtoint i8* %res_$_14069 to i64
- %right_int_$_14071 = ptrtoint i8* null to i64
+ %left_int_$_14070 = ptrtoint i8** %res_$_14069 to i64
+ %right_int_$_14071 = ptrtoint i8** null to i64
  %cnd_$_14072 = icmp ne i64 %left_int_$_14070, %right_int_$_14071
  %zext_$_14073 = zext i1 %cnd_$_14072 to i64
  store i64 %zext_$_14073, i64* %temp_$_14050
@@ -18818,8 +18818,8 @@ thn_$_14047:
 els_$_14048:
  %var_ptr_$_14087 = getelementptr %$locals_exit_$387, %$locals_exit_$387* %locals_$_158, i32 0, i32 2
  %res_$_14088 = load i8*, i8** %var_ptr_$_14087
- %left_int_$_14089 = ptrtoint i8* %res_$_14088 to i64
- %right_int_$_14090 = ptrtoint i8* null to i64
+ %left_int_$_14089 = ptrtoint i8** %res_$_14088 to i64
+ %right_int_$_14090 = ptrtoint i8** null to i64
  %cnd_$_14091 = icmp eq i64 %left_int_$_14089, %right_int_$_14090
  %zext_$_14092 = zext i1 %cnd_$_14091 to i64
  %cnd_$_14093 = icmp ne i64 %zext_$_14092, 0
@@ -18836,7 +18836,7 @@ els_$_14085:
  %var_ptr_$_14099 = getelementptr %$locals_exit_$387, %$locals_exit_$387* %locals_$_158, i32 0, i32 2
  %load_$_14100 = load i8*, i8** %var_ptr_$_14099
  %record_ptr_$_14101 = bitcast i8* %load_$_14100 to %sexps$133*
- %int_of_ptr_$_14104 = ptrtoint i8* %load_$_14100 to i64
+ %int_of_ptr_$_14104 = ptrtoint i8** %load_$_14100 to i64
  %cnd_$_14105 = icmp eq i64 %int_of_ptr_$_14104, 0
  br i1 %cnd_$_14105, label %thn_$_14102, label %mrg_$_14103
 thn_$_14102:
@@ -20000,7 +20000,7 @@ define i64 @tigermain (i8* %$sl) {
  %temp_$_15046 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_161, i32 0, i32 103
  store i64 1, i64* %temp_$_15046
  %size_ptr_$_15047 = getelementptr %token$32, %token$32* null, i32 1
- %size_$_15048 = ptrtoint %token$32* %size_ptr_$_15047 to i64
+ %size_$_15048 = ptrtoint %token$32** %size_ptr_$_15047 to i64
  %record_ptr_$_15049 = call i8* @allocRecord (i64 %size_$_15048)
  %rec_$_15050 = bitcast i8* %record_ptr_$_15049 to %token$32*
  %field_ptr_$_15051 = getelementptr %token$32, %token$32* %rec_$_15050, i32 0, i32 0
@@ -20014,7 +20014,7 @@ define i64 @tigermain (i8* %$sl) {
  %temp_$_15058 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_161, i32 0, i32 85
  store i8* %record_ptr_$_15049, i8** %temp_$_15058
  %size_ptr_$_15059 = getelementptr %token$32, %token$32* null, i32 1
- %size_$_15060 = ptrtoint %token$32* %size_ptr_$_15059 to i64
+ %size_$_15060 = ptrtoint %token$32** %size_ptr_$_15059 to i64
  %record_ptr_$_15061 = call i8* @allocRecord (i64 %size_$_15060)
  %rec_$_15062 = bitcast i8* %record_ptr_$_15061 to %token$32*
  %field_ptr_$_15063 = getelementptr %token$32, %token$32* %rec_$_15062, i32 0, i32 0
@@ -20067,7 +20067,7 @@ define i64 @tigermain (i8* %$sl) {
  %temp_$_15110 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_161, i32 0, i32 69
  store i8* %temp_$_15109, i8** %temp_$_15110
  %size_ptr_$_15111 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15112 = ptrtoint %env$137* %size_ptr_$_15111 to i64
+ %size_$_15112 = ptrtoint %env$137** %size_ptr_$_15111 to i64
  %record_ptr_$_15113 = call i8* @allocRecord (i64 %size_$_15112)
  %rec_$_15114 = bitcast i8* %record_ptr_$_15113 to %env$137*
  %temp_$_15116 = bitcast { i64, [1 x i8] }* @str_$_15115 to i8*
@@ -20075,7 +20075,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15118 = getelementptr %env$137, %env$137* %rec_$_15114, i32 0, i32 0
  store i8* %ret_$_15117, i8** %field_ptr_$_15118
  %size_ptr_$_15119 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15120 = ptrtoint %env$137* %size_ptr_$_15119 to i64
+ %size_$_15120 = ptrtoint %env$137** %size_ptr_$_15119 to i64
  %record_ptr_$_15121 = call i8* @allocRecord (i64 %size_$_15120)
  %rec_$_15122 = bitcast i8* %record_ptr_$_15121 to %env$137*
  %temp_$_15124 = bitcast { i64, [1 x i8] }* @str_$_15123 to i8*
@@ -20083,7 +20083,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15126 = getelementptr %env$137, %env$137* %rec_$_15122, i32 0, i32 0
  store i8* %ret_$_15125, i8** %field_ptr_$_15126
  %size_ptr_$_15127 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15128 = ptrtoint %env$137* %size_ptr_$_15127 to i64
+ %size_$_15128 = ptrtoint %env$137** %size_ptr_$_15127 to i64
  %record_ptr_$_15129 = call i8* @allocRecord (i64 %size_$_15128)
  %rec_$_15130 = bitcast i8* %record_ptr_$_15129 to %env$137*
  %temp_$_15132 = bitcast { i64, [1 x i8] }* @str_$_15131 to i8*
@@ -20091,7 +20091,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15134 = getelementptr %env$137, %env$137* %rec_$_15130, i32 0, i32 0
  store i8* %ret_$_15133, i8** %field_ptr_$_15134
  %size_ptr_$_15135 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15136 = ptrtoint %env$137* %size_ptr_$_15135 to i64
+ %size_$_15136 = ptrtoint %env$137** %size_ptr_$_15135 to i64
  %record_ptr_$_15137 = call i8* @allocRecord (i64 %size_$_15136)
  %rec_$_15138 = bitcast i8* %record_ptr_$_15137 to %env$137*
  %temp_$_15140 = bitcast { i64, [1 x i8] }* @str_$_15139 to i8*
@@ -20099,7 +20099,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15142 = getelementptr %env$137, %env$137* %rec_$_15138, i32 0, i32 0
  store i8* %ret_$_15141, i8** %field_ptr_$_15142
  %size_ptr_$_15143 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15144 = ptrtoint %env$137* %size_ptr_$_15143 to i64
+ %size_$_15144 = ptrtoint %env$137** %size_ptr_$_15143 to i64
  %record_ptr_$_15145 = call i8* @allocRecord (i64 %size_$_15144)
  %rec_$_15146 = bitcast i8* %record_ptr_$_15145 to %env$137*
  %temp_$_15148 = bitcast { i64, [1 x i8] }* @str_$_15147 to i8*
@@ -20107,7 +20107,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15150 = getelementptr %env$137, %env$137* %rec_$_15146, i32 0, i32 0
  store i8* %ret_$_15149, i8** %field_ptr_$_15150
  %size_ptr_$_15151 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15152 = ptrtoint %env$137* %size_ptr_$_15151 to i64
+ %size_$_15152 = ptrtoint %env$137** %size_ptr_$_15151 to i64
  %record_ptr_$_15153 = call i8* @allocRecord (i64 %size_$_15152)
  %rec_$_15154 = bitcast i8* %record_ptr_$_15153 to %env$137*
  %temp_$_15156 = bitcast { i64, [1 x i8] }* @str_$_15155 to i8*
@@ -20115,7 +20115,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15158 = getelementptr %env$137, %env$137* %rec_$_15154, i32 0, i32 0
  store i8* %ret_$_15157, i8** %field_ptr_$_15158
  %size_ptr_$_15159 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15160 = ptrtoint %env$137* %size_ptr_$_15159 to i64
+ %size_$_15160 = ptrtoint %env$137** %size_ptr_$_15159 to i64
  %record_ptr_$_15161 = call i8* @allocRecord (i64 %size_$_15160)
  %rec_$_15162 = bitcast i8* %record_ptr_$_15161 to %env$137*
  %temp_$_15164 = bitcast { i64, [2 x i8] }* @str_$_15163 to i8*
@@ -20123,7 +20123,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15166 = getelementptr %env$137, %env$137* %rec_$_15162, i32 0, i32 0
  store i8* %ret_$_15165, i8** %field_ptr_$_15166
  %size_ptr_$_15167 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15168 = ptrtoint %env$137* %size_ptr_$_15167 to i64
+ %size_$_15168 = ptrtoint %env$137** %size_ptr_$_15167 to i64
  %record_ptr_$_15169 = call i8* @allocRecord (i64 %size_$_15168)
  %rec_$_15170 = bitcast i8* %record_ptr_$_15169 to %env$137*
  %temp_$_15172 = bitcast { i64, [1 x i8] }* @str_$_15171 to i8*
@@ -20131,7 +20131,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15174 = getelementptr %env$137, %env$137* %rec_$_15170, i32 0, i32 0
  store i8* %ret_$_15173, i8** %field_ptr_$_15174
  %size_ptr_$_15175 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15176 = ptrtoint %env$137* %size_ptr_$_15175 to i64
+ %size_$_15176 = ptrtoint %env$137** %size_ptr_$_15175 to i64
  %record_ptr_$_15177 = call i8* @allocRecord (i64 %size_$_15176)
  %rec_$_15178 = bitcast i8* %record_ptr_$_15177 to %env$137*
  %temp_$_15180 = bitcast { i64, [2 x i8] }* @str_$_15179 to i8*
@@ -20139,7 +20139,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15182 = getelementptr %env$137, %env$137* %rec_$_15178, i32 0, i32 0
  store i8* %ret_$_15181, i8** %field_ptr_$_15182
  %size_ptr_$_15183 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15184 = ptrtoint %env$137* %size_ptr_$_15183 to i64
+ %size_$_15184 = ptrtoint %env$137** %size_ptr_$_15183 to i64
  %record_ptr_$_15185 = call i8* @allocRecord (i64 %size_$_15184)
  %rec_$_15186 = bitcast i8* %record_ptr_$_15185 to %env$137*
  %temp_$_15188 = bitcast { i64, [2 x i8] }* @str_$_15187 to i8*
@@ -20147,7 +20147,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15190 = getelementptr %env$137, %env$137* %rec_$_15186, i32 0, i32 0
  store i8* %ret_$_15189, i8** %field_ptr_$_15190
  %size_ptr_$_15191 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15192 = ptrtoint %env$137* %size_ptr_$_15191 to i64
+ %size_$_15192 = ptrtoint %env$137** %size_ptr_$_15191 to i64
  %record_ptr_$_15193 = call i8* @allocRecord (i64 %size_$_15192)
  %rec_$_15194 = bitcast i8* %record_ptr_$_15193 to %env$137*
  %temp_$_15196 = bitcast { i64, [1 x i8] }* @str_$_15195 to i8*
@@ -20155,7 +20155,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15198 = getelementptr %env$137, %env$137* %rec_$_15194, i32 0, i32 0
  store i8* %ret_$_15197, i8** %field_ptr_$_15198
  %size_ptr_$_15199 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15200 = ptrtoint %env$137* %size_ptr_$_15199 to i64
+ %size_$_15200 = ptrtoint %env$137** %size_ptr_$_15199 to i64
  %record_ptr_$_15201 = call i8* @allocRecord (i64 %size_$_15200)
  %rec_$_15202 = bitcast i8* %record_ptr_$_15201 to %env$137*
  %temp_$_15204 = bitcast { i64, [2 x i8] }* @str_$_15203 to i8*
@@ -20163,7 +20163,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15206 = getelementptr %env$137, %env$137* %rec_$_15202, i32 0, i32 0
  store i8* %ret_$_15205, i8** %field_ptr_$_15206
  %size_ptr_$_15207 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15208 = ptrtoint %env$137* %size_ptr_$_15207 to i64
+ %size_$_15208 = ptrtoint %env$137** %size_ptr_$_15207 to i64
  %record_ptr_$_15209 = call i8* @allocRecord (i64 %size_$_15208)
  %rec_$_15210 = bitcast i8* %record_ptr_$_15209 to %env$137*
  %temp_$_15212 = bitcast { i64, [3 x i8] }* @str_$_15211 to i8*
@@ -20171,7 +20171,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15214 = getelementptr %env$137, %env$137* %rec_$_15210, i32 0, i32 0
  store i8* %ret_$_15213, i8** %field_ptr_$_15214
  %size_ptr_$_15215 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15216 = ptrtoint %env$137* %size_ptr_$_15215 to i64
+ %size_$_15216 = ptrtoint %env$137** %size_ptr_$_15215 to i64
  %record_ptr_$_15217 = call i8* @allocRecord (i64 %size_$_15216)
  %rec_$_15218 = bitcast i8* %record_ptr_$_15217 to %env$137*
  %temp_$_15220 = bitcast { i64, [4 x i8] }* @str_$_15219 to i8*
@@ -20179,7 +20179,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15222 = getelementptr %env$137, %env$137* %rec_$_15218, i32 0, i32 0
  store i8* %ret_$_15221, i8** %field_ptr_$_15222
  %size_ptr_$_15223 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15224 = ptrtoint %env$137* %size_ptr_$_15223 to i64
+ %size_$_15224 = ptrtoint %env$137** %size_ptr_$_15223 to i64
  %record_ptr_$_15225 = call i8* @allocRecord (i64 %size_$_15224)
  %rec_$_15226 = bitcast i8* %record_ptr_$_15225 to %env$137*
  %temp_$_15228 = bitcast { i64, [3 x i8] }* @str_$_15227 to i8*
@@ -20187,7 +20187,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15230 = getelementptr %env$137, %env$137* %rec_$_15226, i32 0, i32 0
  store i8* %ret_$_15229, i8** %field_ptr_$_15230
  %size_ptr_$_15231 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15232 = ptrtoint %env$137* %size_ptr_$_15231 to i64
+ %size_$_15232 = ptrtoint %env$137** %size_ptr_$_15231 to i64
  %record_ptr_$_15233 = call i8* @allocRecord (i64 %size_$_15232)
  %rec_$_15234 = bitcast i8* %record_ptr_$_15233 to %env$137*
  %temp_$_15236 = bitcast { i64, [4 x i8] }* @str_$_15235 to i8*
@@ -20195,7 +20195,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15238 = getelementptr %env$137, %env$137* %rec_$_15234, i32 0, i32 0
  store i8* %ret_$_15237, i8** %field_ptr_$_15238
  %size_ptr_$_15239 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15240 = ptrtoint %env$137* %size_ptr_$_15239 to i64
+ %size_$_15240 = ptrtoint %env$137** %size_ptr_$_15239 to i64
  %record_ptr_$_15241 = call i8* @allocRecord (i64 %size_$_15240)
  %rec_$_15242 = bitcast i8* %record_ptr_$_15241 to %env$137*
  %temp_$_15244 = bitcast { i64, [3 x i8] }* @str_$_15243 to i8*
@@ -20203,7 +20203,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15246 = getelementptr %env$137, %env$137* %rec_$_15242, i32 0, i32 0
  store i8* %ret_$_15245, i8** %field_ptr_$_15246
  %size_ptr_$_15247 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15248 = ptrtoint %env$137* %size_ptr_$_15247 to i64
+ %size_$_15248 = ptrtoint %env$137** %size_ptr_$_15247 to i64
  %record_ptr_$_15249 = call i8* @allocRecord (i64 %size_$_15248)
  %rec_$_15250 = bitcast i8* %record_ptr_$_15249 to %env$137*
  %temp_$_15252 = bitcast { i64, [3 x i8] }* @str_$_15251 to i8*
@@ -20211,7 +20211,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15254 = getelementptr %env$137, %env$137* %rec_$_15250, i32 0, i32 0
  store i8* %ret_$_15253, i8** %field_ptr_$_15254
  %size_ptr_$_15255 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15256 = ptrtoint %env$137* %size_ptr_$_15255 to i64
+ %size_$_15256 = ptrtoint %env$137** %size_ptr_$_15255 to i64
  %record_ptr_$_15257 = call i8* @allocRecord (i64 %size_$_15256)
  %rec_$_15258 = bitcast i8* %record_ptr_$_15257 to %env$137*
  %temp_$_15260 = bitcast { i64, [3 x i8] }* @str_$_15259 to i8*
@@ -20219,7 +20219,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15262 = getelementptr %env$137, %env$137* %rec_$_15258, i32 0, i32 0
  store i8* %ret_$_15261, i8** %field_ptr_$_15262
  %size_ptr_$_15263 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15264 = ptrtoint %env$137* %size_ptr_$_15263 to i64
+ %size_$_15264 = ptrtoint %env$137** %size_ptr_$_15263 to i64
  %record_ptr_$_15265 = call i8* @allocRecord (i64 %size_$_15264)
  %rec_$_15266 = bitcast i8* %record_ptr_$_15265 to %env$137*
  %temp_$_15268 = bitcast { i64, [4 x i8] }* @str_$_15267 to i8*
@@ -20227,7 +20227,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15270 = getelementptr %env$137, %env$137* %rec_$_15266, i32 0, i32 0
  store i8* %ret_$_15269, i8** %field_ptr_$_15270
  %size_ptr_$_15271 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15272 = ptrtoint %env$137* %size_ptr_$_15271 to i64
+ %size_$_15272 = ptrtoint %env$137** %size_ptr_$_15271 to i64
  %record_ptr_$_15273 = call i8* @allocRecord (i64 %size_$_15272)
  %rec_$_15274 = bitcast i8* %record_ptr_$_15273 to %env$137*
  %temp_$_15276 = bitcast { i64, [4 x i8] }* @str_$_15275 to i8*
@@ -20235,7 +20235,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15278 = getelementptr %env$137, %env$137* %rec_$_15274, i32 0, i32 0
  store i8* %ret_$_15277, i8** %field_ptr_$_15278
  %size_ptr_$_15279 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15280 = ptrtoint %env$137* %size_ptr_$_15279 to i64
+ %size_$_15280 = ptrtoint %env$137** %size_ptr_$_15279 to i64
  %record_ptr_$_15281 = call i8* @allocRecord (i64 %size_$_15280)
  %rec_$_15282 = bitcast i8* %record_ptr_$_15281 to %env$137*
  %temp_$_15284 = bitcast { i64, [3 x i8] }* @str_$_15283 to i8*
@@ -20243,7 +20243,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15286 = getelementptr %env$137, %env$137* %rec_$_15282, i32 0, i32 0
  store i8* %ret_$_15285, i8** %field_ptr_$_15286
  %size_ptr_$_15287 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15288 = ptrtoint %env$137* %size_ptr_$_15287 to i64
+ %size_$_15288 = ptrtoint %env$137** %size_ptr_$_15287 to i64
  %record_ptr_$_15289 = call i8* @allocRecord (i64 %size_$_15288)
  %rec_$_15290 = bitcast i8* %record_ptr_$_15289 to %env$137*
  %temp_$_15292 = bitcast { i64, [3 x i8] }* @str_$_15291 to i8*
@@ -20251,7 +20251,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15294 = getelementptr %env$137, %env$137* %rec_$_15290, i32 0, i32 0
  store i8* %ret_$_15293, i8** %field_ptr_$_15294
  %size_ptr_$_15295 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15296 = ptrtoint %env$137* %size_ptr_$_15295 to i64
+ %size_$_15296 = ptrtoint %env$137** %size_ptr_$_15295 to i64
  %record_ptr_$_15297 = call i8* @allocRecord (i64 %size_$_15296)
  %rec_$_15298 = bitcast i8* %record_ptr_$_15297 to %env$137*
  %temp_$_15300 = bitcast { i64, [5 x i8] }* @str_$_15299 to i8*
@@ -20259,7 +20259,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15302 = getelementptr %env$137, %env$137* %rec_$_15298, i32 0, i32 0
  store i8* %ret_$_15301, i8** %field_ptr_$_15302
  %size_ptr_$_15303 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15304 = ptrtoint %env$137* %size_ptr_$_15303 to i64
+ %size_$_15304 = ptrtoint %env$137** %size_ptr_$_15303 to i64
  %record_ptr_$_15305 = call i8* @allocRecord (i64 %size_$_15304)
  %rec_$_15306 = bitcast i8* %record_ptr_$_15305 to %env$137*
  %temp_$_15308 = bitcast { i64, [3 x i8] }* @str_$_15307 to i8*
@@ -20267,7 +20267,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15310 = getelementptr %env$137, %env$137* %rec_$_15306, i32 0, i32 0
  store i8* %ret_$_15309, i8** %field_ptr_$_15310
  %size_ptr_$_15311 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15312 = ptrtoint %env$137* %size_ptr_$_15311 to i64
+ %size_$_15312 = ptrtoint %env$137** %size_ptr_$_15311 to i64
  %record_ptr_$_15313 = call i8* @allocRecord (i64 %size_$_15312)
  %rec_$_15314 = bitcast i8* %record_ptr_$_15313 to %env$137*
  %temp_$_15316 = bitcast { i64, [5 x i8] }* @str_$_15315 to i8*
@@ -20275,7 +20275,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15318 = getelementptr %env$137, %env$137* %rec_$_15314, i32 0, i32 0
  store i8* %ret_$_15317, i8** %field_ptr_$_15318
  %size_ptr_$_15319 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15320 = ptrtoint %env$137* %size_ptr_$_15319 to i64
+ %size_$_15320 = ptrtoint %env$137** %size_ptr_$_15319 to i64
  %record_ptr_$_15321 = call i8* @allocRecord (i64 %size_$_15320)
  %rec_$_15322 = bitcast i8* %record_ptr_$_15321 to %env$137*
  %temp_$_15324 = bitcast { i64, [5 x i8] }* @str_$_15323 to i8*
@@ -20283,7 +20283,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15326 = getelementptr %env$137, %env$137* %rec_$_15322, i32 0, i32 0
  store i8* %ret_$_15325, i8** %field_ptr_$_15326
  %size_ptr_$_15327 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15328 = ptrtoint %env$137* %size_ptr_$_15327 to i64
+ %size_$_15328 = ptrtoint %env$137** %size_ptr_$_15327 to i64
  %record_ptr_$_15329 = call i8* @allocRecord (i64 %size_$_15328)
  %rec_$_15330 = bitcast i8* %record_ptr_$_15329 to %env$137*
  %temp_$_15332 = bitcast { i64, [5 x i8] }* @str_$_15331 to i8*
@@ -20291,7 +20291,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15334 = getelementptr %env$137, %env$137* %rec_$_15330, i32 0, i32 0
  store i8* %ret_$_15333, i8** %field_ptr_$_15334
  %size_ptr_$_15335 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15336 = ptrtoint %env$137* %size_ptr_$_15335 to i64
+ %size_$_15336 = ptrtoint %env$137** %size_ptr_$_15335 to i64
  %record_ptr_$_15337 = call i8* @allocRecord (i64 %size_$_15336)
  %rec_$_15338 = bitcast i8* %record_ptr_$_15337 to %env$137*
  %temp_$_15340 = bitcast { i64, [9 x i8] }* @str_$_15339 to i8*
@@ -20299,7 +20299,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15342 = getelementptr %env$137, %env$137* %rec_$_15338, i32 0, i32 0
  store i8* %ret_$_15341, i8** %field_ptr_$_15342
  %size_ptr_$_15343 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15344 = ptrtoint %env$137* %size_ptr_$_15343 to i64
+ %size_$_15344 = ptrtoint %env$137** %size_ptr_$_15343 to i64
  %record_ptr_$_15345 = call i8* @allocRecord (i64 %size_$_15344)
  %rec_$_15346 = bitcast i8* %record_ptr_$_15345 to %env$137*
  %temp_$_15348 = bitcast { i64, [9 x i8] }* @str_$_15347 to i8*
@@ -20307,7 +20307,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15350 = getelementptr %env$137, %env$137* %rec_$_15346, i32 0, i32 0
  store i8* %ret_$_15349, i8** %field_ptr_$_15350
  %size_ptr_$_15351 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15352 = ptrtoint %env$137* %size_ptr_$_15351 to i64
+ %size_$_15352 = ptrtoint %env$137** %size_ptr_$_15351 to i64
  %record_ptr_$_15353 = call i8* @allocRecord (i64 %size_$_15352)
  %rec_$_15354 = bitcast i8* %record_ptr_$_15353 to %env$137*
  %temp_$_15356 = bitcast { i64, [7 x i8] }* @str_$_15355 to i8*
@@ -20315,7 +20315,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15358 = getelementptr %env$137, %env$137* %rec_$_15354, i32 0, i32 0
  store i8* %ret_$_15357, i8** %field_ptr_$_15358
  %size_ptr_$_15359 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15360 = ptrtoint %env$137* %size_ptr_$_15359 to i64
+ %size_$_15360 = ptrtoint %env$137** %size_ptr_$_15359 to i64
  %record_ptr_$_15361 = call i8* @allocRecord (i64 %size_$_15360)
  %rec_$_15362 = bitcast i8* %record_ptr_$_15361 to %env$137*
  %temp_$_15364 = bitcast { i64, [2 x i8] }* @str_$_15363 to i8*
@@ -20323,7 +20323,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15366 = getelementptr %env$137, %env$137* %rec_$_15362, i32 0, i32 0
  store i8* %ret_$_15365, i8** %field_ptr_$_15366
  %size_ptr_$_15367 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15368 = ptrtoint %env$137* %size_ptr_$_15367 to i64
+ %size_$_15368 = ptrtoint %env$137** %size_ptr_$_15367 to i64
  %record_ptr_$_15369 = call i8* @allocRecord (i64 %size_$_15368)
  %rec_$_15370 = bitcast i8* %record_ptr_$_15369 to %env$137*
  %temp_$_15372 = bitcast { i64, [3 x i8] }* @str_$_15371 to i8*
@@ -20331,7 +20331,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15374 = getelementptr %env$137, %env$137* %rec_$_15370, i32 0, i32 0
  store i8* %ret_$_15373, i8** %field_ptr_$_15374
  %size_ptr_$_15375 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15376 = ptrtoint %env$137* %size_ptr_$_15375 to i64
+ %size_$_15376 = ptrtoint %env$137** %size_ptr_$_15375 to i64
  %record_ptr_$_15377 = call i8* @allocRecord (i64 %size_$_15376)
  %rec_$_15378 = bitcast i8* %record_ptr_$_15377 to %env$137*
  %temp_$_15380 = bitcast { i64, [2 x i8] }* @str_$_15379 to i8*
@@ -20339,7 +20339,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15382 = getelementptr %env$137, %env$137* %rec_$_15378, i32 0, i32 0
  store i8* %ret_$_15381, i8** %field_ptr_$_15382
  %size_ptr_$_15383 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15384 = ptrtoint %env$137* %size_ptr_$_15383 to i64
+ %size_$_15384 = ptrtoint %env$137** %size_ptr_$_15383 to i64
  %record_ptr_$_15385 = call i8* @allocRecord (i64 %size_$_15384)
  %rec_$_15386 = bitcast i8* %record_ptr_$_15385 to %env$137*
  %temp_$_15388 = bitcast { i64, [3 x i8] }* @str_$_15387 to i8*
@@ -20347,7 +20347,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15390 = getelementptr %env$137, %env$137* %rec_$_15386, i32 0, i32 0
  store i8* %ret_$_15389, i8** %field_ptr_$_15390
  %size_ptr_$_15391 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15392 = ptrtoint %env$137* %size_ptr_$_15391 to i64
+ %size_$_15392 = ptrtoint %env$137** %size_ptr_$_15391 to i64
  %record_ptr_$_15393 = call i8* @allocRecord (i64 %size_$_15392)
  %rec_$_15394 = bitcast i8* %record_ptr_$_15393 to %env$137*
  %temp_$_15396 = bitcast { i64, [3 x i8] }* @str_$_15395 to i8*
@@ -20355,7 +20355,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15398 = getelementptr %env$137, %env$137* %rec_$_15394, i32 0, i32 0
  store i8* %ret_$_15397, i8** %field_ptr_$_15398
  %size_ptr_$_15399 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15400 = ptrtoint %env$137* %size_ptr_$_15399 to i64
+ %size_$_15400 = ptrtoint %env$137** %size_ptr_$_15399 to i64
  %record_ptr_$_15401 = call i8* @allocRecord (i64 %size_$_15400)
  %rec_$_15402 = bitcast i8* %record_ptr_$_15401 to %env$137*
  %temp_$_15404 = bitcast { i64, [2 x i8] }* @str_$_15403 to i8*
@@ -20363,7 +20363,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15406 = getelementptr %env$137, %env$137* %rec_$_15402, i32 0, i32 0
  store i8* %ret_$_15405, i8** %field_ptr_$_15406
  %size_ptr_$_15407 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15408 = ptrtoint %env$137* %size_ptr_$_15407 to i64
+ %size_$_15408 = ptrtoint %env$137** %size_ptr_$_15407 to i64
  %record_ptr_$_15409 = call i8* @allocRecord (i64 %size_$_15408)
  %rec_$_15410 = bitcast i8* %record_ptr_$_15409 to %env$137*
  %temp_$_15412 = bitcast { i64, [2 x i8] }* @str_$_15411 to i8*
@@ -20371,7 +20371,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15414 = getelementptr %env$137, %env$137* %rec_$_15410, i32 0, i32 0
  store i8* %ret_$_15413, i8** %field_ptr_$_15414
  %size_ptr_$_15415 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15416 = ptrtoint %env$137* %size_ptr_$_15415 to i64
+ %size_$_15416 = ptrtoint %env$137** %size_ptr_$_15415 to i64
  %record_ptr_$_15417 = call i8* @allocRecord (i64 %size_$_15416)
  %rec_$_15418 = bitcast i8* %record_ptr_$_15417 to %env$137*
  %temp_$_15420 = bitcast { i64, [3 x i8] }* @str_$_15419 to i8*
@@ -20379,7 +20379,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15422 = getelementptr %env$137, %env$137* %rec_$_15418, i32 0, i32 0
  store i8* %ret_$_15421, i8** %field_ptr_$_15422
  %size_ptr_$_15423 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15424 = ptrtoint %env$137* %size_ptr_$_15423 to i64
+ %size_$_15424 = ptrtoint %env$137** %size_ptr_$_15423 to i64
  %record_ptr_$_15425 = call i8* @allocRecord (i64 %size_$_15424)
  %rec_$_15426 = bitcast i8* %record_ptr_$_15425 to %env$137*
  %temp_$_15428 = bitcast { i64, [3 x i8] }* @str_$_15427 to i8*
@@ -20387,7 +20387,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15430 = getelementptr %env$137, %env$137* %rec_$_15426, i32 0, i32 0
  store i8* %ret_$_15429, i8** %field_ptr_$_15430
  %size_ptr_$_15431 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15432 = ptrtoint %env$137* %size_ptr_$_15431 to i64
+ %size_$_15432 = ptrtoint %env$137** %size_ptr_$_15431 to i64
  %record_ptr_$_15433 = call i8* @allocRecord (i64 %size_$_15432)
  %rec_$_15434 = bitcast i8* %record_ptr_$_15433 to %env$137*
  %temp_$_15436 = bitcast { i64, [4 x i8] }* @str_$_15435 to i8*
@@ -20395,7 +20395,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15438 = getelementptr %env$137, %env$137* %rec_$_15434, i32 0, i32 0
  store i8* %ret_$_15437, i8** %field_ptr_$_15438
  %size_ptr_$_15439 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15440 = ptrtoint %env$137* %size_ptr_$_15439 to i64
+ %size_$_15440 = ptrtoint %env$137** %size_ptr_$_15439 to i64
  %record_ptr_$_15441 = call i8* @allocRecord (i64 %size_$_15440)
  %rec_$_15442 = bitcast i8* %record_ptr_$_15441 to %env$137*
  %temp_$_15444 = bitcast { i64, [4 x i8] }* @str_$_15443 to i8*
@@ -20403,7 +20403,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15446 = getelementptr %env$137, %env$137* %rec_$_15442, i32 0, i32 0
  store i8* %ret_$_15445, i8** %field_ptr_$_15446
  %size_ptr_$_15447 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15448 = ptrtoint %env$137* %size_ptr_$_15447 to i64
+ %size_$_15448 = ptrtoint %env$137** %size_ptr_$_15447 to i64
  %record_ptr_$_15449 = call i8* @allocRecord (i64 %size_$_15448)
  %rec_$_15450 = bitcast i8* %record_ptr_$_15449 to %env$137*
  %temp_$_15452 = bitcast { i64, [9 x i8] }* @str_$_15451 to i8*
@@ -20411,7 +20411,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15454 = getelementptr %env$137, %env$137* %rec_$_15450, i32 0, i32 0
  store i8* %ret_$_15453, i8** %field_ptr_$_15454
  %size_ptr_$_15455 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15456 = ptrtoint %env$137* %size_ptr_$_15455 to i64
+ %size_$_15456 = ptrtoint %env$137** %size_ptr_$_15455 to i64
  %record_ptr_$_15457 = call i8* @allocRecord (i64 %size_$_15456)
  %rec_$_15458 = bitcast i8* %record_ptr_$_15457 to %env$137*
  %temp_$_15460 = bitcast { i64, [4 x i8] }* @str_$_15459 to i8*
@@ -20419,7 +20419,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15462 = getelementptr %env$137, %env$137* %rec_$_15458, i32 0, i32 0
  store i8* %ret_$_15461, i8** %field_ptr_$_15462
  %size_ptr_$_15463 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15464 = ptrtoint %env$137* %size_ptr_$_15463 to i64
+ %size_$_15464 = ptrtoint %env$137** %size_ptr_$_15463 to i64
  %record_ptr_$_15465 = call i8* @allocRecord (i64 %size_$_15464)
  %rec_$_15466 = bitcast i8* %record_ptr_$_15465 to %env$137*
  %temp_$_15468 = bitcast { i64, [7 x i8] }* @str_$_15467 to i8*
@@ -20427,7 +20427,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15470 = getelementptr %env$137, %env$137* %rec_$_15466, i32 0, i32 0
  store i8* %ret_$_15469, i8** %field_ptr_$_15470
  %size_ptr_$_15471 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15472 = ptrtoint %env$137* %size_ptr_$_15471 to i64
+ %size_$_15472 = ptrtoint %env$137** %size_ptr_$_15471 to i64
  %record_ptr_$_15473 = call i8* @allocRecord (i64 %size_$_15472)
  %rec_$_15474 = bitcast i8* %record_ptr_$_15473 to %env$137*
  %temp_$_15476 = bitcast { i64, [5 x i8] }* @str_$_15475 to i8*
@@ -20435,7 +20435,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15478 = getelementptr %env$137, %env$137* %rec_$_15474, i32 0, i32 0
  store i8* %ret_$_15477, i8** %field_ptr_$_15478
  %size_ptr_$_15479 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15480 = ptrtoint %env$137* %size_ptr_$_15479 to i64
+ %size_$_15480 = ptrtoint %env$137** %size_ptr_$_15479 to i64
  %record_ptr_$_15481 = call i8* @allocRecord (i64 %size_$_15480)
  %rec_$_15482 = bitcast i8* %record_ptr_$_15481 to %env$137*
  %temp_$_15484 = bitcast { i64, [4 x i8] }* @str_$_15483 to i8*
@@ -20443,7 +20443,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15486 = getelementptr %env$137, %env$137* %rec_$_15482, i32 0, i32 0
  store i8* %ret_$_15485, i8** %field_ptr_$_15486
  %size_ptr_$_15487 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15488 = ptrtoint %env$137* %size_ptr_$_15487 to i64
+ %size_$_15488 = ptrtoint %env$137** %size_ptr_$_15487 to i64
  %record_ptr_$_15489 = call i8* @allocRecord (i64 %size_$_15488)
  %rec_$_15490 = bitcast i8* %record_ptr_$_15489 to %env$137*
  %temp_$_15492 = bitcast { i64, [4 x i8] }* @str_$_15491 to i8*
@@ -20451,7 +20451,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15494 = getelementptr %env$137, %env$137* %rec_$_15490, i32 0, i32 0
  store i8* %ret_$_15493, i8** %field_ptr_$_15494
  %size_ptr_$_15495 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15496 = ptrtoint %env$137* %size_ptr_$_15495 to i64
+ %size_$_15496 = ptrtoint %env$137** %size_ptr_$_15495 to i64
  %record_ptr_$_15497 = call i8* @allocRecord (i64 %size_$_15496)
  %rec_$_15498 = bitcast i8* %record_ptr_$_15497 to %env$137*
  %temp_$_15500 = bitcast { i64, [6 x i8] }* @str_$_15499 to i8*
@@ -20459,7 +20459,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15502 = getelementptr %env$137, %env$137* %rec_$_15498, i32 0, i32 0
  store i8* %ret_$_15501, i8** %field_ptr_$_15502
  %size_ptr_$_15503 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15504 = ptrtoint %env$137* %size_ptr_$_15503 to i64
+ %size_$_15504 = ptrtoint %env$137** %size_ptr_$_15503 to i64
  %record_ptr_$_15505 = call i8* @allocRecord (i64 %size_$_15504)
  %rec_$_15506 = bitcast i8* %record_ptr_$_15505 to %env$137*
  %temp_$_15508 = bitcast { i64, [3 x i8] }* @str_$_15507 to i8*
@@ -20467,7 +20467,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15510 = getelementptr %env$137, %env$137* %rec_$_15506, i32 0, i32 0
  store i8* %ret_$_15509, i8** %field_ptr_$_15510
  %size_ptr_$_15511 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15512 = ptrtoint %env$137* %size_ptr_$_15511 to i64
+ %size_$_15512 = ptrtoint %env$137** %size_ptr_$_15511 to i64
  %record_ptr_$_15513 = call i8* @allocRecord (i64 %size_$_15512)
  %rec_$_15514 = bitcast i8* %record_ptr_$_15513 to %env$137*
  %temp_$_15516 = bitcast { i64, [4 x i8] }* @str_$_15515 to i8*
@@ -20475,7 +20475,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15518 = getelementptr %env$137, %env$137* %rec_$_15514, i32 0, i32 0
  store i8* %ret_$_15517, i8** %field_ptr_$_15518
  %size_ptr_$_15519 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15520 = ptrtoint %env$137* %size_ptr_$_15519 to i64
+ %size_$_15520 = ptrtoint %env$137** %size_ptr_$_15519 to i64
  %record_ptr_$_15521 = call i8* @allocRecord (i64 %size_$_15520)
  %rec_$_15522 = bitcast i8* %record_ptr_$_15521 to %env$137*
  %temp_$_15524 = bitcast { i64, [6 x i8] }* @str_$_15523 to i8*
@@ -20483,7 +20483,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15526 = getelementptr %env$137, %env$137* %rec_$_15522, i32 0, i32 0
  store i8* %ret_$_15525, i8** %field_ptr_$_15526
  %size_ptr_$_15527 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15528 = ptrtoint %env$137* %size_ptr_$_15527 to i64
+ %size_$_15528 = ptrtoint %env$137** %size_ptr_$_15527 to i64
  %record_ptr_$_15529 = call i8* @allocRecord (i64 %size_$_15528)
  %rec_$_15530 = bitcast i8* %record_ptr_$_15529 to %env$137*
  %temp_$_15532 = bitcast { i64, [6 x i8] }* @str_$_15531 to i8*
@@ -20491,7 +20491,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15534 = getelementptr %env$137, %env$137* %rec_$_15530, i32 0, i32 0
  store i8* %ret_$_15533, i8** %field_ptr_$_15534
  %size_ptr_$_15535 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15536 = ptrtoint %env$137* %size_ptr_$_15535 to i64
+ %size_$_15536 = ptrtoint %env$137** %size_ptr_$_15535 to i64
  %record_ptr_$_15537 = call i8* @allocRecord (i64 %size_$_15536)
  %rec_$_15538 = bitcast i8* %record_ptr_$_15537 to %env$137*
  %temp_$_15540 = bitcast { i64, [5 x i8] }* @str_$_15539 to i8*
@@ -20499,7 +20499,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15542 = getelementptr %env$137, %env$137* %rec_$_15538, i32 0, i32 0
  store i8* %ret_$_15541, i8** %field_ptr_$_15542
  %size_ptr_$_15543 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15544 = ptrtoint %env$137* %size_ptr_$_15543 to i64
+ %size_$_15544 = ptrtoint %env$137** %size_ptr_$_15543 to i64
  %record_ptr_$_15545 = call i8* @allocRecord (i64 %size_$_15544)
  %rec_$_15546 = bitcast i8* %record_ptr_$_15545 to %env$137*
  %temp_$_15548 = bitcast { i64, [10 x i8] }* @str_$_15547 to i8*
@@ -20507,7 +20507,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15550 = getelementptr %env$137, %env$137* %rec_$_15546, i32 0, i32 0
  store i8* %ret_$_15549, i8** %field_ptr_$_15550
  %size_ptr_$_15551 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15552 = ptrtoint %env$137* %size_ptr_$_15551 to i64
+ %size_$_15552 = ptrtoint %env$137** %size_ptr_$_15551 to i64
  %record_ptr_$_15553 = call i8* @allocRecord (i64 %size_$_15552)
  %rec_$_15554 = bitcast i8* %record_ptr_$_15553 to %env$137*
  %temp_$_15556 = bitcast { i64, [7 x i8] }* @str_$_15555 to i8*
@@ -20515,7 +20515,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15558 = getelementptr %env$137, %env$137* %rec_$_15554, i32 0, i32 0
  store i8* %ret_$_15557, i8** %field_ptr_$_15558
  %size_ptr_$_15559 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15560 = ptrtoint %env$137* %size_ptr_$_15559 to i64
+ %size_$_15560 = ptrtoint %env$137** %size_ptr_$_15559 to i64
  %record_ptr_$_15561 = call i8* @allocRecord (i64 %size_$_15560)
  %rec_$_15562 = bitcast i8* %record_ptr_$_15561 to %env$137*
  %temp_$_15564 = bitcast { i64, [4 x i8] }* @str_$_15563 to i8*
@@ -20523,7 +20523,7 @@ define i64 @tigermain (i8* %$sl) {
  %field_ptr_$_15566 = getelementptr %env$137, %env$137* %rec_$_15562, i32 0, i32 0
  store i8* %ret_$_15565, i8** %field_ptr_$_15566
  %size_ptr_$_15567 = getelementptr %env$137, %env$137* null, i32 1
- %size_$_15568 = ptrtoint %env$137* %size_ptr_$_15567 to i64
+ %size_$_15568 = ptrtoint %env$137** %size_ptr_$_15567 to i64
  %record_ptr_$_15569 = call i8* @allocRecord (i64 %size_$_15568)
  %rec_$_15570 = bitcast i8* %record_ptr_$_15569 to %env$137*
  %temp_$_15572 = bitcast { i64, [4 x i8] }* @str_$_15571 to i8*
@@ -20682,7 +20682,7 @@ body_$_15638:
  %var_ptr_$_15643 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_161, i32 0, i32 3
  %load_$_15644 = load i8*, i8** %var_ptr_$_15643
  %record_ptr_$_15645 = bitcast i8* %load_$_15644 to %deque$109*
- %int_of_ptr_$_15648 = ptrtoint i8* %load_$_15644 to i64
+ %int_of_ptr_$_15648 = ptrtoint i8** %load_$_15644 to i64
  %cnd_$_15649 = icmp eq i64 %int_of_ptr_$_15648, 0
  br i1 %cnd_$_15649, label %thn_$_15646, label %mrg_$_15647
 thn_$_15646:
@@ -20694,7 +20694,7 @@ mrg_$_15647:
  %var_ptr_$_15652 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_161, i32 0, i32 3
  %load_$_15653 = load i8*, i8** %var_ptr_$_15652
  %record_ptr_$_15654 = bitcast i8* %load_$_15653 to %deque$109*
- %int_of_ptr_$_15657 = ptrtoint i8* %load_$_15653 to i64
+ %int_of_ptr_$_15657 = ptrtoint i8** %load_$_15653 to i64
  %cnd_$_15658 = icmp eq i64 %int_of_ptr_$_15657, 0
  br i1 %cnd_$_15658, label %thn_$_15655, label %mrg_$_15656
 thn_$_15655:

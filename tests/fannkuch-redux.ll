@@ -51,8 +51,7 @@ define i32 @main (i32 %0, i8* %1) {
  store i64 %41, i64* %6
  %42 = load i64, i64* %6
  %43 = add i64 %42, 1
- %44 = add i32 0, 0 ; %44 = call i8* @llvm.stacksave ()
- ;store i8* %44, i8** %7
+ %44 = add i32 0, 0
  %45 = alloca i64, i64 %43
  store i64 %43, i64* %8
  %46 = getelementptr i64, i8* %45, i64 0
@@ -103,8 +102,7 @@ define i32 @main (i32 %0, i8* %1) {
  br i1 %78, label %79, label %324
 79:
  %80 = load i64, i64* %6
- %81 = add i32 0, 0 ; %81 = call i8* @llvm.stacksave ()
- ;store i8* %81, i8** %14
+ %81 = add i32 0, 0
  %82 = alloca i64, i64 %80
  store i64 %80, i64* %15
  %83 = load i64, i64* %6
@@ -449,7 +447,6 @@ define i32 @main (i32 %0, i8* %1) {
  br label %180
 318:
  %319 = load i8*, i8** %14
- ;call void @llvm.stackrestore (i8* %319)
  br label %320
 320:
  %321 = load i64, i64* %10
@@ -461,10 +458,9 @@ define i32 @main (i32 %0, i8* %1) {
  %325 = load i64, i64* %12
  %326 = load i64, i64* %6
  %327 = load i64, i64* %11
- %328 = call i32( i8*, ... ) @printf (i8* @.str, i64 %325, i64 %326, i64 %327)
+ %328 = call i32 (i8*, ...) @printf (i8* @.str, i64 %325, i64 %326, i64 %327)
  store i32 0, i32* %3
  %329 = load i8*, i8** %7
- ;call void @llvm.stackrestore (i8* %329)
  %330 = load i32, i32* %3
  ret i32 %330
 }

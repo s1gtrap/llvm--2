@@ -32,14 +32,14 @@ define i64 @tigermain (i8* %$sl) {
  store i8* null, i8** %temp_$_2
  %var_ptr_$_3 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 1
  %res_$_4 = load i8*, i8** %var_ptr_$_3
- %left_int_$_5 = ptrtoint i8* %res_$_4 to i64
- %right_int_$_6 = ptrtoint i8* null to i64
+ %left_int_$_5 = ptrtoint i8** %res_$_4 to i64
+ %right_int_$_6 = ptrtoint i8** null to i64
  %cnd_$_7 = icmp eq i64 %left_int_$_5, %right_int_$_6
  %zext_$_8 = zext i1 %cnd_$_7 to i64
  %var_ptr_$_9 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 1
  %res_$_10 = load i8*, i8** %var_ptr_$_9
- %left_int_$_11 = ptrtoint i8* %res_$_10 to i64
- %right_int_$_12 = ptrtoint i8* null to i64
+ %left_int_$_11 = ptrtoint i8** %res_$_10 to i64
+ %right_int_$_12 = ptrtoint i8** null to i64
  %cnd_$_13 = icmp ne i64 %left_int_$_11, %right_int_$_12
  %zext_$_14 = zext i1 %cnd_$_13 to i64
  ret i64 %zext_$_14

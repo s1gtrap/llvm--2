@@ -102,7 +102,7 @@ define i8* @createIntArrayList$3 (%$locals_tigermain* %$sl, i64 %size$10) {
  %arg_$_51 = getelementptr %$locals_createIntArrayList$3, %$locals_createIntArrayList$3* %locals_$_1, i32 0, i32 0
  store %$locals_tigermain* %$sl, %$locals_tigermain** %arg_$_51
  %size_ptr_$_52 = getelementptr %IntArrayList$1, %IntArrayList$1* null, i32 1
- %size_$_53 = ptrtoint %IntArrayList$1* %size_ptr_$_52 to i64
+ %size_$_53 = ptrtoint %IntArrayList$1** %size_ptr_$_52 to i64
  %record_ptr_$_54 = call i8* @allocRecord (i64 %size_$_53)
  %rec_$_55 = bitcast i8* %record_ptr_$_54 to %IntArrayList$1*
  %field_ptr_$_56 = getelementptr %IntArrayList$1, %IntArrayList$1* %rec_$_55, i32 0, i32 0
@@ -117,7 +117,7 @@ define i8* @createIntArrayList$3 (%$locals_tigermain* %$sl, i64 %size$10) {
  %var_ptr_$_62 = getelementptr %$locals_createIntArrayList$3, %$locals_createIntArrayList$3* %locals_$_1, i32 0, i32 1
  %res_$_63 = load i64, i64* %var_ptr_$_62
  %init_size_ptr_$_64 = getelementptr i64, i64* null, i32 1
- %init_size_$_65 = ptrtoint i64* %init_size_ptr_$_64 to i64
+ %init_size_$_65 = ptrtoint i64** %init_size_ptr_$_64 to i64
  %array_ptr_$_66 = call i8* @initArray (i64 %res_$_63, i64 %init_size_$_65, i8* %init_ptr_$_61)
  %field_ptr_$_67 = getelementptr %IntArrayList$1, %IntArrayList$1* %rec_$_55, i32 0, i32 2
  store i8* %array_ptr_$_66, i8** %field_ptr_$_67
@@ -135,7 +135,7 @@ define i64 @get$4 (%$locals_tigermain* %$sl, i8* %src$11, i64 %index$12) {
  %var_ptr_$_71 = getelementptr %$locals_get$4, %$locals_get$4* %locals_$_2, i32 0, i32 1
  %load_$_72 = load i8*, i8** %var_ptr_$_71
  %record_ptr_$_73 = bitcast i8* %load_$_72 to %IntArrayList$1*
- %int_of_ptr_$_76 = ptrtoint i8* %load_$_72 to i64
+ %int_of_ptr_$_76 = ptrtoint i8** %load_$_72 to i64
  %cnd_$_77 = icmp eq i64 %int_of_ptr_$_76, 0
  br i1 %cnd_$_77, label %thn_$_74, label %mrg_$_75
 thn_$_74:
@@ -172,7 +172,7 @@ define void @push$5 (%$locals_tigermain* %$sl, i8* %src$13, i64 %num$14) {
  %var_ptr_$_124 = getelementptr %$locals_push$5, %$locals_push$5* %locals_$_3, i32 0, i32 2
  %load_$_125 = load i8*, i8** %var_ptr_$_124
  %record_ptr_$_126 = bitcast i8* %load_$_125 to %IntArrayList$1*
- %int_of_ptr_$_129 = ptrtoint i8* %load_$_125 to i64
+ %int_of_ptr_$_129 = ptrtoint i8** %load_$_125 to i64
  %cnd_$_130 = icmp eq i64 %int_of_ptr_$_129, 0
  br i1 %cnd_$_130, label %thn_$_127, label %mrg_$_128
 thn_$_127:
@@ -185,7 +185,7 @@ mrg_$_128:
  %var_ptr_$_134 = getelementptr %$locals_push$5, %$locals_push$5* %locals_$_3, i32 0, i32 2
  %load_$_135 = load i8*, i8** %var_ptr_$_134
  %record_ptr_$_136 = bitcast i8* %load_$_135 to %IntArrayList$1*
- %int_of_ptr_$_139 = ptrtoint i8* %load_$_135 to i64
+ %int_of_ptr_$_139 = ptrtoint i8** %load_$_135 to i64
  %cnd_$_140 = icmp eq i64 %int_of_ptr_$_139, 0
  br i1 %cnd_$_140, label %thn_$_137, label %mrg_$_138
 thn_$_137:
@@ -205,7 +205,7 @@ thn_$_122:
  %var_ptr_$_148 = getelementptr %$locals_push$5, %$locals_push$5* %locals_$_3, i32 0, i32 2
  %load_$_149 = load i8*, i8** %var_ptr_$_148
  %record_ptr_$_150 = bitcast i8* %load_$_149 to %IntArrayList$1*
- %int_of_ptr_$_153 = ptrtoint i8* %load_$_149 to i64
+ %int_of_ptr_$_153 = ptrtoint i8** %load_$_149 to i64
  %cnd_$_154 = icmp eq i64 %int_of_ptr_$_153, 0
  br i1 %cnd_$_154, label %thn_$_151, label %mrg_$_152
 thn_$_151:
@@ -216,7 +216,7 @@ mrg_$_152:
  %res_$_156 = load i64, i64* %field_ptr_$_155
  %temp_$_157 = mul i64 %res_$_156, 2
  %init_size_ptr_$_158 = getelementptr i64, i64* null, i32 1
- %init_size_$_159 = ptrtoint i64* %init_size_ptr_$_158 to i64
+ %init_size_$_159 = ptrtoint i64** %init_size_ptr_$_158 to i64
  %array_ptr_$_160 = call i8* @initArray (i64 %temp_$_157, i64 %init_size_$_159, i8* %init_ptr_$_147)
  %temp_$_161 = getelementptr %$locals_push$5, %$locals_push$5* %locals_$_3, i32 0, i32 1
  store i8* %array_ptr_$_160, i8** %temp_$_161
@@ -227,7 +227,7 @@ mrg_$_152:
  %var_ptr_$_176 = getelementptr %$locals_push$5, %$locals_push$5* %locals_$_3, i32 0, i32 2
  %load_$_177 = load i8*, i8** %var_ptr_$_176
  %record_ptr_$_178 = bitcast i8* %load_$_177 to %IntArrayList$1*
- %int_of_ptr_$_181 = ptrtoint i8* %load_$_177 to i64
+ %int_of_ptr_$_181 = ptrtoint i8** %load_$_177 to i64
  %cnd_$_182 = icmp eq i64 %int_of_ptr_$_181, 0
  br i1 %cnd_$_182, label %thn_$_179, label %mrg_$_180
 thn_$_179:
@@ -239,7 +239,7 @@ mrg_$_180:
  %var_ptr_$_185 = getelementptr %$locals_push$5, %$locals_push$5* %locals_$_3, i32 0, i32 2
  %load_$_186 = load i8*, i8** %var_ptr_$_185
  %record_ptr_$_187 = bitcast i8* %load_$_186 to %IntArrayList$1*
- %int_of_ptr_$_190 = ptrtoint i8* %load_$_186 to i64
+ %int_of_ptr_$_190 = ptrtoint i8** %load_$_186 to i64
  %cnd_$_191 = icmp eq i64 %int_of_ptr_$_190, 0
  br i1 %cnd_$_191, label %thn_$_188, label %mrg_$_189
 thn_$_188:
@@ -254,7 +254,7 @@ mrg_$_189:
  %var_ptr_$_164 = getelementptr %$locals_push$5, %$locals_push$5* %locals_$_3, i32 0, i32 2
  %load_$_165 = load i8*, i8** %var_ptr_$_164
  %record_ptr_$_166 = bitcast i8* %load_$_165 to %IntArrayList$1*
- %int_of_ptr_$_169 = ptrtoint i8* %load_$_165 to i64
+ %int_of_ptr_$_169 = ptrtoint i8** %load_$_165 to i64
  %cnd_$_170 = icmp eq i64 %int_of_ptr_$_169, 0
  br i1 %cnd_$_170, label %thn_$_167, label %mrg_$_168
 thn_$_167:
@@ -266,7 +266,7 @@ mrg_$_168:
  %var_ptr_$_194 = getelementptr %$locals_push$5, %$locals_push$5* %locals_$_3, i32 0, i32 2
  %load_$_195 = load i8*, i8** %var_ptr_$_194
  %record_ptr_$_196 = bitcast i8* %load_$_195 to %IntArrayList$1*
- %int_of_ptr_$_199 = ptrtoint i8* %load_$_195 to i64
+ %int_of_ptr_$_199 = ptrtoint i8** %load_$_195 to i64
  %cnd_$_200 = icmp eq i64 %int_of_ptr_$_199, 0
  br i1 %cnd_$_200, label %thn_$_197, label %mrg_$_198
 thn_$_197:
@@ -279,7 +279,7 @@ mrg_$_198:
  %var_ptr_$_204 = getelementptr %$locals_push$5, %$locals_push$5* %locals_$_3, i32 0, i32 2
  %load_$_205 = load i8*, i8** %var_ptr_$_204
  %record_ptr_$_206 = bitcast i8* %load_$_205 to %IntArrayList$1*
- %int_of_ptr_$_209 = ptrtoint i8* %load_$_205 to i64
+ %int_of_ptr_$_209 = ptrtoint i8** %load_$_205 to i64
  %cnd_$_210 = icmp eq i64 %int_of_ptr_$_209, 0
  br i1 %cnd_$_210, label %thn_$_207, label %mrg_$_208
 thn_$_207:
@@ -295,7 +295,7 @@ mrg_$_123:
  %var_ptr_$_96 = getelementptr %$locals_push$5, %$locals_push$5* %locals_$_3, i32 0, i32 2
  %load_$_97 = load i8*, i8** %var_ptr_$_96
  %record_ptr_$_98 = bitcast i8* %load_$_97 to %IntArrayList$1*
- %int_of_ptr_$_101 = ptrtoint i8* %load_$_97 to i64
+ %int_of_ptr_$_101 = ptrtoint i8** %load_$_97 to i64
  %cnd_$_102 = icmp eq i64 %int_of_ptr_$_101, 0
  br i1 %cnd_$_102, label %thn_$_99, label %mrg_$_100
 thn_$_99:
@@ -306,7 +306,7 @@ mrg_$_100:
  %var_ptr_$_104 = getelementptr %$locals_push$5, %$locals_push$5* %locals_$_3, i32 0, i32 2
  %load_$_105 = load i8*, i8** %var_ptr_$_104
  %record_ptr_$_106 = bitcast i8* %load_$_105 to %IntArrayList$1*
- %int_of_ptr_$_109 = ptrtoint i8* %load_$_105 to i64
+ %int_of_ptr_$_109 = ptrtoint i8** %load_$_105 to i64
  %cnd_$_110 = icmp eq i64 %int_of_ptr_$_109, 0
  br i1 %cnd_$_110, label %thn_$_107, label %mrg_$_108
 thn_$_107:
@@ -331,7 +331,7 @@ mrg_$_115:
  %var_ptr_$_212 = getelementptr %$locals_push$5, %$locals_push$5* %locals_$_3, i32 0, i32 2
  %load_$_213 = load i8*, i8** %var_ptr_$_212
  %record_ptr_$_214 = bitcast i8* %load_$_213 to %IntArrayList$1*
- %int_of_ptr_$_217 = ptrtoint i8* %load_$_213 to i64
+ %int_of_ptr_$_217 = ptrtoint i8** %load_$_213 to i64
  %cnd_$_218 = icmp eq i64 %int_of_ptr_$_217, 0
  br i1 %cnd_$_218, label %thn_$_215, label %mrg_$_216
 thn_$_215:
@@ -344,7 +344,7 @@ mrg_$_216:
  %var_ptr_$_222 = getelementptr %$locals_push$5, %$locals_push$5* %locals_$_3, i32 0, i32 2
  %load_$_223 = load i8*, i8** %var_ptr_$_222
  %record_ptr_$_224 = bitcast i8* %load_$_223 to %IntArrayList$1*
- %int_of_ptr_$_227 = ptrtoint i8* %load_$_223 to i64
+ %int_of_ptr_$_227 = ptrtoint i8** %load_$_223 to i64
  %cnd_$_228 = icmp eq i64 %int_of_ptr_$_227, 0
  br i1 %cnd_$_228, label %thn_$_225, label %mrg_$_226
 thn_$_225:

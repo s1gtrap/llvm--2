@@ -33,7 +33,7 @@ define i64 @tigermain (i8* %$sl) {
  %var_ptr_$_3 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 1
  %load_$_4 = load i8*, i8** %var_ptr_$_3
  %record_ptr_$_5 = bitcast i8* %load_$_4 to %Loc$0*
- %int_of_ptr_$_8 = ptrtoint i8* %load_$_4 to i64
+ %int_of_ptr_$_8 = ptrtoint i8** %load_$_4 to i64
  %cnd_$_9 = icmp eq i64 %int_of_ptr_$_8, 0
  br i1 %cnd_$_9, label %thn_$_6, label %mrg_$_7
 thn_$_6:

@@ -280,7 +280,7 @@ define void @tigermain (i8* %$sl) {
  store i64 %res_$_171, i64* %init_ptr_$_172
  %init_ptr_$_173 = bitcast i64* %init_ptr_$_172 to i8*
  %init_size_ptr_$_174 = getelementptr i64, i64* null, i32 1
- %init_size_$_175 = ptrtoint i64* %init_size_ptr_$_174 to i64
+ %init_size_$_175 = ptrtoint i64** %init_size_ptr_$_174 to i64
  %array_ptr_$_176 = call i8* @initArray (i64 100, i64 %init_size_$_175, i8* %init_ptr_$_173)
  %temp_$_177 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_4, i32 0, i32 4
  store i8* %array_ptr_$_176, i8** %temp_$_177

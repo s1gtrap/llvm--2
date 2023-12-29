@@ -32,7 +32,7 @@ define i8* @tigermain (i8* %$sl) {
  %arg_$_1 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 0
  store i8* %$sl, i8** %arg_$_1
  %size_ptr_$_2 = getelementptr %rectype$0, %rectype$0* null, i32 1
- %size_$_3 = ptrtoint %rectype$0* %size_ptr_$_2 to i64
+ %size_$_3 = ptrtoint %rectype$0** %size_ptr_$_2 to i64
  %record_ptr_$_4 = call i8* @allocRecord (i64 %size_$_3)
  %rec_$_5 = bitcast i8* %record_ptr_$_4 to %rectype$0*
  %field_ptr_$_6 = getelementptr %rectype$0, %rectype$0* %rec_$_5, i32 0, i32 0
@@ -46,7 +46,7 @@ define i8* @tigermain (i8* %$sl) {
  %var_ptr_$_13 = getelementptr %$locals_tigermain, %$locals_tigermain* %locals_$_0, i32 0, i32 1
  %load_$_14 = load i8*, i8** %var_ptr_$_13
  %record_ptr_$_15 = bitcast i8* %load_$_14 to %rectype$0*
- %int_of_ptr_$_18 = ptrtoint i8* %load_$_14 to i64
+ %int_of_ptr_$_18 = ptrtoint i8** %load_$_14 to i64
  %cnd_$_19 = icmp eq i64 %int_of_ptr_$_18, 0
  br i1 %cnd_$_19, label %thn_$_16, label %mrg_$_17
 thn_$_16:
