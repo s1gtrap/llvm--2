@@ -289,6 +289,9 @@ let () =
   b "benches/sha256.ll" default_compilers
     [ [| "100" |]; [| "1000" |]; [| "10000" |] ];
 
+  b "benches/sha256-stdin.ll" default_compilers
+    [ [| "100" |]; [| "1000" |]; [| "10000" |] ];
+
   b "benches/fannkuch-redux.ll" default_compilers
     [
       [| "4" |];
@@ -299,6 +302,4 @@ let () =
       [| "9" |];
       [| "10" |];
       [| "11" |];
-      [| "12" |];
-      [| "13" |];
     ]
