@@ -1677,12 +1677,18 @@ define i32 @mz_compress2 (i8* %0, i8* %1, i8* %2, i64 %3, i32 %4) {
  store i8* %2, i8** %9
  store i64 %3, i64* %10
  store i32 %4, i32* %11
+ call void @printf (i8* @fmt, i32 3, i64 %3)
+ call void @printf (i8* @fmt, i32 4, i32 %4)
  call void @memset (i8* %13, i8 0, i64 112, i1 0)
  %14 = load i64, i64* %10
+ call void @printf (i8* @fmt, i32 14, i64 %14)
  %15 = load i8*, i8** %8
  %16 = load i64, i64* %15
+ call void @printf (i8* @fmt, i32 16, i64 %16)
  %17 = or i64 %14, %16
+ call void @printf (i8* @fmt, i32 17, i64 %17)
  %18 = icmp ugt i64 %17, 4294967295
+ call void @printf (i8* @fmt, i32 18, i1 %18)
  br i1 %18, label %19, label %20
 19:
  store i32 -10000, i32* %6
@@ -1692,7 +1698,9 @@ define i32 @mz_compress2 (i8* %0, i8* %1, i8* %2, i64 %3, i32 %4) {
  %22 = getelementptr %struct.mz_stream_s, i8* %13, i32 0, i32 0
  store i8* %21, i8** %22
  %23 = load i64, i64* %10
+ call void @printf (i8* @fmt, i32 23, i64 %23)
  %24 = trunc i64 %23 to i32
+ call void @printf (i8* @fmt, i32 24, i32 %24)
  %25 = getelementptr %struct.mz_stream_s, i8* %13, i32 0, i32 1
  store i32 %24, i32* %25
  %26 = load i8*, i8** %7
@@ -1700,49 +1708,64 @@ define i32 @mz_compress2 (i8* %0, i8* %1, i8* %2, i64 %3, i32 %4) {
  store i8* %26, i8** %27
  %28 = load i8*, i8** %8
  %29 = load i64, i64* %28
+ call void @printf (i8* @fmt, i32 29, i64 %29)
  %30 = trunc i64 %29 to i32
+ call void @printf (i8* @fmt, i32 30, i32 %30)
  %31 = getelementptr %struct.mz_stream_s, i8* %13, i32 0, i32 4
  store i32 %30, i32* %31
  %32 = load i32, i32* %11
+ call void @printf (i8* @fmt, i32 32, i32 %32)
  %33 = call i32 @mz_deflateInit (i8* %13, i32 %32)
  store i32 %33, i32* %12
  %34 = load i32, i32* %12
+ call void @printf (i8* @fmt, i32 34, i32 %34)
  %35 = icmp ne i32 %34, 0
+ call void @printf (i8* @fmt, i32 35, i1 %35)
  br i1 %35, label %36, label %38
 36:
  %37 = load i32, i32* %12
+ call void @printf (i8* @fmt, i32 37, i32 %37)
  store i32 %37, i32* %6
  br label %56
 38:
  %39 = call i32 @mz_deflate (i8* %13, i32 4)
  store i32 %39, i32* %12
  %40 = load i32, i32* %12
+ call void @printf (i8* @fmt, i32 40, i32 %40)
  %41 = icmp ne i32 %40, 1
+ call void @printf (i8* @fmt, i32 41, i1 %41)
  br i1 %41, label %42, label %51
 42:
  %43 = call i32 @mz_deflateEnd (i8* %13)
  %44 = load i32, i32* %12
+ call void @printf (i8* @fmt, i32 44, i32 %44)
  %45 = icmp eq i32 %44, 0
+ call void @printf (i8* @fmt, i32 45, i1 %45)
  br i1 %45, label %46, label %47
 46:
  br label %49
 47:
  %48 = load i32, i32* %12
+ call void @printf (i8* @fmt, i32 48, i32 %48)
  br label %49
 49:
  %50 = phi i32 [-5, %46], [%48, %47]
+ call void @printf (i8* @fmt, i32 50, i32 %50)
  store i32 %50, i32* %6
  br label %56
 51:
  %52 = getelementptr %struct.mz_stream_s, i8* %13, i32 0, i32 5
  %53 = load i64, i64* %52
+ call void @printf (i8* @fmt, i32 53, i64 %53)
  %54 = load i8*, i8** %8
  store i64 %53, i64* %54
  %55 = call i32 @mz_deflateEnd (i8* %13)
+ call void @printf (i8* @fmt, i32 55, i32 %55)
  store i32 %55, i32* %6
  br label %56
 56:
  %57 = load i32, i32* %6
+ call void @printf (i8* @fmt, i32 57, i32 %57)
  ret i32 %57
 }
 
@@ -1751,6 +1774,7 @@ define i32 @mz_compress (i8* %0, i8* %1, i8* %2, i64 %3) {
  %6 = alloca i8*
  %7 = alloca i8*
  %8 = alloca i64
+ call void @printf (i8* @fmt, i32 3, i64 %3)
  store i8* %0, i8** %5
  store i8* %1, i8** %6
  store i8* %2, i8** %7
@@ -1759,6 +1783,7 @@ define i32 @mz_compress (i8* %0, i8* %1, i8* %2, i64 %3) {
  %10 = load i8*, i8** %6
  %11 = load i8*, i8** %7
  %12 = load i64, i64* %8
+ call void @printf (i8* @fmt, i32 12, i64 %12)
  %13 = call i32 @mz_compress2 (i8* %9, i8* %10, i8* %11, i64 %12, i32 -1)
  ret i32 %13
 }
