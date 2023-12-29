@@ -610,6 +610,7 @@ let compile_call asn oper args =
   let callersaved = [ Rcx; Rdx; Rsi; Rdi; R08; R09; R10; R11 ] in
   let funptr, callins =
     match oper with
+    | Ll.Gid id when S.name id = "llvm.objectsize.i64.p0" -> ([], (Movq, [ Imm (Lit 0L) ; Reg Rcx ]))
     | Ll.Gid id -> ([], (Callq, [ Imm (Lbl (mangle id)) ]))
     | Id _ -> (compile_operand asn Ll.I64 (Reg Rcx) oper, (Callq, [ Reg Rcx ]))
     | _ -> failwith (Ll.string_of_operand oper)
