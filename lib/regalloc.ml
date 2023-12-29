@@ -597,7 +597,7 @@ let compile_operand asn ty dst src =
       | dst, Some i -> [ (Movq, [ i; dst ]) ]
       | _, None -> failwith (Printf.sprintf "%s" (S.name id)))
 
-let arg_loc : int -> operand = function
+let arg = function
   | 0 -> Reg Rdi
   | 1 -> Reg Rsi
   | 2 -> Reg Rdx
@@ -612,7 +612,7 @@ let compile_call asn oper args =
     |> S.ST.add (S.symbol "llvm.memcpy.p0.p0.i64") (S.symbol "memcpy")
   in
   let args = List.map snd args in
-  let crsaved = [ Rcx; Rdx; Rsi; Rdi; R08; R09; R10; R11 ] in
+  let callersaved = [ Rcx; Rdx; Rsi; Rdi; R08; R09; R10; R11 ] in
   let funptr, callins =
     match oper with
     | Ll.Gid id ->
@@ -625,36 +625,23 @@ let compile_call asn oper args =
         (* funptr is moved into %rax *)
     | _ -> failwith (Ll.string_of_operand oper)
   in
-  let pusharg _i dst : ins list =
-    let ins = compile_operand asn Ll.I64 (Reg Rax) dst in
-    ins @ [ (Pushq, [ Reg Rax ]) ]
+  let pusharg _i dst =
+    compile_operand asn Ll.I64 (Reg Rax) dst @ [ (Pushq, [ Reg Rax ]) ]
   in
-  let poparg i _ =
-    ( Popq,
-      [
-        (match i with
-        | 0 -> Reg Rdi
-        | 1 -> Reg Rsi
-        | 2 -> Reg Rdx
-        | 3 -> Reg Rcx
-        | 4 -> Reg R08
-        | 5 -> Reg R09
-        | i -> Ind3 (Lit (Int64.of_int ((3 * 8) + ((i - 6) * 8))), Rbp));
-      ] )
-  in
+  let poparg i _ = (Popq, [ arg i ]) in
   let freen =
     match List.length args with
     | len when len <= 6 -> 0L
     | len -> Int64.of_int ((len - 6) * 8)
   in
   let freeins = (Addq, [ Imm (Lit freen); Reg Rsp ]) in
-  List.map (fun r -> (Pushq, [ Reg r ])) crsaved
+  List.map (fun r -> (Pushq, [ Reg r ])) callersaved
   @ List.flatten (List.mapi pusharg args)
   @ funptr
   @ List.rev (List.mapi poparg args)
   @ [ (Xorq, [ Reg Rax; Reg Rax ]) ]
   @ [ callins; freeins ]
-  @ List.map (fun r -> (Popq, [ Reg r ])) (List.rev crsaved)
+  @ List.map (fun r -> (Popq, [ Reg r ])) (List.rev callersaved)
 
 let rec size_ty : (Ll.uid * Ll.ty) list -> Ll.ty -> int =
  fun tdecls -> function
@@ -1764,19 +1751,7 @@ let compile_fdecl (alc : allocator) debug tdecls name
   let insns : Cfg.insn list = Cfg.flatten cfg in
   let df = Lva.dataflow insns ids g in
   let asn = alloc alc param insns df in
-  let pusharg i _ =
-    ( Pushq,
-      [
-        (match i with
-        | 0 -> Reg Rdi
-        | 1 -> Reg Rsi
-        | 2 -> Reg Rdx
-        | 3 -> Reg Rcx
-        | 4 -> Reg R08
-        | 5 -> Reg R09
-        | i -> Ind3 (Lit (Int64.of_int ((3 * 8) + ((i - 6) * 8))), Rbp));
-      ] )
-  in
+  let pusharg i _ = (Pushq, [ arg i ]) in
   let poparg _i dst =
     match S.ST.find_opt dst asn with
     | Some dst -> (Popq, [ dst ])
