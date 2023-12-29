@@ -35751,6 +35751,8 @@ define i32 @mz_zip_end (i8* %0) {
  ret i32 %31
 }
 
+@fmt = global [15 x i8] c"%%%u = %08llx\0A\00"
+
 define i32 @main (i32 %0, i8* %1) {
  %3 = alloca i32
  %4 = alloca i32
@@ -35771,22 +35773,27 @@ define i32 @main (i32 %0, i8* %1) {
  store i32 0, i32* %6
  %16 = load i8*, i8** @s_pStr
  %17 = call i64 @strlen (i8* %16)
+ call void @printf (i8* @fmt, i32 17, i64 %17)
  store i64 %17, i64* %8
  %18 = load i64, i64* %8
  %19 = call i64 @mz_compressBound (i64 %18)
+ call void @printf (i8* @fmt, i32 19, i64 %19)
  store i64 %19, i64* %9
  %20 = load i64, i64* %8
  store i64 %20, i64* %10
  store i32 0, i32* %13
  %21 = load i32, i32* %4
+ call void @printf (i8* @fmt, i32 21, i32 %21)
  %22 = load i8*, i8** %5
  %23 = call i32 (i8*, ...) @printf (i8* @.str.59, i8* @.str)
  br label %24
 24:
  %25 = load i64, i64* %9
+ call void @printf (i8* @fmt, i32 25, i64 %25)
  %26 = call i8* @malloc (i64 %25)
  store i8* %26, i8** %11
  %27 = load i64, i64* %8
+ call void @printf (i8* @fmt, i32 27, i64 %27)
  %28 = call i8* @malloc (i64 %27)
  store i8* %28, i8** %12
  %29 = load i8*, i8** %11
@@ -35804,9 +35811,11 @@ define i32 @main (i32 %0, i8* %1) {
  %37 = load i8*, i8** %11
  %38 = load i8*, i8** @s_pStr
  %39 = load i64, i64* %8
+ call void @printf (i8* @fmt, i32 39, i64 %39)
  %40 = call i32 @mz_compress (i8* %37, i8* %9, i8* %38, i64 %39)
  store i32 %40, i32* %7
  %41 = load i32, i32* %7
+ call void @printf (i8* @fmt, i32 41, i32 %41)
  %42 = icmp ne i32 %41, 0
  br i1 %42, label %43, label %47
 43:
@@ -35819,11 +35828,14 @@ define i32 @main (i32 %0, i8* %1) {
  br label %133
 47:
  %48 = load i64, i64* %8
+ call void @printf (i8* @fmt, i32 48, i64 %48)
  %49 = trunc i64 %48 to i32
  %50 = load i64, i64* %9
+ call void @printf (i8* @fmt, i32 50, i64 %50)
  %51 = trunc i64 %50 to i32
  %52 = call i32 (i8*, ...) @printf (i8* @.str.62, i32 %49, i32 %51)
  %53 = load i32, i32* %6
+ call void @printf (i8* @fmt, i32 53, i32 %53)
  %54 = icmp ne i32 %53, 0
  br i1 %54, label %55, label %80
 55:
@@ -35834,6 +35846,7 @@ define i32 @main (i32 %0, i8* %1) {
  br label %59
 59:
  %60 = load i32, i32* %14
+ call void @printf (i8* @fmt, i32 60, i32 %60)
  %61 = add i32 %60, -1
  store i32 %61, i32* %14
  %62 = icmp ne i32 %60, 0
@@ -35842,6 +35855,7 @@ define i32 @main (i32 %0, i8* %1) {
  %64 = call i32 @rand ()
  %65 = sext i32 %64 to i64
  %66 = load i64, i64* %9
+ call void @printf (i8* @fmt, i64 66, i64 %66)
  %67 = urem i64 %65, %66
  %68 = trunc i64 %67 to i32
  store i32 %68, i32* %15
@@ -35849,9 +35863,11 @@ define i32 @main (i32 %0, i8* %1) {
  %70 = and i32 %69, 255
  %71 = load i8*, i8** %11
  %72 = load i32, i32* %15
+ call void @printf (i8* @fmt, i64 72, i32 %72)
  %73 = zext i32 %72 to i64
  %74 = getelementptr i8, i8* %71, i64 %73
  %75 = load i8, i8* %74
+ call void @printf (i8* @fmt, i64 75, i8 %75)
  %76 = zext i8 %75 to i32
  %77 = xor i32 %76, %70
  %78 = trunc i32 %77 to i8
@@ -35863,24 +35879,32 @@ define i32 @main (i32 %0, i8* %1) {
  %81 = load i8*, i8** %12
  %82 = load i8*, i8** %11
  %83 = load i64, i64* %9
+ call void @printf (i8* @fmt, i64 83, i64 %83)
  %84 = call i32 @mz_uncompress (i8* %81, i8* %10, i8* %82, i64 %83)
  store i32 %84, i32* %7
  %85 = load i32, i32* %7
+ call void @printf (i8* @fmt, i64 85, i32 %85)
  %86 = icmp eq i32 %85, 0
  %87 = zext i1 %86 to i32
  %88 = load i32, i32* %13
+ call void @printf (i8* @fmt, i64 88, i32 %88)
  %89 = add i32 %88, %87
  store i32 %89, i32* %13
  %90 = load i32, i32* %6
+ call void @printf (i8* @fmt, i64 90, i32 %90)
  %91 = icmp ne i32 %90, 0
  br i1 %91, label %92, label %96
 92:
  %93 = load i32, i32* %6
+ call void @printf (i8* @fmt, i64 93, i32 %93)
  %94 = load i32, i32* %13
+ call void @printf (i8* @fmt, i64 94, i32 %94)
  %95 = call i32 (i8*, ...) @printf (i8* @.str.63, i32 %93, i32 %94)
+ call void @printf (i8* @fmt, i64 95, i32 %95)
  br label %123
 96:
  %97 = load i32, i32* %7
+ call void @printf (i8* @fmt, i64 97, i32 %97)
  %98 = icmp ne i32 %97, 0
  br i1 %98, label %99, label %103
 99:
@@ -35893,18 +35917,23 @@ define i32 @main (i32 %0, i8* %1) {
  br label %133
 103:
  %104 = load i64, i64* %9
+ call void @printf (i8* @fmt, i64 104, i64 %104)
  %105 = trunc i64 %104 to i32
  %106 = load i64, i64* %10
+ call void @printf (i8* @fmt, i64 106, i64 %106)
  %107 = trunc i64 %106 to i32
  %108 = call i32 (i8*, ...) @printf (i8* @.str.65, i32 %105, i32 %107)
  %109 = load i64, i64* %10
+ call void @printf (i8* @fmt, i64 109, i64 %109)
  %110 = load i64, i64* %8
+ call void @printf (i8* @fmt, i64 110, i64 %110)
  %111 = icmp ne i64 %109, %110
  br i1 %111, label %118, label %112
 112:
  %113 = load i8*, i8** %12
  %114 = load i8*, i8** @s_pStr
  %115 = load i64, i64* %8
+ call void @printf (i8* @fmt, i64 115, i64 %115)
  %116 = call i32 @memcmp (i8* %113, i8* %114, i64 %115)
  %117 = icmp ne i32 %116, 0
  br i1 %117, label %118, label %122
@@ -35924,11 +35953,13 @@ define i32 @main (i32 %0, i8* %1) {
  %125 = load i8*, i8** %12
  call void @free (i8* %125)
  %126 = load i32, i32* %6
+ call void @printf (i8* @fmt, i64 126, i32 %126)
  %127 = add i32 %126, 1
  store i32 %127, i32* %6
  br label %128
 128:
  %129 = load i32, i32* %4
+ call void @printf (i8* @fmt, i64 129, i32 %129)
  %130 = icmp sge i32 %129, 2
  br i1 %130, label %24, label %131
 131:
@@ -35937,6 +35968,7 @@ define i32 @main (i32 %0, i8* %1) {
  br label %133
 133:
  %134 = load i32, i32* %3
+ call void @printf (i8* @fmt, i64 134, i32 %134)
  ret i32 %134
 }
 
