@@ -1,7 +1,7 @@
 @.str = global [3 x i8] c"2 \00"
 @.str.1 = global [6 x i8] c"%llu \00"
 
-declare i32 @printf(i8*, ...)
+declare i32 @printf(i8*)
 declare i64 @strtoull(i8*, i8*, i32)
 
 define i32 @fac (i64 %0) {
@@ -17,7 +17,7 @@ define i32 @fac (i64 %0) {
  %8 = icmp eq i64 %7, 0
  br i1 %8, label %9, label %16
 9:
- %10 = call i32 (i8*, ...) @printf (i8* @.str)
+ %10 = call i32( i8* ) @printf (i8* @.str)
  br label %11
 11:
  %12 = load i64, i64* %2
@@ -47,7 +47,7 @@ define i32 @fac (i64 %0) {
  br i1 %28, label %29, label %38
 29:
  %30 = load i64, i64* %4
- %31 = call i32 (i8*, ...) @printf (i8* @.str.1, i64 %30)
+ %31 = call i32( i8* ) @printf (i8* @.str.1, i64 %30)
  br label %32
 32:
  %33 = load i64, i64* %4
@@ -71,7 +71,7 @@ define i32 @fac (i64 %0) {
  br i1 %44, label %45, label %50
 45:
  %46 = load i64, i64* %2
- %47 = call i32 (i8*, ...) @printf (i8* @.str.1, i64 %46)
+ %47 = call i32( i8* ) @printf (i8* @.str.1, i64 %46)
  %48 = load i32, i32* %3
  %49 = add i32 %48, 1
  store i32 %49, i32* %3
