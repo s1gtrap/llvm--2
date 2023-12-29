@@ -22,16 +22,6 @@ let idchar = letter | digit | ['.' '_' '-' '$']
 rule token = parse
   | eof                { EOF }
   | ['\t' ' ']+
-  | "nsw"
-  | "noundef"
-  | "inbounds"
-  | "signext"
-  | "zeroext"
-  | "internal"
-  | ',' ['\t' ' ']+ "..."
-  | '#' digit+         { token lexbuf } (* ignored *)
-  | ','? ['\t' ' ']+ "align" ['\t' ' ']+ digit+ { token lexbuf }
-  | "dereferenceable(" digit+ ')' { token lexbuf }
   | '\n'               { Lexing.new_line lexbuf; token lexbuf }
   | '*'                { STAR }
   | ','                { COMMA }
@@ -95,10 +85,6 @@ rule token = parse
   | "switch"           { SWITCH }
   | "label"            { LABEL }
   | "external global"  { EXTGLOBAL }
-  | "private unnamed_addr constant"
-  | "internal global"
-  | "internal constant"
-  | "constant"
   | "global"           { GLOBAL }
   | "define"           { DEFINE }
   | "alloca"           { ALLOCA }
