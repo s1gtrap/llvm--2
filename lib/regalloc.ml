@@ -938,7 +938,7 @@ let compile_insn tdecls debug asn insn =
           operins @ [ loadins; storins ]
       | None -> [])
   | None, Store (Ll.I8, src, dst) ->
-      let sins = compile_operand asn Ll.I64 (Reg Rax) src in
+      let sins = compile_typed_operand asn Ll.I8 (Reg Rax) src in
       let dins = compile_operand asn Ll.I64 (Reg Rcx) dst in
       let storins =
         match dst with
@@ -947,7 +947,7 @@ let compile_insn tdecls debug asn insn =
       in
       sins @ dins @ storins
   | None, Store (Ll.I32, src, dst) ->
-      let sins = compile_operand asn Ll.I64 (Reg Rax) src in
+      let sins = compile_typed_operand asn Ll.I32 (Reg Rax) src in
       let dins = compile_operand asn Ll.I64 (Reg Rcx) dst in
       let storins =
         match dst with
@@ -955,8 +955,8 @@ let compile_insn tdecls debug asn insn =
         | _ -> raise BackendFatal
       in
       sins @ dins @ storins
-  | None, Store (_, src, dst) ->
-      let sins = compile_operand asn Ll.I64 (Reg Rax) src in
+  | None, Store (ty, src, dst) ->
+      let sins = compile_typed_operand asn ty (Reg Rax) src in
       let dins = compile_operand asn Ll.I64 (Reg Rcx) dst in
       let storins =
         match dst with
