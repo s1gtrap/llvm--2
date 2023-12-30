@@ -511,60 +511,76 @@ let idx_of_reg = function
 let ty_cast : Ll.ty -> operand -> operand =
  fun ty op ->
   match (ty, op) with
-  | Ll.I8, Reg (Rax | Eax | Al) -> Reg Al
-  | Ll.I8, Reg (Rcx | Ecx | Cl) -> Reg Cl
-  | Ll.I8, Reg (Rdx | Edx | Dl) -> Reg Dl
-  | Ll.I8, Reg (Rbx | Ebx | Bl) -> Reg Bl
-  | Ll.I8, Reg (Rsi | Esi | Sil) -> Reg Sil
-  | Ll.I8, Reg (Rdi | Edi | Dil) -> Reg Dil
-  | Ll.I8, Reg (R08 | R08d | R08b) -> Reg R08b
-  | Ll.I8, Reg (R09 | R09d | R09b) -> Reg R09b
-  | Ll.I8, Reg (R10 | R10d | R10b) -> Reg R10b
-  | Ll.I8, Reg (R11 | R11d | R11b) -> Reg R11b
-  | Ll.I8, Reg (R12 | R12d | R12b) -> Reg R12b
-  | Ll.I8, Reg (R13 | R13d | R13b) -> Reg R13b
-  | Ll.I8, Reg (R14 | R14d | R14b) -> Reg R14b
-  | Ll.I8, Reg (R15 | R15d | R15b) -> Reg R15b
-  | Ll.I32, Reg (Rax | Eax | Al) -> Reg Eax
-  | Ll.I32, Reg (Rcx | Ecx | Cl) -> Reg Ecx
-  | Ll.I32, Reg (Rdx | Edx | Dl) -> Reg Edx
-  | Ll.I32, Reg (Rbx | Ebx | Bl) -> Reg Ebx
-  | Ll.I32, Reg (Rsi | Esi | Sil) -> Reg Esi
-  | Ll.I32, Reg (Rdi | Edi | Dil) -> Reg Edi
-  | Ll.I32, Reg (R08 | R08d | R08b) -> Reg R08d
-  | Ll.I32, Reg (R09 | R09d | R09b) -> Reg R09d
-  | Ll.I32, Reg (R10 | R10d | R10b) -> Reg R10d
-  | Ll.I32, Reg (R11 | R11d | R11b) -> Reg R11d
-  | Ll.I32, Reg (R12 | R12d | R12b) -> Reg R12d
-  | Ll.I32, Reg (R13 | R13d | R13b) -> Reg R13d
-  | Ll.I32, Reg (R14 | R14d | R14b) -> Reg R14d
-  | Ll.I32, Reg (R15 | R15d | R15b) -> Reg R15d
-  | Ll.I64, Reg (Rax | Eax | Al) -> Reg Rax
-  | Ll.I64, Reg (Rcx | Ecx | Cl) -> Reg Rcx
-  | Ll.I64, Reg (Rdx | Edx | Dl) -> Reg Rdx
-  | Ll.I64, Reg (Rbx | Ebx | Bl) -> Reg Rbx
-  | Ll.I64, Reg (Rsi | Esi | Sil) -> Reg Rsi
-  | Ll.I64, Reg (Rdi | Edi | Dil) -> Reg Rdi
-  | Ll.I64, Reg (R08 | R08d | R08b) -> Reg R08
-  | Ll.I64, Reg (R09 | R09d | R09b) -> Reg R09
-  | Ll.I64, Reg (R10 | R10d | R10b) -> Reg R10
-  | Ll.I64, Reg (R11 | R11d | R11b) -> Reg R11
-  | Ll.I64, Reg (R12 | R12d | R12b) -> Reg R12
-  | Ll.I64, Reg (R13 | R13d | R13b) -> Reg R13
-  | Ll.I64, Reg (R14 | R14d | R14b) -> Reg R14
-  | Ll.I64, Reg (R15 | R15d | R15b) -> Reg R15
+  | Ll.I8, Reg (Rax | Eax | Ax | Al) -> Reg Al
+  | Ll.I8, Reg (Rcx | Ecx | Cx | Cl) -> Reg Cl
+  | Ll.I8, Reg (Rdx | Edx | Dx | Dl) -> Reg Dl
+  | Ll.I8, Reg (Rbx | Ebx | Bx | Bl) -> Reg Bl
+  | Ll.I8, Reg (Rsi | Esi | Si | Sil) -> Reg Sil
+  | Ll.I8, Reg (Rdi | Edi | Di | Dil) -> Reg Dil
+  | Ll.I8, Reg (R08 | R08d | R08w | R08b) -> Reg R08b
+  | Ll.I8, Reg (R09 | R09d | R09w | R09b) -> Reg R09b
+  | Ll.I8, Reg (R10 | R10d | R10w | R10b) -> Reg R10b
+  | Ll.I8, Reg (R11 | R11d | R11w | R11b) -> Reg R11b
+  | Ll.I8, Reg (R12 | R12d | R12w | R12b) -> Reg R12b
+  | Ll.I8, Reg (R13 | R13d | R13w | R13b) -> Reg R13b
+  | Ll.I8, Reg (R14 | R14d | R14w | R14b) -> Reg R14b
+  | Ll.I8, Reg (R15 | R15d | R15w | R15b) -> Reg R15b
+  | Ll.I16, Reg (Rax | Eax | Ax | Al) -> Reg Ax
+  | Ll.I16, Reg (Rcx | Ecx | Cx | Cl) -> Reg Cx
+  | Ll.I16, Reg (Rdx | Edx | Dx | Dl) -> Reg Dx
+  | Ll.I16, Reg (Rbx | Ebx | Bx | Bl) -> Reg Bx
+  | Ll.I16, Reg (Rsi | Esi | Si | Sil) -> Reg Si
+  | Ll.I16, Reg (Rdi | Edi | Di | Dil) -> Reg Di
+  | Ll.I16, Reg (R08 | R08d | R08w | R08b) -> Reg R08w
+  | Ll.I16, Reg (R09 | R09d | R09w | R09b) -> Reg R09w
+  | Ll.I16, Reg (R10 | R10d | R10w | R10b) -> Reg R10w
+  | Ll.I16, Reg (R11 | R11d | R11w | R11b) -> Reg R11w
+  | Ll.I16, Reg (R12 | R12d | R12w | R12b) -> Reg R12w
+  | Ll.I16, Reg (R13 | R13d | R13w | R13b) -> Reg R13w
+  | Ll.I16, Reg (R14 | R14d | R14w | R14b) -> Reg R14w
+  | Ll.I16, Reg (R15 | R15d | R15w | R15b) -> Reg R15w
+  | Ll.I32, Reg (Rax | Eax | Ax | Al) -> Reg Eax
+  | Ll.I32, Reg (Rcx | Ecx | Cx | Cl) -> Reg Ecx
+  | Ll.I32, Reg (Rdx | Edx | Dx | Dl) -> Reg Edx
+  | Ll.I32, Reg (Rbx | Ebx | Bx | Bl) -> Reg Ebx
+  | Ll.I32, Reg (Rsi | Esi | Si | Sil) -> Reg Esi
+  | Ll.I32, Reg (Rdi | Edi | Di | Dil) -> Reg Edi
+  | Ll.I32, Reg (R08 | R08d | R08w | R08b) -> Reg R08d
+  | Ll.I32, Reg (R09 | R09d | R09w | R09b) -> Reg R09d
+  | Ll.I32, Reg (R10 | R10d | R10w | R10b) -> Reg R10d
+  | Ll.I32, Reg (R11 | R11d | R11w | R11b) -> Reg R11d
+  | Ll.I32, Reg (R12 | R12d | R12w | R12b) -> Reg R12d
+  | Ll.I32, Reg (R13 | R13d | R13w | R13b) -> Reg R13d
+  | Ll.I32, Reg (R14 | R14d | R14w | R14b) -> Reg R14d
+  | Ll.I32, Reg (R15 | R15d | R15w | R15b) -> Reg R15d
+  | Ll.I64, Reg (Rax | Eax | Ax | Al) -> Reg Rax
+  | Ll.I64, Reg (Rcx | Ecx | Cx | Cl) -> Reg Rcx
+  | Ll.I64, Reg (Rdx | Edx | Dx | Dl) -> Reg Rdx
+  | Ll.I64, Reg (Rbx | Ebx | Bx | Bl) -> Reg Rbx
+  | Ll.I64, Reg (Rsi | Esi | Si | Sil) -> Reg Rsi
+  | Ll.I64, Reg (Rdi | Edi | Di | Dil) -> Reg Rdi
+  | Ll.I64, Reg (R08 | R08d | R08w | R08b) -> Reg R08
+  | Ll.I64, Reg (R09 | R09d | R09w | R09b) -> Reg R09
+  | Ll.I64, Reg (R10 | R10d | R10w | R10b) -> Reg R10
+  | Ll.I64, Reg (R11 | R11d | R11w | R11b) -> Reg R11
+  | Ll.I64, Reg (R12 | R12d | R12w | R12b) -> Reg R12
+  | Ll.I64, Reg (R13 | R13d | R13w | R13b) -> Reg R13
+  | Ll.I64, Reg (R14 | R14d | R14w | R14b) -> Reg R14
+  | Ll.I64, Reg (R15 | R15d | R15w | R15b) -> Reg R15
   | _, op -> op
 
 let compile_typed_operand asn ty dst src =
   let mov =
     match ty with
     | Ll.I1 | I8 -> Movb
-    | I16 -> failwith "TODO"
+    | I16 -> Movw
     | I32 -> Movl
     | I64 | Ptr _ -> Movq
     | _ -> failwith "unhandled"
   in
-  match src with
+  (Movq, [ Imm (Lit 0L); ty_cast Ll.I64 dst ])
+  ::
+  (match src with
   | Ll.Null -> [ (mov, [ Imm (Lit 0L); ty_cast ty dst ]) ]
   | IConst64 i -> [ (mov, [ Imm (Lit i); ty_cast ty dst ]) ]
   | IConst32 i -> [ (mov, [ Imm (Lit (Int64.of_int32 i)); ty_cast ty dst ]) ]
@@ -578,13 +594,13 @@ let compile_typed_operand asn ty dst src =
           [ (mov, [ Ind3 src; Reg Rcx ]); (mov, [ Reg Rcx; Ind3 dst ]) ]
       | dst, Some i when dst = i -> [] (* NOTE: don't comppile noop movs *)
       | dst, Some i -> [ (mov, [ i; dst ]) ]
-      | _, None -> failwith (Printf.sprintf "%s" (S.name id)))
+      | _, None -> failwith (Printf.sprintf "%s" (S.name id))))
 
 let compile_operand asn ty dst src =
   match src with
   | Ll.Null -> [ (Movq, [ Imm (Lit 0L); ty_cast ty dst ]) ]
   | IConst64 i -> [ (Movq, [ Imm (Lit i); ty_cast ty dst ]) ]
-  | IConst32 i -> [ (Movq, [ Imm (Lit (Int64.of_int32 i)); ty_cast ty dst ]) ]
+  | IConst32 i -> [ (Movl, [ Imm (Lit (Int64.of_int32 i)); ty_cast ty dst ]) ]
   | IConst8 i ->
       [ (Movq, [ Imm (Lit (Int64.of_int (Char.code i))); ty_cast ty dst ]) ]
   | BConst i -> [ (Movq, [ Imm (Lit (if i then 1L else 0L)); ty_cast ty dst ]) ]
@@ -610,22 +626,25 @@ let compile_call asn oper args =
   let callersaved = [ Rcx; Rdx; Rsi; Rdi; R08; R09; R10; R11 ] in
   let funptr, callins =
     match oper with
-    | Ll.Gid id when S.name id = "llvm.objectsize.i64.p0" -> ([], (Movq, [ Imm (Lit 0L) ; Reg Rcx ]))
+    | Ll.Gid id when S.name id = "llvm.objectsize.i64.p0" ->
+        ([], (Movq, [ Imm (Lit 0L); Reg Rcx ]))
     | Ll.Gid id -> ([], (Callq, [ Imm (Lbl (mangle id)) ]))
     | Id _ -> (compile_operand asn Ll.I64 (Reg Rcx) oper, (Callq, [ Reg Rcx ]))
     | _ -> failwith (Ll.string_of_operand oper)
   in
-  let pusharg dst =
-    compile_operand asn Ll.I64 (Reg Rax) dst @ [ (Pushq, [ Reg Rax ]) ]
+  let pusharg (ty, dst) =
+    compile_typed_operand asn ty (Reg Rax) dst @ [ (Pushq, [ Reg Rax ]) ]
   in
   let poparg i _ = (Popq, [ arg i ]) in
+  let tyargs = args in
   let args = List.map snd args in
   let argslen = List.length args in
   let freen = if argslen <= 6 then 0L else Int64.of_int ((argslen - 6) * 8) in
   let freeins = (Addq, [ Imm (Lit freen); Reg Rsp ]) in
   List.map (fun r -> (Pushq, [ Reg r ])) callersaved
-  @ List.flatten (List.map pusharg args)
+  @ List.flatten (List.map pusharg tyargs)
   @ funptr
+  (* FIXME: should probably also be typed *)
   @ List.rev (List.mapi poparg args)
   @ [ (Xorq, [ Reg Rax; Reg Rax ]) ]
   @ [ callins; freeins ]
