@@ -153,11 +153,10 @@ let () =
     ]
   in
   let print i (f, a, c, min, avg, max, minr, avgr) =
-    if !table then 
-    if i = 0 then 
-      Printf.printf "& %s %s" (cellcolor minr) (Int64.to_string min)
-      else
-      Printf.printf "& %s %.5fx" (cellcolor minr) minr
+    if !table then
+      if i = 0 then
+        Printf.printf "& %s %s" (cellcolor minr) (Int64.to_string min)
+      else Printf.printf "& %s %.5fx" (cellcolor minr) minr
     else (
       Printf.printf "bench %s\t%s " (string_of_compiler c) f;
       Array.iter (fun a -> Printf.printf "%s " a) a;
