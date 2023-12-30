@@ -6,7 +6,9 @@ miniz.c version: 11.0.2
 %27 = 000001ea
 %39 = 000001ea
 %3 = 000001ea
-%4 = ffffffffffffffff
+%12 = 000001ea
+%3 = 000001ea
+%4 = ffffffff
 %14 = 00000000
 %16 = 0000029b
 %17 = 0000029b
