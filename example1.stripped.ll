@@ -1679,7 +1679,7 @@ define i32 @mz_compress2 (i8* %0, i8* %1, i8* %2, i64 %3, i32 %4) {
  store i32 %4, i32* %11
  call void @printf (i8* @fmt, i32 3, i64 %3)
  call void @printf (i8* @fmt, i32 4, i32 %4)
- ;call void @memset (i8* %13, i8 0, i64 112, i1 0)
+ call void @memset (i8* %13, i8 0, i64 112, i1 0)
  %14 = load i64, i64* %10
  call void @printf (i8* @fmt, i32 14, i64 %14)
  %15 = load i8*, i8** %8
