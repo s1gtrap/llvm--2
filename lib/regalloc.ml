@@ -511,20 +511,20 @@ let idx_of_reg = function
 let ty_cast : Ll.ty -> operand -> operand =
  fun ty op ->
   match (ty, op) with
-  | Ll.I8, Reg (Rax | Eax | Ax | Al) -> Reg Al
-  | Ll.I8, Reg (Rcx | Ecx | Cx | Cl) -> Reg Cl
-  | Ll.I8, Reg (Rdx | Edx | Dx | Dl) -> Reg Dl
-  | Ll.I8, Reg (Rbx | Ebx | Bx | Bl) -> Reg Bl
-  | Ll.I8, Reg (Rsi | Esi | Si | Sil) -> Reg Sil
-  | Ll.I8, Reg (Rdi | Edi | Di | Dil) -> Reg Dil
-  | Ll.I8, Reg (R08 | R08d | R08w | R08b) -> Reg R08b
-  | Ll.I8, Reg (R09 | R09d | R09w | R09b) -> Reg R09b
-  | Ll.I8, Reg (R10 | R10d | R10w | R10b) -> Reg R10b
-  | Ll.I8, Reg (R11 | R11d | R11w | R11b) -> Reg R11b
-  | Ll.I8, Reg (R12 | R12d | R12w | R12b) -> Reg R12b
-  | Ll.I8, Reg (R13 | R13d | R13w | R13b) -> Reg R13b
-  | Ll.I8, Reg (R14 | R14d | R14w | R14b) -> Reg R14b
-  | Ll.I8, Reg (R15 | R15d | R15w | R15b) -> Reg R15b
+  | (Ll.I1 | I8), Reg (Rax | Eax | Ax | Al) -> Reg Al
+  | (Ll.I1 | I8), Reg (Rcx | Ecx | Cx | Cl) -> Reg Cl
+  | (Ll.I1 | I8), Reg (Rdx | Edx | Dx | Dl) -> Reg Dl
+  | (Ll.I1 | I8), Reg (Rbx | Ebx | Bx | Bl) -> Reg Bl
+  | (Ll.I1 | I8), Reg (Rsi | Esi | Si | Sil) -> Reg Sil
+  | (Ll.I1 | I8), Reg (Rdi | Edi | Di | Dil) -> Reg Dil
+  | (Ll.I1 | I8), Reg (R08 | R08d | R08w | R08b) -> Reg R08b
+  | (Ll.I1 | I8), Reg (R09 | R09d | R09w | R09b) -> Reg R09b
+  | (Ll.I1 | I8), Reg (R10 | R10d | R10w | R10b) -> Reg R10b
+  | (Ll.I1 | I8), Reg (R11 | R11d | R11w | R11b) -> Reg R11b
+  | (Ll.I1 | I8), Reg (R12 | R12d | R12w | R12b) -> Reg R12b
+  | (Ll.I1 | I8), Reg (R13 | R13d | R13w | R13b) -> Reg R13b
+  | (Ll.I1 | I8), Reg (R14 | R14d | R14w | R14b) -> Reg R14b
+  | (Ll.I1 | I8), Reg (R15 | R15d | R15w | R15b) -> Reg R15b
   | Ll.I16, Reg (Rax | Eax | Ax | Al) -> Reg Ax
   | Ll.I16, Reg (Rcx | Ecx | Cx | Cl) -> Reg Cx
   | Ll.I16, Reg (Rdx | Edx | Dx | Dl) -> Reg Dx
@@ -553,21 +553,22 @@ let ty_cast : Ll.ty -> operand -> operand =
   | Ll.I32, Reg (R13 | R13d | R13w | R13b) -> Reg R13d
   | Ll.I32, Reg (R14 | R14d | R14w | R14b) -> Reg R14d
   | Ll.I32, Reg (R15 | R15d | R15w | R15b) -> Reg R15d
-  | Ll.I64, Reg (Rax | Eax | Ax | Al) -> Reg Rax
-  | Ll.I64, Reg (Rcx | Ecx | Cx | Cl) -> Reg Rcx
-  | Ll.I64, Reg (Rdx | Edx | Dx | Dl) -> Reg Rdx
-  | Ll.I64, Reg (Rbx | Ebx | Bx | Bl) -> Reg Rbx
-  | Ll.I64, Reg (Rsi | Esi | Si | Sil) -> Reg Rsi
-  | Ll.I64, Reg (Rdi | Edi | Di | Dil) -> Reg Rdi
-  | Ll.I64, Reg (R08 | R08d | R08w | R08b) -> Reg R08
-  | Ll.I64, Reg (R09 | R09d | R09w | R09b) -> Reg R09
-  | Ll.I64, Reg (R10 | R10d | R10w | R10b) -> Reg R10
-  | Ll.I64, Reg (R11 | R11d | R11w | R11b) -> Reg R11
-  | Ll.I64, Reg (R12 | R12d | R12w | R12b) -> Reg R12
-  | Ll.I64, Reg (R13 | R13d | R13w | R13b) -> Reg R13
-  | Ll.I64, Reg (R14 | R14d | R14w | R14b) -> Reg R14
-  | Ll.I64, Reg (R15 | R15d | R15w | R15b) -> Reg R15
-  | _, op -> op
+  | (Ll.I64 | Ptr _), Reg (Rax | Eax | Ax | Al) -> Reg Rax
+  | (Ll.I64 | Ptr _), Reg (Rcx | Ecx | Cx | Cl) -> Reg Rcx
+  | (Ll.I64 | Ptr _), Reg (Rdx | Edx | Dx | Dl) -> Reg Rdx
+  | (Ll.I64 | Ptr _), Reg (Rbx | Ebx | Bx | Bl) -> Reg Rbx
+  | (Ll.I64 | Ptr _), Reg (Rsi | Esi | Si | Sil) -> Reg Rsi
+  | (Ll.I64 | Ptr _), Reg (Rdi | Edi | Di | Dil) -> Reg Rdi
+  | (Ll.I64 | Ptr _), Reg (R08 | R08d | R08w | R08b) -> Reg R08
+  | (Ll.I64 | Ptr _), Reg (R09 | R09d | R09w | R09b) -> Reg R09
+  | (Ll.I64 | Ptr _), Reg (R10 | R10d | R10w | R10b) -> Reg R10
+  | (Ll.I64 | Ptr _), Reg (R11 | R11d | R11w | R11b) -> Reg R11
+  | (Ll.I64 | Ptr _), Reg (R12 | R12d | R12w | R12b) -> Reg R12
+  | (Ll.I64 | Ptr _), Reg (R13 | R13d | R13w | R13b) -> Reg R13
+  | (Ll.I64 | Ptr _), Reg (R14 | R14d | R14w | R14b) -> Reg R14
+  | (Ll.I64 | Ptr _), Reg (R15 | R15d | R15w | R15b) -> Reg R15
+  | _, (Ind1 _ | Ind2 _ | Ind3 _) -> op
+  | ty, op -> failwith (Ll.string_of_ty ty ^ " " ^ string_of_operand op)
 
 let compile_typed_operand asn ty dst src =
   let mov =
@@ -591,9 +592,9 @@ let compile_typed_operand asn ty dst src =
   | Id id -> (
       match (dst, S.ST.find_opt id asn) with
       | Ind3 dst, Some (Ind3 src) ->
-          [ (mov, [ Ind3 src; Reg Rcx ]); (mov, [ Reg Rcx; Ind3 dst ]) ]
+          [ (mov, [ Ind3 src; ty_cast ty (Reg Rcx) ]); (mov, [ ty_cast ty (Reg Rcx); Ind3 dst ]) ]
       | dst, Some i when dst = i -> [] (* NOTE: don't comppile noop movs *)
-      | dst, Some i -> [ (mov, [ i; dst ]) ]
+      | dst, Some i -> [ (mov, [ ty_cast ty i; ty_cast ty dst ]) ]
       | _, None -> failwith (Printf.sprintf "%s" (S.name id))))
 
 let compile_operand asn ty dst src =
