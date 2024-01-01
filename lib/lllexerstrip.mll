@@ -23,6 +23,7 @@ rule token = parse
   | eof                { EOF }
   | ['\t' ' ']+
   | "nsw"
+  | "nuw"
   | "noundef"
   | "inbounds"
   | "signext"
@@ -36,6 +37,7 @@ rule token = parse
   | "internal"
   | "local_unnamed_addr"
   | "dso_local"
+  | "tail"
   | '#' digit+         { token lexbuf } (* ignored *)
   | ','? ['\t' ' ']+ "align" ['\t' ' ']+ digit+ { token lexbuf }
   | "dereferenceable(" digit+ ')' { token lexbuf }

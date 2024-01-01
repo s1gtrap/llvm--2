@@ -661,7 +661,7 @@ let rec size_ty : (Ll.uid * Ll.ty) list -> Ll.ty -> int =
   | Namedt ty ->
       let ty = List.assoc ty tdecls in
       size_ty tdecls ty
-  | Struct tys -> List.fold_left (fun sum ty -> sum + size_ty tdecls ty) 0 tys
+  | Struct tys -> (((List.fold_left (fun sum ty -> sum + size_ty tdecls ty) 0 tys) + 15) / 16) * 16
   | Array (len, ty) -> len * size_ty tdecls ty
 
 let compile_gep tdecls asn (ty, oper) ops =
