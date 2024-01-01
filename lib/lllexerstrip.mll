@@ -34,6 +34,7 @@ rule token = parse
   | "immarg"
   | "exact"
   | "internal"
+  | "local_unnamed_addr"
   | '#' digit+         { token lexbuf } (* ignored *)
   | ','? ['\t' ' ']+ "align" ['\t' ' ']+ digit+ { token lexbuf }
   | "dereferenceable(" digit+ ')' { token lexbuf }
