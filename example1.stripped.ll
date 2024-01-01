@@ -546,6 +546,7 @@ define i32 @mz_deflateInit (i8* %0, i32 %1) {
  store i32 %1, i32* %4
  %5 = load i8*, i8** %3
  %6 = load i32, i32* %4
+ call void @printf (i8* @fmt, i32 6, i32 %6)
  %7 = call i32 @mz_deflateInit2 (i8* %5, i32 %6, i32 8, i32 15, i32 9, i32 0)
  ret i32 %7
 }
@@ -567,37 +568,54 @@ define i32 @mz_deflateInit2 (i8* %0, i32 %1, i32 %2, i32 %3, i32 %4, i32 %5) {
  store i32 %4, i32* %12
  store i32 %5, i32* %13
  %16 = load i32, i32* %9
+ call void @printf (i8* @fmt, i32 16, i32 %16)
  %17 = load i32, i32* %11
+ call void @printf (i8* @fmt, i32 17, i32 %17)
  %18 = load i32, i32* %13
+ call void @printf (i8* @fmt, i32 18, i32 %18)
  %19 = call i32 @tdefl_create_comp_flags_from_zip_params (i32 %16, i32 %17, i32 %18)
+ call void @printf (i8* @fmt, i32 19, i32 %19)
  %20 = or i32 8192, %19
+ call void @printf (i8* @fmt, i32 20, i32 %20)
  store i32 %20, i32* %15
  %21 = load i8*, i8** %8
  %22 = icmp ne i8* %21, null
+ call void @printf (i8* @fmt, i32 22, i1 %22)
  br i1 %22, label %24, label %23
 23:
  store i32 -2, i32* %7
  br label %92
 24:
  %25 = load i32, i32* %10
+ call void @printf (i8* @fmt, i32 25, i32 %25)
  %26 = icmp ne i32 %25, 8
+ call void @printf (i8* @fmt, i32 26, i1 %26)
  br i1 %26, label %40, label %27
 27:
  %28 = load i32, i32* %12
+ call void @printf (i8* @fmt, i32 28, i32 %28)
  %29 = icmp slt i32 %28, 1
+ call void @printf (i8* @fmt, i32 29, i1 %29)
  br i1 %29, label %40, label %30
 30:
  %31 = load i32, i32* %12
+ call void @printf (i8* @fmt, i32 31, i32 %31)
  %32 = icmp sgt i32 %31, 9
+ call void @printf (i8* @fmt, i32 32, i1 %32)
  br i1 %32, label %40, label %33
 33:
  %34 = load i32, i32* %11
+ call void @printf (i8* @fmt, i32 34, i32 %34)
  %35 = icmp ne i32 %34, 15
+ call void @printf (i8* @fmt, i32 35, i1 %35)
  br i1 %35, label %36, label %41
 36:
  %37 = load i32, i32* %11
+ call void @printf (i8* @fmt, i32 37, i32 %37)
  %38 = sub i32 0, %37
+ call void @printf (i8* @fmt, i32 38, i32 %38)
  %39 = icmp ne i32 %38, 15
+ call void @printf (i8* @fmt, i32 39, i1 %39)
  br i1 %39, label %40, label %41
 40:
  store i32 -10000, i32* %7
@@ -625,6 +643,7 @@ define i32 @mz_deflateInit2 (i8* %0, i32 %1, i32 %2, i32 %3, i32 %4, i32 %5) {
  %55 = getelementptr %struct.mz_stream_s, i8* %54, i32 0, i32 8
  %56 = load i8*, i8** %55
  %57 = icmp ne i8* %56, null
+ call void @printf (i8* @fmt, i32 57, i1 %57)
  br i1 %57, label %61, label %58
 58:
  %59 = load i8*, i8** %8
@@ -636,6 +655,7 @@ define i32 @mz_deflateInit2 (i8* %0, i32 %1, i32 %2, i32 %3, i32 %4, i32 %5) {
  %63 = getelementptr %struct.mz_stream_s, i8* %62, i32 0, i32 9
  %64 = load i8*, i8** %63
  %65 = icmp ne i8* %64, null
+ call void @printf (i8* @fmt, i32 65, i1 %65)
  br i1 %65, label %69, label %66
 66:
  %67 = load i8*, i8** %8
@@ -664,8 +684,10 @@ define i32 @mz_deflateInit2 (i8* %0, i32 %1, i32 %2, i32 %3, i32 %4, i32 %5) {
  store i8* %81, i8** %83
  %84 = load i8*, i8** %14
  %85 = load i32, i32* %15
+ call void @printf (i8* @fmt, i32 85, i32 %85)
  %86 = call i32 @tdefl_init (i8* %84, i8* null, i8* null, i32 %85)
  %87 = icmp ne i32 %86, 0
+ call void @printf (i8* @fmt, i32 87, i1 %87)
  br i1 %87, label %88, label %91
 88:
  %89 = load i8*, i8** %8
@@ -677,6 +699,7 @@ define i32 @mz_deflateInit2 (i8* %0, i32 %1, i32 %2, i32 %3, i32 %4, i32 %5) {
  br label %92
 92:
  %93 = load i32, i32* %7
+ call void @printf (i8* @fmt, i32 93, i32 %93)
  ret i32 %93
 }
 
@@ -689,84 +712,122 @@ define i32 @tdefl_create_comp_flags_from_zip_params (i32 %0, i32 %1, i32 %2) {
  store i32 %1, i32* %5
  store i32 %2, i32* %6
  %8 = load i32, i32* %4
+ call void @printf (i8* @fmt, i32 8, i32 %8)
  %9 = icmp sge i32 %8, 0
+ call void @printf (i8* @fmt, i32 9, i1 %9)
  br i1 %9, label %10, label %18
 10:
  %11 = load i32, i32* %4
+ call void @printf (i8* @fmt, i32 11, i32 %11)
  %12 = icmp slt i32 10, %11
+ call void @printf (i8* @fmt, i32 12, i1 %12)
  br i1 %12, label %13, label %14
 13:
  br label %16
 14:
  %15 = load i32, i32* %4
+ call void @printf (i8* @fmt, i32 15, i32 %15)
  br label %16
 16:
  %17 = phi i32 [10, %13], [%15, %14]
+ call void @printf (i8* @fmt, i32 17, i32 %17)
  br label %19
 18:
  br label %19
 19:
  %20 = phi i32 [%17, %16], [6, %18]
+ call void @printf (i8* @fmt, i32 20, i32 %20)
  %21 = sext i32 %20 to i64
+ call void @printf (i8* @fmt, i32 21, i64 %21)
  %22 = getelementptr [11 x i32], i8* @s_tdefl_num_probes, i64 0, i64 %21
  %23 = load i32, i32* %22
+ call void @printf (i8* @fmt, i32 23, i32 %23)
  %24 = load i32, i32* %4
+ call void @printf (i8* @fmt, i32 24, i32 %24)
  %25 = icmp sle i32 %24, 3
+ call void @printf (i8* @fmt, i32 25, i1 %25)
  %26 = zext i1 %25 to i64
+ call void @printf (i8* @fmt, i32 26, i64 %26)
  %27 = select i1 %25, i32 16384, i32 0
+ call void @printf (i8* @fmt, i32 27, i32 %27)
  %28 = or i32 %23, %27
+ call void @printf (i8* @fmt, i32 28, i32 %28)
  store i32 %28, i32* %7
  %29 = load i32, i32* %5
+ call void @printf (i8* @fmt, i32 29, i32 %29)
  %30 = icmp sgt i32 %29, 0
+ call void @printf (i8* @fmt, i32 30, i1 %30)
  br i1 %30, label %31, label %34
 31:
  %32 = load i32, i32* %7
+ call void @printf (i8* @fmt, i32 32, i32 %32)
  %33 = or i32 %32, 4096
+ call void @printf (i8* @fmt, i32 33, i32 %33)
  store i32 %33, i32* %7
  br label %34
 34:
  %35 = load i32, i32* %4
+ call void @printf (i8* @fmt, i32 35, i32 %35)
  %36 = icmp ne i32 %35, 0
+ call void @printf (i8* @fmt, i32 36, i1 %36)
  br i1 %36, label %40, label %37
 37:
  %38 = load i32, i32* %7
+ call void @printf (i8* @fmt, i32 38, i32 %38)
  %39 = or i32 %38, 524288
+ call void @printf (i8* @fmt, i32 39, i32 %39)
  store i32 %39, i32* %7
  br label %68
 40:
  %41 = load i32, i32* %6
+ call void @printf (i8* @fmt, i32 41, i32 %41)
  %42 = icmp eq i32 %41, 1
+ call void @printf (i8* @fmt, i32 42, i1 %42)
  br i1 %42, label %43, label %46
 43:
  %44 = load i32, i32* %7
+ call void @printf (i8* @fmt, i32 44, i32 %44)
  %45 = or i32 %44, 131072
+ call void @printf (i8* @fmt, i32 45, i32 %45)
  store i32 %45, i32* %7
  br label %67
 46:
  %47 = load i32, i32* %6
+ call void @printf (i8* @fmt, i32 47, i32 %47)
  %48 = icmp eq i32 %47, 2
+ call void @printf (i8* @fmt, i32 48, i1 %48)
  br i1 %48, label %49, label %52
 49:
  %50 = load i32, i32* %7
+ call void @printf (i8* @fmt, i32 50, i32 %50)
  %51 = and i32 %50, -4096
+ call void @printf (i8* @fmt, i32 51, i32 %51)
  store i32 %51, i32* %7
  br label %66
 52:
  %53 = load i32, i32* %6
+ call void @printf (i8* @fmt, i32 53, i32 %53)
  %54 = icmp eq i32 %53, 4
+ call void @printf (i8* @fmt, i32 54, i1 %54)
  br i1 %54, label %55, label %58
 55:
  %56 = load i32, i32* %7
+ call void @printf (i8* @fmt, i32 56, i32 %56)
  %57 = or i32 %56, 262144
+ call void @printf (i8* @fmt, i32 57, i32 %57)
  store i32 %57, i32* %7
  br label %65
 58:
  %59 = load i32, i32* %6
+ call void @printf (i8* @fmt, i32 59, i32 %59)
  %60 = icmp eq i32 %59, 3
+ call void @printf (i8* @fmt, i32 60, i1 %60)
  br i1 %60, label %61, label %64
 61:
  %62 = load i32, i32* %7
+ call void @printf (i8* @fmt, i32 62, i32 %62)
  %63 = or i32 %62, 65536
+ call void @printf (i8* @fmt, i32 63, i32 %63)
  store i32 %63, i32* %7
  br label %64
 64:
@@ -779,6 +840,7 @@ define i32 @tdefl_create_comp_flags_from_zip_params (i32 %0, i32 %1, i32 %2) {
  br label %68
 68:
  %69 = load i32, i32* %7
+ call void @printf (i8* @fmt, i32 69, i32 %69)
  ret i32 %69
 }
 
