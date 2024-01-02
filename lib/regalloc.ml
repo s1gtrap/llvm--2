@@ -1827,13 +1827,7 @@ let compile_fdecl (alc : allocator) debug tdecls name
         let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
         let term = compile_terminator pad asn movs t in
         { b with asm = Text (asm @ term) }
-        :: block
-             ( {
-                 lbl = S.name fname ^ "$" ^ S.name name;
-                 global = false;
-                 asm = Text [];
-               },
-               tail )
+        :: block ({ lbl = pad name; global = false; asm = Text [] }, tail)
     | ({ asm = Text asm; _ } as b), [ Cfg.Term t ] ->
         let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
         let term = compile_terminator pad asn movs t in
