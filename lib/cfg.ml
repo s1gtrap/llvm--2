@@ -45,7 +45,7 @@ let indices (((_, head), tail) : Ll.cfg) : G.V.t array =
 
 let blocks ids (((_, head), tail) : Ll.cfg) : G.V.t S.table =
   let f (i, t) ((n, b) : _ * Ll.block) =
-    (i + List.length b.insns + 2, S.enter (t, n, ids.(i)))
+    (i + List.length b.insns + 2, S.enter (t, n, ids.(i + 1)))
   in
   snd (List.fold_left f (List.length head.insns + 1, S.empty) tail)
 
