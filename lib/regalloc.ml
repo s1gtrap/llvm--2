@@ -1820,12 +1820,14 @@ let compile_fdecl (alc : allocator) debug tdecls name
     | Some m -> S.ST.add name m movs
     | _ -> movs
   in
+  let hd_or or_ = function _ :: hd :: _ | [ hd ] -> hd | [] -> or_ in
+  let tl_opt = function _ :: tail | tail -> tail in
   let rec block name global (insns : (Ll.uid option * Ll.insn) list) names =
     function
     | Cfg.Insn i :: tail -> block name global (insns @ [ i ]) names tail
     | Cfg.Term t :: tail ->
         [ (name, global, insns, t) ]
-        @ block (List.hd names) false [] (List.tl names) tail
+        @ block (hd_or name names) false [] (tl_opt names) tail
     | [] -> []
   in
   block name true [] names insns
