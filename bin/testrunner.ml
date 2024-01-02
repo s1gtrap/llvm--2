@@ -224,6 +224,7 @@ let () =
   |> t "tests/lshri32.ll" (List.init 31 string_of_int)
   |> t "tests/alloca.ll" [] (* FIXME: allocan *)
   |> t "tests/loop0.ll" [] |> t "tests/loop1.ll" [] |> t "tests/loop2.ll" []
+  |> t "tests/loop3.ll" []
   |> t "tests/argv0.ll" [] ~asserts:(assert_exitcode lor assert_stderr)
   |> t "tests/argv1.ll" [ "hello," ]
   |> t "tests/argv2.ll" [ "Hello,"; "world!" ]
