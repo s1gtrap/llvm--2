@@ -53,6 +53,7 @@ let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
   let g = G.create () in
   let ids = indices ((l, head), tail) in
   let blk = blocks ids ((l, head), tail) in
+  let blk = match l with Some e -> S.ST.add e ids.(0) blk | None -> blk in
   let blk l =
     match S.ST.find_opt l blk with
     | Some i -> i

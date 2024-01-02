@@ -1096,7 +1096,7 @@ let nextcase () =
   switch_case := c + 1;
   c
 
-let compile_terminator fname asn movs term =
+let compile_terminator pad asn movs term =
   let ins =
     match term with
     | Ll.Ret (_, Some oper) ->
@@ -1124,13 +1124,13 @@ let compile_terminator fname asn movs term =
           (Popq, [ Reg Rbp ]);
           (Retq, []);
         ]
-    | Br lbl -> movs @ [ (Jmp, [ Imm (Lbl (S.name fname ^ S.name lbl)) ]) ]
+    | Br lbl -> movs @ [ (Jmp, [ Imm (Lbl (pad lbl)) ]) ]
     | Cbr (oper, thn, els) ->
         let operins = compile_operand asn Ll.I64 (Reg Rax) oper in
         let zeroins = (Movq, [ Imm (Lit 0L); Reg Rcx ]) in
         let cmpins : ins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
-        let jeq = (J Eq, [ Imm (Lbl (S.name fname ^ S.name els)) ]) in
-        let jmp = (Jmp, [ Imm (Lbl (S.name fname ^ S.name thn)) ]) in
+        let jeq = (J Eq, [ Imm (Lbl (pad els)) ]) in
+        let jmp = (Jmp, [ Imm (Lbl (pad thn)) ]) in
         operins @ [ zeroins; cmpins ] @ movs @ [ jeq; jmp ]
     | Unreachable ->
         (* undefined, so do literally nothing *)
@@ -1140,11 +1140,11 @@ let compile_terminator fname asn movs term =
         let hay (o, l) =
           let hayins = compile_typed_operand asn ty (Reg Rcx) o in
           let cmpins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
-          let jeq = (J Eq, [ Imm (Lbl (S.name fname ^ S.name l)) ]) in
+          let jeq = (J Eq, [ Imm (Lbl (pad l)) ]) in
           hayins @ [ cmpins; jeq ]
         in
         let asd : ins list = List.map hay cases |> List.flatten in
-        let jmp = (Jmp, [ Imm (Lbl (S.name fname ^ S.name els)) ]) in
+        let jmp = (Jmp, [ Imm (Lbl (pad els)) ]) in
         needins @ asd @ [ jmp ]
   in
   (Comment (Ll.string_of_terminator term), []) :: ins
@@ -1749,17 +1749,7 @@ let compile_fdecl (alc : allocator) debug tdecls name
     ({ param; cfg; _ } : Ll.fdecl) =
   let fname = name in
   (* move out of pre-assigned parameter registers (rsi, rdi, .. r9) *)
-  let (entryl, head), tail = cfg in
-  let _, blocks = List.split tail in
-  let named_insns =
-    head.insns @ List.concat (List.map (fun (b : Ll.block) -> b.insns) blocks)
-  in
-  let names = List.filter_map Fun.id (List.map fst named_insns) in
-  let _layout =
-    List.mapi
-      (fun idx uid -> (uid, Ind3 (Lit (Int64.of_int (-(8 * (idx + 1)))), Rbp)))
-      (param @ names)
-  in
+  let (entryl, _head), _tail = cfg in
   let ids, g = Cfg.graph cfg in
   let insns : Cfg.insn list = Cfg.flatten cfg in
   let df = Lva.dataflow insns ids g in
@@ -1823,36 +1813,38 @@ let compile_fdecl (alc : allocator) debug tdecls name
           t ops)
       S.empty phis
   in
-  (*S.ST.iter
-    (fun k v ->
-      Printf.printf "%s: %s\n" (S.name k) (Ll.mapcat "," string_of_ins v))
-    movs;*)
+  let pad n = "_" ^ S.name fname ^ "$" ^ S.name n in
   let movs =
     match S.ST.find_opt (S.symbol "entry") movs with
     | Some m -> S.ST.add name m movs
     | _ -> movs
   in
-  let rec f name global (insns : (Ll.uid option * Ll.insn) list) = function
-    | Cfg.Insn i :: tail -> f name global (insns @ [ i ]) tail
-    | Cfg.Term t :: Cfg.Label nname :: tail ->
-        [ (name, global, insns, t) ] @ f nname false [] tail
-    | [ Cfg.Term t ] -> [ (name, global, insns, t) ]
-    | _ -> failwith "invalid cfg"
+  let rec block = function
+    | ({ asm = Text asm; _ } as b), Cfg.Insn ins :: tail ->
+        let ins = compile_insn tdecls debug asn ins in
+        block ({ b with asm = Text (asm @ ins) }, tail)
+    | ({ asm = Text asm; _ } as b), Cfg.Term t :: Cfg.Label name :: tail ->
+        let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
+        let term = compile_terminator pad asn movs t in
+        { b with asm = Text (asm @ term) }
+        :: block
+             ( {
+                 lbl = S.name fname ^ "$" ^ S.name name;
+                 global = false;
+                 asm = Text [];
+               },
+               tail )
+    | ({ asm = Text asm; _ } as b), [ Cfg.Term t ] ->
+        let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
+        let term = compile_terminator pad asn movs t in
+        [ { b with asm = Text (asm @ term) } ]
+    | _ -> failwith ""
   in
-  f name true [] insns
-  |> List.map (fun (name, global, insns, term) ->
-         let pro : ins list = if global then pro else [] in
-         let head : ins list =
-           List.map (compile_insn tdecls debug asn) insns |> List.flatten
-         in
-         let head : ins list = pro @ head in
-         let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
-         let tail = compile_terminator fname asn movs term in
-         {
-           lbl = (if global then S.name fname else S.name fname ^ S.name name);
-           global;
-           asm = Text (head @ tail);
-         })
+  match entryl with
+  | Some entryl ->
+      { lbl = S.name fname; global = true; asm = Text pro }
+      :: block ({ lbl = pad entryl; global = false; asm = Text [] }, insns)
+  | None -> block ({ lbl = S.name fname; global = true; asm = Text pro }, insns)
 
 let rec compile_ginit = function
   | Ll.GNull -> [ Quad (Lit 0L) ]
