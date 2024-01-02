@@ -592,7 +592,10 @@ let compile_typed_operand asn ty dst src =
   | Id id -> (
       match (dst, S.ST.find_opt id asn) with
       | Ind3 dst, Some (Ind3 src) ->
-          [ (mov, [ Ind3 src; ty_cast ty (Reg Rcx) ]); (mov, [ ty_cast ty (Reg Rcx); Ind3 dst ]) ]
+          [
+            (mov, [ Ind3 src; ty_cast ty (Reg Rcx) ]);
+            (mov, [ ty_cast ty (Reg Rcx); Ind3 dst ]);
+          ]
       | dst, Some i when dst = i -> [] (* NOTE: don't comppile noop movs *)
       | dst, Some i -> [ (mov, [ ty_cast ty i; ty_cast ty dst ]) ]
       | _, None -> failwith (Printf.sprintf "%s" (S.name id))))
@@ -661,7 +664,9 @@ let rec size_ty : (Ll.uid * Ll.ty) list -> Ll.ty -> int =
   | Namedt ty ->
       let ty = List.assoc ty tdecls in
       size_ty tdecls ty
-  | Struct tys -> (((List.fold_left (fun sum ty -> sum + size_ty tdecls ty) 0 tys) + 15) / 16) * 16
+  | Struct tys ->
+      (List.fold_left (fun sum ty -> sum + size_ty tdecls ty) 0 tys + 15)
+      / 16 * 16
   | Array (len, ty) -> len * size_ty tdecls ty
 
 let compile_gep tdecls asn (ty, oper) ops =
