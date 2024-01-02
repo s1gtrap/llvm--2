@@ -11,11 +11,14 @@ let progcfg input =
     let insns = Cfg.flatten fdecl.cfg in
     List.iteri
       (fun i n ->
-        Printf.printf "%d {%s}\t%s\n" i
-          (Ll.mapcat ","
-             (fun v -> string_of_int (Cfg.G.V.label v))
-             (Cfg.G.succ g ids.(i)))
-          (Cfg.string_of_insn n))
+        match n with
+        | Cfg.Label _ -> Printf.printf "\t%s\n" (Cfg.string_of_insn n)
+        | _ ->
+            Printf.printf "%d {%s}\t%s\n" i
+              (Ll.mapcat ","
+                 (fun v -> string_of_int (Cfg.G.V.label v))
+                 (Cfg.G.succ g ids.(i)))
+              (Cfg.string_of_insn n))
       insns;
     ()
   in
