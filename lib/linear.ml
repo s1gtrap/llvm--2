@@ -1,6 +1,5 @@
 let def t (ins : Cfg.insn) idx =
   match ins with
-  | Label _ -> t
   | Insn (Some dop, _) -> Symbol.ST.add dop idx t
   | Insn (None, _) -> t
   | Term _ -> t
@@ -9,7 +8,6 @@ let use t (insn : Cfg.insn) idx =
   (* FIXME: combine with use in lva.ml *)
   let op o s = match o with Ll.Id i -> Symbol.ST.add i idx s | _ -> s in
   match insn with
-  | Label _ -> t
   | Insn (_, Binop (_, _, lop, rop)) -> op lop t |> op rop
   | Insn (_, Alloca _) -> t
   | Insn (_, AllocaN (_, (_, o))) -> op o t
@@ -52,7 +50,6 @@ let print_intervals insns intervals =
     insns
 
 let intervals params insns (_livein, _liveout) =
-  let insns = List.filter (function Cfg.Label _ -> false | _ -> true) insns in
   let param t k = Symbol.ST.add k (-1) t in
   let defs = List.fold_left param Symbol.empty params in
   let uses = Symbol.empty in

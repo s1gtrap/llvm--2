@@ -592,7 +592,10 @@ let compile_typed_operand asn ty dst src =
   | Id id -> (
       match (dst, S.ST.find_opt id asn) with
       | Ind3 dst, Some (Ind3 src) ->
-          [ (mov, [ Ind3 src; ty_cast ty (Reg Rcx) ]); (mov, [ ty_cast ty (Reg Rcx); Ind3 dst ]) ]
+          [
+            (mov, [ Ind3 src; ty_cast ty (Reg Rcx) ]);
+            (mov, [ ty_cast ty (Reg Rcx); Ind3 dst ]);
+          ]
       | dst, Some i when dst = i -> [] (* NOTE: don't comppile noop movs *)
       | dst, Some i -> [ (mov, [ ty_cast ty i; ty_cast ty dst ]) ]
       | _, None -> failwith (Printf.sprintf "%s" (S.name id))))
@@ -661,7 +664,9 @@ let rec size_ty : (Ll.uid * Ll.ty) list -> Ll.ty -> int =
   | Namedt ty ->
       let ty = List.assoc ty tdecls in
       size_ty tdecls ty
-  | Struct tys -> (((List.fold_left (fun sum ty -> sum + size_ty tdecls ty) 0 tys) + 15) / 16) * 16
+  | Struct tys ->
+      (List.fold_left (fun sum ty -> sum + size_ty tdecls ty) 0 tys + 15)
+      / 16 * 16
   | Array (len, ty) -> len * size_ty tdecls ty
 
 let compile_gep tdecls asn (ty, oper) ops =
@@ -1657,9 +1662,6 @@ let alloc a param insns (in_, out) : operand S.table =
         in
         simp S.SS.empty
     | Linearscan ->
-        let insns =
-          List.filter (function Cfg.Label _ -> false | _ -> true) insns
-        in
         let intervals = Linear.intervals param insns (in_, out) in
         let avail =
           Regs.of_list
@@ -1750,11 +1752,6 @@ let compile_fdecl (alc : allocator) debug tdecls name
     head.insns @ List.concat (List.map (fun (b : Ll.block) -> b.insns) blocks)
   in
   let names = List.filter_map Fun.id (List.map fst named_insns) in
-  let _layout =
-    List.mapi
-      (fun idx uid -> (uid, Ind3 (Lit (Int64.of_int (-(8 * (idx + 1)))), Rbp)))
-      (param @ names)
-  in
   let ids, g = Cfg.graph cfg in
   let insns : Cfg.insn list = Cfg.flatten cfg in
   let df = Lva.dataflow insns ids g in
@@ -1818,23 +1815,20 @@ let compile_fdecl (alc : allocator) debug tdecls name
           t ops)
       S.empty phis
   in
-  (*S.ST.iter
-    (fun k v ->
-      Printf.printf "%s: %s\n" (S.name k) (Ll.mapcat "," string_of_ins v))
-    movs;*)
   let movs =
     match S.ST.find_opt (S.symbol "entry") movs with
     | Some m -> S.ST.add name m movs
     | _ -> movs
   in
-  let rec f name global (insns : (Ll.uid option * Ll.insn) list) = function
-    | Cfg.Insn i :: tail -> f name global (insns @ [ i ]) tail
-    | Cfg.Term t :: Cfg.Label nname :: tail ->
-        [ (name, global, insns, t) ] @ f nname false [] tail
-    | [ Cfg.Term t ] -> [ (name, global, insns, t) ]
-    | _ -> failwith "invalid cfg"
+  let rec block name global (insns : (Ll.uid option * Ll.insn) list) names =
+    function
+    | Cfg.Insn i :: tail -> block name global (insns @ [ i ]) names tail
+    | Cfg.Term t :: tail ->
+        [ (name, global, insns, t) ]
+        @ block (List.hd names) false [] (List.tl names) tail
+    | [] -> []
   in
-  f name true [] insns
+  block name true [] names insns
   |> List.map (fun (name, global, insns, term) ->
          let pro : ins list = if global then pro else [] in
          let head : ins list =

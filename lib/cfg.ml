@@ -1,15 +1,11 @@
 open Graph
 module S = Symbol
 
-type insn =
-  | Label of S.symbol
-  | Insn of (Ll.uid option * Ll.insn)
-  | Term of Ll.terminator
+type insn = Insn of (Ll.uid option * Ll.insn) | Term of Ll.terminator
 
 let string_of_insn = function
-  | Label l -> Printf.sprintf "%s:" (S.name l)
-  | Insn i -> Printf.sprintf "    %s" (Ll.string_of_named_insn i)
-  | Term t -> Printf.sprintf "    %s" (Ll.string_of_terminator t)
+  | Insn i -> Ll.string_of_named_insn i
+  | Term t -> Ll.string_of_terminator t
 
 module G = Imperative.Digraph.Abstract (struct
   type t = int
@@ -45,7 +41,7 @@ let indices (((_, head), tail) : Ll.cfg) : G.V.t array =
 
 let blocks ids (((_, head), tail) : Ll.cfg) : G.V.t S.table =
   let f (i, t) ((n, b) : _ * Ll.block) =
-    (i + List.length b.insns + 2, S.enter (t, n, ids.(i)))
+    (i + List.length b.insns + 1, S.enter (t, n, ids.(i)))
   in
   snd (List.fold_left f (List.length head.insns + 1, S.empty) tail)
 
@@ -63,7 +59,7 @@ let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
   let _, tail =
     List.map snd tail
     |> List.fold_left_map
-         (fun o (b : Ll.block) -> (o + List.length b.insns + 2, (o, b)))
+         (fun o (b : Ll.block) -> (o + List.length b.insns + 1, (o, b)))
          (List.length head.insns + 1)
   in
   let add_edge i j = G.add_edge g ids.(i) (blk j) in
@@ -87,7 +83,6 @@ let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
   List.iter
     (fun ((i, b) : _ * Ll.block) ->
       G.add_edge g ids.(i) ids.(i + 1);
-      let i = i + 1 in
       for i = i to i + List.length b.insns - 1 do
         G.add_edge g ids.(i) ids.(i + 1)
       done;
@@ -117,8 +112,8 @@ let%test "graph" =
 
 let flatten (((_, head), tail) : Ll.cfg) : insn list =
   let insn i = Insn i in
-  let named_block ((n, b) : _ * Ll.block) =
-    [ Label n ] @ List.map insn b.insns @ [ Term b.terminator ]
+  let named_block ((_n, b) : _ * Ll.block) =
+    List.map insn b.insns @ [ Term b.terminator ]
   in
   List.map insn head.insns @ [ Term head.terminator ]
   @ List.flatten (List.map named_block tail)
