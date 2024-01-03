@@ -193,15 +193,15 @@ type opcode =
   | Divq
   | Divl
   | Comment of string
-  | Breakpoint of string
+  | Breakpoint of S.symbol
 
-let breaks = ref 0
-let break i = "_$break_" ^ string_of_int i ^ "$"
+let breaks = ref S.SS.empty
+let break n  = S.symbol ("_$break$" ^ n ^ "$" ^ string_of_int (S.SS.cardinal !breaks) ^ "$")
 
-let newbreak () =
-  let b = !breaks in
-  breaks := b + 1;
-  (Breakpoint (break b), [])
+let newbreak fname =
+  let bname =  (break fname ) in
+  breaks := S.SS.add bname !breaks;
+  (Breakpoint bname, [])
 
 (* An instruction is an opcode plus its operands.
    Note that arity and other constraints about the operands
@@ -361,7 +361,7 @@ let string_of_opcode (opc : opcode) : string =
   | Divq -> "divq"
   | Divl -> "divl"
   | Comment s -> "# " ^ String.escaped s
-  | Breakpoint s -> s ^ ":"
+  | Breakpoint s -> (S.name s) ^ ":"
 
 let map_concat s f l = String.concat s (List.map f l)
 
@@ -433,7 +433,7 @@ let string_of_elem { lbl; global; asm } : string =
 let global s = "        .globl " ^ s
 
 let string_of_prog (p : prog) : string =
-  String.concat "\n" (List.init !breaks break |> List.map global)
+  String.concat "\n" (S.SS.elements !breaks |> List.map S.name |> List.map global)
   ^ "\n"
   ^ String.concat "\n" (List.map string_of_elem p)
 
@@ -756,8 +756,9 @@ let compile_bop : Ll.bop -> Ll.ty -> opcode =
     | Xor, Ll.I8 -> Xorb
   | _ -> failwith "TODO"*)
 
+
 let compile_insn tdecls debug asn insn =
-  (if debug then [ newbreak () ] else [])
+  (match debug with Some name -> [ newbreak name ] | None -> [])
   @ [ (Comment (Ll.string_of_named_insn insn), []) ]
   @
   match insn with
@@ -1829,7 +1830,7 @@ let compile_fdecl (alc : allocator) debug tdecls name
         :: block (Some name)
              ({ lbl = pad name; global = false; asm = Text [] }, tail)
     | ({ asm = Text asm; _ } as b), Cfg.Insn ins :: tail ->
-        let ins = compile_insn tdecls debug asn ins in
+        let ins = compile_insn tdecls (if debug then Some (S.name fname) else None) asn ins in
         block bname ({ b with asm = Text (asm @ ins) }, tail)
     | ({ asm = Text asm; _ } as b), Cfg.Term t :: Cfg.Label name :: tail ->
         let phis =
