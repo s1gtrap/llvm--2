@@ -2,6 +2,7 @@
 
 import lldb
 import os
+import re
 import sys
 import itertools
 from time import sleep
@@ -24,13 +25,15 @@ target = debugger.CreateTargetWithFileAndArch(exe, lldb.LLDB_ARCH_DEFAULT)
 if target:
     # If the target is valid set a breakpoint at main
     main_bp = target.BreakpointCreateByRegex(
-        "^_\\$break_[0-9]+\\$", target.GetExecutable().GetFilename())
+        "^_\\$break\\$[a-zA-Z0-9_]+\\$[0-9]+\\$$", target.GetExecutable().GetFilename())
 
     print(main_bp)
 
     # Launch the process. Since we specified synchronous mode, we won't return
     # from this function until we hit the breakpoint at main
     process = target.LaunchSimple(sys.argv[2:], None, os.getcwd())
+    fstate = {}
+    rebp = re.compile("^_\\$break\\$([a-zA-Z0-9_]+)\\$[0-9]+\\$$")
 
     # Make sure the launch went ok
     if process:
@@ -43,13 +46,18 @@ if target:
                 # Get the first thread
                 thread = process.GetThreadAtIndex(0)
                 if thread:
+                    print("dsfsd", thread.GetStopReason(),
+                          thread.id,
+                          thread.GetStopReasonDataAtIndex(0))
                     # Print some simple thread info
                     print(thread)
                     # Get the first frame
                     frame = thread.GetFrameAtIndex(0)
                     if frame:
                         # Print some simple frame info
-                        print(frame)
+                        # print(frame, "  asdf ", frame.name)
+                        matches = rebp.match(frame.name)
+                        fname = print(matches.group(1))
                         function = frame.GetFunction()
                         # See if we have debug info (a function)
                         if function:
@@ -74,19 +82,19 @@ if target:
                         print('%s (number of children = %d):' %
                               (value.GetName(), value.GetNumChildren()))
                         # grab the first five elements
-                        gprs = itertools.islice(value, 2, 16)
-                        changed = 0
+                        gprs = itertools.islice(value, 0, 16)
+                        # changed = 0
                         for child in gprs:
                             if child.GetName() in regvals:
                                 if regvals[child.GetName()] != child.GetValue():
                                     regvals[child.GetName()] = child.GetValue()
-                                    changed += 1
+                                    # changed += 1
                                     print(child.GetName(), child.GetValue())
                             else:
                                 regvals[child.GetName()] = child.GetValue()
                                 print(child.GetName(), child.GetValue())
-                        if changed > 3:
-                            raise "changed more than two!"
+                        # if changed > 3:
+                            # raise "changed more than two!"
 
                 # print("Hit the breakpoint at main, enter to continue and wait for program to exit or 'Ctrl-D'/'quit' to terminate the program")
                 next = sys.stdin.readline()
