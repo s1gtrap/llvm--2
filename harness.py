@@ -68,17 +68,22 @@ if target:
                         changes = []
                         if fname not in fstate:
                             fstate[fname] = {}
+                        indices = [0, 3, 1, 2, 7, 6, 5, 4,
+                                   8, 9, 10, 11, 12, 13, 14, 15]
                         for i, child in enumerate(gprs):
                             print(i, child.GetName())
                             if child.GetName() in fstate[fname]:
                                 if fstate[fname][child.GetName()] != child.GetValue():
-                                    if i == 1:
-                                        i = 3
-                                    elif i == 2:
-                                        i = 2
-                                    elif i == 3:
-                                        i = 1
-                                    if (1 << i) & mask == 0:
+                                    # if i == 1:
+                                    # i = 3
+                                    # elif i == 2:
+                                    # i = 2
+                                    # elif i == 3:
+                                    # i = 1
+                                    j = indices[i]
+                                    print("{0:b}".format(mask))
+                                    print("{0:b}".format((1 << j)))
+                                    if (1 << j) & (~mask) != 0:
                                         changed += 1
                                         changes.append(
                                             [child.GetName(), fstate[fname][child.GetName()], child.GetValue()])
