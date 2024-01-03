@@ -591,15 +591,14 @@ let compile_typed_operand asn ty dst src =
   | BConst i -> [ (mov, [ Imm (Lit (if i then 1L else 0L)); ty_cast ty dst ]) ]
   | Gid gid -> [ (Leaq, [ Ind3 (Lbl (mangle gid), Rip); ty_cast ty dst ]) ]
   | Id id -> (
-      match (dst, S.ST.find_opt id asn) with
-      | Ind3 dst, Some (Ind3 src) ->
+      match (dst, S.ST.find id asn) with
+      | Ind3 dst, Ind3 src ->
           [
             (mov, [ Ind3 src; ty_cast ty (Reg Rcx) ]);
             (mov, [ ty_cast ty (Reg Rcx); Ind3 dst ]);
           ]
-      | dst, Some i when dst = i -> [] (* NOTE: don't comppile noop movs *)
-      | dst, Some i -> [ (mov, [ ty_cast ty i; ty_cast ty dst ]) ]
-      | _, None -> failwith (Printf.sprintf "%s" (S.name id)))
+      | dst, i when dst = i -> [] (* NOTE: don't comppile noop movs *)
+      | dst, i -> [ (mov, [ ty_cast ty i; ty_cast ty dst ]) ])
 
 let compile_operand asn ty dst src =
   match src with
