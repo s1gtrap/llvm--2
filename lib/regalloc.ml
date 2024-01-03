@@ -580,29 +580,26 @@ let compile_typed_operand asn ty dst src =
     | _ -> failwith "unhandled"
   in
   (* zero target register when size < arch *)
-  if ty <> Ll.I64 then [ (Movq, [ Imm (Lit 0L); ty_cast Ll.I64 dst ]) ]
-  else
-    []
-    @
-    match src with
-    | Ll.Null -> [ (mov, [ Imm (Lit 0L); ty_cast ty dst ]) ]
-    | IConst64 i -> [ (mov, [ Imm (Lit i); ty_cast ty dst ]) ]
-    | IConst32 i -> [ (mov, [ Imm (Lit (Int64.of_int32 i)); ty_cast ty dst ]) ]
-    | IConst8 i ->
-        [ (mov, [ Imm (Lit (Int64.of_int (Char.code i))); ty_cast ty dst ]) ]
-    | BConst i ->
-        [ (mov, [ Imm (Lit (if i then 1L else 0L)); ty_cast ty dst ]) ]
-    | Gid gid -> [ (Leaq, [ Ind3 (Lbl (mangle gid), Rip); ty_cast ty dst ]) ]
-    | Id id -> (
-        match (dst, S.ST.find_opt id asn) with
-        | Ind3 dst, Some (Ind3 src) ->
-            [
-              (mov, [ Ind3 src; ty_cast ty (Reg Rcx) ]);
-              (mov, [ ty_cast ty (Reg Rcx); Ind3 dst ]);
-            ]
-        | dst, Some i when dst = i -> [] (* NOTE: don't comppile noop movs *)
-        | dst, Some i -> [ (mov, [ ty_cast ty i; ty_cast ty dst ]) ]
-        | _, None -> failwith (Printf.sprintf "%s" (S.name id)))
+  (if ty <> Ll.I64 then [ (Movq, [ Imm (Lit 0L); ty_cast Ll.I64 dst ]) ] else [])
+  @
+  match src with
+  | Ll.Null -> [ (mov, [ Imm (Lit 0L); ty_cast ty dst ]) ]
+  | IConst64 i -> [ (mov, [ Imm (Lit i); ty_cast ty dst ]) ]
+  | IConst32 i -> [ (mov, [ Imm (Lit (Int64.of_int32 i)); ty_cast ty dst ]) ]
+  | IConst8 i ->
+      [ (mov, [ Imm (Lit (Int64.of_int (Char.code i))); ty_cast ty dst ]) ]
+  | BConst i -> [ (mov, [ Imm (Lit (if i then 1L else 0L)); ty_cast ty dst ]) ]
+  | Gid gid -> [ (Leaq, [ Ind3 (Lbl (mangle gid), Rip); ty_cast ty dst ]) ]
+  | Id id -> (
+      match (dst, S.ST.find_opt id asn) with
+      | Ind3 dst, Some (Ind3 src) ->
+          [
+            (mov, [ Ind3 src; ty_cast ty (Reg Rcx) ]);
+            (mov, [ ty_cast ty (Reg Rcx); Ind3 dst ]);
+          ]
+      | dst, Some i when dst = i -> [] (* NOTE: don't comppile noop movs *)
+      | dst, Some i -> [ (mov, [ ty_cast ty i; ty_cast ty dst ]) ]
+      | _, None -> failwith (Printf.sprintf "%s" (S.name id)))
 
 let compile_operand asn ty dst src =
   match src with
