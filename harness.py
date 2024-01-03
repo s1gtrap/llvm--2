@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import lldb
 import os
 import sys
@@ -13,7 +15,7 @@ def disassemble_instructions(insts):
 debugger = lldb.SBDebugger.Create()
 debugger.SetAsync(False)
 
-exe = "/home/s1g/Workspaces/BSc/llvm--2/crc32b"
+exe = sys.argv[1]
 
 print("Creating a target for '%s'" % exe)
 
@@ -28,7 +30,7 @@ if target:
 
     # Launch the process. Since we specified synchronous mode, we won't return
     # from this function until we hit the breakpoint at main
-    process = target.LaunchSimple(None, None, os.getcwd())
+    process = target.LaunchSimple(sys.argv[2:], None, os.getcwd())
 
     # Make sure the launch went ok
     if process:
@@ -83,7 +85,7 @@ if target:
                             else:
                                 regvals[child.GetName()] = child.GetValue()
                                 print(child.GetName(), child.GetValue())
-                        if changed > 2:
+                        if changed > 3:
                             raise "changed more than two!"
 
                 # print("Hit the breakpoint at main, enter to continue and wait for program to exit or 'Ctrl-D'/'quit' to terminate the program")
