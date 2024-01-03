@@ -25,6 +25,8 @@ rule token = parse
   | "nsw"
   | "nuw"
   | "noundef"
+  | "nonnull"
+  | "readnone"
   | "inbounds"
   | "signext"
   | "zeroext"
