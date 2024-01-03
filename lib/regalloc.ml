@@ -1775,7 +1775,9 @@ let compile_fdecl (alc : allocator) debug tdecls name
           let pt =
             S.ST.find_opt p t
             |> Option.value ~default:S.ST.empty
-            |> S.ST.add l (mov1 @ [ mov2 ])
+            |> S.ST.update l (function
+                 | Some ins -> Some (ins @ mov1 @ [ mov2 ])
+                 | None -> Some (mov1 @ [ mov2 ]))
           in
           S.ST.add p pt t
         in
