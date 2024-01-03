@@ -22,18 +22,19 @@ print("Creating a target for '%s'" % exe)
 
 target = debugger.CreateTargetWithFileAndArch(exe, lldb.LLDB_ARCH_DEFAULT)
 
+
 if target:
     # If the target is valid set a breakpoint at main
     main_bp = target.BreakpointCreateByRegex(
-        "^_\\$break\\$[a-zA-Z0-9_]+\\$[0-9]+\\$$", target.GetExecutable().GetFilename())
+        "^_\\$break\\$[a-zA-Z0-9_]+\\$[0-9]+\\$[0-9]+\\$$", target.GetExecutable().GetFilename())
 
-    print(main_bp)
+    # print(main_bp)
 
     # Launch the process. Since we specified synchronous mode, we won't return
     # from this function until we hit the breakpoint at main
     process = target.LaunchSimple(sys.argv[2:], None, os.getcwd())
     fstate = {}
-    rebp = re.compile("^_\\$break\\$([a-zA-Z0-9_]+)\\$[0-9]+\\$$")
+    rebp = re.compile("^_\\$break\\$([a-zA-Z0-9_]+)\\$[0-9]+\\$([0-9]+)\\$$")
 
     # Make sure the launch went ok
     if process:
@@ -52,32 +53,49 @@ if target:
                         # print(frame, "  asdf ", frame.name)
                         matches = rebp.match(frame.name)
                         fname = matches.group(1)
+                        mask = int(matches.group(2))
                         function = frame.GetFunction()
                         # See if we have debug info (a function)
 
                         value = frame.GetRegisters()[0]
                         # print('Frame registers (size of register set = %d):' % registerList.GetSize())
                         # print value
-                        print('%s (number of children = %d):' %
-                              (value.GetName(), value.GetNumChildren()))
+                        # print('%s (number of children = %d):' %
+                        # (value.GetName(), value.GetNumChildren()))
                         # grab the first five elements
                         gprs = itertools.islice(value, 0, 16)
                         changed = 0
+                        changes = []
                         if fname not in fstate:
                             fstate[fname] = {}
-                        for child in gprs:
+                        for i, child in enumerate(gprs):
+                            print(i, child.GetName())
                             if child.GetName() in fstate[fname]:
                                 if fstate[fname][child.GetName()] != child.GetValue():
+                                    if i == 1:
+                                        i = 3
+                                    elif i == 2:
+                                        i = 2
+                                    elif i == 3:
+                                        i = 1
+                                    if (1 << i) & mask == 0:
+                                        changed += 1
+                                        changes.append(
+                                            [child.GetName(), fstate[fname][child.GetName()], child.GetValue()])
+                                        # print(child.GetName(),
+                                        # child.GetValue())
                                     fstate[fname][child.GetName()
                                                   ] = child.GetValue()
-                                    changed += 1
-                                    print(child.GetName(),
-                                          child.GetValue())
                             else:
                                 fstate[fname][child.GetName()] = child.GetValue()
                                 # print( child.GetName(), child.GetValue())
-                        if changed > 2:
+                        if changed > 0:
+                            print("---------- WARNING ----------",
+                                  file=sys.stderr)
+                            print(" changed more than expected!",
+                                  file=sys.stderr)
                             if function:
+
                                 # We do have a function, print some info for the function
                                 # print(function)
                                 # Now get all instructions for this function and print them
@@ -93,6 +111,9 @@ if target:
                                     insts = symbol.GetInstructions(target)
                                     disassemble_instructions(insts)
 
+                            for [reg, was, now] in changes:
+                                print(reg, "was", was, "changed to", now)
+
                 # print("Hit the breakpoint at main, enter to continue and wait for program to exit or 'Ctrl-D'/'quit' to terminate the program")
                 next = sys.stdin.readline()
                 if not next or next.rstrip('\n') == 'quit':
@@ -103,7 +124,7 @@ if target:
                     process.Continue()
                     # When we return from the above function we will hopefully be at the
                     # program exit. Print out some process info
-                    print(process)
+                    # print(process)
             elif state == lldb.eStateExited:
                 print("Didn't hit the breakpoint at main, program has exited...")
             else:
