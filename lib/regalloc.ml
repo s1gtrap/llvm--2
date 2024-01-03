@@ -1754,6 +1754,34 @@ let compile_fdecl (alc : allocator) debug tdecls name
   let insns : Cfg.insn list = Cfg.flatten cfg in
   let df = Lva.dataflow insns ids g in
   let asn = alloc alc param insns df in
+
+  let rec phis t = function
+    | Cfg.Label l :: tail ->
+        let preds = addphis S.ST.empty l tail in
+        let t = S.ST.add l preds t in
+        phis t tail
+    | _ :: tail -> phis t tail
+    | [] -> t
+  and addphis t l = function
+    | Cfg.Insn (Some d, PhiNode (_ty, s)) :: tail ->
+        let addphi t (o, l) =
+          let mov1 = compile_typed_operand asn Ll.I64 (Reg Rax) o in
+          let mov2 = (Movq, [ Reg Rax; S.ST.find d asn ]) in
+          S.ST.add l (mov1 @ [ mov2 ]) t
+        in
+        let t = List.fold_left addphi t s in
+        addphis t l tail
+    | _ -> t
+  in
+  let phis = phis S.ST.empty insns in
+
+  S.ST.iter
+    (fun k v ->
+      Printf.printf "%s: " (S.name k);
+      S.ST.iter (fun k _v -> Printf.printf "%s " (S.name k)) v;
+      Printf.printf "\n")
+    phis;
+
   let pusharg i _ = (Pushq, [ arg i ]) in
   let poparg _i dst =
     match S.ST.find_opt dst asn with
@@ -1784,6 +1812,33 @@ let compile_fdecl (alc : allocator) debug tdecls name
     ]
   in
   let pro = pro @ List.mapi pusharg param @ List.mapi poparg (List.rev param) in
+  (*let rec addphis t = function
+      | (Some d, Ll.PhiNode (_, preds)) :: tail ->
+          let addphi t (o, l) =
+            let mov1 = compile_typed_operand asn Ll.I64 (Reg Rax) o in
+            let mov2 = (Movq, [ Reg Rax; S.ST.find d asn ]) in
+            S.ST.add l (mov1 @ [ mov2 ]) t (* FIXME: maybe update instead *)
+          in
+          let dt = List.fold_left addphi S.ST.empty preds in
+          addphis (S.ST.add d dt t) tail
+      | _ -> t
+    in
+    let phis =
+        match entryl with
+        | Some entryl -> addphis S.ST.empty head.insns
+        | None -> S.ST.empty
+      in
+      let rec phis t = function
+        | Cfg.Insn ins :: tail -> phis ({ b with asm = Text (asm @ ins) }, tail)
+        | Cfg.Label name :: tail ->
+            { b with asm = Text (asm @ term) }
+            :: phis ({ lbl = pad name; global = false; asm = Text [] }, tail)
+        | [ Cfg.Term t ] ->
+            let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
+            let term = compile_terminator pad asn movs t in
+            [ { b with asm = Text (asm @ term) } ]
+        | _ -> failwith ""
+      in*)
   let phis =
     List.filter_map
       (function
