@@ -37,44 +37,23 @@ if target:
 
     # Make sure the launch went ok
     if process:
-        regvals = {}
         for _ in iter(int, 1):
             # Print some simple process info
             state = process.GetState()
-            print(process)
             if state == lldb.eStateStopped:
                 # Get the first thread
                 thread = process.GetThreadAtIndex(0)
                 if thread:
-                    print("dsfsd", thread.GetStopReason(),
-                          thread.id,
-                          thread.GetStopReasonDataAtIndex(0))
                     # Print some simple thread info
-                    print(thread)
                     # Get the first frame
                     frame = thread.GetFrameAtIndex(0)
                     if frame:
                         # Print some simple frame info
                         # print(frame, "  asdf ", frame.name)
                         matches = rebp.match(frame.name)
-                        fname = print(matches.group(1))
+                        fname = matches.group(1)
                         function = frame.GetFunction()
                         # See if we have debug info (a function)
-                        if function:
-                            # We do have a function, print some info for the function
-                            print(function)
-                            # Now get all instructions for this function and print them
-                            insts = function.GetInstructions(target)
-                            disassemble_instructions(insts)
-                        else:
-                            # See if we have a symbol in the symbol table for where we stopped
-                            symbol = frame.GetSymbol()
-                            if symbol:
-                                # We do have a symbol, print some info for the symbol
-                                print(symbol)
-                                # Now get all instructions for this symbol and print them
-                                insts = symbol.GetInstructions(target)
-                                disassemble_instructions(insts)
 
                         value = frame.GetRegisters()[0]
                         # print('Frame registers (size of register set = %d):' % registerList.GetSize())
@@ -83,18 +62,36 @@ if target:
                               (value.GetName(), value.GetNumChildren()))
                         # grab the first five elements
                         gprs = itertools.islice(value, 0, 16)
-                        # changed = 0
+                        changed = 0
+                        if fname not in fstate:
+                            fstate[fname] = {}
                         for child in gprs:
-                            if child.GetName() in regvals:
-                                if regvals[child.GetName()] != child.GetValue():
-                                    regvals[child.GetName()] = child.GetValue()
-                                    # changed += 1
-                                    print(child.GetName(), child.GetValue())
+                            if child.GetName() in fstate[fname]:
+                                if fstate[fname][child.GetName()] != child.GetValue():
+                                    fstate[fname][child.GetName()
+                                                  ] = child.GetValue()
+                                    changed += 1
+                                    print(child.GetName(),
+                                          child.GetValue())
                             else:
-                                regvals[child.GetName()] = child.GetValue()
-                                print(child.GetName(), child.GetValue())
-                        # if changed > 3:
-                            # raise "changed more than two!"
+                                fstate[fname][child.GetName()] = child.GetValue()
+                                # print( child.GetName(), child.GetValue())
+                        if changed > 2:
+                            if function:
+                                # We do have a function, print some info for the function
+                                # print(function)
+                                # Now get all instructions for this function and print them
+                                insts = function.GetInstructions(target)
+                                disassemble_instructions(insts)
+                            else:
+                                # See if we have a symbol in the symbol table for where we stopped
+                                symbol = frame.GetSymbol()
+                                if symbol:
+                                    # We do have a symbol, print some info for the symbol
+                                    # print(symbol)
+                                    # Now get all instructions for this symbol and print them
+                                    insts = symbol.GetInstructions(target)
+                                    disassemble_instructions(insts)
 
                 # print("Hit the breakpoint at main, enter to continue and wait for program to exit or 'Ctrl-D'/'quit' to terminate the program")
                 next = sys.stdin.readline()
