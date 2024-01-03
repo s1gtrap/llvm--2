@@ -1820,6 +1820,8 @@ let compile_fdecl (alc : allocator) debug tdecls name
     | _ -> movs
   in
   let rec block = function
+    | ({ global = true; _ } as b), Cfg.Label name :: tail ->
+        b :: block ({ lbl = pad name; global = false; asm = Text [] }, tail)
     | ({ asm = Text asm; _ } as b), Cfg.Insn ins :: tail ->
         let ins = compile_insn tdecls debug asn ins in
         block ({ b with asm = Text (asm @ ins) }, tail)
@@ -1834,11 +1836,7 @@ let compile_fdecl (alc : allocator) debug tdecls name
         [ { b with asm = Text (asm @ term) } ]
     | _ -> failwith ""
   in
-  match entryl with
-  | Some entryl ->
-      { lbl = S.name fname; global = true; asm = Text pro }
-      :: block ({ lbl = pad entryl; global = false; asm = Text [] }, insns)
-  | None -> block ({ lbl = S.name fname; global = true; asm = Text pro }, insns)
+  block ({ lbl = S.name fname; global = true; asm = Text pro }, insns)
 
 let rec compile_ginit = function
   | Ll.GNull -> [ Quad (Lit 0L) ]
