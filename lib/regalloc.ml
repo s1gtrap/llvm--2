@@ -92,6 +92,12 @@ type reg =
   | R14b
   | R15b
 
+module Regs = Set.Make (struct
+  type t = reg
+
+  let compare a b = compare a b
+end)
+
 type operand =
   | Imm of imm (* immediate *)
   | Reg of reg (* register *)
@@ -198,10 +204,12 @@ type opcode =
   | Breakpoint of S.symbol
 
 let breaks = ref S.SS.empty
-let break n  = S.symbol ("_$break$" ^ n ^ "$" ^ string_of_int (S.SS.cardinal !breaks) ^ "$")
 
-let newbreak fname =
-  let bname =  (break fname ) in
+let break n m =
+  S.symbol ("_$break$" ^ n ^ "$" ^ string_of_int (S.SS.cardinal !breaks) ^ "$" ^ string_of_int m ^ "$")
+
+let newbreak fname mask =
+  let bname = break fname mask in
   breaks := S.SS.add bname !breaks;
   (Breakpoint bname, [])
 
@@ -365,7 +373,7 @@ let string_of_opcode (opc : opcode) : string =
   | Divq -> "divq"
   | Divl -> "divl"
   | Comment s -> "# " ^ String.escaped s
-  | Breakpoint s -> (S.name s) ^ ":"
+  | Breakpoint s -> S.name s ^ ":"
 
 let map_concat s f l = String.concat s (List.map f l)
 
@@ -437,7 +445,8 @@ let string_of_elem { lbl; global; asm } : string =
 let global s = "        .globl " ^ s
 
 let string_of_prog (p : prog) : string =
-  String.concat "\n" (S.SS.elements !breaks |> List.map S.name |> List.map global)
+  String.concat "\n"
+    (S.SS.elements !breaks |> List.map S.name |> List.map global)
   ^ "\n"
   ^ String.concat "\n" (List.map string_of_elem p)
 
@@ -760,9 +769,26 @@ let compile_bop : Ll.bop -> Ll.ty -> opcode =
     | Xor, Ll.I8 -> Xorb
   | _ -> failwith "TODO"*)
 
+let scratch = Regs.add Rax Regs.empty |> Regs.add Rcx
+
+let modifies asn = function
+  | ( Some d,
+      ( Ll.Binop _ | Alloca _ | AllocaN _ | Load _ | Store _ | Icmp _
+      | Bitcast _ | Gep _ | Zext _ | Sext _ | Ptrtoint _ | Trunc _ ) ) -> (
+      match S.ST.find d asn with
+      | Reg reg -> Regs.add reg scratch
+      | _ -> scratch)
+      | _ -> scratch
+
+let annotate debug asn insn =
+  let regs = modifies asn insn in
+  let mask =
+    Regs.fold (fun reg mask -> (1 lsl idx_of_reg reg) lor mask) regs 0
+  in
+  match debug with Some name -> [ newbreak name mask ] | None -> []
 
 let compile_insn tdecls debug asn insn =
-  (match debug with Some name -> [ newbreak name ] | None -> [])
+  annotate debug asn insn
   @ [ (Comment (Ll.string_of_named_insn insn), []) ]
   @
   match insn with
@@ -1184,12 +1210,6 @@ type mark =
   | PotentialSpill of S.symbol * Lva.G.V.t
 
 type assign = Color of S.symbol * int | ActualSpill of S.symbol
-
-module Regs = Set.Make (struct
-  type t = reg
-
-  let compare a b = compare a b
-end)
 
 let coalesce_briggs k (prefs : S.SS.t S.ST.t)
     ((l, g) : Lva.G.V.t S.ST.t * Lva.G.t) : Lva.G.V.t S.table * Lva.G.t =
@@ -1832,7 +1852,11 @@ let compile_fdecl (alc : allocator) debug tdecls name
         :: block (Some name)
              ({ lbl = pad name; global = false; asm = Text [] }, tail)
     | ({ asm = Text asm; _ } as b), Cfg.Insn ins :: tail ->
-        let ins = compile_insn tdecls (if debug then Some (S.name fname) else None) asn ins in
+        let ins =
+          compile_insn tdecls
+            (if debug then Some (S.name fname) else None)
+            asn ins
+        in
         block bname ({ b with asm = Text (asm @ ins) }, tail)
     | ({ asm = Text asm; _ } as b), Cfg.Term t :: Cfg.Label name :: tail ->
         let phis =
