@@ -198,7 +198,7 @@ let () =
     let pct = Float.floor (float_of_int p /. float_of_int t *. 100.0) in
     Printf.printf "Passed: %d / %d [%.0f%%]\n" p t pct
   in
-  t "tests/void.ll" [] (0, 0)
+  t "tests/void.ll" [] ~asserts:(assert_stdout lor assert_stderr) (0, 0)
   |> t "tests/zero.ll" [] |> t "tests/one.ll" [] |> t "tests/simplest.ll" []
   |> t "tests/add.ll" [ "1"; "2" ]
   |> t "tests/add.ll" [ "-13"; "12" ]
