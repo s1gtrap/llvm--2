@@ -1096,7 +1096,7 @@ let nextcase () =
   switch_case := c + 1;
   c
 
-let compile_terminator pad asn movs term =
+let compile_terminator pad asn phis term =
   let ins =
     match term with
     | Ll.Ret (_, Some oper) ->
@@ -1124,14 +1124,20 @@ let compile_terminator pad asn movs term =
           (Popq, [ Reg Rbp ]);
           (Retq, []);
         ]
-    | Br lbl -> movs @ [ (Jmp, [ Imm (Lbl (pad lbl)) ]) ]
+    | Br lbl ->
+        (S.ST.find_opt lbl phis |> Option.value ~default:[])
+        @ [ (Jmp, [ Imm (Lbl (pad lbl)) ]) ]
     | Cbr (oper, thn, els) ->
         let operins = compile_operand asn Ll.I64 (Reg Rax) oper in
         let zeroins = (Movq, [ Imm (Lit 0L); Reg Rcx ]) in
-        let cmpins : ins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
         let jeq = (J Eq, [ Imm (Lbl (pad els)) ]) in
+        let cmpins : ins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
         let jmp = (Jmp, [ Imm (Lbl (pad thn)) ]) in
-        operins @ [ zeroins; cmpins ] @ movs @ [ jeq; jmp ]
+        operins @ [ zeroins; cmpins ]
+        @ (S.ST.find_opt els phis |> Option.value ~default:[])
+        @ [ jeq ]
+        @ (S.ST.find_opt thn phis |> Option.value ~default:[])
+        @ [ jmp ]
     | Unreachable ->
         (* undefined, so do literally nothing *)
         []
@@ -1749,7 +1755,7 @@ let compile_fdecl (alc : allocator) debug tdecls name
     ({ param; cfg; _ } : Ll.fdecl) =
   let fname = name in
   (* move out of pre-assigned parameter registers (rsi, rdi, .. r9) *)
-  let (entryl, _head), _tail = cfg in
+  let (_entryl, _head), _tail = cfg in
   let ids, g = Cfg.graph cfg in
   let insns : Cfg.insn list = Cfg.flatten cfg in
   let df = Lva.dataflow insns ids g in
@@ -1779,13 +1785,12 @@ let compile_fdecl (alc : allocator) debug tdecls name
   in
   let phis = phis S.ST.empty insns in
 
-  S.ST.iter
+  (*S.ST.iter
     (fun k v ->
       Printf.printf "%s: " (S.name k);
       S.ST.iter (fun k _v -> Printf.printf "%s " (S.name k)) v;
       Printf.printf "\n")
-    phis;
-
+    phis;*)
   let pusharg i _ = (Pushq, [ arg i ]) in
   let poparg _i dst =
     match S.ST.find_opt dst asn with
@@ -1816,86 +1821,35 @@ let compile_fdecl (alc : allocator) debug tdecls name
     ]
   in
   let pro = pro @ List.mapi pusharg param @ List.mapi poparg (List.rev param) in
-  (*let rec addphis t = function
-      | (Some d, Ll.PhiNode (_, preds)) :: tail ->
-          let addphi t (o, l) =
-            let mov1 = compile_typed_operand asn Ll.I64 (Reg Rax) o in
-            let mov2 = (Movq, [ Reg Rax; S.ST.find d asn ]) in
-            S.ST.add l (mov1 @ [ mov2 ]) t (* FIXME: maybe update instead *)
-          in
-          let dt = List.fold_left addphi S.ST.empty preds in
-          addphis (S.ST.add d dt t) tail
-      | _ -> t
-    in
-    let phis =
-        match entryl with
-        | Some entryl -> addphis S.ST.empty head.insns
-        | None -> S.ST.empty
-      in
-      let rec phis t = function
-        | Cfg.Insn ins :: tail -> phis ({ b with asm = Text (asm @ ins) }, tail)
-        | Cfg.Label name :: tail ->
-            { b with asm = Text (asm @ term) }
-            :: phis ({ lbl = pad name; global = false; asm = Text [] }, tail)
-        | [ Cfg.Term t ] ->
-            let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
-            let term = compile_terminator pad asn movs t in
-            [ { b with asm = Text (asm @ term) } ]
-        | _ -> failwith ""
-      in*)
-  let phis =
-    List.filter_map
-      (function
-        | Cfg.Insn (Some dst, Ll.PhiNode (_, ops)) -> Some (dst, ops)
-        | _ -> None)
-      insns
-  in
-  let movs : ins list S.table =
-    List.fold_left
-      (fun t ((dst, ops) : S.symbol * _) ->
-        List.fold_left
-          (fun t ((src, lbl) : Ll.operand * _) ->
-            let lbl =
-              match entryl with Some l when l = lbl -> name | _ -> lbl
-            in
-            S.ST.update lbl
-              (function
-                | Some movs ->
-                    Some
-                      (movs
-                      (* FIXME: phi movs need to be placed between jumps *)
-                      @ [ (Comment ("phi mov for %" ^ S.name dst), []) ]
-                      @ compile_operand asn Ll.I64 (S.ST.find dst asn) src)
-                | None ->
-                    Some (compile_operand asn Ll.I64 (S.ST.find dst asn) src))
-              t)
-          t ops)
-      S.empty phis
-  in
   let pad n = "_" ^ S.name fname ^ "$" ^ S.name n in
-  let movs =
-    match S.ST.find_opt (S.symbol "entry") movs with
-    | Some m -> S.ST.add name m movs
-    | _ -> movs
-  in
-  let rec block = function
+  let rec block bname = function
     | ({ global = true; _ } as b), Cfg.Label name :: tail ->
-        b :: block ({ lbl = pad name; global = false; asm = Text [] }, tail)
+        b
+        :: block (Some name)
+             ({ lbl = pad name; global = false; asm = Text [] }, tail)
     | ({ asm = Text asm; _ } as b), Cfg.Insn ins :: tail ->
         let ins = compile_insn tdecls debug asn ins in
-        block ({ b with asm = Text (asm @ ins) }, tail)
+        block bname ({ b with asm = Text (asm @ ins) }, tail)
     | ({ asm = Text asm; _ } as b), Cfg.Term t :: Cfg.Label name :: tail ->
-        let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
-        let term = compile_terminator pad asn movs t in
+        let phis =
+          Option.bind bname (fun bname -> S.ST.find_opt bname phis)
+          |> Option.value ~default:S.ST.empty
+        in
+        (*Printf.printf " 1phis :  %d\n" (S.ST.cardinal phis);*)
+        let term = compile_terminator pad asn phis t in
         { b with asm = Text (asm @ term) }
-        :: block ({ lbl = pad name; global = false; asm = Text [] }, tail)
+        :: block (Some name)
+             ({ lbl = pad name; global = false; asm = Text [] }, tail)
     | ({ asm = Text asm; _ } as b), [ Cfg.Term t ] ->
-        let movs = Option.value (S.ST.find_opt name movs) ~default:[] in
-        let term = compile_terminator pad asn movs t in
+        let phis =
+          Option.bind bname (fun bname -> S.ST.find_opt bname phis)
+          |> Option.value ~default:S.ST.empty
+        in
+        let term = compile_terminator pad asn phis t in
         [ { b with asm = Text (asm @ term) } ]
     | _ -> failwith ""
   in
-  block ({ lbl = S.name fname; global = true; asm = Text pro }, insns)
+  block None ({ lbl = S.name fname; global = true; asm = Text pro }, insns)
 
 let rec compile_ginit = function
   | Ll.GNull -> [ Quad (Lit 0L) ]
