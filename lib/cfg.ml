@@ -35,19 +35,21 @@ let dot g =
   Dot_.fprint_graph Format.str_formatter g;
   Format.flush_str_formatter ()
 
-let indices (((_, head), tail) : Ll.cfg) : G.V.t array =
-  let off = List.length head.insns + 1 in
+let indices (((entrylbl, head), tail) : Ll.cfg) : G.V.t array =
+  let off = match entrylbl with Some _ -> 1 | None -> 0 in
+  let off = off + List.length head.insns + 1 in
   let insns (b : Ll.block) = b.insns in
   let tail = List.map snd tail |> List.map insns |> List.map List.length in
   let len = List.fold_left ( + ) off tail in
   let len = len + (2 * List.length tail) in
   Array.init len G.V.create
 
-let blocks ids (((_, head), tail) : Ll.cfg) : G.V.t S.table =
+let blocks ids (((entrylbl, head), tail) : Ll.cfg) : G.V.t S.table =
   let f (i, t) ((n, b) : _ * Ll.block) =
     (i + List.length b.insns + 2, S.enter (t, n, ids.(i + 1)))
   in
-  snd (List.fold_left f (List.length head.insns + 1, S.empty) tail)
+  let off = match entrylbl with Some _ -> 1 | None -> 0 in
+  snd (List.fold_left f (off + List.length head.insns + 1, S.empty) tail)
 
 let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
   let g = G.create () in
@@ -116,10 +118,11 @@ let%test "graph" =
   let _ids, g = graph cfg in
   dot g = "digraph G {\n  0;\n  1;\n  2;\n  3;\n  \n  \n  1 -> 3;\n  \n  }\n"
 
-let flatten (((_, head), tail) : Ll.cfg) : insn list =
+let flatten (((entrylbl, head), tail) : Ll.cfg) : insn list =
   let insn i = Insn i in
   let named_block ((n, b) : _ * Ll.block) =
     [ Label n ] @ List.map insn b.insns @ [ Term b.terminator ]
   in
-  List.map insn head.insns @ [ Term head.terminator ]
+  (Option.map (fun l -> [ Label l ]) entrylbl |> Option.value ~default:[])
+  @ List.map insn head.insns @ [ Term head.terminator ]
   @ List.flatten (List.map named_block tail)
