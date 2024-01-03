@@ -1757,17 +1757,21 @@ let compile_fdecl (alc : allocator) debug tdecls name
 
   let rec phis t = function
     | Cfg.Label l :: tail ->
-        let preds = addphis S.ST.empty l tail in
-        let t = S.ST.add l preds t in
+        let t = addphis t l tail in
         phis t tail
     | _ :: tail -> phis t tail
     | [] -> t
   and addphis t l = function
     | Cfg.Insn (Some d, PhiNode (_ty, s)) :: tail ->
-        let addphi t (o, l) =
+        let addphi t ((o, p) : _ * S.symbol) =
           let mov1 = compile_typed_operand asn Ll.I64 (Reg Rax) o in
           let mov2 = (Movq, [ Reg Rax; S.ST.find d asn ]) in
-          S.ST.add l (mov1 @ [ mov2 ]) t
+          let pt =
+            S.ST.find_opt p t
+            |> Option.value ~default:S.ST.empty
+            |> S.ST.add l (mov1 @ [ mov2 ])
+          in
+          S.ST.add p pt t
         in
         let t = List.fold_left addphi t s in
         addphis t l tail
