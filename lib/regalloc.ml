@@ -1130,11 +1130,10 @@ let compile_terminator pad asn phis term =
         @ [ (Jmp, [ Imm (Lbl (pad lbl)) ]) ]
     | Cbr (oper, thn, els) ->
         let operins = compile_operand asn Ll.I64 (Reg Rax) oper in
-        let zeroins = (Movq, [ Imm (Lit 0L); Reg Rcx ]) in
         let jeq = (J Eq, [ Imm (Lbl (pad els)) ]) in
-        let cmpins : ins = (Cmpq, [ Reg Rax; Reg Rcx ]) in
+        let cmpins = (Cmpq, [ Imm (Lit 0L); Reg Rax ]) in
         let jmp = (Jmp, [ Imm (Lbl (pad thn)) ]) in
-        operins @ [ zeroins; cmpins ]
+        operins @ [ cmpins ]
         @ (S.ST.find_opt els phis |> Option.value ~default:[])
         @ [ jeq ]
         @ (S.ST.find_opt thn phis |> Option.value ~default:[])
