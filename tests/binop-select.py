@@ -3,6 +3,9 @@
 from enum import Enum
 import sys
 
+def rshift(v, n):
+    return v >> n if v >= 0 else (v + 0x100000000) >> n
+
 class Bop(Enum):
     ADD = 1
     SUB = 2
@@ -41,7 +44,7 @@ class Bop(Enum):
             case Bop.SDIV:
                 return "/"
             case Bop.SREM:
-                return "%"
+                return "%%"
             case Bop.UDIV:
                 return "udiv"
             case Bop.UREM:
@@ -58,7 +61,7 @@ class Bop(Enum):
             case Bop.SHL:
                 return (o1 << o2)
             case Bop.LSHR:
-                return (o1 >> o2) # FIXME
+                return (rshift(o1, o2)) # FIXME
             case Bop.ASHR:
                 return (o1 >> o2) # FIXME
             case Bop.AND:
@@ -68,11 +71,11 @@ class Bop(Enum):
             case Bop.XOR:
                 return (o1 ^ o2)
             case Bop.SDIV:
-                return (o1 / o2) # FIXME
+                return (o1 // o2) # FIXME
             case Bop.SREM:
                 return (o1 % o2) # FIXME
             case Bop.UDIV:
-                return (o1 / o2) # FIXME
+                return (o1 // o2) # FIXME
             case Bop.UREM:
                 return (o1 % o2) # FIXME
 
@@ -156,11 +159,14 @@ ty2 = ty1 # Ty[sys.argv[3].upper()]
 
 def eqstr(ty1, bop, ty2, cnd):
     str = f"{ty1} {bop} {ty2} {cnd} {ty1}"
-    return f"global [{len(str) + 2} x i8] c\"{str}\\0A\\00\""
+    l = len(str.encode('utf-8').decode('unicode_escape'))
+    return f"global [{l + 2} x i8] c\"{str}\\0A\\00\""
 
 def assertbop(ty1, op1, bop, ty2, op2):
+    if op2 == 0 and (bop == Bop.SDIV or bop == Bop.UDIV or bop == Bop.SREM or bop == Bop.UREM):
+        return ""
     op3 = bop.apply(ty1, op1, ty2, op2) & ty1.umax()
-    return f" call void @assert ({ty1.name.lower()} {op1}, {ty2.name.lower()} {op2}, {ty1.name.lower()} {op3})"
+    return f" call void @assert ({ty1.name.lower()} {op1}, {ty2.name.lower()} {op2}, {ty1.name.lower()} {op3})\n"
 
 print("@.str =", eqstr(ty1, bop, ty2, "!="))
 print("@.str.1 =", eqstr(ty1, bop, ty2, "=="))
@@ -176,14 +182,14 @@ print(f" ret void")
 print(f"}}")
 print()
 print(f"define i32 @main (i32 %0, i8* %1) {{")
-print(assertbop(ty1, 0, bop, ty2, 0))
-print(assertbop(ty1, 1, bop, ty2, 0))
-print(assertbop(ty1, 0, bop, ty2, 1))
-print(assertbop(ty1, 1, bop, ty2, 1))
-print(assertbop(ty1, 1, bop, ty2, 2))
-print(assertbop(ty1, 1, bop, ty2, 2))
+print(assertbop(ty1, 0, bop, ty2, 0), end='')
+print(assertbop(ty1, 1, bop, ty2, 0), end='')
+print(assertbop(ty1, 0, bop, ty2, 1), end='')
+print(assertbop(ty1, 1, bop, ty2, 1), end='')
+print(assertbop(ty1, 1, bop, ty2, 2), end='')
+print(assertbop(ty1, 1, bop, ty2, 2), end='')
 for i in range(1, ty1.size()):
     for j in range(i, ty2.size()):
-        print(assertbop(ty1, 2 ** i - 1, bop, ty2, 2 ** j - 1))
+        print(assertbop(ty1, 2 ** i - 1, bop, ty2, 2 ** j - 1), end='')
 print(f" ret i32 0")
 print(f"}}")

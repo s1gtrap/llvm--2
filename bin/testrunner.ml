@@ -225,6 +225,22 @@ let () =
   |> t "tests/xori16.ll" [] (* ./tests/binop-select.py xor i16 *)
   |> t "tests/xori32.ll" [] (* ./tests/binop-select.py xor i32 *)
   |> t "tests/xori64.ll" [] (* ./tests/binop-select.py xor i64 *)
+  |> t "tests/sdivi8.ll" [] (* ./tests/binop-select.py sdiv i8 *)
+  |> t "tests/sdivi16.ll" [] (* ./tests/binop-select.py sdiv i16 *)
+  |> t "tests/sdivi32.ll" [] (* ./tests/binop-select.py sdiv i32 *)
+  |> t "tests/sdivi64.ll" [] (* ./tests/binop-select.py sdiv i64 *)
+  |> t "tests/udivi8.ll" [] (* ./tests/binop-select.py udiv i8 *)
+  |> t "tests/udivi16.ll" [] (* ./tests/binop-select.py udiv i16 *)
+  |> t "tests/udivi32.ll" [] (* ./tests/binop-select.py udiv i32 *)
+  |> t "tests/udivi64.ll" [] (* ./tests/binop-select.py udiv i64 *)
+  |> t "tests/sremi8.ll" [] (* ./tests/binop-select.py srem i8 *)
+  |> t "tests/sremi16.ll" [] (* ./tests/binop-select.py srem i16 *)
+  |> t "tests/sremi32.ll" [] (* ./tests/binop-select.py srem i32 *)
+  |> t "tests/sremi64.ll" [] (* ./tests/binop-select.py srem i64 *)
+  |> t "tests/uremi8.ll" [] (* ./tests/binop-select.py urem i8 *)
+  |> t "tests/uremi16.ll" [] (* ./tests/binop-select.py urem i16 *)
+  |> t "tests/uremi32.ll" [] (* ./tests/binop-select.py urem i32 *)
+  |> t "tests/uremi64.ll" [] (* ./tests/binop-select.py urem i64 *)
   |> t "tests/add.ll" [ "1"; "2" ]
   |> t "tests/add.ll" [ "-13"; "12" ]
   |> t "tests/argc.ll" []
