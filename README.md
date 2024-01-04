@@ -12,6 +12,15 @@ It might work for earlier releases as well.
 
 Builds a subset of LLVM IR referred to as LLVM-- in our compilers cource.
 
+```bash
+$ opam --version
+2.1.5
+$ dune --version
+3.11.1
+$ ocaml --version
+The OCaml toplevel, version 4.14.1
+```
+
 ## Build
 
 Built with OCaml 4.14.1

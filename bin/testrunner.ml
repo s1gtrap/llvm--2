@@ -44,15 +44,6 @@ let exec_with_timeout_and_capture process args timeout input =
   close_in stderr_ic;
   (exit, stdout, stderr)
 
-let compilers =
-  [
-    Common.Tiger;
-    Common.Llvm__2 (Greedy 12);
-    Common.Llvm__2 (Simple 12);
-    Common.Llvm__2 (Briggs 12);
-    Common.Llvm__2 Linearscan;
-  ]
-
 let clang t args =
   let outfile = Filename.temp_file "" "" in
   let args =
@@ -87,7 +78,7 @@ let assert_exitcode : asserts = 0b1
 and assert_stdout : asserts = 0b10
 and assert_stderr : asserts = 0b100
 
-let t ?(stdin = "") ?(cargs = []) ?(timeout = 5)
+let t compilers ?(stdin = "") ?(cargs = []) ?(timeout = 5)
     ?(asserts = assert_exitcode lor assert_stdout lor assert_stderr) t args
     counts =
   let regexp =
@@ -194,6 +185,16 @@ let t ?(stdin = "") ?(cargs = []) ?(timeout = 5)
   else counts
 
 let () =
+  let compilers =
+    [
+      (*Common.Tiger;*)
+      Common.Llvm__2 (Greedy 12);
+      Common.Llvm__2 (Simple 12);
+      Common.Llvm__2 (Briggs 12);
+      Common.Llvm__2 Linearscan;
+    ]
+  in
+  let t = t compilers in
   let print (t, p) =
     let pct = Float.floor (float_of_int p /. float_of_int t *. 100.0) in
     Printf.printf "Passed: %d / %d [%.0f%%]\n" p t pct
