@@ -437,7 +437,7 @@ let () =
   |> t "tests/tiger/arith.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
   |> t "tests/tiger/binary_tree.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
   |> t "tests/tiger/brainfuck.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
-  |> t "tests/tests/tiger/runtime.color.tig.ll" [] ~cargs:[ "tiger.c" ]
+  |> t "tests/tiger/color.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
   |> t "tests/tiger/ddd.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
   |> t "tests/tiger/div213.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
   |> t "tests/tiger/divbyzero.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
