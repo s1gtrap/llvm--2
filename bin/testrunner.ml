@@ -187,7 +187,7 @@ let t compilers ?(stdin = "") ?(cargs = []) ?(timeout = 5)
 let () =
   let compilers =
     [
-      (*Common.Tiger;*)
+      Common.Tiger;
       Common.Llvm__2 (Greedy 12);
       Common.Llvm__2 (Simple 12);
       Common.Llvm__2 (Briggs 12);
