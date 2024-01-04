@@ -209,6 +209,22 @@ let () =
   |> t "tests/subi16.ll" [] (* ./tests/binop-select.py sub i16 *)
   |> t "tests/subi32.ll" [] (* ./tests/binop-select.py sub i32 *)
   |> t "tests/subi64.ll" [] (* ./tests/binop-select.py sub i64 *)
+  |> t "tests/muli8.ll" [] (* ./tests/binop-select.py mul i8 *)
+  |> t "tests/muli16.ll" [] (* ./tests/binop-select.py mul i16 *)
+  |> t "tests/muli32.ll" [] (* ./tests/binop-select.py mul i32 *)
+  |> t "tests/muli64.ll" [] (* ./tests/binop-select.py mul i64 *)
+  |> t "tests/andi8.ll" [] (* ./tests/binop-select.py and i8 *)
+  |> t "tests/andi16.ll" [] (* ./tests/binop-select.py and i16 *)
+  |> t "tests/andi32.ll" [] (* ./tests/binop-select.py and i32 *)
+  |> t "tests/andi64.ll" [] (* ./tests/binop-select.py and i64 *)
+  |> t "tests/ori8.ll" [] (* ./tests/binop-select.py or i8 *)
+  |> t "tests/ori16.ll" [] (* ./tests/binop-select.py or i16 *)
+  |> t "tests/ori32.ll" [] (* ./tests/binop-select.py or i32 *)
+  |> t "tests/ori64.ll" [] (* ./tests/binop-select.py or i64 *)
+  |> t "tests/xori8.ll" [] (* ./tests/binop-select.py xor i8 *)
+  |> t "tests/xori16.ll" [] (* ./tests/binop-select.py xor i16 *)
+  |> t "tests/xori32.ll" [] (* ./tests/binop-select.py xor i32 *)
+  |> t "tests/xori64.ll" [] (* ./tests/binop-select.py xor i64 *)
   |> t "tests/add.ll" [ "1"; "2" ]
   |> t "tests/add.ll" [ "-13"; "12" ]
   |> t "tests/argc.ll" []
