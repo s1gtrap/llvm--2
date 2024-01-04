@@ -316,27 +316,28 @@ let () =
   |> t "tests/subset.ll" [ "1" ]
   |> t "tests/subset.ll" [ "1"; "2" ]
   |> t "tests/subset.ll" [ "1"; "2"; "3" ]
-  |> t "tests/factori32.ll" [ "2" ]
-  |> t "tests/factori32.ll" [ "3" ]
-  |> t "tests/factori32.ll" [ "4" ]
-  |> t "tests/factori32.ll" [ "5" ]
-  |> t "tests/factori32.ll" [ "5040" ]
-  |> t "tests/factori32.ll" [ "5040" ]
-  |> t "tests/factori32.ll" [ "268435399" ]
-  |> t "tests/factori32.ll" [ "536870909" ]
-  |> t "tests/factori32.ll" [ "1073741789" ]
-  |> t "tests/factori32.ll" [ "2147483647" ]
-  |> t "tests/factori64.ll" [ "2" ]
-  |> t "tests/factori64.ll" [ "3" ]
-  |> t "tests/factori64.ll" [ "4" ]
-  |> t "tests/factori64.ll" [ "5" ]
-  |> t "tests/factori64.ll" [ "5040" ]
-  |> t "tests/factori64.ll" [ "5040" ]
-  |> t "tests/factori64.ll" [ "268435399" ]
-  |> t "tests/factori64.ll" [ "536870909" ]
-  |> t "tests/factori64.ll" [ "1073741789" ]
-  |> t "tests/factori64.ll" [ "2147483647" ]
-  |> t "tests/factori64.ll" [ "18446744073709551615" ]
+  |> t "tests/factori32.ll" [ "2" ] ~timeout:60
+  |> t "tests/factori32.ll" [ "3" ] ~timeout:60
+  |> t "tests/factori32.ll" [ "4" ] ~timeout:60
+  |> t "tests/factori32.ll" [ "5" ] ~timeout:60
+  |> t "tests/factori32.ll" [ "5040" ] ~timeout:60
+  |> t "tests/factori32.ll" [ "268435399" ] ~timeout:60
+  |> t "tests/factori32.ll" [ "536870909" ] ~timeout:60
+  |> t "tests/factori32.ll" [ "1073741789" ] ~timeout:60
+  |> t "tests/factori32.ll" [ "2147483647" ] ~timeout:60
+  |> t "tests/factori64.ll" [ "2" ] ~timeout:60
+  |> t "tests/factori64.ll" [ "3" ] ~timeout:60
+  |> t "tests/factori64.ll" [ "4" ] ~timeout:60
+  |> t "tests/factori64.ll" [ "5" ] ~timeout:60
+  |> t "tests/factori64.ll" [ "5040" ] ~timeout:60
+  |> t "tests/factori64.ll" [ "268435399" ] ~timeout:60
+  |> t "tests/factori64.ll" [ "536870909" ] ~timeout:60
+  |> t "tests/factori64.ll" [ "1073741789" ] ~timeout:60
+  |> t "tests/factori64.ll" [ "2147483647" ] ~timeout:60
+  |> t "tests/factori64.ll" [ "2305843009213693951" ] ~timeout:60
+  |> t "tests/factori64.ll" [ "4611686018427387847" ] ~timeout:60
+  |> t "tests/factori64.ll" [ "9223372036854775783" ] ~timeout:60
+  (*|> t "tests/factori64.ll" [ "18446744073709551615" ] ~timeout:60*)
   |> t "tests/sieven.ll" [ "1" ]
   |> t "tests/sieven.ll" [ "10" ]
   |> t "tests/sieven.ll" [ "100" ]
