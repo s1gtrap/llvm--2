@@ -184,6 +184,8 @@ type opcode =
   | J of cnd
   | Cmpq
   | Cmpl
+  | Cmpw
+  | Cmpb
   | Set of cnd
   | Callq
   | Retq
@@ -352,6 +354,8 @@ let string_of_opcode (opc : opcode) : string =
   | J c -> "j" ^ string_of_cnd c
   | Cmpq -> "cmpq"
   | Cmpl -> "cmpl"
+  | Cmpw -> "cmpw"
+  | Cmpb -> "cmpb"
   | Set c -> "set" ^ string_of_cnd c
   | Callq -> "callq"
   | Retq -> "retq"
@@ -969,24 +973,22 @@ let compile_insn tdecls debug asn insn =
         | _ -> failwith (Ll.string_of_operand dst)
       in
       sins @ dins @ [ storins ]
-  | Some dst, Icmp (cnd, Ll.I32, l, r) ->
-      let lop = Reg Eax in
-      let rop = Reg Ecx in
+  | Some dst, Icmp (cnd, ty, l, r) ->
+      let lop = ty_cast ty (Reg Eax) in
+      let rop = ty_cast ty (Reg Ecx) in
+      let cmpi =
+        match ty with
+        | Ll.I64 -> Cmpq
+        | Ll.I32 -> Cmpl
+        | Ll.I16 -> Cmpw
+        | Ll.I8 | Ll.I1 -> Cmpb
+        | _ -> Cmpq
+      in
       let dst = S.ST.find dst asn in
-      let lins = compile_operand asn Ll.I64 (Reg Rax) l in
-      let rins = compile_operand asn Ll.I64 (Reg Rcx) r in
+      let lins = compile_typed_operand asn ty (Reg Rax) l in
+      let rins = compile_typed_operand asn ty (Reg Rcx) r in
       let setzins = (Movq, [ Imm (Lit 0L); dst ]) in
-      let cmpinsn = (Cmpl, [ rop; lop ]) in
-      let setinsn = (Set (compile_cnd cnd), [ byteofquad dst ]) in
-      lins @ rins @ [ cmpinsn; setzins; setinsn ]
-  | Some dst, Icmp (cnd, _, l, r) ->
-      let lop = Reg Rax in
-      let rop = Reg Rcx in
-      let dst = S.ST.find dst asn in
-      let lins = compile_operand asn Ll.I64 lop l in
-      let rins = compile_operand asn Ll.I64 rop r in
-      let setzins = (Movq, [ Imm (Lit 0L); dst ]) in
-      let cmpinsn = (Cmpq, [ rop; lop ]) in
+      let cmpinsn = (cmpi, [ rop; lop ]) in
       let setinsn = (Set (compile_cnd cnd), [ byteofquad dst ]) in
       lins @ rins @ [ cmpinsn; setzins; setinsn ]
   | None, Call (_, oper, args) -> compile_call asn oper args
