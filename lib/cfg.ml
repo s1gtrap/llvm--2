@@ -118,11 +118,9 @@ let%test "graph" =
   let _ids, g = graph cfg in
   dot g = "digraph G {\n  0;\n  1;\n  2;\n  3;\n  \n  \n  1 -> 3;\n  \n  }\n"
 
-let flatten (((entrylbl, head), tail) : Ll.cfg) : insn list =
-  let insn i = Insn i in
-  let named_block ((n, b) : _ * Ll.block) =
-    [ Label n ] @ List.map insn b.insns @ [ Term b.terminator ]
-  in
-  (Option.map (fun l -> [ Label l ]) entrylbl |> Option.value ~default:[])
-  @ List.map insn head.insns @ [ Term head.terminator ]
-  @ List.flatten (List.map named_block tail)
+let flatten ((head, tail) : Ll.cfg) : insn list =
+  let label l = Label l and insn i = Insn i in
+  let block (b : Ll.block) = List.map insn b.insns @ [ Term b.terminator ] in
+  let named_opt (n, b) = (Option.map label n |> Option.to_list) @ block b in
+  let named (n, b) = Label n :: block b in
+  named_opt head @ (List.map named tail |> List.flatten)
