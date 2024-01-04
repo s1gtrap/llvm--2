@@ -93,7 +93,7 @@ rule token = parse
   | '%' (idchar+ as i) { UID (S.symbol i) }
   | '@' (idchar+ as i) { GID (S.symbol i) }
   | "x"                           { CROSS } (* for Array types *)
-  | '-'? digit+ as d              { INT (Int64.of_string d) }
+  | '-'? digit+ as d              { INT (try Int64.of_string d with Failure _ -> Int64.of_string ("0u" ^ d)) }
   | idchar+ as i                  { LBL (S.symbol i) }
   | ";" ([^'\n']*) '\n'
   | ("declare" | "target" | "attributes" | "source_filename") [^'\n']* '\n'
