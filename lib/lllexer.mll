@@ -109,6 +109,6 @@ and string current = parse
                         { string (current^(Scanf.unescaped e)) lexbuf }
   | '\\' (hex hex as h)
                         { string (current^(hex2str h)) lexbuf }
-  | [' '-'~']           { string (current^(Lexing.lexeme lexbuf)) lexbuf }
+  | [' '-'\x7f']           { string (current^(Lexing.lexeme lexbuf)) lexbuf }
   | eof                 { error lexbuf "Unclosed string at end of file" }
   | _ as c              { error lexbuf @@ "Illegal character '" ^ (String.make 1 c) ^ "'" }
