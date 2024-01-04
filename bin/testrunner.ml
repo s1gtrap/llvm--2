@@ -200,6 +200,14 @@ let () =
   in
   t "tests/void.ll" [] ~asserts:(assert_stdout lor assert_stderr) (0, 0)
   |> t "tests/zero.ll" [] |> t "tests/one.ll" [] |> t "tests/simplest.ll" []
+  |> t "tests/addi8.ll" [] (* ./tests/binop-select.py add i8 *)
+  |> t "tests/addi16.ll" [] (* ./tests/binop-select.py add i16 *)
+  |> t "tests/addi32.ll" [] (* ./tests/binop-select.py add i32 *)
+  |> t "tests/addi64.ll" [] (* ./tests/binop-select.py add i64 *)
+  |> t "tests/subi8.ll" [] (* ./tests/binop-select.py sub i8 *)
+  |> t "tests/subi16.ll" [] (* ./tests/binop-select.py sub i16 *)
+  |> t "tests/subi32.ll" [] (* ./tests/binop-select.py sub i32 *)
+  |> t "tests/subi64.ll" [] (* ./tests/binop-select.py sub i64 *)
   |> t "tests/add.ll" [ "1"; "2" ]
   |> t "tests/add.ll" [ "-13"; "12" ]
   |> t "tests/argc.ll" []
