@@ -504,12 +504,14 @@ let () =
   |> t "tests/tiger/test1.tig.ll" []
        ~cargs:[ "tests/tiger/runtime.c" ]
        ~asserts:(assert_stdout lor assert_stderr)
-  |> t "tests/tiger/test12.tig.ll" []
+  |> t "tests/tiger/test12.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
+  |> t "tests/tiger/test2.tig.ll" []
        ~cargs:[ "tests/tiger/runtime.c" ]
        ~asserts:(assert_stdout lor assert_stderr)
-  |> t "tests/tiger/test2.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
   |> t "tests/tiger/test27.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
-  |> t "tests/tiger/test3.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
+  |> t "tests/tiger/test3.tig.ll" []
+       ~cargs:[ "tests/tiger/runtime.c" ]
+       ~asserts:(assert_stdout lor assert_stderr)
   |> t "tests/tiger/test30.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
   |> t "tests/tiger/test37.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
   |> t "tests/tiger/test4.tig.ll" [] ~cargs:[ "tests/tiger/runtime.c" ]
