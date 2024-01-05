@@ -48,7 +48,7 @@ let printset s = Printf.sprintf "{%s}" (Ll.mapcat " " S.name (S.SS.elements s))
 
 let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) ?(v = false)
     (g : Cfg.G.t) =
-  let insns = List.mapi (fun i v -> (i, v)) insns |> List.rev in
+  let insns = List.mapi (fun i v -> (i, v)) insns in
   let in_ = Array.init (List.length insns) (Fun.const S.SS.empty) in
   let out = Array.init (List.length insns) (Fun.const S.SS.empty) in
   let changes = Array.init (List.length insns) (Fun.const []) in
@@ -83,23 +83,24 @@ let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) ?(v = false)
     if List.fold_left flow false insns then dataflow () else (in_, out)
   in
   let flow = dataflow () in
-  if v then Printf.printf "    | ";
-  Printf.printf "       use        def |";
-  List.iter (fun _ -> Printf.printf "        in        out |") changes.(0);
-  Printf.printf "\n";
+  if v then (
+    Printf.printf "    | ";
+    Printf.printf "         use          def |";
+    List.iter (fun _ -> Printf.printf "          in          out |") changes.(0);
+    Printf.printf "\n");
   let printsets (s1, s2) =
-    Printf.printf "%10s " (printset s1);
-    Printf.printf "%10s" (printset s2);
+    Printf.printf "%12s " (printset s1);
+    Printf.printf "%12s" (printset s2);
     Printf.printf " |"
   in
-  Array.iteri
-    (fun i c ->
-      Printf.printf "%3d | " i;
-      let insn = List.nth insns i in
-      printsets (use S.SS.empty (snd insn), def S.SS.empty (snd insn));
-      List.iter printsets c;
-      Printf.printf "\n")
-    changes;
+  let insns = List.rev insns in
+  Array.to_list changes
+  |> List.iteri (fun i c ->
+         Printf.printf "%3d | " i;
+         let insn = List.nth insns i in
+         printsets (use S.SS.empty (snd insn), def S.SS.empty (snd insn));
+         List.iter printsets c;
+         Printf.printf "\n");
   flow
 
 open Graph
