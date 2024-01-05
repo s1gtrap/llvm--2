@@ -48,14 +48,17 @@ let blocks ids (((entrylbl, head), tail) : Ll.cfg) : G.V.t S.table =
   let f (i, t) ((n, b) : _ * Ll.block) =
     (i + List.length b.insns + 2, S.enter (t, n, ids.(i + 1)))
   in
-  let off = match entrylbl with Some _ -> 1 | None -> 0 in
-  snd (List.fold_left f (off + List.length head.insns + 1, S.empty) tail)
+  let off, blk =
+    match entrylbl with
+    | Some e -> (1, S.ST.add e ids.(0) S.ST.empty)
+    | None -> (0, S.ST.empty)
+  in
+  snd (List.fold_left f (off + List.length head.insns + 1, blk) tail)
 
 let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
   let g = G.create () in
   let ids = indices ((l, head), tail) in
   let blk = blocks ids ((l, head), tail) in
-  let blk = match l with Some e -> S.ST.add e ids.(0) blk | None -> blk in
   let blk l =
     match S.ST.find_opt l blk with
     | Some i -> i
