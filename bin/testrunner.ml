@@ -248,6 +248,18 @@ let () =
   |> t "tests/argc.ll" [ "two"; "three" ]
   |> t "tests/argc.ll" [ "2"; "3"; "4" ]
   |> t "tests/arith0.ll" [] |> t "tests/arith1.ll" [] |> t "tests/arith2.ll" []
+  |> t "tests/count0.ll" (List.init 0 string_of_int)
+  |> t "tests/count0.ll" (List.init 1 string_of_int)
+  |> t "tests/count0.ll" (List.init 2 string_of_int)
+  |> t "tests/count0.ll" (List.init 3 string_of_int)
+  |> t "tests/count0.ll" (List.init 4 string_of_int)
+  |> t "tests/count0.ll" (List.init 5 string_of_int)
+  |> t "tests/count1.ll" (List.init 0 string_of_int)
+  |> t "tests/count1.ll" (List.init 1 string_of_int)
+  |> t "tests/count1.ll" (List.init 2 string_of_int)
+  |> t "tests/count1.ll" (List.init 3 string_of_int)
+  |> t "tests/count1.ll" (List.init 4 string_of_int)
+  |> t "tests/count1.ll" (List.init 5 string_of_int)
   |> t "tests/factorial0.ll" (List.init 0 string_of_int)
   |> t "tests/factorial0.ll" (List.init 1 string_of_int)
   |> t "tests/factorial0.ll" (List.init 2 string_of_int)
