@@ -24,14 +24,14 @@ let progcfg input =
   in
   List.iter fdecl prog.fdecls
 
-let proglva input =
+let proglva ?(v = false) ?(r = false) input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
     Printf.printf "%s:\n" (Symbol.name name);
     let ids, g = Cfg.graph fdecl.cfg in
     let insns = Cfg.flatten fdecl.cfg in
-    let in_, out = Lva.dataflow insns ids g ~v:true in
+    let in_, out = Lva.dataflow insns ids g ~v ~r in
     Lva.print insns ids g in_ out;
     ()
   in
@@ -118,6 +118,7 @@ let progprefs input =
 let () =
   let usage_msg = "llvm__2 [-v] -p <parser> <file1> [<file2>] ..." in
   let verbose = ref false in
+  let reverse = ref false in
   let input_files = ref [] in
   let oper = ref "" in
   let out = ref "" in
@@ -130,6 +131,7 @@ let () =
   let speclist =
     [
       ("-v", Arg.Set verbose, "Output debug information");
+      ("-r", Arg.Set reverse, "Reverse instructions before dataflow analysis");
       ("-t", Arg.Set_string oper, "Set operation to apply");
       ("-o", Arg.Set_string out, "Set output file");
       ("-c", Arg.Set_string clang, "Set clang parameters");
@@ -146,7 +148,7 @@ let () =
   let oper =
     match !oper with
     | "cfg" -> progcfg
-    | "lva" | "dataflow" -> proglva
+    | "lva" | "dataflow" -> proglva ~v:!verbose ~r:(Bool.not !reverse)
     | "itf" | "interf" | "dot" -> progitf alc
     | "asn" -> progasn alc
     | "x86" -> progx86 alc !debug

@@ -44,63 +44,52 @@ let print (insns : Cfg.insn list) (_ids : Cfg.G.V.t array) (_g : Cfg.G.t)
     insns;
   ()
 
-let printset s = Printf.sprintf "{%s}" (Ll.mapcat " " S.name (S.SS.elements s))
-
 let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) ?(v = false)
-    (g : Cfg.G.t) =
+    ?(r = false) (g : Cfg.G.t) =
+  Printf.printf "%b\n" r;
   let insns = List.mapi (fun i v -> (i, v)) insns in
+  let insns = if r then List.rev insns else insns in
   let in_ = Array.init (List.length insns) (Fun.const S.SS.empty) in
   let out = Array.init (List.length insns) (Fun.const S.SS.empty) in
   let changes = Array.init (List.length insns) (Fun.const []) in
   let rec dataflow () =
     let flowout (i, _) =
-      let newout =
-        let succ = Cfg.G.succ g ids.(i) in
-        List.fold_left
-          (fun s v -> S.SS.union s in_.(Cfg.G.V.label v))
-          S.SS.empty succ
-      in
-      let changed = not (S.SS.equal newout out.(i)) in
-      if changed then out.(i) <- newout;
-      changed
+      let succ = Cfg.G.succ g ids.(i) in
+      List.fold_left
+        (fun s v -> S.SS.union s in_.(Cfg.G.V.label v))
+        S.SS.empty succ
     in
     let flowin (i, insn) =
-      let newin =
-        S.SS.union (use S.SS.empty insn)
-          (S.SS.diff out.(i) (def S.SS.empty insn))
-      in
-      let changed = not (S.SS.equal newin in_.(i)) in
-      if changed then in_.(i) <- newin;
-      changed
+      S.SS.union (use S.SS.empty insn) (S.SS.diff out.(i) (def S.SS.empty insn))
     in
-    let flow changed insn =
-      let cout = flowout insn and cin = flowin insn in
-      (if v then
-         let i, _ = insn in
-         changes.(i) <- (List.append changes.(i)) [ (in_.(i), out.(i)) ]);
-      changed || cout || cin
+    let flow changed (i, insn) =
+      let in' = flowin (i, insn) and out' = flowout (i, insn) in
+      let ic = not (S.SS.equal in' in_.(i))
+      and oc = not (S.SS.equal out' out.(i)) in
+      if ic then in_.(i) <- in';
+      if oc then out.(i) <- out';
+      if v then changes.(i) <- (List.append changes.(i)) [ (in_.(i), out.(i)) ];
+      changed || ic || oc
     in
     if List.fold_left flow false insns then dataflow () else (in_, out)
   in
   let flow = dataflow () in
+  let printset s = Ll.mapcat "," S.name (S.SS.elements s) in
   if v then (
-    Printf.printf "    | ";
-    Printf.printf "         use          def |";
-    List.iter (fun _ -> Printf.printf "          in          out |") changes.(0);
-    Printf.printf "\n");
-  let printsets (s1, s2) =
-    Printf.printf "%12s " (printset s1);
-    Printf.printf "%12s" (printset s2);
-    Printf.printf " |"
-  in
-  let insns = List.rev insns in
-  Array.to_list changes
-  |> List.iteri (fun i c ->
-         Printf.printf "%3d | " i;
-         let insn = List.nth insns i in
-         printsets (use S.SS.empty (snd insn), def S.SS.empty (snd insn));
-         List.iter printsets c;
-         Printf.printf "\n");
+    Printf.printf "\\begin{NiceTabular}{|c|c c|%s|}\n"
+      (Ll.mapcat "|" (Fun.const "c c") changes.(0));
+    Printf.printf "  i & use & def & %s\\\\\n"
+      (Ll.mapcat " & " (Fun.const "in & out") changes.(0));
+    let printsets (s1, s2) = printset s1 ^ "  & " ^ printset s2 in
+    let insns = if r then List.rev insns else insns in
+    Array.to_list changes
+    |> List.iteri (fun i c ->
+           Printf.printf "%3d " i;
+           let insn = List.nth insns i in
+           Printf.printf " & %s"
+             (printsets (use S.SS.empty (snd insn), def S.SS.empty (snd insn)));
+           Printf.printf " & %s\\\\\n" (Ll.mapcat " & " printsets c));
+    Printf.printf "\\end{NiceTabular}\n");
   flow
 
 open Graph
