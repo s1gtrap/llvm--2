@@ -31,7 +31,7 @@ let proglva input =
     Printf.printf "%s:\n" (Symbol.name name);
     let ids, g = Cfg.graph fdecl.cfg in
     let insns = Cfg.flatten fdecl.cfg in
-    let in_, out = Lva.dataflow insns ids g in
+    let in_, out = Lva.dataflow insns ids g ~v:true in
     Lva.print insns ids g in_ out;
     ()
   in

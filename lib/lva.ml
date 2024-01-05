@@ -44,10 +44,14 @@ let print (insns : Cfg.insn list) (_ids : Cfg.G.V.t array) (_g : Cfg.G.t)
     insns;
   ()
 
-let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
+let printset s = Printf.sprintf "{%s}" (Ll.mapcat " " S.name (S.SS.elements s))
+
+let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) ?(v = false)
+    (g : Cfg.G.t) =
   let insns = List.mapi (fun i v -> (i, v)) insns |> List.rev in
   let in_ = Array.init (List.length insns) (Fun.const S.SS.empty) in
   let out = Array.init (List.length insns) (Fun.const S.SS.empty) in
+  let changes = Array.init (List.length insns) (Fun.const []) in
   let rec dataflow () =
     let flowout (i, _) =
       let newout =
@@ -69,10 +73,34 @@ let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) (g : Cfg.G.t) =
       if changed then in_.(i) <- newin;
       changed
     in
-    let flow changed insn = changed || flowout insn || flowin insn in
+    let flow changed insn =
+      let cout = flowout insn and cin = flowin insn in
+      (if v then
+         let i, _ = insn in
+         changes.(i) <- (List.append changes.(i)) [ (in_.(i), out.(i)) ]);
+      changed || cout || cin
+    in
     if List.fold_left flow false insns then dataflow () else (in_, out)
   in
-  dataflow ()
+  let flow = dataflow () in
+  if v then Printf.printf "    | ";
+  Printf.printf "       use        def |";
+  List.iter (fun _ -> Printf.printf "        in        out |") changes.(0);
+  Printf.printf "\n";
+  let printsets (s1, s2) =
+    Printf.printf "%10s " (printset s1);
+    Printf.printf "%10s" (printset s2);
+    Printf.printf " |"
+  in
+  Array.iteri
+    (fun i c ->
+      Printf.printf "%3d | " i;
+      let insn = List.nth insns i in
+      printsets (use S.SS.empty (snd insn), def S.SS.empty (snd insn));
+      List.iter printsets c;
+      Printf.printf "\n")
+    changes;
+  flow
 
 open Graph
 
