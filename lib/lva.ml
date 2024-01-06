@@ -117,8 +117,8 @@ let dot g =
   Dot_.fprint_graph Format.str_formatter g;
   Format.flush_str_formatter ()
 
-let interf (param : Ll.uid list) (insns : Cfg.insn list) (_in_ : S.SS.t array)
-    (out : S.SS.t array) : G.V.t S.table * G.t =
+let interf (param : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
+    : G.V.t S.table * G.t =
   let g = G.create () in
   let verts : G.vertex S.table ref = ref S.empty in
   let vert (s : S.symbol) : G.vertex =
@@ -130,13 +130,7 @@ let interf (param : Ll.uid list) (insns : Cfg.insn list) (_in_ : S.SS.t array)
         verts := S.ST.add s v !verts;
         v
   in
-  (* add all function parameters *)
   List.iter (fun s -> ignore (vert s)) param;
-  (*S.SS.iter
-    (fun i ->
-      let _ = vert i in
-      ())
-    in_.(0);*)
   List.iter
     (fun p1 ->
       List.iter
