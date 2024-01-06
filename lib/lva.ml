@@ -117,7 +117,7 @@ let dot g =
   Dot_.fprint_graph Format.str_formatter g;
   Format.flush_str_formatter ()
 
-let interf (param : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
+let interf (params : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
     : G.V.t S.table * G.t =
   let g = G.create () in
   let vert (s : S.symbol) (t : G.vertex S.ST.t) : G.vertex * G.vertex S.ST.t =
@@ -130,41 +130,30 @@ let interf (param : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
   in
   let vert2 t s = vert s t |> snd and vert3 s t = vert s t |> snd in
   (* add params *)
-  let t = List.fold_left vert2 S.ST.empty param in
+  let t = List.fold_left vert2 S.ST.empty params in
   (* connect all params *)
-  let rec p t p1 = List.fold_left (p2 p1) t param
-  and p2 p1 t p2 =
-    if p1 <> p2 then (
-      let v1, t = vert p1 t in
-      let v2, t = vert p2 t in
-      if v1 <> v2 then G.add_edge g v1 v2;
-      t)
-    else t
+  let edge v1 v2 t =
+    let v1, t = vert v1 t in
+    let v2, t = vert v2 t in
+    if v1 <> v2 then G.add_edge g v1 v2;
+    t
   in
-  let t = List.fold_left p t param in
+  let param t p1 =
+    let param t p2 = if p1 <> p2 then edge p1 p2 t else t in
+    List.fold_left param t params
+  in
+  let t = List.fold_left param t params in
+  let setedges2 t v = S.SS.fold vert3 v t in
   (* add all defs *)
-  let t =
-    List.map (def S.SS.empty) insns
-    |> List.fold_left (fun t v -> S.SS.fold vert3 v t) t
-  in
-  let t =
-    List.mapi (fun i n -> (i, n)) insns
+  let t = List.map (def S.SS.empty) insns |> List.fold_left setedges2 t in
+  ( List.mapi (fun i n -> (i, n)) insns
     |> List.fold_left
          (fun t (i, n) ->
            let d = def S.SS.empty n in
-           let f e1 t : _ S.ST.t =
-             S.SS.fold
-               (fun e2 t ->
-                 let v1, t = vert e1 t in
-                 let v2, t = vert e2 t in
-                 if v1 <> v2 then G.add_edge g v1 v2;
-                 t)
-               out.(i) t
-           in
+           let f e1 t = S.SS.fold (edge e1) out.(i) t in
            S.SS.fold f d t)
-         t
-  in
-  (t, g)
+         t,
+    g )
 
 let prefer (insns : Cfg.insn list) : S.SS.t S.ST.t =
   (* FIXME: test phi nodes > 4 *)
