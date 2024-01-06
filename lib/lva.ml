@@ -124,29 +124,28 @@ let interf (param : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
     match S.ST.find_opt s t with
     | Some v -> (v, t)
     | None ->
-        let v : G.vertex = G.V.create (S.SS.add s S.SS.empty) in
+        let v = S.SS.add s S.SS.empty |> G.V.create in
         G.add_vertex g v;
         (v, S.ST.add s v t)
   in
-  let t = List.fold_left (fun t s -> vert s t |> snd) S.ST.empty param in
-  let t =
-    List.fold_left
-      (fun t p1 ->
-        List.fold_left
-          (fun t p2 ->
-            if p1 <> p2 then (
-              let v1, t = vert p1 t in
-              let v2, t = vert p2 t in
-              if v1 <> v2 then G.add_edge g v1 v2;
-              t)
-            else t)
-          t param)
-      t param
+  let vert2 t s = vert s t |> snd and vert3 s t = vert s t |> snd in
+  (* add params *)
+  let t = List.fold_left vert2 S.ST.empty param in
+  (* connect all params *)
+  let rec p t p1 = List.fold_left (p2 p1) t param
+  and p2 p1 t p2 =
+    if p1 <> p2 then (
+      let v1, t = vert p1 t in
+      let v2, t = vert p2 t in
+      if v1 <> v2 then G.add_edge g v1 v2;
+      t)
+    else t
   in
+  let t = List.fold_left p t param in
   (* add all defs *)
   let t =
     List.map (def S.SS.empty) insns
-    |> List.fold_left (fun t v -> S.SS.fold (fun v t -> vert v t |> snd) v t) t
+    |> List.fold_left (fun t v -> S.SS.fold vert3 v t) t
   in
   let t =
     List.mapi (fun i n -> (i, n)) insns
