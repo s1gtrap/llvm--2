@@ -143,17 +143,15 @@ let interf (params : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
     List.fold_left param t params
   in
   let t = List.fold_left param t params in
-  let setedges2 t v = S.SS.fold vert3 v t in
   (* add all defs *)
-  let t = List.map (def S.SS.empty) insns |> List.fold_left setedges2 t in
-  ( List.mapi (fun i n -> (i, n)) insns
-    |> List.fold_left
-         (fun t (i, n) ->
-           let d = def S.SS.empty n in
-           let f e1 t = S.SS.fold (edge e1) out.(i) t in
-           S.SS.fold f d t)
-         t,
-    g )
+  let setverts t s = S.SS.fold vert3 s t in
+  let t = List.map (def S.SS.empty) insns |> List.fold_left setverts t in
+  let defoutedges t (i, n) =
+    let defs = def S.SS.empty n in
+    let outedge e1 t = S.SS.fold (edge e1) out.(i) t in
+    S.SS.fold outedge defs t
+  in
+  (List.mapi (fun i n -> (i, n)) insns |> List.fold_left defoutedges t, g)
 
 let prefer (insns : Cfg.insn list) : S.SS.t S.ST.t =
   (* FIXME: test phi nodes > 4 *)
