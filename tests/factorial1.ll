@@ -1,4 +1,5 @@
 define i32 @main (i32 %0, i8* %1) {
+2:
  %3 = icmp sgt i32 %0, 1
  br i1 %3, label %4, label %10
 4:

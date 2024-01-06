@@ -46,7 +46,6 @@ let print (insns : Cfg.insn list) (_ids : Cfg.G.V.t array) (_g : Cfg.G.t)
 
 let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) ?(v = false)
     ?(r = false) (g : Cfg.G.t) =
-  Printf.printf "%b\n" r;
   let insns = List.mapi (fun i v -> (i, v)) insns in
   let insns = if r then List.rev insns else insns in
   let in_ = Array.init (List.length insns) (Fun.const S.SS.empty) in
