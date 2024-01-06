@@ -120,45 +120,52 @@ let dot g =
 let interf (param : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
     : G.V.t S.table * G.t =
   let g = G.create () in
-  let verts : G.vertex S.table ref = ref S.empty in
-  let vert (s : S.symbol) : G.vertex =
-    match S.ST.find_opt s !verts with
-    | Some v -> v
+  let vert (s : S.symbol) (t : G.vertex S.ST.t) : G.vertex * G.vertex S.ST.t =
+    match S.ST.find_opt s t with
+    | Some v -> (v, t)
     | None ->
         let v : G.vertex = G.V.create (S.SS.add s S.SS.empty) in
         G.add_vertex g v;
-        verts := S.ST.add s v !verts;
-        v
+        (v, S.ST.add s v t)
   in
-  List.iter (fun s -> ignore (vert s)) param;
-  List.iter
-    (fun p1 ->
-      List.iter
-        (fun p2 ->
-          if p1 <> p2 then
-            let v1 : G.V.t = vert p1 in
-            let v2 : G.V.t = vert p2 in
-            if v1 <> v2 then G.add_edge g v1 v2)
-        param)
-    param;
+  let t = List.fold_left (fun t s -> vert s t |> snd) S.ST.empty param in
+  let t =
+    List.fold_left
+      (fun t p1 ->
+        List.fold_left
+          (fun t p2 ->
+            if p1 <> p2 then (
+              let v1, t = vert p1 t in
+              let v2, t = vert p2 t in
+              if v1 <> v2 then G.add_edge g v1 v2;
+              t)
+            else t)
+          t param)
+      t param
+  in
   (* add all defs *)
-  List.map (def S.SS.empty) insns
-  |> List.iter (S.SS.iter (fun v -> ignore (vert v)));
-  List.iteri
-    (fun i n ->
-      let d = def S.SS.empty n in
-      S.SS.iter
-        (fun e1 ->
-          S.SS.iter
-            (fun e2 ->
-              let v1 : G.V.t = vert e1 in
-              let v2 : G.V.t = vert e2 in
-              if v1 <> v2 then G.add_edge g v1 v2)
-            out.(i))
-        d;
-      ())
-    insns;
-  (!verts, g)
+  let t =
+    List.map (def S.SS.empty) insns
+    |> List.fold_left (fun t v -> S.SS.fold (fun v t -> vert v t |> snd) v t) t
+  in
+  let t =
+    List.mapi (fun i n -> (i, n)) insns
+    |> List.fold_left
+         (fun t (i, n) ->
+           let d = def S.SS.empty n in
+           let f e1 t : _ S.ST.t =
+             S.SS.fold
+               (fun e2 t ->
+                 let v1, t = vert e1 t in
+                 let v2, t = vert e2 t in
+                 if v1 <> v2 then G.add_edge g v1 v2;
+                 t)
+               out.(i) t
+           in
+           S.SS.fold f d t)
+         t
+  in
+  (t, g)
 
 let prefer (insns : Cfg.insn list) : S.SS.t S.ST.t =
   (* FIXME: test phi nodes > 4 *)
