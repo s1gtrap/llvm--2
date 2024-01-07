@@ -293,6 +293,10 @@ let () =
   |> t "tests/argv0.ll" [] ~asserts:(assert_exitcode lor assert_stderr)
   |> t "tests/argv1.ll" [ "hello," ]
   |> t "tests/argv2.ll" [ "Hello,"; "world!" ]
+  |> t "tests/countdown.ll" (List.init 0 string_of_int)
+  |> t "tests/countdown.ll" (List.init 1 string_of_int)
+  |> t "tests/countdown.ll" (List.init 2 string_of_int)
+  |> t "tests/countdown.ll" (List.init 1024 string_of_int)
   |> t "tests/atoi.ll" []
   |> t "tests/atoi.ll" [ "hello," ]
   |> t "tests/atoi.ll" [ "0" ] |> t "tests/atoi.ll" [ "1" ]
