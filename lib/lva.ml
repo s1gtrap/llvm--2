@@ -129,15 +129,15 @@ let interf (params : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
         (v, S.ST.add e v t)
   in
   let vert2 t e = vert e t |> snd and vert3 e t = vert e t |> snd in
-  (* add params *)
-  let t = List.fold_left vert2 S.ST.empty params in
-  (* connect all params *)
-  let edge v1 v2 t =
-    let v1, t = vert v1 t in
-    let v2, t = vert v2 t in
+  let edge s1 s2 t =
+    let v1, t = vert s1 t in
+    let v2, t = vert s2 t in
     if v1 <> v2 then G.add_edge g v1 v2;
     t
   in
+  (* Add params *)
+  let t = List.fold_left vert2 S.ST.empty params in
+  (* connect all params *)
   let param t p1 =
     let param t p2 = if p1 <> p2 then edge p1 p2 t else t in
     List.fold_left param t params
