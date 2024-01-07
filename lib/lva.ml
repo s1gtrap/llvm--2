@@ -120,15 +120,15 @@ let dot g =
 let interf (params : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
     : G.V.t S.table * G.t =
   let g = G.create () in
-  let vert (s : S.symbol) (t : G.vertex S.ST.t) : G.vertex * G.vertex S.ST.t =
-    match S.ST.find_opt s t with
+  let vert e t =
+    match S.ST.find_opt e t with
     | Some v -> (v, t)
     | None ->
-        let v = S.SS.add s S.SS.empty |> G.V.create in
+        let v = S.SS.add e S.SS.empty |> G.V.create in
         G.add_vertex g v;
-        (v, S.ST.add s v t)
+        (v, S.ST.add e v t)
   in
-  let vert2 t s = vert s t |> snd and vert3 s t = vert s t |> snd in
+  let vert2 t e = vert e t |> snd and vert3 e t = vert e t |> snd in
   (* add params *)
   let t = List.fold_left vert2 S.ST.empty params in
   (* connect all params *)
@@ -151,7 +151,8 @@ let interf (params : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
     let outedge e1 t = S.SS.fold (edge e1) out.(i) t in
     S.SS.fold outedge defs t
   in
-  (List.mapi (fun i n -> (i, n)) insns |> List.fold_left defoutedges t, g)
+  let t = List.mapi (fun i n -> (i, n)) insns |> List.fold_left defoutedges t in
+  (t, g)
 
 let prefer (insns : Cfg.insn list) : S.SS.t S.ST.t =
   (* FIXME: test phi nodes > 4 *)
