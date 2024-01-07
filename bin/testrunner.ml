@@ -290,6 +290,11 @@ let () =
   |> t "tests/alloca.ll" [] (* FIXME: allocan *)
   |> t "tests/loop0.ll" [] |> t "tests/loop1.ll" [] |> t "tests/loop2.ll" []
   |> t "tests/loop3.ll" [] |> t "tests/loop4.ll" [] |> t "tests/loop5.ll" []
+  |> t "tests/loopn0.ll" [ "0" ]
+  |> t "tests/loopn0.ll" [ "1" ]
+  (*|> t "tests/loopn0.ll" [ "2147483647" ] ~timeout:30*)
+  |> t "tests/loopn1.ll" [ "0" ]
+  |> t "tests/loopn1.ll" [ "1" ]
   |> t "tests/argv0.ll" [] ~asserts:(assert_exitcode lor assert_stderr)
   |> t "tests/argv1.ll" [ "hello," ]
   |> t "tests/argv2.ll" [ "Hello,"; "world!" ]
