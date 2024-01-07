@@ -9,6 +9,7 @@ l1:
 l3:
  %o4 = phi i32 [%o0, %l1], [%o7, %l3]
  %o5 = phi i32 [0, %l1], [%o6, %l3]
+ call i32 @printf (i8* @fmt, i32 0, i32 %o0)
  call i32 @printf (i8* @fmt, i32 4, i32 %o4)
  call i32 @printf (i8* @fmt, i32 5, i32 %o5)
  %o6 = add i32 %o5, %o0
