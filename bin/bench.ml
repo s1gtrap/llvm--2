@@ -195,6 +195,74 @@ let () =
   Arg.parse speclist (fun _ -> ()) "append [-r n]";
   flush Stdlib.stdout;
 
+  b "benches/fib.ll" default_compilers
+    [
+      [| "8" |];
+      [| "10" |];
+      [| "12" |];
+      [| "14" |];
+      [| "16" |];
+      [| "18" |];
+      [| "20" |];
+      [| "22" |];
+      [| "24" |];
+      [| "26" |];
+      [| "28" |];
+      [| "30" |];
+      [| "32" |];
+    ];
+
+  b "benches/fib.ll"
+    [
+      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 8);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 6);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 4);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 2);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 1);
+      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+      Tiger;
+    ]
+    [
+      [| "8" |];
+      [| "10" |];
+      [| "12" |];
+      [| "14" |];
+      [| "16" |];
+      [| "18" |];
+      [| "20" |];
+      [| "22" |];
+      [| "24" |];
+      [| "26" |];
+      [| "28" |];
+      [| "30" |];
+      [| "32" |];
+    ];
+
+  b "benches/loopn0.ll" default_compilers
+    [
+      [| "65535" |] (* 2 ** 16 - 1 *);
+      [| "131071" |] (* 2 ** 17 - 1 *);
+      [| "262143" |] (* 2 ** 18 - 1 *);
+      [| "524287" |] (* 2 ** 19 - 1 *);
+      [| "1048575" |] (* 2 ** 20 - 1 *);
+      [| "2097151" |] (* 2 ** 21 - 1 *);
+      [| "4194303" |] (* 2 ** 22 - 1 *);
+      [| "8388607" |] (* 2 ** 23 - 1 *);
+    ];
+
+  b "benches/loopn1.ll" default_compilers
+    [
+      [| "65535" |] (* 2 ** 16 - 1 *);
+      [| "131071" |] (* 2 ** 17 - 1 *);
+      [| "262143" |] (* 2 ** 18 - 1 *);
+      [| "524287" |] (* 2 ** 19 - 1 *);
+      [| "1048575" |] (* 2 ** 20 - 1 *);
+      [| "2097151" |] (* 2 ** 21 - 1 *);
+      [| "4194303" |] (* 2 ** 22 - 1 *);
+      [| "8388607" |] (* 2 ** 23 - 1 *);
+    ];
+
   b "benches/factori32.ll" default_compilers
     [
       [| "16777213" |];
@@ -239,50 +307,6 @@ let () =
       Array.init 18 string_of_int;
       (* (Array.init 19 string_of_int) n
          (Array.init 20 string_of_int) n*)
-    ];
-
-  b "benches/fib.ll" default_compilers
-    [
-      [| "8" |];
-      [| "10" |];
-      [| "12" |];
-      [| "14" |];
-      [| "16" |];
-      [| "18" |];
-      [| "20" |];
-      [| "22" |];
-      [| "24" |];
-      [| "26" |];
-      [| "28" |];
-      [| "30" |];
-      [| "32" |];
-    ];
-
-  b "benches/fib.ll"
-    [
-      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 8);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 6);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 4);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 2);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 1);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
-      Tiger;
-    ]
-    [
-      [| "8" |];
-      [| "10" |];
-      [| "12" |];
-      [| "14" |];
-      [| "16" |];
-      [| "18" |];
-      [| "20" |];
-      [| "22" |];
-      [| "24" |];
-      [| "26" |];
-      [| "28" |];
-      [| "30" |];
-      [| "32" |];
     ];
 
   b "benches/sha256.ll" default_compilers
