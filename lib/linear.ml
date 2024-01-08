@@ -125,13 +125,17 @@ let intervals insns (in_, out) =
   in
   List.rev starts |> List.map (fun (i, n, a) -> (i, n, a, active.(i)))
 
-let linearscan insns _asn _is =
-  let insn (assign, active) (_i, _n) = (assign, active) in
-  List.fold_left insn (S.ST.empty, S.ST.empty) insns
+let linearscan k insns =
+  let avail = Regs.of_list (List.init k reg_of_int) in
+  let insn (active, assign) ((_, n1), (_, n2, _, _)) =
+    Printf.printf "%s %s\n" (Cfg.string_of_insn n1) (Cfg.string_of_insn n2);
+    (active, assign)
+  in
+  let _, assign = List.fold_left insn (avail, S.ST.empty) insns in
+  assign
 
 let alloc k insns d =
   let insns = List.mapi (fun i n -> (i, n)) insns in
-  let _avail = Regs.of_list (List.init k reg_of_int) in
   let intervals = intervals insns d in
   List.iter
     (fun (i, _n, s, e) ->
@@ -142,6 +146,6 @@ let alloc k insns d =
       S.SS.iter (fun s -> Printf.printf "%s " (S.name s)) e;
       Printf.printf "}\n")
     intervals;
+  let assign = List.combine insns intervals |> linearscan k in
   (*S.ST.iter (fun k (b, e) -> Printf.printf "%s: (%d, %d)\n" (S.name k) b e) is;*)
-  let insn t _i = t in
-  List.fold_left insn S.ST.empty insns
+  assign
