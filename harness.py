@@ -132,6 +132,7 @@ if target:
                     # print(process)
             elif state == lldb.eStateExited:
                 print("Didn't hit the breakpoint at main, program has exited...")
+                exit(0)
             else:
                 print('Unexpected process state: %s, killing process...' %
                       debugger.StateAsCString(state))
