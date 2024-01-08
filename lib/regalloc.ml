@@ -1,4 +1,5 @@
 open Common
+open X86
 open Graph
 
 exception BackendFatal (* use this for impossible cases *)
@@ -17,24 +18,11 @@ let os =
 let mangle s =
   match os with Linux -> Symbol.name s | Darwin -> "_" ^ Symbol.name s
 
-type lbl = string
-type quad = int64
-
-(* Immediate operands *)
-type imm = Lit of quad | Lbl of lbl
-
 (* Registers:
     instruction pointer: rip
     arguments: rdi, rsi, rdx, rcx, r08, r09
     callee-save: rbx, rbp, r12-r15
 *)
-
-type operand =
-  | Imm of imm (* immediate *)
-  | Reg of reg (* register *)
-  | Ind1 of imm (* indirect: displacement *)
-  | Ind2 of reg (* indirect: (%reg) *)
-  | Ind3 of (imm * reg)
 (* indirect: displacement(%reg) *)
 
 let byteofquad = function
@@ -160,84 +148,6 @@ type prog = elem list
 (* Provide some syntactic sugar for writing x86 code in SML files. *)
 
 (* pretty printing ----------------------------------------------------------- *)
-
-let string_of_reg (r : reg) : string =
-  match r with
-  | Rip -> "%rip"
-  | Rax -> "%rax"
-  | Rbx -> "%rbx"
-  | Rcx -> "%rcx"
-  | Rdx -> "%rdx"
-  | Rsi -> "%rsi"
-  | Rdi -> "%rdi"
-  | Rbp -> "%rbp"
-  | Rsp -> "%rsp"
-  | R08 -> "%r8"
-  | R09 -> "%r9"
-  | R10 -> "%r10"
-  | R11 -> "%r11"
-  | R12 -> "%r12"
-  | R13 -> "%r13"
-  | R14 -> "%r14"
-  | R15 -> "%r15"
-  | Eax -> "%eax"
-  | Ebx -> "%ebx"
-  | Ecx -> "%ecx"
-  | Edx -> "%edx"
-  | Esi -> "%esi"
-  | Edi -> "%edi"
-  | Ebp -> "%ebp"
-  | Esp -> "%esp"
-  | R08d -> "%r8d"
-  | R09d -> "%r9d"
-  | R10d -> "%r10d"
-  | R11d -> "%r11d"
-  | R12d -> "%r12d"
-  | R13d -> "%r13d"
-  | R14d -> "%r14d"
-  | R15d -> "%r15d"
-  | Ax -> "%ax"
-  | Cx -> "%cx"
-  | Dx -> "%dx"
-  | Bx -> "%bx"
-  | Si -> "%si"
-  | Di -> "%di"
-  | R08w -> "%r8w"
-  | R09w -> "%r9w"
-  | R10w -> "%r10w"
-  | R11w -> "%r11w"
-  | R12w -> "%r12w"
-  | R13w -> "%r13w"
-  | R14w -> "%r14w"
-  | R15w -> "%r15w"
-  | Al -> "%al"
-  | Cl -> "%cl"
-  | Dl -> "%dl"
-  | Bl -> "%bl"
-  | Sil -> "%sil"
-  | Dil -> "%dil"
-  | R08b -> "%r8b"
-  | R09b -> "%r9b"
-  | R10b -> "%r10b"
-  | R11b -> "%r11b"
-  | R12b -> "%r12b"
-  | R13b -> "%r13b"
-  | R14b -> "%r14b"
-  | R15b -> "%r15b"
-
-let string_of_lbl (l : lbl) : string = l
-
-let string_of_imm = function
-  | Lit i -> Int64.to_string i
-  | Lbl l -> string_of_lbl l
-
-let string_of_operand (oper : operand) : string =
-  match oper with
-  | Imm i -> "$" ^ string_of_imm i
-  | Reg r -> string_of_reg r
-  | Ind1 i -> string_of_imm i
-  | Ind2 r -> "(" ^ string_of_reg r ^ ")"
-  | Ind3 (i, r) -> string_of_imm i ^ "(" ^ string_of_reg r ^ ")"
 
 let string_of_jmp_operand (oper : operand) : string =
   match oper with
@@ -1517,7 +1427,6 @@ let compile_fdecl (alc : allocator) debug tdecls name
     ({ param; cfg; _ } : Ll.fdecl) =
   let fname = name in
   (* move out of pre-assigned parameter registers (rsi, rdi, .. r9) *)
-  let (_entryl, _head), _tail = cfg in
   let ids, g = Cfg.graph cfg in
   let insns : Cfg.insn list = Cfg.flatten cfg in
   let df = Lva.dataflow insns ids g in
@@ -1555,11 +1464,15 @@ let compile_fdecl (alc : allocator) debug tdecls name
       S.ST.iter (fun k _v -> Printf.printf "%s " (S.name k)) v;
       Printf.printf "\n")
     phis;*)
-  let pusharg i _ = (Pushq, [ arg i ]) in
+  let pusharg i dst =
+    match S.ST.find_opt dst asn with
+    | Some _ -> [ (Pushq, [ arg i ]) ]
+    | None -> []
+  in
   let poparg _i dst =
     match S.ST.find_opt dst asn with
-    | Some dst -> (Popq, [ dst ])
-    | None -> failwith (Printf.sprintf "cannot pop %s" (S.name dst))
+    | Some dst -> [ (Popq, [ dst ]) ]
+    | None -> []
   in
   let min =
     S.ST.fold
@@ -1584,7 +1497,11 @@ let compile_fdecl (alc : allocator) debug tdecls name
       (Subq, [ Imm (Lit min); Reg Rsp ]);
     ]
   in
-  let pro = pro @ List.mapi pusharg param @ List.mapi poparg (List.rev param) in
+  let pro =
+    pro
+    @ (List.mapi pusharg param |> List.flatten)
+    @ (List.mapi poparg (List.rev param) |> List.flatten)
+  in
   let pad n = "_" ^ S.name fname ^ "$" ^ S.name n in
   let rec block bname = function
     | ({ global = true; _ } as b), Cfg.Label name :: tail ->

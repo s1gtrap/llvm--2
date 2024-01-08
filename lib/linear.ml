@@ -1,4 +1,5 @@
 open Common
+open X86
 
 let def t (ins : Cfg.insn) idx =
   match ins with
@@ -78,7 +79,7 @@ let intervals params insns (_livein, _liveout) =
 
 let intervals insns (in_, out) =
   let insn (starts, t, active) (i, n) =
-    Printf.printf "%s\n" (Cfg.string_of_insn n);
+    (*Printf.printf "%s\n" (Cfg.string_of_insn n);*)
     (* init ins and outs if not present *)
     let init s (added, t, active) =
       ( S.SS.filter (fun s -> not (S.ST.mem s t)) s |> S.SS.union added,
@@ -127,17 +128,31 @@ let intervals insns (in_, out) =
 
 let linearscan k insns =
   let avail = Regs.of_list (List.init k reg_of_int) in
-  let insn (active, assign) ((_, n1), (_, n2, _, _)) =
-    Printf.printf "%s %s\n" (Cfg.string_of_insn n1) (Cfg.string_of_insn n2);
-    (active, assign)
+  let insn (avail, active, assign) (_, _n, s, _e) =
+    (*Printf.printf "%s\n" (Cfg.string_of_insn n);*)
+    let start s (avail, active, assign) =
+      match Regs.choose_opt avail with
+      | Some reg -> (Regs.remove reg avail, S.ST.add s reg active, assign)
+      | None ->
+          (* FIXME: order by remaining or total length *)
+          let z, reg = S.ST.choose active in
+          ( avail,
+            S.ST.remove z active |> S.ST.add s reg,
+            S.ST.add z
+              (Ind3 (Lit (Int64.of_int (S.ST.cardinal assign)), Rbp))
+              assign )
+    in
+    S.SS.fold start s (avail, active, assign)
   in
-  let _, assign = List.fold_left insn (avail, S.ST.empty) insns in
-  assign
+  let _, active, assign =
+    List.fold_left insn (avail, S.ST.empty, S.ST.empty) insns
+  in
+  S.ST.fold (fun k v acc -> S.ST.add k (Reg v) acc) active assign
 
 let alloc k insns d =
   let insns = List.mapi (fun i n -> (i, n)) insns in
   let intervals = intervals insns d in
-  List.iter
+  (*List.iter
     (fun (i, _n, s, e) ->
       Printf.printf "%d: %s\t{ " i "";
       (*(Cfg.string_of_insn n);*)
@@ -145,7 +160,10 @@ let alloc k insns d =
       Printf.printf "}\t{ ";
       S.SS.iter (fun s -> Printf.printf "%s " (S.name s)) e;
       Printf.printf "}\n")
-    intervals;
-  let assign = List.combine insns intervals |> linearscan k in
+    intervals;*)
+  let assign = linearscan k intervals in
+  (*S.ST.iter
+    (fun k v -> Printf.printf "%s: %s\n" (S.name k) (string_of_operand v))
+    assign;*)
   (*S.ST.iter (fun k (b, e) -> Printf.printf "%s: (%d, %d)\n" (S.name k) b e) is;*)
   assign
