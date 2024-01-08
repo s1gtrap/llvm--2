@@ -139,7 +139,7 @@ let linearscan k insns =
           ( avail,
             S.ST.remove z active |> S.ST.add s reg,
             S.ST.add z
-              (Ind3 (Lit (Int64.of_int (S.ST.cardinal assign)), Rbp))
+              (Ind3 (Lit (Int64.of_int ((S.ST.cardinal assign * -8) - 8)), Rbp))
               assign )
     in
     S.SS.fold start s (avail, active, assign)
