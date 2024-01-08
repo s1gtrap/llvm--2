@@ -103,8 +103,10 @@ switch_cases:
     { (snd i, l) :: tail }
 
 terminator:
-  | RET t=ty o=operand?
-    { Ret (t, o) }
+  | RET VOID
+    { Ret (Void, None) }
+  | RET t=ty o=operand
+    { Ret (t, Some o) }
   | BR LABEL l=UID
     { Br l }
   | BR I1 o=operand COMMA LABEL l1=UID COMMA LABEL l2=UID
