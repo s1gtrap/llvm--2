@@ -196,7 +196,7 @@ let () =
       Common.Llvm__2 (Greedy 12);
       Common.Llvm__2 (Simple 12);
       Common.Llvm__2 (Briggs 12);
-      Common.Llvm__2 Linearscan;
+      Common.Llvm__2 (Linearscan 12);
     ]
   in
   let filter = if Array.length Sys.argv >= 2 then Sys.argv.(1) else "" in
