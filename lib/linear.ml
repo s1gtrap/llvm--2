@@ -77,29 +77,53 @@ let intervals params insns (_livein, _liveout) =
   intervals
 
 let intervals insns (in_, out) =
-  let insn (starts, t) (i, n) =
+  let insn (starts, t, active) (i, n) =
     Printf.printf "%s\n" (Cfg.string_of_insn n);
     (* init ins and outs if not present *)
-    let init s (added, t) =
+    let init s (added, t, active) =
       ( S.SS.filter (fun s -> not (S.ST.mem s t)) s |> S.SS.union added,
         S.SS.fold
           (fun s t ->
-            S.ST.update s (function Some r -> Some r | None -> Some 0) t)
-          s t )
+            S.ST.update s
+              (function
+                | Some j ->
+                    active.(i) <- S.SS.add s active.(i);
+                    active.(j) <- S.SS.remove s active.(j);
+                    Some i
+                | None ->
+                    active.(i) <- S.SS.add s active.(i);
+                    Some i)
+              t)
+          s t,
+        active )
     in
     (* set latest use in outs *)
-    let end_ s (added, t) =
+    let end_ s (added, t, active) =
       ( S.SS.filter (fun s -> not (S.ST.mem s t)) s |> S.SS.union added,
         S.SS.fold
           (fun s t ->
-            S.ST.update s (function Some _ -> Some i | None -> Some i) t)
-          s t )
+            S.ST.update s
+              (function
+                | Some j ->
+                    active.(i) <- S.SS.add s active.(i);
+                    active.(j) <- S.SS.remove s active.(j);
+                    Some i
+                | None -> Some i)
+              t)
+          s t,
+        active )
     in
-    let a, t = init in_.(i) (S.SS.empty, t) |> init out.(i) |> end_ out.(i) in
-    ((i, n, a) :: starts, t)
+    let a, t, c =
+      init in_.(i) (S.SS.empty, t, active) |> init out.(i) |> end_ out.(i)
+    in
+    ((i, n, a) :: starts, t, c)
   in
-  let starts, _t = List.fold_left insn ([], S.ST.empty) insns in
-  List.rev starts |> List.map (fun (i, n, a) -> (i, n, a, S.SS.empty))
+  let starts, _t, active =
+    List.fold_left insn
+      ([], S.ST.empty, Array.init (List.length insns) (Fun.const S.SS.empty))
+      insns
+  in
+  List.rev starts |> List.map (fun (i, n, a) -> (i, n, a, active.(i)))
 
 let linearscan insns _asn _is =
   let insn (assign, active) (_i, _n) = (assign, active) in
@@ -108,15 +132,16 @@ let linearscan insns _asn _is =
 let alloc k insns d =
   let insns = List.mapi (fun i n -> (i, n)) insns in
   let _avail = Regs.of_list (List.init k reg_of_int) in
-  let starts = intervals insns d in
+  let intervals = intervals insns d in
   List.iter
-    (fun (i, n, s, e) ->
-      Printf.printf "%d: %s\t{ " i (Cfg.string_of_insn n);
+    (fun (i, _n, s, e) ->
+      Printf.printf "%d: %s\t{ " i "";
+      (*(Cfg.string_of_insn n);*)
       S.SS.iter (fun s -> Printf.printf "%s " (S.name s)) s;
       Printf.printf "}\t{ ";
       S.SS.iter (fun s -> Printf.printf "%s " (S.name s)) e;
       Printf.printf "}\n")
-    starts;
+    intervals;
   (*S.ST.iter (fun k (b, e) -> Printf.printf "%s: (%d, %d)\n" (S.name k) b e) is;*)
   let insn t _i = t in
   List.fold_left insn S.ST.empty insns
