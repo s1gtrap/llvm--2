@@ -8,6 +8,7 @@ declare i32 @printf(i8*, ...)
 declare void @free(i8*)
 
 define i32 @read_ints (i8* %0) {
+1:
  %2 = call i8* @malloc (i64 64)
  br label %3
 3:
@@ -72,6 +73,7 @@ define i32 @read_ints (i8* %0) {
 }
 
 define void @print_ints (i8* %0, i32 %1) {
+2:
  %3 = icmp sgt i32 %1, 0
  br i1 %3, label %4, label %6
 4:
@@ -90,6 +92,7 @@ define void @print_ints (i8* %0, i32 %1) {
 }
 
 define i32 @main () {
+0:
  %1 = call i8* @malloc (i64 64)
  br label %2
 2:

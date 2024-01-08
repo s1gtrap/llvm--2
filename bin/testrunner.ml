@@ -263,9 +263,19 @@ let () =
   |> t "tests/printints0.ll" []
   |> t "tests/printints0.ll" [] ~stdin:"1\n"
   |> t "tests/printints0.ll" [] ~stdin:"0\n1\n2\n"
+  |> t "tests/printints0.ll" [] ~stdin:"1\n2\n3\n4\n5\n6\n7\n8\n9\n10"
   |> t "tests/printints1.ll" []
   |> t "tests/printints1.ll" [] ~stdin:"1\n"
   |> t "tests/printints1.ll" [] ~stdin:"0\n1\n2\n"
+  |> t "tests/printints1.ll" [] ~stdin:"1\n2\n3\n4\n5\n6\n7\n8\n9\n10"
+  (*|> t "tests/printints-debug0.ll" []
+    |> t "tests/printints-debug0.ll" [] ~stdin:"1\n"
+    |> t "tests/printints-debug0.ll" [] ~stdin:"0\n1\n2\n"
+    |> t "tests/printints-debug0.ll" [] ~stdin:"1\n2\n3\n4\n5\n6\n7\n8\n9\n10"
+    |> t "tests/printints-debug1.ll" []
+    |> t "tests/printints-debug1.ll" [] ~stdin:"1\n"
+    |> t "tests/printints-debug1.ll" [] ~stdin:"0\n1\n2\n"
+    |> t "tests/printints-debug1.ll" [] ~stdin:"1\n2\n3\n4\n5\n6\n7\n8\n9\n10"*)
   |> t "tests/factorial0.ll" (List.init 0 string_of_int)
   |> t "tests/factorial0.ll" (List.init 1 string_of_int)
   |> t "tests/factorial0.ll" (List.init 2 string_of_int)

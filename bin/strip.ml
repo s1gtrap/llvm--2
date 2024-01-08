@@ -32,48 +32,67 @@ let from_channel input =
   close_in input;
   parseRes
 
-let strip_intrins_of_operand = function
-  | Ll.Gid s when S.name s = "llvm.memset.p0.i64" -> Ll.Gid (S.symbol "memset")
+let strip_intrins_of_operand_opt = function
+  | Ll.Gid s when S.name s = "llvm.memset.p0.i64" ->
+      Some (Ll.Gid (S.symbol "memset"))
   | Ll.Gid s when S.name s = "llvm.memcpy.p0.p0.i64" ->
-      Ll.Gid (S.symbol "memcpy")
-  | op -> op
+      Some (Ll.Gid (S.symbol "memcpy"))
+  | Ll.Gid s when S.name s = "llvm.lifetime.start.p0" -> None
+  | Ll.Gid s when S.name s = "llvm.lifetime.end.p0" -> None
+  | op -> Some op
 
+let strip_intrins_of_operand o = strip_intrins_of_operand_opt o |> Option.get
 let strip_intrins_of_typed_operand (t, o) = (t, strip_intrins_of_operand o)
 
-let strip_intrins_of_insn (d, i) =
-  ( d,
-    match i with
-    | Ll.Binop (b, t, o1, o2) ->
-        Ll.Binop (b, t, strip_intrins_of_operand o1, strip_intrins_of_operand o2)
-    | AllocaN (t, (tn, on)) -> AllocaN (t, (tn, strip_intrins_of_operand on))
-    | Load (t, o) -> Load (t, strip_intrins_of_operand o)
-    | Store (t, o1, o2) ->
-        Store (t, strip_intrins_of_operand o1, strip_intrins_of_operand o2)
-    | Icmp (c, t, o1, o2) ->
-        Icmp (c, t, strip_intrins_of_operand o1, strip_intrins_of_operand o2)
-    | Call (t, o, ol) ->
-        Call
-          ( t,
-            strip_intrins_of_operand o,
-            List.map strip_intrins_of_typed_operand ol )
-    | Bitcast (t1, o, t2) -> Bitcast (t1, strip_intrins_of_operand o, t2)
-    | Gep (t, (t1, o1), ol) ->
-        Gep
-          ( t,
-            (t1, strip_intrins_of_operand o1),
-            List.map strip_intrins_of_typed_operand ol )
-    | Zext (t1, o, t2) -> Zext (t1, strip_intrins_of_operand o, t2)
-    | Sext (t1, o, t2) -> Sext (t1, strip_intrins_of_operand o, t2)
-    | Ptrtoint (t1, o, t2) -> Ptrtoint (t1, strip_intrins_of_operand o, t2)
-    | Trunc (t1, o, t2) -> Trunc (t1, strip_intrins_of_operand o, t2)
-    | PhiNode (t, ol) ->
-        PhiNode (t, List.map (fun (o, l) -> (strip_intrins_of_operand o, l)) ol)
-    | Select (o, to1, to2) ->
-        Select
-          ( strip_intrins_of_operand o,
-            strip_intrins_of_typed_operand to1,
-            strip_intrins_of_typed_operand to2 )
-    | i -> i )
+let strip_intrins_of_insn i =
+  match i with
+  | d, Ll.Binop (b, t, o1, o2) ->
+      Some
+        ( d,
+          Ll.Binop
+            (b, t, strip_intrins_of_operand o1, strip_intrins_of_operand o2) )
+  | d, AllocaN (t, (tn, on)) ->
+      Some (d, AllocaN (t, (tn, strip_intrins_of_operand on)))
+  | d, Load (t, o) -> Some (d, Load (t, strip_intrins_of_operand o))
+  | d, Store (t, o1, o2) ->
+      Some
+        (d, Store (t, strip_intrins_of_operand o1, strip_intrins_of_operand o2))
+  | d, Icmp (c, t, o1, o2) ->
+      Some
+        ( d,
+          Icmp (c, t, strip_intrins_of_operand o1, strip_intrins_of_operand o2)
+        )
+  | d, Call (t, o, ol) ->
+      strip_intrins_of_operand_opt o
+      |> Option.map (fun o ->
+             (d, Ll.Call (t, o, List.map strip_intrins_of_typed_operand ol)))
+  | d, Bitcast (t1, o, t2) ->
+      Some (d, Bitcast (t1, strip_intrins_of_operand o, t2))
+  | d, Gep (t, (t1, o1), ol) ->
+      Some
+        ( d,
+          Gep
+            ( t,
+              (t1, strip_intrins_of_operand o1),
+              List.map strip_intrins_of_typed_operand ol ) )
+  | d, Zext (t1, o, t2) -> Some (d, Zext (t1, strip_intrins_of_operand o, t2))
+  | d, Sext (t1, o, t2) -> Some (d, Sext (t1, strip_intrins_of_operand o, t2))
+  | d, Ptrtoint (t1, o, t2) ->
+      Some (d, Ptrtoint (t1, strip_intrins_of_operand o, t2))
+  | d, Trunc (t1, o, t2) -> Some (d, Trunc (t1, strip_intrins_of_operand o, t2))
+  | d, PhiNode (t, ol) ->
+      Some
+        ( d,
+          PhiNode
+            (t, List.map (fun (o, l) -> (strip_intrins_of_operand o, l)) ol) )
+  | d, Select (o, to1, to2) ->
+      Some
+        ( d,
+          Select
+            ( strip_intrins_of_operand o,
+              strip_intrins_of_typed_operand to1,
+              strip_intrins_of_typed_operand to2 ) )
+  | i -> Some i
 
 let strip_intrins_of_terminator = function
   | Ll.Ret (t, o) -> Ll.Ret (t, Option.map strip_intrins_of_operand o)
@@ -85,7 +104,7 @@ let strip_intrins_of_terminator = function
 let strip_intrins_of_block ((name, block) : 'a * Ll.block) : 'a * Ll.block =
   ( name,
     {
-      insns = List.map strip_intrins_of_insn block.insns;
+      insns = List.filter_map strip_intrins_of_insn block.insns;
       terminator = strip_intrins_of_terminator block.terminator;
     } )
 
