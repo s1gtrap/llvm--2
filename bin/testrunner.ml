@@ -184,6 +184,14 @@ let t compilers ?(stdin = "") ?(cargs = []) ?(timeout = 5)
     List.fold_left test counts compilers)
   else counts
 
+(* https://discuss.ocaml.org/t/more-natural-preferred-way-to-shuffle-an-array/217/5 *)
+let rec shuffle = function
+  | [] -> []
+  | [ single ] -> [ single ]
+  | list ->
+      let before, after = List.partition (fun _ -> Random.bool ()) list in
+      List.rev_append (shuffle before) (shuffle after)
+
 let () =
   let compilers =
     [
@@ -276,6 +284,12 @@ let () =
     |> t "tests/printints-debug1.ll" [] ~stdin:"1\n"
     |> t "tests/printints-debug1.ll" [] ~stdin:"0\n1\n2\n"
     |> t "tests/printints-debug1.ll" [] ~stdin:"1\n2\n3\n4\n5\n6\n7\n8\n9\n10"*)
+  |> t "tests/bubblesort0.ll" [] ~stdin:"1\n"
+  |> t "tests/bubblesort0.ll" []
+       ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")
+  |> t "tests/bubblesort1.ll" [] ~stdin:"1\n"
+  |> t "tests/bubblesort1.ll" []
+       ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")
   |> t "tests/factorial0.ll" (List.init 0 string_of_int)
   |> t "tests/factorial0.ll" (List.init 1 string_of_int)
   |> t "tests/factorial0.ll" (List.init 2 string_of_int)
