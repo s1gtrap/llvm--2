@@ -18,13 +18,6 @@ let os =
 let mangle s =
   match os with Linux -> Symbol.name s | Darwin -> "_" ^ Symbol.name s
 
-(* Registers:
-    instruction pointer: rip
-    arguments: rdi, rsi, rdx, rcx, r08, r09
-    callee-save: rbx, rbp, r12-r15
-*)
-(* indirect: displacement(%reg) *)
-
 let byteofquad = function
   | Reg Rax -> Reg Al
   | Reg Rcx -> Reg Cl
