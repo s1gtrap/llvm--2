@@ -78,13 +78,10 @@ let assert_exitcode : asserts = 0b1
 and assert_stdout : asserts = 0b10
 and assert_stderr : asserts = 0b100
 
-let t compilers ?(stdin = "") ?(cargs = []) ?(timeout = 5)
+let t matches compilers ?(stdin = "") ?(cargs = []) ?(timeout = 5)
     ?(asserts = assert_exitcode lor assert_stdout lor assert_stderr) t args
     counts =
-  let regexp =
-    Str.regexp_string (if Array.length Sys.argv >= 2 then Sys.argv.(1) else "")
-  in
-  if Str.string_partial_match regexp t 0 then (
+  if matches t then (
     let exe = clang t cargs in
     let expexit, expout, experr =
       exec_with_timeout_and_capture exe args timeout stdin
@@ -202,7 +199,8 @@ let () =
       Common.Llvm__2 Linearscan;
     ]
   in
-  let t = t compilers in
+  let filter = if Array.length Sys.argv >= 2 then Sys.argv.(1) else "" in
+  let t = t (matches filter) compilers in
   let print (t, p) =
     let pct = Float.floor (float_of_int p /. float_of_int t *. 100.0) in
     Printf.printf "Passed: %d / %d [%.0f%%]\n" p t pct

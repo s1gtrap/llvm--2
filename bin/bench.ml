@@ -164,15 +164,8 @@ let () =
       Printf.printf "avg=%Ld (%s%f%s)\t" avg (grad avgr) avgr reset;
       Printf.printf "max=%Ld\n" max)
   in
-  let matches s =
-    let re = Str.regexp_string !filter in
-    try
-      ignore (Str.search_forward re s 0);
-      true
-    with Not_found -> false
-  in
   let b f c args =
-    if matches f then (
+    if matches !filter f then (
       if !table then (
         Printf.printf "\\begin{NiceTabular}{|c|%s|}\n\\hline\n"
           (String.make (List.length c + 1) 'c');

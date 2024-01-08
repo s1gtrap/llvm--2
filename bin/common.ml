@@ -132,3 +132,10 @@ let compile_test c test cargs =
       in
       execs := S.add testname fn !execs;
       fn
+
+let matches filter s =
+  let re = Str.regexp_string filter in
+  try
+    ignore (Str.search_forward re s 0);
+    true
+  with Not_found -> false
