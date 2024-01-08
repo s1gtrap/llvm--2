@@ -290,6 +290,12 @@ let () =
   |> t "tests/bubblesort1.ll" [] ~stdin:"1\n"
   |> t "tests/bubblesort1.ll" []
        ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")
+  |> t "tests/quicksort0.ll" [] ~stdin:"1\n"
+  |> t "tests/quicksort0.ll" []
+       ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")
+  |> t "tests/quicksort1.ll" [] ~stdin:"1\n"
+  |> t "tests/quicksort1.ll" []
+       ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")
   |> t "tests/factorial0.ll" (List.init 0 string_of_int)
   |> t "tests/factorial0.ll" (List.init 1 string_of_int)
   |> t "tests/factorial0.ll" (List.init 2 string_of_int)
