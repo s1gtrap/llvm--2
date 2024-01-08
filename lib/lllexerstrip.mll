@@ -39,10 +39,13 @@ rule token = parse
   | "internal"
   | "local_unnamed_addr"
   | "dso_local"
+  | "allocptr"
   | "tail"
   | '#' digit+         { token lexbuf } (* ignored *)
   | ','? ['\t' ' ']+ "align" ['\t' ' ']+ digit+ { token lexbuf }
-  | "dereferenceable(" digit+ ')' { token lexbuf }
+  | "dereferenceable(" digit+ ')'
+  | "dereferenceable_or_null(" digit+ ')' { token lexbuf }
+  | '\n'               { Lexing.new_line lexbuf; token lexbuf }
   | '\n'               { Lexing.new_line lexbuf; token lexbuf }
   | '*'                { STAR }
   | ','                { COMMA }
@@ -87,6 +90,7 @@ rule token = parse
   | "shl"              { SHL }
   | "ptr"              { PTR }
   | "ret"              { RET }
+  | "undef"            { INT 0L }
   | "unreachable"      { UNREACHABLE }
   | "getelementptr"    { GEP }
   | "zext"             { ZEXT }
