@@ -65,7 +65,7 @@ let progasn (alloc_ : Regalloc.allocator) input =
     let asn = Regalloc.alloc alloc_ [] insns df in
     Symbol.ST.iter
       (fun k v ->
-        Printf.printf "%s: %s\n" (Symbol.name k) (Regalloc.string_of_operand v))
+        Printf.printf "%s: %s\n" (Symbol.name k) (X86.string_of_operand v))
       asn
   in
   List.iter fdecl prog.fdecls
