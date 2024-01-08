@@ -39,44 +39,6 @@ let use t (insn : Cfg.insn) idx =
   | Term Unreachable -> t
   | _ -> failwith (Cfg.string_of_insn insn)
 
-let print_intervals insns intervals =
-  let variables = Symbol.ST.bindings intervals |> List.map fst in
-  List.iteri
-    (fun idx ins ->
-      List.iter
-        (fun k ->
-          let livestart, liveend = Symbol.ST.find k intervals in
-          if idx = livestart then Printf.printf ",-"
-          else if livestart < idx && idx < liveend then Printf.printf "| "
-          else if idx = liveend then Printf.printf "'-"
-          else Printf.printf "  ")
-        variables;
-      Printf.printf "%s\n" (Cfg.string_of_insn ins))
-    insns
-
-let intervals params insns (_livein, _liveout) =
-  let insns = List.filter (function Cfg.Label _ -> false | _ -> true) insns in
-  let param t k = Symbol.ST.add k (-1) t in
-  let defs = List.fold_left param Symbol.empty params in
-  let uses = Symbol.empty in
-  let rec intervals defs uses = function
-    | idx, ins :: tail ->
-        let defs = def defs ins idx in
-        let uses = use uses ins idx in
-        intervals defs uses (idx + 1, tail)
-    | _, [] -> (defs, uses)
-  in
-  let defs, uses = intervals defs uses (0, insns) in
-  let intervals =
-    Symbol.ST.filter_map
-      (fun k livestart ->
-        Symbol.ST.find_opt k uses
-        |> Option.map (fun liveend -> (livestart, liveend)))
-      defs
-  in
-  print_intervals insns intervals;
-  intervals
-
 let intervals insns (in_, out) =
   let insn (starts, t, active) (i, n) =
     (*Printf.printf "%s\n" (Cfg.string_of_insn n);*)

@@ -1039,10 +1039,10 @@ let coalesce_briggs _k (prefs : S.SS.t S.ST.t)
     ((l, g) : Lva.G.V.t S.ST.t * Lva.G.t) : Lva.G.V.t S.table * Lva.G.t =
   let try_coalesce _ops (_ol, g) =
     let l' = l and g' = g in
-    S.ST.iter
+    (*S.ST.iter
       (fun k v ->
         S.SS.iter (fun v -> Printf.printf "%s <- %s\n" (S.name k) (S.name v)) v)
-      prefs;
+      prefs;*)
     (l', g')
   in
   let rec partition inset outsets =
