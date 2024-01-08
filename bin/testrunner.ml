@@ -191,7 +191,7 @@ let () =
       Common.Llvm__2 (Greedy 12);
       Common.Llvm__2 (Simple 12);
       Common.Llvm__2 (Briggs 12);
-      Common.Llvm__2 Linearscan;
+      Common.Llvm__2 (Linearscan 12);
     ]
   in
   let t = t compilers in

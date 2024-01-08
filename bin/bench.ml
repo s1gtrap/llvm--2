@@ -132,7 +132,8 @@ let default_compilers =
     Llvm__2 (Llvm__2.Regalloc.Simple 2);
     Llvm__2 (Llvm__2.Regalloc.Briggs 12);
     Llvm__2 (Llvm__2.Regalloc.Briggs 2);
-    Llvm__2 Llvm__2.Regalloc.Linearscan;
+    Llvm__2 (Llvm__2.Regalloc.Linearscan 2);
+    Llvm__2 (Llvm__2.Regalloc.Linearscan 12);
     Llvm__2 (Llvm__2.Regalloc.Greedy 12);
     Llvm__2 (Llvm__2.Regalloc.Greedy 0);
   ]

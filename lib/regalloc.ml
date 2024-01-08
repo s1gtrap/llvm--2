@@ -92,6 +92,21 @@ type reg =
   | R14b
   | R15b
 
+let reg_of_int = function
+  | 0 -> Rdx
+  | 1 -> Rbx
+  | 2 -> Rsi
+  | 3 -> Rdi
+  | 4 -> R08
+  | 5 -> R09
+  | 6 -> R10
+  | 7 -> R11
+  | 8 -> R12
+  | 9 -> R13
+  | 10 -> R14
+  | 11 -> R15
+  | i -> failwith ("out of bounds: " ^ string_of_int i)
+
 type operand =
   | Imm of imm (* immediate *)
   | Reg of reg (* register *)
@@ -1158,13 +1173,17 @@ let compile_terminator pad asn phis term =
 
 module C = Coloring.Mark (Lva.G)
 
-type allocator = Simple of int | Briggs of int | Greedy of int | Linearscan
+type allocator =
+  | Simple of int
+  | Briggs of int
+  | Greedy of int
+  | Linearscan of int
 
 let allocator_of_string n = function
   | s when String.starts_with ~prefix:s "simple" -> Simple n
   | s when String.starts_with ~prefix:s "briggs" -> Briggs n
   | s when String.starts_with ~prefix:s "greedy" -> Greedy n
-  | s when String.starts_with ~prefix:s "linearscan" -> Linearscan
+  | s when String.starts_with ~prefix:s "linearscan" -> Linearscan n
   | "" -> Greedy 0 (* NOTE: default allocator *)
   | s -> failwith ("invalid allocator: " ^ s)
 
@@ -1172,7 +1191,7 @@ let string_of_allocator = function
   | Simple k -> "simple " ^ string_of_int k
   | Briggs k -> "briggs " ^ string_of_int k
   | Greedy k -> "greedy " ^ string_of_int k
-  | Linearscan -> "linear"
+  | Linearscan k -> "linear " ^ string_of_int k
 
 module VS = Set.Make (Lva.G.V)
 module VT = Map.Make (Lva.G.V)
@@ -1247,21 +1266,6 @@ let alloc a param insns (in_, out) : operand S.table =
       flush stdout;
       j
     in*)
-  let reg_of_int = function
-    | 0 -> Rdx
-    | 1 -> Rbx
-    | 2 -> Rsi
-    | 3 -> Rdi
-    | 4 -> R08
-    | 5 -> R09
-    | 6 -> R10
-    | 7 -> R11
-    | 8 -> R12
-    | 9 -> R13
-    | 10 -> R14
-    | 11 -> R15
-    | i -> failwith ("out of bounds: " ^ string_of_int i)
-  in
   let l =
     match a with
     | Greedy k ->
@@ -1580,15 +1584,12 @@ let alloc a param insns (in_, out) : operand S.table =
           else simp (S.SS.union (S.SS.of_list spills2) spills)
         in
         simp S.SS.empty
-    | Linearscan ->
+    | Linearscan k ->
         let insns =
           List.filter (function Cfg.Label _ -> false | _ -> true) insns
         in
         let intervals = Linear.intervals param insns (in_, out) in
-        let avail =
-          Regs.of_list
-            [ Rdx; Rbx; Rsi; Rdi; R08; R09; R10; R11; R12; R13; R14; R15 ]
-        in
+        let avail = Regs.of_list (List.init k reg_of_int) in
         let scan (idx, avail, assigns, spills) _ins =
           match
             List.find_opt
