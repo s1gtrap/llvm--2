@@ -1,5 +1,5 @@
+open Common
 open Graph
-module S = Symbol
 
 exception BackendFatal (* use this for impossible cases *)
 
@@ -28,84 +28,6 @@ type imm = Lit of quad | Lbl of lbl
     arguments: rdi, rsi, rdx, rcx, r08, r09
     callee-save: rbx, rbp, r12-r15
 *)
-
-type reg =
-  | Rip
-  | Rax
-  | Rbx
-  | Rcx
-  | Rdx
-  | Rsi
-  | Rdi
-  | Rbp
-  | Rsp
-  | R08
-  | R09
-  | R10
-  | R11
-  | R12
-  | R13
-  | R14
-  | R15
-  | Eax
-  | Ebx
-  | Ecx
-  | Edx
-  | Esi
-  | Edi
-  | Ebp
-  | Esp
-  | R08d
-  | R09d
-  | R10d
-  | R11d
-  | R12d
-  | R13d
-  | R14d
-  | R15d
-  | Ax
-  | Cx
-  | Dx
-  | Bx
-  | Si
-  | Di
-  | R08w
-  | R09w
-  | R10w
-  | R11w
-  | R12w
-  | R13w
-  | R14w
-  | R15w
-  | Al
-  | Cl
-  | Dl
-  | Bl
-  | Sil
-  | Dil
-  | R08b
-  | R09b
-  | R10b
-  | R11b
-  | R12b
-  | R13b
-  | R14b
-  | R15b
-
-let reg_of_int = function
-  | 0 -> Rdx
-  | 1 -> Rbx
-  | 2 -> Rsi
-  | 3 -> Rdi
-  | 4 -> R08
-  | 5 -> R09
-  | 6 -> R10
-  | 7 -> R11
-  | 8 -> R12
-  | 9 -> R13
-  | 10 -> R14
-  | 11 -> R15
-  | i -> failwith ("out of bounds: " ^ string_of_int i)
 
 type operand =
   | Imm of imm (* immediate *)
@@ -1203,16 +1125,14 @@ type mark =
 
 type assign = Color of S.symbol * int | ActualSpill of S.symbol
 
-module Regs = Set.Make (struct
-  type t = reg
-
-  let compare a b = compare a b
-end)
-
 let coalesce_briggs _k (prefs : S.SS.t S.ST.t)
     ((l, g) : Lva.G.V.t S.ST.t * Lva.G.t) : Lva.G.V.t S.table * Lva.G.t =
   let try_coalesce _ops (_ol, g) =
     let l' = l and g' = g in
+    S.ST.iter
+      (fun k v ->
+        S.SS.iter (fun v -> Printf.printf "%s <- %s\n" (S.name k) (S.name v)) v)
+      prefs;
     (l', g')
   in
   let rec partition inset outsets =
@@ -1584,79 +1504,7 @@ let alloc a param insns (in_, out) : operand S.table =
           else simp (S.SS.union (S.SS.of_list spills2) spills)
         in
         simp S.SS.empty
-    | Linearscan k ->
-        let insns =
-          List.filter (function Cfg.Label _ -> false | _ -> true) insns
-        in
-        let intervals = Linear.intervals param insns (in_, out) in
-        let avail = Regs.of_list (List.init k reg_of_int) in
-        let scan (idx, avail, assigns, spills) _ins =
-          match
-            List.find_opt
-              (fun (k, _) -> fst (S.ST.find k intervals) = idx)
-              (S.ST.bindings intervals)
-          with
-          | Some (k, (livestart, liveend)) ->
-              if Regs.is_empty avail then
-                (* spill the longest interval currently assigned *)
-                let longest =
-                  S.ST.fold
-                    (fun k r (k2, r2, len2) ->
-                      match S.ST.find_opt k intervals with
-                      | Some (nlivestart, nliveend) ->
-                          let len = nliveend - nlivestart in
-                          if len > len2 then (k, Some r, len) else (k2, r2, len2)
-                      | None -> (k2, r2, len2))
-                    assigns
-                    (k, None, liveend - livestart)
-                in
-                match longest with
-                | k2, Some r, _ ->
-                    (*Printf.printf "spilling %s to assign %s = %s\n" (S.name k2)
-                      (S.name k) (string_of_reg r);*)
-                    ( idx + 1,
-                      avail,
-                      S.ST.add k r (S.ST.remove k2 assigns),
-                      S.SS.add k2 spills )
-                | _, None, _ ->
-                    (*Printf.printf "spilling %s\n" (S.name k);*)
-                    (idx + 1, avail, assigns, S.SS.add k spills)
-              else
-                (* otherwise assign to available register *)
-                let reg = Regs.choose avail in
-                (*Printf.printf "assigning %s = %s\n" (S.name k)
-                  (string_of_reg reg);*)
-                (idx + 1, Regs.remove reg avail, S.ST.add k reg assigns, spills)
-          | None -> (idx + 1, avail, assigns, spills)
-        in
-        let avail, assigns, spills =
-          List.fold_left
-            (fun (avail, assigns, spills) k ->
-              match Regs.choose_opt avail with
-              | Some r ->
-                  (*Printf.printf "assigning %s = %s, regs is now" (S.name k)
-                      (string_of_reg r);
-                    Regs.iter
-                      (fun r -> Printf.printf " %s" (string_of_reg r))
-                      (Regs.remove r avail);
-                    Printf.printf "\n";*)
-                  (Regs.remove r avail, S.ST.add k r assigns, spills)
-              | None ->
-                  Printf.printf "spilling %s\n" (S.name k);
-                  (avail, assigns, S.SS.add k spills))
-            (avail, Symbol.empty, S.SS.empty)
-            param
-        in
-        let _, _, assigns, spills =
-          List.fold_left scan (0, avail, assigns, spills) insns
-        in
-        let assigns = S.ST.map (fun r -> Reg r) assigns in
-        let _, assigns =
-          S.SS.fold
-            (fun k (i, acc) -> (i + 1, S.ST.add k (stack i) acc))
-            spills (0, assigns)
-        in
-        assigns
+    | Linearscan k -> Linear.alloc k insns (in_, out)
   in
   l
 
