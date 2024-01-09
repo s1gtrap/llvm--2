@@ -1074,8 +1074,10 @@ let coalesce_briggs k (prefs : S.SS.t S.ST.t)
     let neighs = Lva.VS.union sneighs dneighs in
     let sign v = Lva.G.succ g v |> List.length >= k in
     let signeighs = Lva.VS.filter sign neighs in
-    if Lva.VS.cardinal signeighs < k then
-      coalesce (S.ST.find sop l) (S.ST.find dop l) (l, g)
+    if
+      (not (Lva.G.mem_edge g (S.ST.find sop l) (S.ST.find dop l)))
+      && Lva.VS.cardinal signeighs < k
+    then coalesce (S.ST.find sop l) (S.ST.find dop l) (l, g)
     else (l, g)
   in
   let try_coalesce_prefs sop dops (l, g) =
