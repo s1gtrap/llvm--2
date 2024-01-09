@@ -331,6 +331,7 @@ let () =
     [ [| "100" |]; [| "1000" |]; [| "10000" |] ];
 
   b "benches/fannkuch-redux.ll" default_compilers
+  (* 123,61s *)
     [
       [| "4" |];
       [| "5" |];
