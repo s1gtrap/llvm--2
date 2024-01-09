@@ -287,6 +287,7 @@ let () =
       [| "34359738337" |];
     ];
 
+  (*bin "benches/bubblesort0.ll" default_compilers [];*)
   b "benches/sieven.ll" default_compilers
     (*  0,56s *)
     [
@@ -312,7 +313,7 @@ let () =
     ];
 
   b "benches/fannkuch-redux.ll" default_compilers
-  (* 123,61s *)
+    (* 123,61s *)
     [
       [| "4" |];
       [| "5" |];
@@ -325,7 +326,7 @@ let () =
     ];
 
   b "benches/sha256.ll" default_compilers
-  (* 623,21s *)
+    (* 623,21s *)
     [
       [| "4" |];
       [| "8" |];
