@@ -324,6 +324,7 @@ let () =
     ];
 
   b "benches/sha256.ll" default_compilers
+  (* 623,21s *)
     [
       [| "4" |];
       [| "8" |];
