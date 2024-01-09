@@ -190,6 +190,7 @@ let () =
   flush Stdlib.stdout;
 
   b "benches/fib.ll" default_compilers
+    (* 1.33s *)
     [
       [| "8" |];
       [| "10" |];
@@ -207,6 +208,7 @@ let () =
     ];
 
   b "benches/fib.ll"
+    (* 1.33s *)
     [
       Llvm__2 (Llvm__2.Regalloc.Greedy 12);
       Llvm__2 (Llvm__2.Regalloc.Greedy 8);
@@ -234,6 +236,7 @@ let () =
     ];
 
   b "benches/loopn0.ll" default_compilers
+    (* 1.31s *)
     [
       [| "65535" |] (* 2 ** 16 - 1 *);
       [| "131071" |] (* 2 ** 17 - 1 *);
@@ -246,6 +249,7 @@ let () =
     ];
 
   b "benches/loopn1.ll" default_compilers
+    (* 0.85s *)
     [
       [| "65535" |] (* 2 ** 16 - 1 *);
       [| "131071" |] (* 2 ** 17 - 1 *);
@@ -258,6 +262,7 @@ let () =
     ];
 
   b "benches/factori32.ll" default_compilers
+    (* 123,85s *)
     [
       [| "16777213" |];
       [| "33554393" |];
@@ -270,6 +275,7 @@ let () =
     ];
 
   b "benches/factori64.ll" default_compilers
+    (* 0,56s *)
     [
       [| "268435399" |];
       [| "536870909" |];
@@ -282,6 +288,7 @@ let () =
     ];
 
   b "benches/sieven.ll" default_compilers
+    (*  0,56s *)
     [
       [| "128" |];
       [| "256" |];
@@ -294,6 +301,7 @@ let () =
     ];
 
   b "benches/subset.ll" default_compilers
+    (* 2,67s *)
     [
       Array.init 15 string_of_int;
       Array.init 16 string_of_int;
@@ -301,6 +309,18 @@ let () =
       Array.init 18 string_of_int;
       (* (Array.init 19 string_of_int) n
          (Array.init 20 string_of_int) n*)
+    ];
+
+  b "benches/fannkuch-redux.ll" default_compilers
+    [
+      [| "4" |];
+      [| "5" |];
+      [| "6" |];
+      [| "7" |];
+      [| "8" |];
+      [| "9" |];
+      [| "10" |];
+      [| "11" |];
     ];
 
   b "benches/sha256.ll" default_compilers
@@ -317,19 +337,7 @@ let () =
       [| "2048" |];
       [| "4096" |];
       [| "8192" |];
-    ];
-
-  b "benches/sha256-stdin.ll" default_compilers
-    [ [| "100" |]; [| "1000" |]; [| "10000" |] ];
-
-  b "benches/fannkuch-redux.ll" default_compilers
-    [
-      [| "4" |];
-      [| "5" |];
-      [| "6" |];
-      [| "7" |];
-      [| "8" |];
-      [| "9" |];
-      [| "10" |];
-      [| "11" |];
     ]
+
+(*b "benches/sha256-stdin.ll" default_compilers
+  [ [| "100" |]; [| "1000" |]; [| "10000" |] ];*)
