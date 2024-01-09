@@ -1,6 +1,7 @@
 declare i64 @strtoull(i8*, i8*, i32)
 
 define i32 @main (i32 %0, i8* %1) {
+2:
  %3 = getelementptr i8*, i8* %1, i64 1
  %4 = load i8*, i8** %3
  %5 = call i64 @strtoull (i8* %4, i8* null, i32 10)
