@@ -159,6 +159,7 @@ let t matches compilers ?(stdin = "") ?(cargs = []) ?(timeout = 5)
           || (asserts land assert_stderr > 0 && experr <> goterr)
         then (
           Printf.printf "%sfailed!%s\n" red nc;
+          Printf.printf "    %s\n" exe;
           if asserts land assert_exitcode > 0 && expexit <> gotexit then
             Printf.printf "  exit:\n    got %s, expected %s\n"
               (string_of_status gotexit) (string_of_status expexit);

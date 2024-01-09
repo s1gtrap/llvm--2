@@ -1473,10 +1473,10 @@ let compile_fdecl (alc : allocator) debug tdecls name
           in
           let issame =
             match o with
-            | Ll.Id s -> S.ST.find d asn <> S.ST.find s asn
-            | _ -> true
+            | Ll.Id s -> S.ST.find d asn = S.ST.find s asn
+            | _ -> false
           in
-          if issame then S.ST.add p pt t else t
+          if not issame then S.ST.add p pt t else t
         in
         let t = List.fold_left addphi t s in
         addphis t l tail
