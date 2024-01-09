@@ -1018,49 +1018,56 @@ let string_of_allocator = function
   | Greedy k -> "greedy " ^ string_of_int k
   | Linearscan k -> "linear " ^ string_of_int k
 
-module VS = Set.Make (Lva.G.V)
-module VT = Map.Make (Lva.G.V)
-module Ints = Set.Make (Int)
-
 type mark =
   | Color of S.symbol * Lva.G.V.t
   | PotentialSpill of S.symbol * Lva.G.V.t
 
 type assign = Color of S.symbol * int | ActualSpill of S.symbol
 
-let coalesce_briggs _k (prefs : S.SS.t S.ST.t)
+let coalesce v1 v2 (_l, g) =
+  let g' = Lva.G.create () in
+  let l', vt', _ =
+    Lva.G.fold_vertex
+      (fun v (st, vt, jn) ->
+        if v = v1 || v = v2 then (
+          match jn with
+          | None ->
+              let s = Lva.G.V.label v in
+              (st, vt, Some (v, s))
+          | Some (v1, s1) ->
+              let s = Lva.G.V.label v |> S.SS.union s1 in
+              let v' = Lva.G.V.create s in
+              Lva.G.add_vertex g' v';
+
+              ( S.SS.fold (fun e l -> S.ST.add e v' l) s st,
+                Lva.VT.add v1 v' vt |> Lva.VT.add v2 v',
+                None ))
+        else
+          let s = Lva.G.V.label v in
+          let v' = Lva.G.V.create s in
+          Lva.G.add_vertex g' v';
+          (S.SS.fold (fun e st -> S.ST.add e v' st) s st, Lva.VT.add v v' vt, jn))
+      g
+      (S.ST.empty, Lva.VT.empty, None)
+  in
+  (l', g')
+
+let coalesce_briggs k (prefs : S.SS.t S.ST.t)
     ((l, g) : Lva.G.V.t S.ST.t * Lva.G.t) : Lva.G.V.t S.table * Lva.G.t =
-  let try_coalesce _ops (_ol, g) =
-    let l' = l and g' = g in
-    (*S.ST.iter
-      (fun k v ->
-        S.SS.iter (fun v -> Printf.printf "%s <- %s\n" (S.name k) (S.name v)) v)
-      prefs;*)
-    (l', g')
+  let try_coalesce sop dop (l, g) =
+    let sneighs = S.ST.find sop l |> Lva.G.succ g |> Lva.VS.of_list
+    and dneighs = S.ST.find dop l |> Lva.G.succ g |> Lva.VS.of_list in
+    let neighs = Lva.VS.union sneighs dneighs in
+    let sign v = Lva.G.succ g v |> List.length >= k in
+    let signeighs = Lva.VS.filter sign neighs in
+    if Lva.VS.cardinal signeighs < k then
+      coalesce (S.ST.find sop l) (S.ST.find dop l) (l, g)
+    else (l, g)
   in
-  let rec partition inset outsets =
-    match S.SS.choose_opt inset with
-    | Some e ->
-        let rec place outset =
-          match outset with
-          | ss :: tail
-            when S.SS.for_all
-                   (fun e2 -> Lva.G.mem_edge g (S.ST.find e l) (S.ST.find e2 l))
-                   ss ->
-              ss :: place tail
-          | ss :: tail -> S.SS.add e ss :: tail
-          | [] -> [ S.SS.add e S.SS.empty ]
-        in
-        let outsets = place outsets in
-        let inset = S.SS.remove e inset in
-        partition inset outsets
-    | None -> outsets
+  let try_coalesce_prefs sop dops (l, g) =
+    S.SS.fold (try_coalesce sop) dops (l, g)
   in
-  S.ST.fold
-    (fun k prefs acc ->
-      partition (S.SS.add k prefs) []
-      |> List.fold_left (fun acc ops -> try_coalesce ops acc) acc)
-    prefs (l, g)
+  S.ST.fold try_coalesce_prefs prefs (l, g)
 
 let coalesce (alc : allocator) (prefs : S.SS.t S.ST.t)
     ((l, g) : Lva.G.V.t S.ST.t * Lva.G.t) : Lva.G.V.t S.table * Lva.G.t =
@@ -1119,10 +1126,10 @@ let alloc a param insns (in_, out) : operand S.table =
           let spilled k _v = not (S.SS.mem k spills) in
           let simplify () =
             (* mark nodes as colorables *)
-            let rec remove_vertex (removed_vertices : VS.t)
+            let rec remove_vertex (removed_vertices : Lva.VS.t)
                 (l : Lva.G.V.t S.table) : mark list =
               let insig _k v =
-                let mem k = not (VS.mem k removed_vertices) in
+                let mem k = not (Lva.VS.mem k removed_vertices) in
                 let degree = Lva.G.succ g v |> List.filter mem |> List.length in
                 if degree < c then Some (v, degree) else None
               in
@@ -1133,16 +1140,20 @@ let alloc a param insns (in_, out) : operand S.table =
               | Some (k, (v, _deg)) ->
                   (* Printf.printf "removing %s (%d < %d)\n" (S.name k) deg c;*)
                   Color (k, v)
-                  :: remove_vertex (VS.add v removed_vertices) (S.ST.remove k l)
+                  :: remove_vertex
+                       (Lva.VS.add v removed_vertices)
+                       (S.ST.remove k l)
               | None -> spill removed_vertices l
-            and spill (removed_vertices : VS.t) (l : Lva.G.V.t S.table) =
+            and spill (removed_vertices : Lva.VS.t) (l : Lva.G.V.t S.table) =
               match S.ST.filter spilled l |> S.ST.choose_opt with
               | Some (k, v) ->
                   PotentialSpill (k, v)
-                  :: remove_vertex (VS.add v removed_vertices) (S.ST.remove k l)
+                  :: remove_vertex
+                       (Lva.VS.add v removed_vertices)
+                       (S.ST.remove k l)
               | None -> []
             in
-            remove_vertex VS.empty l
+            remove_vertex Lva.VS.empty l
           in
           let markers = simplify () in
           (* Printf.printf "Marked as colorable: ";
@@ -1158,13 +1169,13 @@ let alloc a param insns (in_, out) : operand S.table =
             | i -> Ints.add (i - 1) (add (i - 1))
           in
           let indices = add c in
-          let rec select (assignments : int VT.t) (markers : mark list) :
+          let rec select (assignments : int Lva.VT.t) (markers : mark list) :
               assign list =
             match markers with
             | Color (k, v) :: tail ->
                 let neighbor_assignments =
                   Lva.G.succ g v
-                  |> List.filter_map (fun v -> VT.find_opt v assignments)
+                  |> List.filter_map (fun v -> Lva.VT.find_opt v assignments)
                   |> List.fold_left (fun s i -> Ints.add i s) Ints.empty
                 in
                 let avail_assignments =
@@ -1173,12 +1184,12 @@ let alloc a param insns (in_, out) : operand S.table =
                 let assignment = Ints.choose avail_assignments in
                 (* Printf.printf "coloring %s %d\n" (S.name k) assignment;*)
                 Color (k, assignment)
-                :: select (VT.add v assignment assignments) tail
+                :: select (Lva.VT.add v assignment assignments) tail
             | PotentialSpill (k, v) :: tail -> (
                 (* potential spill *)
                 let neighbor_assignments =
                   Lva.G.succ g v
-                  |> List.filter_map (fun v -> VT.find_opt v assignments)
+                  |> List.filter_map (fun v -> Lva.VT.find_opt v assignments)
                   |> List.fold_left (fun s i -> Ints.add i s) Ints.empty
                 in
                 let avail_assignments =
@@ -1189,19 +1200,19 @@ let alloc a param insns (in_, out) : operand S.table =
                 | Some assignment ->
                     (* Printf.printf "coloring %s %d\n" (S.name k) assignment;*)
                     Color (k, assignment)
-                    :: select (VT.add v assignment assignments) tail
+                    :: select (Lva.VT.add v assignment assignments) tail
                 | None ->
                     (* actual spill *)
                     let actual_spills = actual_spill assignments markers in
                     let assignments = List.map Fun.id actual_spills in
                     assignments)
             | [] -> []
-          and actual_spill (assignments : int VT.t) markers : assign list =
+          and actual_spill (assignments : int Lva.VT.t) markers : assign list =
             match markers with
             | PotentialSpill (k, v) :: tail -> (
                 let neighbor_assignments =
                   Lva.G.succ g v
-                  |> List.filter_map (fun v -> VT.find_opt v assignments)
+                  |> List.filter_map (fun v -> Lva.VT.find_opt v assignments)
                   |> List.fold_left (fun s i -> Ints.add i s) Ints.empty
                 in
                 let avail_assignments =
@@ -1210,14 +1221,16 @@ let alloc a param insns (in_, out) : operand S.table =
                 let assignment = Ints.choose_opt avail_assignments in
                 match assignment with
                 | Some assignment ->
-                    actual_spill (VT.add v assignment assignments) tail
+                    actual_spill (Lva.VT.add v assignment assignments) tail
                 | None ->
                     (* push actual spill *)
                     ActualSpill k :: actual_spill assignments tail)
             | _ :: tail -> actual_spill assignments tail
             | [] -> []
           in
-          let assignments : assign list = List.rev markers |> select VT.empty in
+          let assignments : assign list =
+            List.rev markers |> select Lva.VT.empty
+          in
           (* Printf.printf "Assignments: ";
              List.iter
                (function
@@ -1279,10 +1292,10 @@ let alloc a param insns (in_, out) : operand S.table =
           let spilled k _v = not (S.SS.mem k spills) in
           let simplify () =
             (* mark nodes as colorables *)
-            let rec remove_vertex (removed_vertices : VS.t)
+            let rec remove_vertex (removed_vertices : Lva.VS.t)
                 (l : Lva.G.V.t S.table) : mark list =
               let insig _k v =
-                let mem k = not (VS.mem k removed_vertices) in
+                let mem k = not (Lva.VS.mem k removed_vertices) in
                 let degree = Lva.G.succ g v |> List.filter mem |> List.length in
                 if degree < c then Some (v, degree) else None
               in
@@ -1293,16 +1306,20 @@ let alloc a param insns (in_, out) : operand S.table =
               | Some (k, (v, _deg)) ->
                   (* Printf.printf "removing %s (%d < %d)\n" (S.name k) deg c;*)
                   Color (k, v)
-                  :: remove_vertex (VS.add v removed_vertices) (S.ST.remove k l)
+                  :: remove_vertex
+                       (Lva.VS.add v removed_vertices)
+                       (S.ST.remove k l)
               | None -> spill removed_vertices l
-            and spill (removed_vertices : VS.t) (l : Lva.G.V.t S.table) =
+            and spill (removed_vertices : Lva.VS.t) (l : Lva.G.V.t S.table) =
               match S.ST.filter spilled l |> S.ST.choose_opt with
               | Some (k, v) ->
                   PotentialSpill (k, v)
-                  :: remove_vertex (VS.add v removed_vertices) (S.ST.remove k l)
+                  :: remove_vertex
+                       (Lva.VS.add v removed_vertices)
+                       (S.ST.remove k l)
               | None -> []
             in
-            remove_vertex VS.empty l
+            remove_vertex Lva.VS.empty l
           in
           let markers = simplify () in
           (* Printf.printf "Marked as colorable: ";
@@ -1318,13 +1335,13 @@ let alloc a param insns (in_, out) : operand S.table =
             | i -> Ints.add (i - 1) (add (i - 1))
           in
           let indices = add c in
-          let rec select (assignments : int VT.t) (markers : mark list) :
+          let rec select (assignments : int Lva.VT.t) (markers : mark list) :
               assign list =
             match markers with
             | Color (k, v) :: tail ->
                 let neighbor_assignments =
                   Lva.G.succ g v
-                  |> List.filter_map (fun v -> VT.find_opt v assignments)
+                  |> List.filter_map (fun v -> Lva.VT.find_opt v assignments)
                   |> List.fold_left (fun s i -> Ints.add i s) Ints.empty
                 in
                 let avail_assignments =
@@ -1333,12 +1350,12 @@ let alloc a param insns (in_, out) : operand S.table =
                 let assignment = Ints.choose avail_assignments in
                 (* Printf.printf "coloring %s %d\n" (S.name k) assignment;*)
                 Color (k, assignment)
-                :: select (VT.add v assignment assignments) tail
+                :: select (Lva.VT.add v assignment assignments) tail
             | PotentialSpill (k, v) :: tail -> (
                 (* potential spill *)
                 let neighbor_assignments =
                   Lva.G.succ g v
-                  |> List.filter_map (fun v -> VT.find_opt v assignments)
+                  |> List.filter_map (fun v -> Lva.VT.find_opt v assignments)
                   |> List.fold_left (fun s i -> Ints.add i s) Ints.empty
                 in
                 let avail_assignments =
@@ -1349,19 +1366,19 @@ let alloc a param insns (in_, out) : operand S.table =
                 | Some assignment ->
                     (* Printf.printf "coloring %s %d\n" (S.name k) assignment;*)
                     Color (k, assignment)
-                    :: select (VT.add v assignment assignments) tail
+                    :: select (Lva.VT.add v assignment assignments) tail
                 | None ->
                     (* actual spill *)
                     let actual_spills = actual_spill assignments markers in
                     let assignments = List.map Fun.id actual_spills in
                     assignments)
             | [] -> []
-          and actual_spill (assignments : int VT.t) markers : assign list =
+          and actual_spill (assignments : int Lva.VT.t) markers : assign list =
             match markers with
             | PotentialSpill (k, v) :: tail -> (
                 let neighbor_assignments =
                   Lva.G.succ g v
-                  |> List.filter_map (fun v -> VT.find_opt v assignments)
+                  |> List.filter_map (fun v -> Lva.VT.find_opt v assignments)
                   |> List.fold_left (fun s i -> Ints.add i s) Ints.empty
                 in
                 let avail_assignments =
@@ -1370,14 +1387,16 @@ let alloc a param insns (in_, out) : operand S.table =
                 let assignment = Ints.choose_opt avail_assignments in
                 match assignment with
                 | Some assignment ->
-                    actual_spill (VT.add v assignment assignments) tail
+                    actual_spill (Lva.VT.add v assignment assignments) tail
                 | None ->
                     (* push actual spill *)
                     ActualSpill k :: actual_spill assignments tail)
             | _ :: tail -> actual_spill assignments tail
             | [] -> []
           in
-          let assignments : assign list = List.rev markers |> select VT.empty in
+          let assignments : assign list =
+            List.rev markers |> select Lva.VT.empty
+          in
           (* Printf.printf "Assignments: ";
              List.iter
                (function
