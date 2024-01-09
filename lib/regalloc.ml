@@ -1476,7 +1476,12 @@ let compile_fdecl (alc : allocator) debug tdecls name
                  | Some ins -> Some (ins @ mov1 @ [ mov2 ])
                  | None -> Some (mov1 @ [ mov2 ]))
           in
-          S.ST.add p pt t
+          let issame =
+            match o with
+            | Ll.Id s -> S.ST.find d asn <> S.ST.find s asn
+            | _ -> true
+          in
+          if issame then S.ST.add p pt t else t
         in
         let t = List.fold_left addphi t s in
         addphis t l tail
