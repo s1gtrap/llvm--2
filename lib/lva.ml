@@ -155,33 +155,25 @@ let interf (params : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
   (t, g)
 
 let prefer (insns : Cfg.insn list) : S.SS.t S.ST.t =
-  (* FIXME: test phi nodes > 4 *)
-  let l =
-    let add (t : S.SS.t S.ST.t) ops =
-      List.map (fun a -> List.map (fun b -> (a, b)) ops) ops
-      |> List.flatten
-      |> List.filter (fun ((_, n1), (_, n2)) -> n1 <> n2)
-      |> List.fold_left
-           (fun t (a, b) ->
-             S.ST.update a
-               (function
-                 | Some s -> Some (S.SS.add b s)
-                 | None -> Some (S.SS.add b S.SS.empty))
-               t)
-           t
-    in
-    let func (t : S.SS.t S.ST.t) = function
-      | Cfg.Insn (Some o1, Ll.PhiNode (_, ops)) ->
-          let ops =
-            List.filter_map (function Ll.Id op, _ -> Some op | _ -> None) ops
-          in
-          add t (o1 :: ops)
-      | Cfg.Insn (Some op, _) -> add t [ op ]
-      | _ -> t
-    in
-    List.fold_left func S.ST.empty insns
+  let insn t = function
+    | Cfg.Insn (Some d, Ll.PhiNode (_, ops)) ->
+        List.fold_left
+          (fun t o ->
+            match o with
+            | Ll.Id sop, _ ->
+                S.ST.update sop
+                  (function
+                    | Some s -> Some (S.SS.add d s)
+                    | None -> Some (S.SS.singleton d))
+                  t
+            | _ -> t)
+          t ops
+    | _ -> t
   in
-  l
+  List.fold_left insn S.ST.empty insns
+
+module VS = Set.Make (G.V)
+module VT = Map.Make (G.V)
 
 (*let coalesce _k ops (ol, g) =
     let g' = G.create () in
