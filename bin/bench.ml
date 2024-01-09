@@ -312,6 +312,7 @@ let () =
     ];
 
   b "benches/fannkuch-redux.ll" default_compilers
+  (* 123,61s *)
     [
       [| "4" |];
       [| "5" |];
