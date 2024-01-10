@@ -297,8 +297,6 @@ let compile_cnd (c : Ll.cnd) : cnd =
 
 type layout = (Ll.uid * operand) list
 
-let stack i = Ind3 (Lit (Int64.of_int ((i + 1) * -8)), Rbp)
-
 (* useful for looking up items in tdecls or layouts *)
 let lookup m x =
   match List.assoc_opt x m with

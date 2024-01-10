@@ -68,6 +68,7 @@ let intervalends insns starts (in_, _out) =
         newin ordstarts,
       S.SS.fold
         (fun e a ->
+          Printf.printf "%s\n" (S.name e);
           IT.update
             (-i + S.ST.find e starts)
             (function
@@ -79,7 +80,7 @@ let intervalends insns starts (in_, _out) =
   in
   List.fold_right insn insns (IT.empty, IT.empty, S.SS.empty)
 
-let rec expire i (avail, active, incstart, incend) =
+let rec expire i (avail, active, assign, incstart, incend) =
   (*Printf.printf "\nexpite\n";
     Printf.printf "active: %s\n" (sos active);
     Printf.printf "incstart:\n";
@@ -89,7 +90,7 @@ let rec expire i (avail, active, incstart, incend) =
     Printf.printf "\n";*)
   match IT.min_binding_opt incend with
   | Some (j, end_) ->
-      if j >= i then (avail, active, incstart, incend)
+      if j >= i then (avail, active, assign, incstart, incend)
       else
         let avail', active' =
           S.SS.fold
@@ -105,10 +106,10 @@ let rec expire i (avail, active, incstart, incend) =
         S.SS.iter (fun e -> Printf.printf "%s is now expired\n" (S.name e)) end_;
         (* might need to expite individually *)
         let incend' = IT.remove j incend in
-        expire i (avail', active', incstart, incend')
-  | None -> (avail, active, incstart, incend)
+        expire i (avail', active', assign, incstart, incend')
+  | None -> (avail, active, assign, incstart, incend)
 
-let rec linearscan lengths insns (avail, active, incstart, incend) =
+let rec linearscan lengths insns (avail, active, assign, incstart, incend) =
   (*Printf.printf "\nlinearscan\n";
     Printf.printf "active: %s\n" (sos active);
     Printf.printf "incstart:\n";
@@ -125,11 +126,15 @@ let rec linearscan lengths insns (avail, active, incstart, incend) =
         if S.SS.is_empty ss' then IT.remove i incstart
         else IT.add i ss' incstart
       in
-      let avail', active', incstart', incend' =
+      let avail', active', assign, incstart', incend' =
         match Regs.choose_opt avail with
         | Some reg ->
             expire i
-              (Regs.remove reg avail, S.ST.add e reg active, incstart', incend)
+              ( Regs.remove reg avail,
+                S.ST.add e reg active,
+                S.ST.add e (Reg reg) assign,
+                incstart',
+                incend )
         | None ->
             let _, spill =
               IT.filter
@@ -142,10 +147,16 @@ let rec linearscan lengths insns (avail, active, incstart, incend) =
             Printf.printf "want to spill %s\n" (S.name spill);
             (* spill *)
             expire i
-              (Regs.add reg avail, S.ST.remove spill active, incstart', incend)
+              ( Regs.add reg avail,
+                S.ST.remove spill active,
+                S.ST.add e
+                  (stack (S.ST.cardinal assign - S.ST.cardinal active))
+                  assign,
+                incstart',
+                incend )
       in
-      linearscan lengths insns (avail', active', incstart', incend')
-  | None -> expire (List.length insns) (avail, active, incstart, incend)
+      linearscan lengths insns (avail', active', assign, incstart', incend')
+  | None -> expire (List.length insns) (avail, active, assign, incstart, incend)
 
 let alloc k insns (in_, out) =
   let avail = List.init k reg_of_int |> Regs.of_list in
@@ -156,11 +167,11 @@ let alloc k insns (in_, out) =
   in
   Printf.printf "lenghts:\n";
   IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) lengths;
-  let _, asn, _, _ =
-    linearscan lengths insns (avail, S.ST.empty, incstart, incend)
+  let _, _, asn, _, _ =
+    linearscan lengths insns (avail, S.ST.empty, S.ST.empty, incstart, incend)
   in
   S.ST.iter
-    (fun k v -> Printf.printf "%s: %s\n" (S.name k) (string_of_reg v))
+    (fun k v -> Printf.printf "%s: %s\n" (S.name k) (string_of_operand v))
     asn;
   (*let intervals = intervals insns d in*)
   (*let _intervals = linearscan k insns d in*)
@@ -177,4 +188,4 @@ let alloc k insns (in_, out) =
     (fun k v -> Printf.printf "%s: %s\n" (S.name k) (string_of_operand v))
     assign;*)
   (*S.ST.iter (fun k (b, e) -> Printf.printf "%s: (%d, %d)\n" (S.name k) b e) is;*)
-  failwith "ok"
+  asn

@@ -171,3 +171,5 @@ let string_of_operand (oper : operand) : string =
   | Ind1 i -> string_of_imm i
   | Ind2 r -> "(" ^ string_of_reg r ^ ")"
   | Ind3 (i, r) -> string_of_imm i ^ "(" ^ string_of_reg r ^ ")"
+
+let stack i = Ind3 (Lit (Int64.of_int ((i + 1) * -8)), Rbp)
