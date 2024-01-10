@@ -41,7 +41,6 @@ let use t (insn : Cfg.insn) idx =
 
 let intervals insns (in_, out) =
   let insn (starts, t, active) (i, n) =
-    (*Printf.printf "%s\n" (Cfg.string_of_insn n);*)
     (* init ins and outs if not present *)
     let init s (added, t, active) =
       ( S.SS.filter (fun s -> not (S.ST.mem s t)) s |> S.SS.union added,
@@ -81,7 +80,7 @@ let intervals insns (in_, out) =
     in
     ((i, n, a) :: starts, t, c)
   in
-  let starts, _t, active =
+  let starts, _, active =
     List.fold_left insn
       ([], S.ST.empty, Array.init (List.length insns) (Fun.const S.SS.empty))
       insns
@@ -90,6 +89,7 @@ let intervals insns (in_, out) =
 
 let linearscan k insns =
   let avail = Regs.of_list (List.init k reg_of_int) in
+  let spill i = Ind3 (Lit (Int64.of_int ((i * -8) - 8)), Rbp) in
   let insn (avail, active, assign) (_, _n, s, _e) =
     (*Printf.printf "%s\n" (Cfg.string_of_insn n);*)
     let start s (avail, active, assign) =
@@ -100,9 +100,7 @@ let linearscan k insns =
           let z, reg = S.ST.choose active in
           ( avail,
             S.ST.remove z active |> S.ST.add s reg,
-            S.ST.add z
-              (Ind3 (Lit (Int64.of_int ((S.ST.cardinal assign * -8) - 8)), Rbp))
-              assign )
+            S.ST.add z (S.ST.cardinal assign |> spill) assign )
     in
     S.SS.fold start s (avail, active, assign)
   in
