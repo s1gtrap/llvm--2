@@ -73,10 +73,7 @@ let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
          (List.length head.insns + 1)
   in
   let add_edge i j = G.add_edge g ids.(i) (blk j) in
-  let f ((i, b) : _ * Ll.block) =
-    for i = i to i + List.length b.insns - 1 do
-      G.add_edge g ids.(i) ids.(i + 1)
-    done;
+  let term i (b : Ll.block) =
     let i = i + List.length b.insns in
     match b with
     | { terminator = Ret _; _ } -> ()
@@ -89,6 +86,12 @@ let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
         add_edge i d;
         List.map snd c |> List.iter (add_edge i)
   in
+  let f ((i, b) : _ * Ll.block) =
+    for i = i to i + List.length b.insns - 1 do
+      G.add_edge g ids.(i) ids.(i + 1)
+    done;
+    term i b
+  in
   f (0, head);
   List.iter
     (fun ((i, b) : _ * Ll.block) ->
@@ -97,17 +100,7 @@ let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
       for i = i to i + List.length b.insns - 1 do
         G.add_edge g ids.(i) ids.(i + 1)
       done;
-      let i = i + List.length b.insns in
-      match b with
-      | { terminator = Ret _; _ } -> ()
-      | { terminator = Br l; _ } -> add_edge i l
-      | { terminator = Cbr (_, l, r); _ } ->
-          add_edge i l;
-          add_edge i r
-      | { terminator = Unreachable; _ } -> ()
-      | { terminator = Switch (_, _, d, c); _ } ->
-          add_edge i d;
-          List.map snd c |> List.iter (add_edge i))
+      term i b)
     tail;
   (ids, g)
 
