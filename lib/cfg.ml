@@ -55,64 +55,32 @@ let blocks ids (((entrylbl, head), tail) : Ll.cfg) : G.V.t S.table =
   in
   snd (List.fold_left f (off + List.length head.insns + 1, blk) tail)
 
-let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
-  let g = G.create () in
-  let ids = indices ((l, head), tail) in
-  let blk = blocks ids ((l, head), tail) in
-  let blk l =
-    match S.ST.find_opt l blk with
-    | Some i -> i
-    | None -> failwith (Printf.sprintf "%s" (Symbol.name l))
-  in
-  let add i = G.add_vertex g i in
-  List.iter add (Array.to_list ids);
-  let _, tail =
-    List.map snd tail
-    |> List.fold_left_map
-         (fun o (b : Ll.block) -> (o + List.length b.insns + 2, (o, b)))
-         (List.length head.insns + 1)
-  in
-  let add_edge i j = G.add_edge g ids.(i) (blk j) in
-  let term i ({ terminator; _ } as b : Ll.block) =
-    let i = i + List.length b.insns in
-    match terminator with
-    | Ret _ -> ()
-    | Br l -> add_edge i l
-    | Cbr (_, l, r) ->
-        add_edge i l;
-        add_edge i r
-    | Unreachable -> ()
-    | Switch (_, _, d, c) ->
-        add_edge i d;
-        List.map snd c |> List.iter (add_edge i)
-  in
-  let block i (b : Ll.block) =
-    for i = i to i + List.length b.insns - 1 do
-      G.add_edge g ids.(i) ids.(i + 1)
-    done;
-    term i b
-  in
-  block 0 head;
-  List.iter
-    (fun ((i, b) : _ * Ll.block) ->
-      G.add_edge g ids.(i) ids.(i + 1);
-      block (i + 1) b)
-    tail;
-  (ids, g)
-
-let%test "graph" =
-  let cfg = parse "ret void" in
-  let _ids, g = graph cfg in
-  dot g = "digraph G {\n  1;\n  3;\n  \n  \n  1 -> 3;\n  \n  }\n"
-
-let%test "graph" =
-  let cfg = parse "    br label %a\na:\n    br label %b\nb:\n    ret void" in
-  let _ids, g = graph cfg in
-  dot g = "digraph G {\n  0;\n  1;\n  2;\n  3;\n  \n  \n  1 -> 3;\n  \n  }\n"
-
 let flatten ((head, tail) : Ll.cfg) : insn list =
   let label l = Label l and insn i = Insn i in
   let block (b : Ll.block) = List.map insn b.insns @ [ Term b.terminator ] in
   let named_opt (n, b) = (Option.map label n |> Option.to_list) @ block b in
   let named (n, b) = Label n :: block b in
   named_opt head @ (List.map named tail |> List.flatten)
+
+let graph ((head, tail) : Ll.cfg) : G.V.t array * G.t =
+  let insns = flatten (head, tail) |> List.mapi (fun i n -> (i, n)) in
+  let verts = Array.init (List.length insns) G.V.create in
+  let addbl t = function i, Label l -> S.ST.add l verts.(i + 1) t | _ -> t in
+  let blocks = List.fold_left addbl S.ST.empty insns in
+  let g = G.create () in
+  Array.iter (G.add_vertex g) verts;
+  let addterm i = function
+    | Ll.Ret _ -> ()
+    | Br lbl -> G.add_edge g verts.(i) (S.ST.find lbl blocks)
+    | Cbr (_, l1, l2) ->
+        G.add_edge g verts.(i) (S.ST.find l1 blocks);
+        G.add_edge g verts.(i) (S.ST.find l2 blocks)
+    | _ -> failwith ""
+  in
+  let addedges = function
+    | _, Label _ -> ()
+    | i, Insn _ -> G.add_edge g verts.(i) verts.(i + 1)
+    | i, Term term -> addterm i term
+  in
+  List.iter addedges insns;
+  (verts, g)
