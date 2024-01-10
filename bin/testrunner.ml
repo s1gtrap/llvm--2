@@ -283,6 +283,20 @@ let () =
     |> t "tests/printints-debug1.ll" [] ~stdin:"1\n"
     |> t "tests/printints-debug1.ll" [] ~stdin:"0\n1\n2\n"
     |> t "tests/printints-debug1.ll" [] ~stdin:"1\n2\n3\n4\n5\n6\n7\n8\n9\n10"*)
+  |> t "tests/dumb-mul0.ll" [ "0"; "0" ]
+  |> t "tests/dumb-mul0.ll" [ "0"; "1" ]
+  |> t "tests/dumb-mul0.ll" [ "1"; "0" ]
+  |> t "tests/dumb-mul0.ll" [ "1"; "1" ]
+  |> t "tests/dumb-mul0.ll" [ "1"; "2" ]
+  |> t "tests/dumb-mul0.ll" [ "3"; "4" ]
+  |> t "tests/dumb-mul0.ll" [ "5"; "6" ]
+  |> t "tests/dumb-mul1.ll" [ "0"; "0" ]
+  |> t "tests/dumb-mul1.ll" [ "0"; "1" ]
+  |> t "tests/dumb-mul1.ll" [ "1"; "0" ]
+  |> t "tests/dumb-mul1.ll" [ "1"; "1" ]
+  |> t "tests/dumb-mul1.ll" [ "1"; "2" ]
+  |> t "tests/dumb-mul1.ll" [ "3"; "4" ]
+  |> t "tests/dumb-mul1.ll" [ "5"; "6" ]
   |> t "tests/bubblesort0.ll" [] ~stdin:"1\n"
   |> t "tests/bubblesort0.ll" []
        ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")
