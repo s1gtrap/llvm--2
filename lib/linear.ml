@@ -1,5 +1,4 @@
 open Common
-open X86
 
 let def t (ins : Cfg.insn) idx =
   match ins with
@@ -39,79 +38,85 @@ let use t (insn : Cfg.insn) idx =
   | Term Unreachable -> t
   | _ -> failwith (Cfg.string_of_insn insn)
 
-let intervals insns (in_, out) =
-  let insn (starts, t, active) (i, n) =
-    (* init ins and outs if not present *)
-    let init s (added, t, active) =
-      ( S.SS.filter (fun s -> not (S.ST.mem s t)) s |> S.SS.union added,
-        S.SS.fold
-          (fun s t ->
-            S.ST.update s
-              (function
-                | Some j ->
-                    active.(i) <- S.SS.add s active.(i);
-                    active.(j) <- S.SS.remove s active.(j);
-                    Some i
-                | None ->
-                    active.(i) <- S.SS.add s active.(i);
-                    Some i)
-              t)
-          s t,
-        active )
-    in
-    (* set latest use in outs *)
-    let end_ s (added, t, active) =
-      ( S.SS.filter (fun s -> not (S.ST.mem s t)) s |> S.SS.union added,
-        S.SS.fold
-          (fun s t ->
-            S.ST.update s
-              (function
-                | Some j ->
-                    active.(i) <- S.SS.add s active.(i);
-                    active.(j) <- S.SS.remove s active.(j);
-                    Some i
-                | None -> Some i)
-              t)
-          s t,
-        active )
-    in
-    let a, t, c =
-      init in_.(i) (S.SS.empty, t, active) |> init out.(i) |> end_ out.(i)
-    in
-    ((i, n, a) :: starts, t, c)
-  in
-  let starts, _, active =
-    List.fold_left insn
-      ([], S.ST.empty, Array.init (List.length insns) (Fun.const S.SS.empty))
-      insns
-  in
-  List.rev starts |> List.map (fun (i, n, a) -> (i, n, a, active.(i)))
+module IT = Map.Make (Int)
 
-let linearscan k insns =
-  let avail = Regs.of_list (List.init k reg_of_int) in
-  let spill i = Ind3 (Lit (Int64.of_int ((i * -8) - 8)), Rbp) in
-  let insn (avail, active, assign) (_, _n, s, _e) =
-    (*Printf.printf "%s\n" (Cfg.string_of_insn n);*)
-    let start s (avail, active, assign) =
-      match Regs.choose_opt avail with
-      | Some reg -> (Regs.remove reg avail, S.ST.add s reg active, assign)
-      | None ->
-          (* FIXME: order by remaining or total length *)
-          let z, reg = S.ST.choose active in
-          ( avail,
-            S.ST.remove z active |> S.ST.add s reg,
-            S.ST.add z (S.ST.cardinal assign |> spill) assign )
-    in
-    S.SS.fold start s (avail, active, assign)
+let intervalstart insns (in_, _out) =
+  let insn (ordstarts, starts, active) (i, _n) =
+    let newin = S.SS.diff in_.(i) active in
+    ( S.SS.fold
+        (fun e a ->
+          IT.update i
+            (function
+              | Some s -> Some (S.SS.add e s) | None -> Some (S.SS.singleton e))
+            a)
+        newin ordstarts,
+      S.SS.fold (fun e a -> S.ST.add e i a) newin starts,
+      S.SS.union active newin )
   in
-  let _, active, assign =
-    List.fold_left insn (avail, S.ST.empty, S.ST.empty) insns
-  in
-  S.ST.fold (fun k v acc -> S.ST.add k (Reg v) acc) active assign
+  List.fold_left insn (IT.empty, S.ST.empty, S.SS.empty) insns
 
-let alloc k insns d =
+let intervalends insns (_in_, out) =
+  let insn (i, _n) (ordstarts, starts, active) =
+    let newin = S.SS.diff out.(i) active in
+    ( S.SS.fold
+        (fun e a ->
+          IT.update i
+            (function
+              | Some s -> Some (S.SS.add e s) | None -> Some (S.SS.singleton e))
+            a)
+        newin ordstarts,
+      S.SS.fold (fun e a -> S.ST.add e i a) newin starts,
+      S.SS.union active newin )
+  in
+  List.fold_right insn insns (IT.empty, S.ST.empty, S.SS.empty)
+
+let rec expire i (active, incstart, incend) =
+  Printf.printf "\nexpite\n";
+  Printf.printf "active: %s\n" (sos active);
+  Printf.printf "incstart:\n";
+  IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incstart;
+  Printf.printf "incend:\n";
+  IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incend;
+  Printf.printf "\n";
+  match IT.min_binding_opt incend with
+  | Some (j, end_) ->
+      if j >= i then (active, incstart, incend)
+      else
+        let active' = S.SS.diff active end_ in
+        let incend' = IT.remove j incend in
+        expire i (active', incstart, incend')
+  | None -> (active, incstart, incend)
+
+let rec linearscan (active, incstart, incend) =
+  Printf.printf "\nlinearscan\n";
+  Printf.printf "active: %s\n" (sos active);
+  Printf.printf "incstart:\n";
+  IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incstart;
+  Printf.printf "incend:\n";
+  IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incend;
+  Printf.printf "\n";
+  match IT.min_binding_opt incstart with
+  | Some (i, ss) ->
+      Printf.printf "prepared to remove %d containing %s:\n" i (sos ss);
+      let e = S.SS.choose ss in
+      let ss' = S.SS.remove e ss in
+      let incstart' =
+        if S.SS.is_empty ss' then IT.remove i incstart
+        else IT.add i ss' incstart
+      in
+      let active', incstart', incend' =
+        expire i (S.SS.add e active, incstart', incend)
+      in
+      linearscan (active', incstart', incend')
+  | None -> (active, incstart, incend)
+
+let alloc _k insns (in_, out) =
   let insns = List.mapi (fun i n -> (i, n)) insns in
-  let intervals = intervals insns d in
+  let incstart, _st1, _st2 = intervalstart insns (in_, out) in
+  let incend, _st1, _st2 = intervalends insns (in_, out) in
+  let _ = linearscan (S.SS.empty, incstart, incend) in
+  (*let intervals = intervals insns d in*)
+  (*let _intervals = linearscan k insns d in*)
   (*List.iter
     (fun (i, _n, s, e) ->
       Printf.printf "%d: %s\t{ " i "";
@@ -121,9 +126,8 @@ let alloc k insns d =
       S.SS.iter (fun s -> Printf.printf "%s " (S.name s)) e;
       Printf.printf "}\n")
     intervals;*)
-  let assign = linearscan k intervals in
   (*S.ST.iter
     (fun k v -> Printf.printf "%s: %s\n" (S.name k) (string_of_operand v))
     assign;*)
   (*S.ST.iter (fun k (b, e) -> Printf.printf "%s: (%d, %d)\n" (S.name k) b e) is;*)
-  assign
+  failwith "ok"
