@@ -86,21 +86,17 @@ let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
         add_edge i d;
         List.map snd c |> List.iter (add_edge i)
   in
-  let f ((i, b) : _ * Ll.block) =
+  let block i (b : Ll.block) =
     for i = i to i + List.length b.insns - 1 do
       G.add_edge g ids.(i) ids.(i + 1)
     done;
     term i b
   in
-  f (0, head);
+  block 0 head;
   List.iter
     (fun ((i, b) : _ * Ll.block) ->
       G.add_edge g ids.(i) ids.(i + 1);
-      let i = i + 1 in
-      for i = i to i + List.length b.insns - 1 do
-        G.add_edge g ids.(i) ids.(i + 1)
-      done;
-      term i b)
+      block (i + 1) b)
     tail;
   (ids, g)
 
