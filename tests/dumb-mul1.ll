@@ -15,6 +15,7 @@ define i32 @add (i32 %0, i32 %1) {
 }
 
 define i32 @mul (i32 %0, i32 %1) {
+2:
  %3 = icmp sgt i32 %0, 0
  br i1 %3, label %6, label %4
 4:
