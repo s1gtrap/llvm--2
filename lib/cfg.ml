@@ -73,16 +73,16 @@ let graph (((l, head), tail) : Ll.cfg) : G.V.t array * G.t =
          (List.length head.insns + 1)
   in
   let add_edge i j = G.add_edge g ids.(i) (blk j) in
-  let term i (b : Ll.block) =
+  let term i ({ terminator; _ } as b : Ll.block) =
     let i = i + List.length b.insns in
-    match b with
-    | { terminator = Ret _; _ } -> ()
-    | { terminator = Br l; _ } -> add_edge i l
-    | { terminator = Cbr (_, l, r); _ } ->
+    match terminator with
+    | Ret _ -> ()
+    | Br l -> add_edge i l
+    | Cbr (_, l, r) ->
         add_edge i l;
         add_edge i r
-    | { terminator = Unreachable; _ } -> ()
-    | { terminator = Switch (_, _, d, c); _ } ->
+    | Unreachable -> ()
+    | Switch (_, _, d, c) ->
         add_edge i d;
         List.map snd c |> List.iter (add_edge i)
   in
