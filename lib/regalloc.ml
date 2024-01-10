@@ -1476,7 +1476,7 @@ let compile_fdecl (alc : allocator) debug tdecls name
             | Ll.Id s -> S.ST.find d asn = S.ST.find s asn
             | _ -> false
           in
-          if not issame then S.ST.add p pt t else t
+          match alc with Briggs _ when issame -> t | _ -> S.ST.add p pt t
         in
         let t = List.fold_left addphi t s in
         addphis t l tail
