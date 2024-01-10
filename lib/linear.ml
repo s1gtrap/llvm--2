@@ -1,4 +1,5 @@
 open Common
+open X86
 
 let def t (ins : Cfg.insn) idx =
   match ins with
@@ -78,7 +79,7 @@ let intervalends insns starts (in_, _out) =
   in
   List.fold_right insn insns (IT.empty, IT.empty, S.SS.empty)
 
-let rec expire i (active, incstart, incend) =
+let rec expire i (avail, active, incstart, incend) =
   (*Printf.printf "\nexpite\n";
     Printf.printf "active: %s\n" (sos active);
     Printf.printf "incstart:\n";
@@ -88,16 +89,24 @@ let rec expire i (active, incstart, incend) =
     Printf.printf "\n";*)
   match IT.min_binding_opt incend with
   | Some (j, end_) ->
-      if j >= i then (active, incstart, incend)
+      if j >= i then (avail, active, incstart, incend)
       else
-        let active' = S.SS.diff active end_ in
+        let avail', active' =
+          S.SS.fold
+            (fun k (avail, active) ->
+              let reg = S.ST.find k active in
+              let active' = S.ST.remove k active in
+              let avail' = Regs.add reg avail in
+              (avail', active'))
+            end_ (avail, active)
+        in
         S.SS.iter (fun e -> Printf.printf "%s is now expired\n" (S.name e)) end_;
         (* might need to expite individually *)
         let incend' = IT.remove j incend in
-        expire i (active', incstart, incend')
-  | None -> (active, incstart, incend)
+        expire i (avail', active', incstart, incend')
+  | None -> (avail, active, incstart, incend)
 
-let rec linearscan insns (active, incstart, incend) =
+let rec linearscan lengths insns (avail, active, incstart, incend) =
   (*Printf.printf "\nlinearscan\n";
     Printf.printf "active: %s\n" (sos active);
     Printf.printf "incstart:\n";
@@ -114,13 +123,28 @@ let rec linearscan insns (active, incstart, incend) =
         if S.SS.is_empty ss' then IT.remove i incstart
         else IT.add i ss' incstart
       in
-      let active', incstart', incend' =
-        expire i (S.SS.add e active, incstart', incend)
+      let avail', active', incstart', incend' =
+        match Regs.choose_opt avail with
+        | Some reg ->
+            expire i
+              (Regs.remove reg avail, S.ST.add e reg active, incstart', incend)
+        | None ->
+            let _, spill =
+              IT.filter
+                (fun _k v -> S.SS.exists (fun e -> S.ST.mem e active) v)
+                lengths
+              |> IT.min_binding
+            in
+            let spill = S.SS.find_first (fun e -> S.ST.mem e active) spill in
+            Printf.printf "want to spill %s\n" (S.name spill);
+            (* spill *)
+            expire i (avail, active, incstart', incend)
       in
-      linearscan insns (active', incstart', incend')
-  | None -> expire (List.length insns) (active, incstart, incend)
+      linearscan lengths insns (avail', active', incstart', incend')
+  | None -> expire (List.length insns) (avail, active, incstart, incend)
 
-let alloc _k insns (in_, out) =
+let alloc k insns (in_, out) =
+  let avail = List.init k reg_of_int |> Regs.of_list in
   let insns = List.mapi (fun i n -> (i, n)) insns in
   let incstart, starts, _st2 = intervalstart insns (in_, out) in
   let (incend, lengths, _st2) : _ * S.SS.t IT.t * _ =
@@ -128,7 +152,12 @@ let alloc _k insns (in_, out) =
   in
   Printf.printf "lenghts:\n";
   IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) lengths;
-  let _ = linearscan insns (S.SS.empty, incstart, incend) in
+  let _, asn, _, _ =
+    linearscan lengths insns (avail, S.ST.empty, incstart, incend)
+  in
+  S.ST.iter
+    (fun k v -> Printf.printf "%s: %s\n" (S.name k) (string_of_reg v))
+    asn;
   (*let intervals = intervals insns d in*)
   (*let _intervals = linearscan k insns d in*)
   (*List.iter
