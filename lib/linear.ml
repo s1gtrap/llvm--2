@@ -2,9 +2,9 @@ open Common
 open X86
 module IT = Map.Make (Int)
 
-let intervalstart insns (_in_, out) =
+let intervalstart insns (in_, out) =
   let insn (ordstarts, starts, active) (i, _n) =
-    let newout = S.SS.diff out.(i) active in
+    let newout = S.SS.diff (S.SS.union in_.(i) out.(i)) active in
     ( S.SS.fold
         (fun e a ->
           IT.update i
