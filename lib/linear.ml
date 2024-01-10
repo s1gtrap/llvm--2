@@ -97,7 +97,7 @@ let rec expire i (active, incstart, incend) =
         expire i (active', incstart, incend')
   | None -> (active, incstart, incend)
 
-let rec linearscan (active, incstart, incend) =
+let rec linearscan insns (active, incstart, incend) =
   (*Printf.printf "\nlinearscan\n";
     Printf.printf "active: %s\n" (sos active);
     Printf.printf "incstart:\n";
@@ -117,8 +117,8 @@ let rec linearscan (active, incstart, incend) =
       let active', incstart', incend' =
         expire i (S.SS.add e active, incstart', incend)
       in
-      linearscan (active', incstart', incend')
-  | None -> (active, incstart, incend)
+      linearscan insns (active', incstart', incend')
+  | None -> expire (List.length insns) (active, incstart, incend)
 
 let alloc _k insns (in_, out) =
   let insns = List.mapi (fun i n -> (i, n)) insns in
@@ -128,7 +128,7 @@ let alloc _k insns (in_, out) =
   in
   Printf.printf "lenghts:\n";
   IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) lengths;
-  let _ = linearscan (S.SS.empty, incstart, incend) in
+  let _ = linearscan insns (S.SS.empty, incstart, incend) in
   (*let intervals = intervals insns d in*)
   (*let _intervals = linearscan k insns d in*)
   (*List.iter
