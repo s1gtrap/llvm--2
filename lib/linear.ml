@@ -29,7 +29,7 @@ let intervalends insns starts (in_, _out) =
         newin ordstarts,
       S.SS.fold
         (fun e a ->
-          Printf.printf "%s\n" (S.name e);
+          (*Printf.printf "%s\n" (S.name e);*)
           IT.update
             (-i + S.ST.find e starts)
             (function
@@ -73,7 +73,10 @@ let rec expire i (avail, active, assign, incstart, incend) =
 let rec linearscan lengths insns spills (avail, active, assign, incstart, incend)
     =
   (*Printf.printf "\nlinearscan\n";
-    Printf.printf "active: %s\n" (sos active);
+    Printf.printf "active:\n";
+    S.ST.iter
+      (fun k v -> Printf.printf "  %s: %s\n" (S.name k) (string_of_reg v))
+      active;
     Printf.printf "incstart:\n";
     IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incstart;
     Printf.printf "incend:\n";
@@ -126,13 +129,7 @@ let alloc k insns (in_, out) =
   let insns = List.mapi (fun i n -> (i, n)) insns in
   let incstart, starts, _st2 = intervalstart insns (in_, out) in
   let starts = S.SS.fold (fun e s -> S.ST.add e 0 s) in_.(0) starts in
-  let incstart =
-    IT.update 0
-      (function
-        | Some ss -> Some (S.SS.union ss in_.(0)) | None -> Some in_.(0))
-      incstart
-  in
-  let (incend, lengths, _st2) : _ * S.SS.t IT.t * _ =
+  let (incend, lengths, _st1) : _ * S.SS.t IT.t * _ =
     intervalends insns starts (in_, out)
   in
   (*Printf.printf "lenghts:\n";
