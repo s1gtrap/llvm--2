@@ -12,7 +12,7 @@ let progcfg input =
     List.iteri
       (fun i n ->
         match n with
-        | Cfg.Label _ -> Printf.printf "\t%s\n" (Cfg.string_of_insn n)
+        | Cfg.Label _ -> Printf.printf "%d\t%s\n" i (Cfg.string_of_insn n)
         | _ ->
             Printf.printf "%d {%s}\t%s\n" i
               (Ll.mapcat ","
