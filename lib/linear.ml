@@ -42,21 +42,6 @@ module IT = Map.Make (Int)
 
 let intervalstart insns (_in_, out) =
   let insn (ordstarts, starts, active) (i, _n) =
-    let newin = S.SS.diff out.(i) active in
-    ( S.SS.fold
-        (fun e a ->
-          IT.update i
-            (function
-              | Some s -> Some (S.SS.add e s) | None -> Some (S.SS.singleton e))
-            a)
-        newin ordstarts,
-      S.SS.fold (fun e a -> S.ST.add e i a) newin starts,
-      S.SS.union active newin )
-  in
-  List.fold_left insn (IT.empty, S.ST.empty, S.SS.empty) insns
-
-let intervalends insns starts (_in_, out) =
-  let insn (i, _n) (ordstarts, lengths, active) =
     let newout = S.SS.diff out.(i) active in
     ( S.SS.fold
         (fun e a ->
@@ -65,6 +50,21 @@ let intervalends insns starts (_in_, out) =
               | Some s -> Some (S.SS.add e s) | None -> Some (S.SS.singleton e))
             a)
         newout ordstarts,
+      S.SS.fold (fun e a -> S.ST.add e i a) newout starts,
+      S.SS.union active newout )
+  in
+  List.fold_left insn (IT.empty, S.ST.empty, S.SS.empty) insns
+
+let intervalends insns starts (in_, _out) =
+  let insn (i, _n) (ordstarts, lengths, active) =
+    let newin = S.SS.diff in_.(i) active in
+    ( S.SS.fold
+        (fun e a ->
+          IT.update i
+            (function
+              | Some s -> Some (S.SS.add e s) | None -> Some (S.SS.singleton e))
+            a)
+        newin ordstarts,
       S.SS.fold
         (fun e a ->
           IT.update
@@ -73,40 +73,42 @@ let intervalends insns starts (_in_, out) =
               | Some ss -> Some (S.SS.add e ss)
               | None -> Some (S.SS.singleton e))
             a)
-        newout lengths,
-      S.SS.union active newout )
+        newin lengths,
+      S.SS.union active newin )
   in
   List.fold_right insn insns (IT.empty, IT.empty, S.SS.empty)
 
 let rec expire i (active, incstart, incend) =
-  Printf.printf "\nexpite\n";
-  Printf.printf "active: %s\n" (sos active);
-  Printf.printf "incstart:\n";
-  IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incstart;
-  Printf.printf "incend:\n";
-  IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incend;
-  Printf.printf "\n";
+  (*Printf.printf "\nexpite\n";
+    Printf.printf "active: %s\n" (sos active);
+    Printf.printf "incstart:\n";
+    IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incstart;
+    Printf.printf "incend:\n";
+    IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incend;
+    Printf.printf "\n";*)
   match IT.min_binding_opt incend with
   | Some (j, end_) ->
       if j >= i then (active, incstart, incend)
       else
         let active' = S.SS.diff active end_ in
+        S.SS.iter (fun e -> Printf.printf "%s is now expired\n" (S.name e)) end_;
+        (* might need to expite individually *)
         let incend' = IT.remove j incend in
         expire i (active', incstart, incend')
   | None -> (active, incstart, incend)
 
 let rec linearscan (active, incstart, incend) =
-  Printf.printf "\nlinearscan\n";
-  Printf.printf "active: %s\n" (sos active);
-  Printf.printf "incstart:\n";
-  IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incstart;
-  Printf.printf "incend:\n";
-  IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incend;
-  Printf.printf "\n";
+  (*Printf.printf "\nlinearscan\n";
+    Printf.printf "active: %s\n" (sos active);
+    Printf.printf "incstart:\n";
+    IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incstart;
+    Printf.printf "incend:\n";
+    IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incend;
+    Printf.printf "\n";*)
   match IT.min_binding_opt incstart with
   | Some (i, ss) ->
-      Printf.printf "prepared to remove %d containing %s:\n" i (sos ss);
       let e = S.SS.choose ss in
+      Printf.printf "%s is now active\n" (S.name e);
       let ss' = S.SS.remove e ss in
       let incstart' =
         if S.SS.is_empty ss' then IT.remove i incstart
