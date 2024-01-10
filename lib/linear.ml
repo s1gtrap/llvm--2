@@ -94,10 +94,12 @@ let rec expire i (avail, active, incstart, incend) =
         let avail', active' =
           S.SS.fold
             (fun k (avail, active) ->
-              let reg = S.ST.find k active in
-              let active' = S.ST.remove k active in
-              let avail' = Regs.add reg avail in
-              (avail', active'))
+              match S.ST.find_opt k active with
+              | Some reg ->
+                  let active' = S.ST.remove k active in
+                  let avail' = Regs.add reg avail in
+                  (avail', active')
+              | None -> (avail, active))
             end_ (avail, active)
         in
         S.SS.iter (fun e -> Printf.printf "%s is now expired\n" (S.name e)) end_;
@@ -136,9 +138,11 @@ let rec linearscan lengths insns (avail, active, incstart, incend) =
               |> IT.min_binding
             in
             let spill = S.SS.find_first (fun e -> S.ST.mem e active) spill in
+            let reg = S.ST.find spill active in
             Printf.printf "want to spill %s\n" (S.name spill);
             (* spill *)
-            expire i (avail, active, incstart', incend)
+            expire i
+              (Regs.add reg avail, S.ST.remove spill active, incstart', incend)
       in
       linearscan lengths insns (avail', active', incstart', incend')
   | None -> expire (List.length insns) (avail, active, incstart, incend)
