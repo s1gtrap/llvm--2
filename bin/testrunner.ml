@@ -208,6 +208,16 @@ let () =
   in
   t "tests/void.ll" [] ~asserts:(assert_stdout lor assert_stderr) (0, 0)
   |> t "tests/zero.ll" [] |> t "tests/one.ll" [] |> t "tests/simplest.ll" []
+  |> t "tests/series2.ll" [] (* ./tests/series-select.py 2 *)
+  |> t "tests/series4.ll" [] (* ./tests/series-select.py 4 *)
+  |> t "tests/series8.ll" [] (* ./tests/series-select.py 8 *)
+  |> t "tests/series16.ll" [] (* ./tests/series-select.py 16 *)
+  |> t "tests/series32.ll" [] (* ./tests/series-select.py 32 *)
+  |> t "tests/series64.ll" [] (* ./tests/series-select.py 64 *)
+  |> t "tests/series128.ll" [] (* ./tests/series-select.py 128 *)
+  |> t "tests/series256.ll" [] (* ./tests/series-select.py 256 *)
+  |> t "tests/series512.ll" [] (* ./tests/series-select.py 512 *)
+  |> t "tests/series1024.ll" [] (* ./tests/series-select.py 1024 *)
   |> t "tests/addi8.ll" [] (* ./tests/binop-select.py add i8 *)
   |> t "tests/addi16.ll" [] (* ./tests/binop-select.py add i16 *)
   |> t "tests/addi32.ll" [] (* ./tests/binop-select.py add i32 *)
