@@ -55,20 +55,28 @@ let intervalstart insns (in_, _out) =
   in
   List.fold_left insn (IT.empty, S.ST.empty, S.SS.empty) insns
 
-let intervalends insns (_in_, out) =
-  let insn (i, _n) (ordstarts, starts, active) =
-    let newin = S.SS.diff out.(i) active in
+let intervalends insns starts (_in_, out) =
+  let insn (i, _n) (ordstarts, lengths, active) =
+    let newout = S.SS.diff out.(i) active in
     ( S.SS.fold
         (fun e a ->
           IT.update i
             (function
               | Some s -> Some (S.SS.add e s) | None -> Some (S.SS.singleton e))
             a)
-        newin ordstarts,
-      S.SS.fold (fun e a -> S.ST.add e i a) newin starts,
-      S.SS.union active newin )
+        newout ordstarts,
+      S.SS.fold
+        (fun e a ->
+          IT.update
+            (i - S.ST.find e starts)
+            (function
+              | Some ss -> Some (S.SS.add e ss)
+              | None -> Some (S.SS.singleton e))
+            a)
+        newout lengths,
+      S.SS.union active newout )
   in
-  List.fold_right insn insns (IT.empty, S.ST.empty, S.SS.empty)
+  List.fold_right insn insns (IT.empty, IT.empty, S.SS.empty)
 
 let rec expire i (active, incstart, incend) =
   Printf.printf "\nexpite\n";
@@ -112,8 +120,12 @@ let rec linearscan (active, incstart, incend) =
 
 let alloc _k insns (in_, out) =
   let insns = List.mapi (fun i n -> (i, n)) insns in
-  let incstart, _st1, _st2 = intervalstart insns (in_, out) in
-  let incend, _st1, _st2 = intervalends insns (in_, out) in
+  let incstart, starts, _st2 = intervalstart insns (in_, out) in
+  let (incend, lengths, _st2) : _ * S.SS.t IT.t * _ =
+    intervalends insns starts (in_, out)
+  in
+  Printf.printf "incstart:\n";
+  IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) lengths;
   let _ = linearscan (S.SS.empty, incstart, incend) in
   (*let intervals = intervals insns d in*)
   (*let _intervals = linearscan k insns d in*)
