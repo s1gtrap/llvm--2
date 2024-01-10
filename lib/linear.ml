@@ -40,9 +40,9 @@ let use t (insn : Cfg.insn) idx =
 
 module IT = Map.Make (Int)
 
-let intervalstart insns (in_, _out) =
+let intervalstart insns (_in_, out) =
   let insn (ordstarts, starts, active) (i, _n) =
-    let newin = S.SS.diff in_.(i) active in
+    let newin = S.SS.diff out.(i) active in
     ( S.SS.fold
         (fun e a ->
           IT.update i
@@ -68,7 +68,7 @@ let intervalends insns starts (_in_, out) =
       S.SS.fold
         (fun e a ->
           IT.update
-            (i - S.ST.find e starts)
+            (-i + S.ST.find e starts)
             (function
               | Some ss -> Some (S.SS.add e ss)
               | None -> Some (S.SS.singleton e))
@@ -124,7 +124,7 @@ let alloc _k insns (in_, out) =
   let (incend, lengths, _st2) : _ * S.SS.t IT.t * _ =
     intervalends insns starts (in_, out)
   in
-  Printf.printf "incstart:\n";
+  Printf.printf "lenghts:\n";
   IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) lengths;
   let _ = linearscan (S.SS.empty, incstart, incend) in
   (*let intervals = intervals insns d in*)
