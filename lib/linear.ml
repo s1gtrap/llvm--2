@@ -17,26 +17,13 @@ let intervalstart insns (in_, out) =
 
 let intervalends insns starts (in_, out) =
   let insn (i, _n) (ordstarts, lengths, ends, active) =
-    let newin = S.SS.diff (S.SS.union in_.(i) out.(i)) active in
-    ( S.SS.fold
-        (fun e a ->
-          IT.update i
-            (function
-              | Some s -> Some (S.SS.add e s) | None -> Some (S.SS.singleton e))
-            a)
-        newin ordstarts,
+    let in' = S.SS.diff (S.SS.union in_.(i) out.(i)) active in
+    ( S.SS.fold (fun e a -> IT.update i (add e) a) in' ordstarts,
       S.SS.fold
-        (fun e a ->
-          (*Printf.printf "%s\n" (S.name e);*)
-          IT.update
-            (-i + S.ST.find e starts)
-            (function
-              | Some ss -> Some (S.SS.add e ss)
-              | None -> Some (S.SS.singleton e))
-            a)
-        newin lengths,
-      S.SS.fold (fun e a -> S.ST.add e i a) newin ends,
-      S.SS.union active newin )
+        (fun e a -> IT.update (-i + S.ST.find e starts) (add e) a)
+        in' lengths,
+      S.SS.fold (fun e a -> S.ST.add e i a) in' ends,
+      S.SS.union active in' )
   in
   List.fold_right insn insns (IT.empty, IT.empty, S.ST.empty, S.SS.empty)
 
