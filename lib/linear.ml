@@ -18,7 +18,7 @@ let intervalstart insns (in_, out) =
   List.fold_left insn (IT.empty, S.ST.empty, S.SS.empty) insns
 
 let intervalends insns starts (in_, _out) =
-  let insn (i, _n) (ordstarts, lengths, active) =
+  let insn (i, _n) (ordstarts, lengths, ends, active) =
     let newin = S.SS.diff in_.(i) active in
     ( S.SS.fold
         (fun e a ->
@@ -37,9 +37,10 @@ let intervalends insns starts (in_, _out) =
               | None -> Some (S.SS.singleton e))
             a)
         newin lengths,
+      S.SS.fold (fun e a -> S.ST.add e i a) newin ends,
       S.SS.union active newin )
   in
-  List.fold_right insn insns (IT.empty, IT.empty, S.SS.empty)
+  List.fold_right insn insns (IT.empty, IT.empty, S.ST.empty, S.SS.empty)
 
 let rec expire i (avail, active, assign, incstart, incend) =
   (*Printf.printf "\nexpite\n";
@@ -187,14 +188,14 @@ let rec linearscan insns spills
 
 let print _k (insns : (_ * Cfg.insn) list) (in_, out) =
   let _, starts, _ = intervalstart insns (in_, out) in
-  let _, lengths, _ = intervalends insns starts (in_, out) in
+  let _, _, ends, _ = intervalends insns starts (in_, out) in
   let ids = S.ST.bindings starts |> List.map fst in
   let print i (_, n) =
     let print s =
       let start = S.ST.find s starts in
-      let end_ = start + S.ST.find s lengths in
+      let end_ = start + S.ST.find s ends in
       Printf.printf "%s"
-        (if S.ST.find s starts <= i && i <= end_ then "| " else "  ")
+        (if S.ST.find s starts <= i && i < end_ then "| " else "  ")
     in
     List.iter print ids;
     Printf.printf "%s\n" (Cfg.string_of_insn n)
@@ -206,7 +207,7 @@ let alloc k insns (in_, out) =
   let insns = List.mapi (fun i n -> (i, n)) insns in
   let incstart, starts, _st2 = intervalstart insns (in_, out) in
   let starts = S.SS.fold (fun e s -> S.ST.add e 0 s) in_.(0) starts in
-  let incend, lengths, _ = intervalends insns starts (in_, out) in
+  let incend, lengths, _, _ = intervalends insns starts (in_, out) in
   (*Printf.printf "lenghts:\n";
     IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) lengths;*)
   let _, _, asn, _, _ =
