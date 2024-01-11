@@ -43,6 +43,15 @@ let intervalends insns starts (in_, _out) =
 
 let rec expire i (avail, active, assign, incstart, incend) =
   (*Printf.printf "\nexpite\n";
+    Printf.printf "  avail: ";
+    Regs.iter (fun r -> Printf.printf "%s " (string_of_reg r)) avail;
+    Printf.printf "\n";
+    Printf.printf "  active:\n";
+    S.ST.iter
+      (fun k v -> Printf.printf "    %s: %s\n" (S.name k) (string_of_reg v))
+      active;
+    Printf.printf "\n";*)
+  (*Printf.printf "\nexpite\n";
     Printf.printf "active: %s\n" (sos active);
     Printf.printf "incstart:\n";
     IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incstart;
@@ -58,6 +67,7 @@ let rec expire i (avail, active, assign, incstart, incend) =
         let reg = S.ST.find s active in
         let active' = S.ST.remove s active in
         let avail' = Regs.add reg avail in
+        (*Printf.printf "erase %s\n" (S.name s);*)
         (*S.SS.iter (fun e -> Printf.printf "%s is now expired\n" (S.name e)) end_;*)
         (* might need to expite individually *)
         let incend' = IT.remove j incend in
@@ -67,11 +77,15 @@ let rec expire i (avail, active, assign, incstart, incend) =
 let rec linearscan lengths insns spills (avail, active, assign, incstart, incend)
     =
   (*Printf.printf "\nlinearscan\n";
-    Printf.printf "active:\n";
+      Printf.printf "  avail: ";
+      Regs.iter (fun r -> Printf.printf "%s " (string_of_reg r)) avail;
+      Printf.printf "\n";
+      Printf.printf "  active:\n";
     S.ST.iter
-      (fun k v -> Printf.printf "  %s: %s\n" (S.name k) (string_of_reg v))
+      (fun k v -> Printf.printf "    %s: %s\n" (S.name k) (string_of_reg v))
       active;
-    Printf.printf "incstart:\n";
+    Printf.printf "\n";*)
+  (*Printf.printf "incstart:\n";
     IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incstart;
     Printf.printf "incend:\n";
     IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incend;
@@ -85,10 +99,18 @@ let rec linearscan lengths insns spills (avail, active, assign, incstart, incend
         if S.SS.is_empty ss' then IT.remove i incstart
         else IT.add i ss' incstart
       in
-      let spills, (avail', active', assign, incstart', incend') =
+      let spills, (avail', active', assign', incstart', incend') =
         match Regs.choose_opt avail with
         | Some reg ->
-            (*Printf.printf "assign %s to %s\n" (S.name e) (string_of_reg reg);*)
+            (*Printf.printf "assign:"
+              Printf.printf "  avail was %s\n"  (string_of_reg reg);
+              Printf.printf "assign %s to %s\n" (S.name e) (string_of_reg reg);
+              Printf.printf "  avail is now ";
+              Regs.iter
+                (fun r -> Printf.printf "%s " (string_of_reg r))
+                (Regs.remove reg avail);
+              Printf.printf "\n";*)
+            (*Printf.printf "  set %s to %s\n" (S.name e) (string_of_reg reg);*)
             ( spills,
               expire i
                 ( Regs.remove reg avail,
@@ -105,22 +127,36 @@ let rec linearscan lengths insns spills (avail, active, assign, incstart, incend
             in
             let spill = S.SS.find_first (fun e -> S.ST.mem e active) spill in
             let reg = S.ST.find spill active in
-            (*Printf.printf "want to spill %s\n" (S.name spill);*)
+            (*Printf.printf "want to spill %s\n" (S.name spill);
+              Printf.printf "assign %s to %s\n" (S.name e) (string_of_reg reg);*)
             (* spill *)
             (*Printf.printf "spilled %s to %s\n" (S.name spill)
                 (stack spills |> string_of_operand);
               Printf.printf "assigned %s to %s\n" (S.name spill)
                 (string_of_reg reg);*)
+            (*Printf.printf "  unset %s\n" (S.name spill);
+              Printf.printf "  set %s to %s\n" (S.name spill)
+                (string_of_operand (stack spills));*)
+            let incend' =
+              IT.filter_map
+                (fun _ ss ->
+                  let ss' = S.SS.remove spill ss in
+                  if S.SS.is_empty ss' then None else Some ss')
+                incend
+            in
+            (*Printf.printf "  set %s to %s\n" (S.name e) (string_of_reg reg);*)
             ( spills + 1,
               expire i
                 ( avail,
-                  S.ST.add e reg active,
-                  S.ST.add spill (stack spills) assign |> S.ST.add e (Reg reg),
+                  S.ST.remove spill active |> S.ST.add e reg,
+                  S.ST.remove spill assign
+                  |> S.ST.add spill (stack spills)
+                  |> S.ST.add e (Reg reg),
                   incstart',
-                  incend ) )
+                  incend' ) )
       in
       linearscan lengths insns spills
-        (avail', active', assign, incstart', incend')
+        (avail', active', assign', incstart', incend')
   | None -> expire (List.length insns) (avail, active, assign, incstart, incend)
 
 let alloc k insns (in_, out) =
