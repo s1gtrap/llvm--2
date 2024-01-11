@@ -53,17 +53,11 @@ let rec expire i (avail, active, assign, incstart, incend) =
   | Some (j, end_) ->
       if j >= i then (avail, active, assign, incstart, incend)
       else
-        let avail', active' =
-          S.SS.fold
-            (fun k (avail, active) ->
-              match S.ST.find_opt k active with
-              | Some reg ->
-                  let active' = S.ST.remove k active in
-                  let avail' = Regs.add reg avail in
-                  (avail', active')
-              | None -> (avail, active))
-            end_ (avail, active)
-        in
+        let s = S.SS.choose end_ in
+        (*Printf.printf "%s \n" (S.name s);*)
+        let reg = S.ST.find s active in
+        let active' = S.ST.remove s active in
+        let avail' = Regs.add reg avail in
         (*S.SS.iter (fun e -> Printf.printf "%s is now expired\n" (S.name e)) end_;*)
         (* might need to expite individually *)
         let incend' = IT.remove j incend in
@@ -94,6 +88,7 @@ let rec linearscan lengths insns spills (avail, active, assign, incstart, incend
       let spills, (avail', active', assign, incstart', incend') =
         match Regs.choose_opt avail with
         | Some reg ->
+            (*Printf.printf "assign %s to %s\n" (S.name e) (string_of_reg reg);*)
             ( spills,
               expire i
                 ( Regs.remove reg avail,
@@ -112,11 +107,15 @@ let rec linearscan lengths insns spills (avail, active, assign, incstart, incend
             let reg = S.ST.find spill active in
             (*Printf.printf "want to spill %s\n" (S.name spill);*)
             (* spill *)
+            (*Printf.printf "spilled %s to %s\n" (S.name spill)
+                (stack spills |> string_of_operand);
+              Printf.printf "assigned %s to %s\n" (S.name spill)
+                (string_of_reg reg);*)
             ( spills + 1,
               expire i
-                ( Regs.add reg avail,
-                  S.ST.remove spill active,
-                  S.ST.add e (stack spills) assign,
+                ( avail,
+                  S.ST.add e reg active,
+                  S.ST.add spill (stack spills) assign |> S.ST.add e (Reg reg),
                   incstart',
                   incend ) )
       in
