@@ -1,6 +1,6 @@
 @.str = global [28 x i8] c"*%p = \22%s\22\0Aatoi(\22%s\22) = %d\0A\00"
 @.str.1 = global [11 x i8] c"%d = %lld\0A\00"
-@.str.2 = global [12 x i8] c"%d != %lld\0A\00"
+@.str.2 = global [24 x i8] c"%d = floor(sqrt(%lld))\0A\00"
 
 declare i32 @atoi(i8*)
 declare i32 @printf(i8*, ...)
@@ -32,7 +32,6 @@ define i32 @main (i32 %0, i8* %1) {
   %7 = call i32 @isqrt (i32 %5)
   %8 = call i64 @strtoll (i8* %4, i8* null, i32 10)
   call i32 @printf (i8* @.str.1, i32 %5, i64 %8)
-  call i32 @printf (i8* @.str.1)
   call i32 @printf (i8* @.str.2, i32 %7, i32 %5)
   ret i32 %5
 }
