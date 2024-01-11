@@ -2,18 +2,16 @@ open Common
 open X86
 module IT = Map.Make (Int)
 
+let add e = function
+  | Some s -> Some (S.SS.add e s)
+  | None -> Some (S.SS.singleton e)
+
 let intervalstart insns (in_, out) =
   let insn (ordstarts, starts, active) (i, _n) =
-    let newout = S.SS.diff (S.SS.union in_.(i) out.(i)) active in
-    ( S.SS.fold
-        (fun e a ->
-          IT.update i
-            (function
-              | Some s -> Some (S.SS.add e s) | None -> Some (S.SS.singleton e))
-            a)
-        newout ordstarts,
-      S.SS.fold (fun e a -> S.ST.add e i a) newout starts,
-      S.SS.union active newout )
+    let out' = S.SS.diff (S.SS.union in_.(i) out.(i)) active in
+    ( S.SS.fold (fun e a -> IT.update i (add e) a) out' ordstarts,
+      S.SS.fold (fun e a -> S.ST.add e i a) out' starts,
+      S.SS.union active out' )
   in
   List.fold_left insn (IT.empty, S.ST.empty, S.SS.empty) insns
 
