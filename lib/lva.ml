@@ -7,6 +7,7 @@ let use (s : S.SS.t) (insn : Cfg.insn) =
   let op o s = match o with Ll.Id i -> S.SS.add i s | _ -> s in
   let po = Fun.flip op in
   match insn with
+  | Label _ | Insn (_, (Alloca _ | Comment _)) -> s
   | Insn (_, AllocaN (_, (_, o)))
   | Insn (_, Bitcast (_, o, _))
   | Insn (_, Load (_, o))
@@ -24,8 +25,8 @@ let use (s : S.SS.t) (insn : Cfg.insn) =
       List.map snd ops |> List.fold_left po (op (snd bop) s)
   | Insn (_, Select (c, (_, l), (_, r))) -> op c s |> op l |> op r
   | Insn (_, PhiNode (_, ops)) -> List.map fst ops |> List.fold_left po s
-  | Term (Ret (_, Some o) | Cbr (o, _, _)) -> op o s
-  | _ -> s
+  | Term (Ret (_, Some o) | Cbr (o, _, _) | Switch (_, o, _, _)) -> op o s
+  | Term (Ret (_, None) | Unreachable | Br _) -> s
 
 let printset s =
   let sos s = Ll.mapcat "," S.name (S.SS.elements s) in

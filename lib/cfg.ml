@@ -70,12 +70,14 @@ let graph ((head, tail) : Ll.cfg) : G.V.t array * G.t =
   let g = G.create () in
   Array.iter (G.add_vertex g) verts;
   let addterm i = function
-    | Ll.Ret _ -> ()
+    | Ll.Ret _ | Unreachable -> ()
     | Br lbl -> G.add_edge g verts.(i) (S.ST.find lbl blocks)
     | Cbr (_, l1, l2) ->
         G.add_edge g verts.(i) (S.ST.find l1 blocks);
         G.add_edge g verts.(i) (S.ST.find l2 blocks)
-    | _ -> failwith ""
+    | Switch (_, _, _, lbls) ->
+        let vert l = S.ST.find l blocks in
+        List.map snd lbls |> List.map vert |> List.iter (G.add_edge g verts.(i))
   in
   let addedges = function
     | _, Label _ -> ()
