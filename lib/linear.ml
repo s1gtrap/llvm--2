@@ -185,14 +185,28 @@ let rec linearscan insns spills
         (lengths', avail', active', assign', incstart', incend')
   | None -> expire (List.length insns) (avail, active, assign, incstart, incend)
 
+let print _k (insns : (_ * Cfg.insn) list) (in_, out) =
+  let _, starts, _ = intervalstart insns (in_, out) in
+  let _, lengths, _ = intervalends insns starts (in_, out) in
+  let ids = S.ST.bindings starts |> List.map fst in
+  let print i (_, n) =
+    let print s =
+      let start = S.ST.find s starts in
+      let end_ = start + S.ST.find s lengths in
+      Printf.printf "%s"
+        (if S.ST.find s starts <= i && i <= end_ then "| " else "  ")
+    in
+    List.iter print ids;
+    Printf.printf "%s\n" (Cfg.string_of_insn n)
+  in
+  List.iteri print insns
+
 let alloc k insns (in_, out) =
   let avail = List.init k reg_of_int |> Regs.of_list in
   let insns = List.mapi (fun i n -> (i, n)) insns in
   let incstart, starts, _st2 = intervalstart insns (in_, out) in
   let starts = S.SS.fold (fun e s -> S.ST.add e 0 s) in_.(0) starts in
-  let (incend, lengths, _st1) : _ * S.SS.t IT.t * _ =
-    intervalends insns starts (in_, out)
-  in
+  let incend, lengths, _ = intervalends insns starts (in_, out) in
   (*Printf.printf "lenghts:\n";
     IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) lengths;*)
   let _, _, asn, _, _ =

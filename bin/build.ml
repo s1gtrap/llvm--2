@@ -54,6 +54,18 @@ let progitf (alc : Regalloc.allocator) input =
   in
   List.iter fdecl prog.fdecls
 
+let proglra n input =
+  let input = open_ input in
+  let prog = Parse.from_channel Llparser.prog input in
+  let fdecl ((name, fdecl) : _ * Ll.fdecl) =
+    Printf.printf "%s:\n" (Symbol.name name);
+    let ids, g = Cfg.graph fdecl.cfg in
+    let insns = Cfg.flatten fdecl.cfg in
+    let df = Lva.dataflow insns ids g in
+    Linear.print n (List.mapi (fun i n -> (i, n)) insns) df
+  in
+  List.iter fdecl prog.fdecls
+
 let progasn (alloc_ : Regalloc.allocator) input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
@@ -150,6 +162,7 @@ let () =
     | "cfg" -> progcfg
     | "lva" | "dataflow" -> proglva ~v:!verbose ~r:(Bool.not !reverse)
     | "itf" | "interf" | "dot" -> progitf alc
+    | "lra" -> proglra !n
     | "asn" -> progasn alc
     | "x86" -> progx86 alc !debug
     | "prefs" -> progprefs
