@@ -17,9 +17,9 @@ let intervalstart insns (in_, out) =
   in
   List.fold_left insn (IT.empty, S.ST.empty, S.SS.empty) insns
 
-let intervalends insns starts (in_, _out) =
+let intervalends insns starts (in_, out) =
   let insn (i, _n) (ordstarts, lengths, ends, active) =
-    let newin = S.SS.diff in_.(i) active in
+    let newin = S.SS.diff (S.SS.union in_.(i) out.(i)) active in
     ( S.SS.fold
         (fun e a ->
           IT.update i
@@ -190,12 +190,16 @@ let print _k (insns : (_ * Cfg.insn) list) (in_, out) =
   let _, starts, _ = intervalstart insns (in_, out) in
   let _, _, ends, _ = intervalends insns starts (in_, out) in
   let ids = S.ST.bindings starts |> List.map fst in
-  let print i (_, n) =
+  let print _ (i, n) =
     let print s =
       let start = S.ST.find s starts in
-      let end_ = start + S.ST.find s ends in
+      let end_ = S.ST.find s ends in
       Printf.printf "%s"
-        (if S.ST.find s starts <= i && i < end_ then "| " else "  ")
+        (if start = end_ then ""
+         else if S.ST.find s starts = i then ".-"
+         else if start <= i && i < end_ then "| "
+         else if i = end_ then "'-"
+         else "  ")
     in
     List.iter print ids;
     Printf.printf "%s\n" (Cfg.string_of_insn n)
