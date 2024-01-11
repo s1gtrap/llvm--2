@@ -24,7 +24,7 @@ let progcfg input =
   in
   List.iter fdecl prog.fdecls
 
-let proglva ?(v = false) ?(r = false) input =
+let proglva ?(v = 0) ?(r = false) input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
@@ -54,7 +54,7 @@ let progitf (alc : Regalloc.allocator) input =
   in
   List.iter fdecl prog.fdecls
 
-let proglra n input =
+let proglra input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
@@ -62,7 +62,7 @@ let proglra n input =
     let ids, g = Cfg.graph fdecl.cfg in
     let insns = Cfg.flatten fdecl.cfg in
     let df = Lva.dataflow insns ids g in
-    Linear.print n (List.mapi (fun i n -> (i, n)) insns) df
+    Linear.print (List.mapi (fun i n -> (i, n)) insns) df
   in
   List.iter fdecl prog.fdecls
 
@@ -152,6 +152,19 @@ let () =
       ("-d", Arg.Set debug, "Debug symbols for LLVM-- instructions");
     ]
   in
+  let rec countflags flag = function
+    | arg :: args when String.starts_with ~prefix:"-" arg ->
+        let rec countchars = function
+          | c :: tail when c = flag -> 1 + countchars tail
+          | _ :: tail -> countchars tail
+          | _ -> 0
+        in
+        countchars (List.init (String.length arg) (String.get arg))
+        + countflags flag args
+    | _ :: args -> countflags flag args
+    | _ -> 0
+  in
+  let verbose = countflags 'v' (Array.to_list Sys.argv) in
 
   Arg.parse speclist anon_fun usage_msg;
 
@@ -160,9 +173,9 @@ let () =
   let oper =
     match !oper with
     | "cfg" -> progcfg
-    | "lva" | "dataflow" -> proglva ~v:!verbose ~r:(Bool.not !reverse)
+    | "lva" | "dataflow" -> proglva ~v:verbose ~r:(Bool.not !reverse)
     | "itf" | "interf" | "dot" -> progitf alc
-    | "lra" -> proglra !n
+    | "lra" -> proglra
     | "asn" -> progasn alc
     | "x86" -> progx86 alc !debug
     | "prefs" -> progprefs

@@ -75,9 +75,10 @@ let rec expire i (avail, active, assign, incstart, incend) =
         expire i (avail', active', assign, incstart, incend')
   | None -> (avail, active, assign, incstart, incend)
 
-let rec linearscan insns spills
+let rec linearscan insns spills ?(v = 0)
     (lengths, avail, active, assign, incstart, incend) =
-  (*Printf.printf "\nlinearscan\n";
+  if v >= 2 then (
+    Printf.printf "\nlinearscan\n";
     Printf.printf "  avail: ";
     Regs.iter (fun r -> Printf.printf "%s " (string_of_reg r)) avail;
     Printf.printf "\n";
@@ -86,11 +87,11 @@ let rec linearscan insns spills
       (fun k v -> Printf.printf "    %s: %s\n" (S.name k) (string_of_reg v))
       active;
     Printf.printf "\n";
-    Printf.printf "incstart:\n";
-      IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incstart;
-      Printf.printf "incend:\n";
-      IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incend;
-      Printf.printf "\n";*)
+    Printf.printf "  incstart:\n";
+    IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incstart;
+    Printf.printf "  incend:\n";
+    IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) incend;
+    Printf.printf "\n");
   match IT.min_binding_opt incstart with
   | Some (i, ss) ->
       let e = S.SS.choose ss in
@@ -186,7 +187,7 @@ let rec linearscan insns spills
         (lengths', avail', active', assign', incstart', incend')
   | None -> expire (List.length insns) (avail, active, assign, incstart, incend)
 
-let print _k (insns : (_ * Cfg.insn) list) (in_, out) =
+let print (insns : (_ * Cfg.insn) list) (in_, out) =
   let _, starts, _ = intervalstart insns (in_, out) in
   let _, _, ends, _ = intervalends insns starts (in_, out) in
   let ids = S.ST.bindings starts |> List.map fst in
@@ -206,16 +207,18 @@ let print _k (insns : (_ * Cfg.insn) list) (in_, out) =
   in
   List.iteri print insns
 
-let alloc k insns (in_, out) =
+let alloc k insns ?(v = 0) (in_, out) =
   let avail = List.init k reg_of_int |> Regs.of_list in
   let insns = List.mapi (fun i n -> (i, n)) insns in
   let incstart, starts, _st2 = intervalstart insns (in_, out) in
   let starts = S.SS.fold (fun e s -> S.ST.add e 0 s) in_.(0) starts in
   let incend, lengths, _, _ = intervalends insns starts (in_, out) in
-  (*Printf.printf "lenghts:\n";
-    IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) lengths;*)
+  if v >= 2 then (
+    Printf.printf "lenghts:\n";
+    IT.iter (fun k v -> Printf.printf "  %d: %s\n" k (sos v)) lengths);
   let _, _, asn, _, _ =
-    linearscan insns 0 (lengths, avail, S.ST.empty, S.ST.empty, incstart, incend)
+    linearscan insns 0 ~v
+      (lengths, avail, S.ST.empty, S.ST.empty, incstart, incend)
   in
   (*S.ST.iter
     (fun k v -> Printf.printf "%s: %s\n" (S.name k) (string_of_operand v))

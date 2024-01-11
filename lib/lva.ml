@@ -44,7 +44,7 @@ let print (insns : Cfg.insn list) (_ids : Cfg.G.V.t array) (_g : Cfg.G.t)
     insns;
   ()
 
-let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) ?(v = false)
+let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) ?(v = 0)
     ?(r = false) (g : Cfg.G.t) =
   let insns = List.mapi (fun i v -> (i, v)) insns in
   let insns = if r then List.rev insns else insns in
@@ -67,14 +67,15 @@ let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) ?(v = false)
       and oc = not (S.SS.equal out' out.(i)) in
       if ic then in_.(i) <- in';
       if oc then out.(i) <- out';
-      if v then changes.(i) <- (List.append changes.(i)) [ (in_.(i), out.(i)) ];
+      if v > 0 then
+        changes.(i) <- (List.append changes.(i)) [ (in_.(i), out.(i)) ];
       changed || ic || oc
     in
     if List.fold_left flow false insns then dataflow () else (in_, out)
   in
   let flow = dataflow () in
   let printset s = Ll.mapcat "," S.name (S.SS.elements s) in
-  if v then (
+  if v > 0 then (
     Printf.printf "\\begin{NiceTabular}{|c|c c|%s|}\n"
       (Ll.mapcat "|" (Fun.const "c c") changes.(0));
     Printf.printf "  i & use & def & %s\\\\\n"
