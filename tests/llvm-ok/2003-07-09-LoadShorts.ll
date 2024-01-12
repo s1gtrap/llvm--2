@@ -1,0 +1,370 @@
+%struct.ShortsSet_struct = type { i32, i32, i16, i16, i8, i8 }
+
+@.str = global [42 x i8] c"   ui = %u (0x%x)\09\09UL-ui = %lld (0x%llx)\0A\00"
+@.str.1 = global [44 x i8] c"ui*ui = %u (0x%x)\09  UL/ui = %lld (0x%llx)\0A\0A\00"
+@.str.2 = global [39 x i8] c"    i = %d (0x%x)\09L-i = %lld (0x%llx)\0A\00"
+@.str.3 = global [41 x i8] c" i* i = %d (0x%x)\09L/ i = %lld (0x%llx)\0A\0A\00"
+@.str.4 = global [42 x i8] c"us    = %u (0x%x)\09\09UL-us = %lld (0x%llx)\0A\00"
+@.str.5 = global [44 x i8] c"us*us = %u (0x%x)\09  UL/us = %lld (0x%llx)\0A\0A\00"
+@.str.6 = global [39 x i8] c" s    = %d (0x%x)\09L-s = %lld (0x%llx)\0A\00"
+@.str.7 = global [41 x i8] c" s* s = %d (0x%x)\09L/ s = %lld (0x%llx)\0A\0A\00"
+@.str.8 = global [42 x i8] c"ub    = %u (0x%x)\09\09UL-ub = %lld (0x%llx)\0A\00"
+@.str.9 = global [43 x i8] c"ub*ub = %u (0x%x)\09\09UL/ub = %lld (0x%llx)\0A\0A\00"
+@.str.10 = global [40 x i8] c" b    = %d (0x%x)\09\09L-b = %lld (0x%llx)\0A\00"
+@.str.11 = global [42 x i8] c" b* b = %d (0x%x)\09\09\09L/b = %lld (0x%llx)\0A\0A\00"
+
+declare i8* @malloc(i64)
+declare i32 @printf(i8*, ...)
+
+define i64 @getL () {
+ ret i64 -5787213826675591005
+}
+
+define i32 @main (i32 %0, i8* %1) {
+ %3 = alloca i32
+ %4 = alloca i32
+ %5 = alloca i8*
+ %6 = alloca i64
+ %7 = alloca i64
+ %8 = alloca i8*
+ store i32 0, i32* %3
+ store i32 %0, i32* %4
+ store i8* %1, i8** %5
+ %9 = call i64 @getL ()
+ store i64 %9, i64* %6
+ %10 = load i64, i64* %6
+ store i64 %10, i64* %7
+ %11 = call i8* @malloc (i64 16)
+ store i8* %11, i8** %8
+ %12 = load i64, i64* %6
+ %13 = trunc i64 %12 to i32
+ %14 = load i8*, i8** %8
+ %15 = getelementptr %struct.ShortsSet_struct, i8* %14, i32 0, i32 0
+ store i32 %13, i32* %15
+ %16 = load i64, i64* %6
+ %17 = trunc i64 %16 to i32
+ %18 = load i8*, i8** %8
+ %19 = getelementptr %struct.ShortsSet_struct, i8* %18, i32 0, i32 1
+ store i32 %17, i32* %19
+ %20 = load i64, i64* %6
+ %21 = trunc i64 %20 to i16
+ %22 = load i8*, i8** %8
+ %23 = getelementptr %struct.ShortsSet_struct, i8* %22, i32 0, i32 2
+ store i16 %21, i16* %23
+ %24 = load i64, i64* %6
+ %25 = trunc i64 %24 to i16
+ %26 = load i8*, i8** %8
+ %27 = getelementptr %struct.ShortsSet_struct, i8* %26, i32 0, i32 3
+ store i16 %25, i16* %27
+ %28 = load i64, i64* %6
+ %29 = trunc i64 %28 to i8
+ %30 = load i8*, i8** %8
+ %31 = getelementptr %struct.ShortsSet_struct, i8* %30, i32 0, i32 4
+ store i8 %29, i8* %31
+ %32 = load i64, i64* %6
+ %33 = trunc i64 %32 to i8
+ %34 = load i8*, i8** %8
+ %35 = getelementptr %struct.ShortsSet_struct, i8* %34, i32 0, i32 5
+ store i8 %33, i8* %35
+ %36 = load i8*, i8** %8
+ %37 = getelementptr %struct.ShortsSet_struct, i8* %36, i32 0, i32 0
+ %38 = load i32, i32* %37
+ %39 = load i8*, i8** %8
+ %40 = getelementptr %struct.ShortsSet_struct, i8* %39, i32 0, i32 0
+ %41 = load i32, i32* %40
+ %42 = load i64, i64* %6
+ %43 = load i8*, i8** %8
+ %44 = getelementptr %struct.ShortsSet_struct, i8* %43, i32 0, i32 0
+ %45 = load i32, i32* %44
+ %46 = zext i32 %45 to i64
+ %47 = sub i64 %42, %46
+ %48 = load i64, i64* %6
+ %49 = load i8*, i8** %8
+ %50 = getelementptr %struct.ShortsSet_struct, i8* %49, i32 0, i32 0
+ %51 = load i32, i32* %50
+ %52 = zext i32 %51 to i64
+ %53 = sub i64 %48, %52
+ %54 = call i32 (i8*, ...) @printf (i8* @.str, i32 %38, i32 %41, i64 %47, i64 %53)
+ %55 = load i8*, i8** %8
+ %56 = getelementptr %struct.ShortsSet_struct, i8* %55, i32 0, i32 0
+ %57 = load i32, i32* %56
+ %58 = load i8*, i8** %8
+ %59 = getelementptr %struct.ShortsSet_struct, i8* %58, i32 0, i32 0
+ %60 = load i32, i32* %59
+ %61 = mul i32 %57, %60
+ %62 = load i8*, i8** %8
+ %63 = getelementptr %struct.ShortsSet_struct, i8* %62, i32 0, i32 0
+ %64 = load i32, i32* %63
+ %65 = load i8*, i8** %8
+ %66 = getelementptr %struct.ShortsSet_struct, i8* %65, i32 0, i32 0
+ %67 = load i32, i32* %66
+ %68 = mul i32 %64, %67
+ %69 = load i64, i64* %6
+ %70 = load i8*, i8** %8
+ %71 = getelementptr %struct.ShortsSet_struct, i8* %70, i32 0, i32 0
+ %72 = load i32, i32* %71
+ %73 = zext i32 %72 to i64
+ %74 = udiv i64 %69, %73
+ %75 = load i64, i64* %6
+ %76 = load i8*, i8** %8
+ %77 = getelementptr %struct.ShortsSet_struct, i8* %76, i32 0, i32 0
+ %78 = load i32, i32* %77
+ %79 = zext i32 %78 to i64
+ %80 = udiv i64 %75, %79
+ %81 = call i32 (i8*, ...) @printf (i8* @.str.1, i32 %61, i32 %68, i64 %74, i64 %80)
+ %82 = load i8*, i8** %8
+ %83 = getelementptr %struct.ShortsSet_struct, i8* %82, i32 0, i32 1
+ %84 = load i32, i32* %83
+ %85 = load i8*, i8** %8
+ %86 = getelementptr %struct.ShortsSet_struct, i8* %85, i32 0, i32 1
+ %87 = load i32, i32* %86
+ %88 = load i64, i64* %7
+ %89 = load i8*, i8** %8
+ %90 = getelementptr %struct.ShortsSet_struct, i8* %89, i32 0, i32 1
+ %91 = load i32, i32* %90
+ %92 = sext i32 %91 to i64
+ %93 = sub i64 %88, %92
+ %94 = load i64, i64* %7
+ %95 = load i8*, i8** %8
+ %96 = getelementptr %struct.ShortsSet_struct, i8* %95, i32 0, i32 1
+ %97 = load i32, i32* %96
+ %98 = sext i32 %97 to i64
+ %99 = sub i64 %94, %98
+ %100 = call i32 (i8*, ...) @printf (i8* @.str.2, i32 %84, i32 %87, i64 %93, i64 %99)
+ %101 = load i8*, i8** %8
+ %102 = getelementptr %struct.ShortsSet_struct, i8* %101, i32 0, i32 1
+ %103 = load i32, i32* %102
+ %104 = load i8*, i8** %8
+ %105 = getelementptr %struct.ShortsSet_struct, i8* %104, i32 0, i32 1
+ %106 = load i32, i32* %105
+ %107 = mul i32 %103, %106
+ %108 = load i8*, i8** %8
+ %109 = getelementptr %struct.ShortsSet_struct, i8* %108, i32 0, i32 1
+ %110 = load i32, i32* %109
+ %111 = load i8*, i8** %8
+ %112 = getelementptr %struct.ShortsSet_struct, i8* %111, i32 0, i32 1
+ %113 = load i32, i32* %112
+ %114 = mul i32 %110, %113
+ %115 = load i64, i64* %7
+ %116 = load i8*, i8** %8
+ %117 = getelementptr %struct.ShortsSet_struct, i8* %116, i32 0, i32 1
+ %118 = load i32, i32* %117
+ %119 = sext i32 %118 to i64
+ %120 = sdiv i64 %115, %119
+ %121 = load i64, i64* %7
+ %122 = load i8*, i8** %8
+ %123 = getelementptr %struct.ShortsSet_struct, i8* %122, i32 0, i32 1
+ %124 = load i32, i32* %123
+ %125 = sext i32 %124 to i64
+ %126 = sdiv i64 %121, %125
+ %127 = call i32 (i8*, ...) @printf (i8* @.str.3, i32 %107, i32 %114, i64 %120, i64 %126)
+ %128 = load i8*, i8** %8
+ %129 = getelementptr %struct.ShortsSet_struct, i8* %128, i32 0, i32 2
+ %130 = load i16, i16* %129
+ %131 = zext i16 %130 to i32
+ %132 = load i8*, i8** %8
+ %133 = getelementptr %struct.ShortsSet_struct, i8* %132, i32 0, i32 2
+ %134 = load i16, i16* %133
+ %135 = zext i16 %134 to i32
+ %136 = load i64, i64* %6
+ %137 = load i8*, i8** %8
+ %138 = getelementptr %struct.ShortsSet_struct, i8* %137, i32 0, i32 2
+ %139 = load i16, i16* %138
+ %140 = zext i16 %139 to i64
+ %141 = sub i64 %136, %140
+ %142 = load i64, i64* %6
+ %143 = load i8*, i8** %8
+ %144 = getelementptr %struct.ShortsSet_struct, i8* %143, i32 0, i32 2
+ %145 = load i16, i16* %144
+ %146 = zext i16 %145 to i64
+ %147 = sub i64 %142, %146
+ %148 = call i32 (i8*, ...) @printf (i8* @.str.4, i32 %131, i32 %135, i64 %141, i64 %147)
+ %149 = load i8*, i8** %8
+ %150 = getelementptr %struct.ShortsSet_struct, i8* %149, i32 0, i32 2
+ %151 = load i16, i16* %150
+ %152 = zext i16 %151 to i32
+ %153 = load i8*, i8** %8
+ %154 = getelementptr %struct.ShortsSet_struct, i8* %153, i32 0, i32 2
+ %155 = load i16, i16* %154
+ %156 = zext i16 %155 to i32
+ %157 = mul i32 %152, %156
+ %158 = load i8*, i8** %8
+ %159 = getelementptr %struct.ShortsSet_struct, i8* %158, i32 0, i32 2
+ %160 = load i16, i16* %159
+ %161 = zext i16 %160 to i32
+ %162 = load i8*, i8** %8
+ %163 = getelementptr %struct.ShortsSet_struct, i8* %162, i32 0, i32 2
+ %164 = load i16, i16* %163
+ %165 = zext i16 %164 to i32
+ %166 = mul i32 %161, %165
+ %167 = load i64, i64* %6
+ %168 = load i8*, i8** %8
+ %169 = getelementptr %struct.ShortsSet_struct, i8* %168, i32 0, i32 2
+ %170 = load i16, i16* %169
+ %171 = zext i16 %170 to i64
+ %172 = udiv i64 %167, %171
+ %173 = load i64, i64* %6
+ %174 = load i8*, i8** %8
+ %175 = getelementptr %struct.ShortsSet_struct, i8* %174, i32 0, i32 2
+ %176 = load i16, i16* %175
+ %177 = zext i16 %176 to i64
+ %178 = udiv i64 %173, %177
+ %179 = call i32 (i8*, ...) @printf (i8* @.str.5, i32 %157, i32 %166, i64 %172, i64 %178)
+ %180 = load i8*, i8** %8
+ %181 = getelementptr %struct.ShortsSet_struct, i8* %180, i32 0, i32 3
+ %182 = load i16, i16* %181
+ %183 = sext i16 %182 to i32
+ %184 = load i8*, i8** %8
+ %185 = getelementptr %struct.ShortsSet_struct, i8* %184, i32 0, i32 3
+ %186 = load i16, i16* %185
+ %187 = sext i16 %186 to i32
+ %188 = load i64, i64* %7
+ %189 = load i8*, i8** %8
+ %190 = getelementptr %struct.ShortsSet_struct, i8* %189, i32 0, i32 3
+ %191 = load i16, i16* %190
+ %192 = sext i16 %191 to i64
+ %193 = sub i64 %188, %192
+ %194 = load i64, i64* %7
+ %195 = load i8*, i8** %8
+ %196 = getelementptr %struct.ShortsSet_struct, i8* %195, i32 0, i32 3
+ %197 = load i16, i16* %196
+ %198 = sext i16 %197 to i64
+ %199 = sub i64 %194, %198
+ %200 = call i32 (i8*, ...) @printf (i8* @.str.6, i32 %183, i32 %187, i64 %193, i64 %199)
+ %201 = load i8*, i8** %8
+ %202 = getelementptr %struct.ShortsSet_struct, i8* %201, i32 0, i32 3
+ %203 = load i16, i16* %202
+ %204 = sext i16 %203 to i32
+ %205 = load i8*, i8** %8
+ %206 = getelementptr %struct.ShortsSet_struct, i8* %205, i32 0, i32 3
+ %207 = load i16, i16* %206
+ %208 = sext i16 %207 to i32
+ %209 = mul i32 %204, %208
+ %210 = load i8*, i8** %8
+ %211 = getelementptr %struct.ShortsSet_struct, i8* %210, i32 0, i32 3
+ %212 = load i16, i16* %211
+ %213 = sext i16 %212 to i32
+ %214 = load i8*, i8** %8
+ %215 = getelementptr %struct.ShortsSet_struct, i8* %214, i32 0, i32 3
+ %216 = load i16, i16* %215
+ %217 = sext i16 %216 to i32
+ %218 = mul i32 %213, %217
+ %219 = load i64, i64* %7
+ %220 = load i8*, i8** %8
+ %221 = getelementptr %struct.ShortsSet_struct, i8* %220, i32 0, i32 3
+ %222 = load i16, i16* %221
+ %223 = sext i16 %222 to i64
+ %224 = sdiv i64 %219, %223
+ %225 = load i64, i64* %7
+ %226 = load i8*, i8** %8
+ %227 = getelementptr %struct.ShortsSet_struct, i8* %226, i32 0, i32 3
+ %228 = load i16, i16* %227
+ %229 = sext i16 %228 to i64
+ %230 = sdiv i64 %225, %229
+ %231 = call i32 (i8*, ...) @printf (i8* @.str.7, i32 %209, i32 %218, i64 %224, i64 %230)
+ %232 = load i8*, i8** %8
+ %233 = getelementptr %struct.ShortsSet_struct, i8* %232, i32 0, i32 4
+ %234 = load i8, i8* %233
+ %235 = zext i8 %234 to i32
+ %236 = load i8*, i8** %8
+ %237 = getelementptr %struct.ShortsSet_struct, i8* %236, i32 0, i32 4
+ %238 = load i8, i8* %237
+ %239 = zext i8 %238 to i32
+ %240 = load i64, i64* %6
+ %241 = load i8*, i8** %8
+ %242 = getelementptr %struct.ShortsSet_struct, i8* %241, i32 0, i32 4
+ %243 = load i8, i8* %242
+ %244 = zext i8 %243 to i64
+ %245 = sub i64 %240, %244
+ %246 = load i64, i64* %6
+ %247 = load i8*, i8** %8
+ %248 = getelementptr %struct.ShortsSet_struct, i8* %247, i32 0, i32 4
+ %249 = load i8, i8* %248
+ %250 = zext i8 %249 to i64
+ %251 = sub i64 %246, %250
+ %252 = call i32 (i8*, ...) @printf (i8* @.str.8, i32 %235, i32 %239, i64 %245, i64 %251)
+ %253 = load i8*, i8** %8
+ %254 = getelementptr %struct.ShortsSet_struct, i8* %253, i32 0, i32 4
+ %255 = load i8, i8* %254
+ %256 = zext i8 %255 to i32
+ %257 = load i8*, i8** %8
+ %258 = getelementptr %struct.ShortsSet_struct, i8* %257, i32 0, i32 4
+ %259 = load i8, i8* %258
+ %260 = zext i8 %259 to i32
+ %261 = mul i32 %256, %260
+ %262 = load i8*, i8** %8
+ %263 = getelementptr %struct.ShortsSet_struct, i8* %262, i32 0, i32 4
+ %264 = load i8, i8* %263
+ %265 = zext i8 %264 to i32
+ %266 = load i8*, i8** %8
+ %267 = getelementptr %struct.ShortsSet_struct, i8* %266, i32 0, i32 4
+ %268 = load i8, i8* %267
+ %269 = zext i8 %268 to i32
+ %270 = mul i32 %265, %269
+ %271 = load i64, i64* %6
+ %272 = load i8*, i8** %8
+ %273 = getelementptr %struct.ShortsSet_struct, i8* %272, i32 0, i32 4
+ %274 = load i8, i8* %273
+ %275 = zext i8 %274 to i64
+ %276 = udiv i64 %271, %275
+ %277 = load i64, i64* %6
+ %278 = load i8*, i8** %8
+ %279 = getelementptr %struct.ShortsSet_struct, i8* %278, i32 0, i32 4
+ %280 = load i8, i8* %279
+ %281 = zext i8 %280 to i64
+ %282 = udiv i64 %277, %281
+ %283 = call i32 (i8*, ...) @printf (i8* @.str.9, i32 %261, i32 %270, i64 %276, i64 %282)
+ %284 = load i8*, i8** %8
+ %285 = getelementptr %struct.ShortsSet_struct, i8* %284, i32 0, i32 5
+ %286 = load i8, i8* %285
+ %287 = sext i8 %286 to i32
+ %288 = load i8*, i8** %8
+ %289 = getelementptr %struct.ShortsSet_struct, i8* %288, i32 0, i32 5
+ %290 = load i8, i8* %289
+ %291 = sext i8 %290 to i32
+ %292 = load i64, i64* %7
+ %293 = load i8*, i8** %8
+ %294 = getelementptr %struct.ShortsSet_struct, i8* %293, i32 0, i32 5
+ %295 = load i8, i8* %294
+ %296 = sext i8 %295 to i64
+ %297 = sub i64 %292, %296
+ %298 = load i64, i64* %7
+ %299 = load i8*, i8** %8
+ %300 = getelementptr %struct.ShortsSet_struct, i8* %299, i32 0, i32 5
+ %301 = load i8, i8* %300
+ %302 = sext i8 %301 to i64
+ %303 = sub i64 %298, %302
+ %304 = call i32 (i8*, ...) @printf (i8* @.str.10, i32 %287, i32 %291, i64 %297, i64 %303)
+ %305 = load i8*, i8** %8
+ %306 = getelementptr %struct.ShortsSet_struct, i8* %305, i32 0, i32 5
+ %307 = load i8, i8* %306
+ %308 = sext i8 %307 to i32
+ %309 = load i8*, i8** %8
+ %310 = getelementptr %struct.ShortsSet_struct, i8* %309, i32 0, i32 5
+ %311 = load i8, i8* %310
+ %312 = sext i8 %311 to i32
+ %313 = mul i32 %308, %312
+ %314 = load i8*, i8** %8
+ %315 = getelementptr %struct.ShortsSet_struct, i8* %314, i32 0, i32 5
+ %316 = load i8, i8* %315
+ %317 = sext i8 %316 to i32
+ %318 = load i8*, i8** %8
+ %319 = getelementptr %struct.ShortsSet_struct, i8* %318, i32 0, i32 5
+ %320 = load i8, i8* %319
+ %321 = sext i8 %320 to i32
+ %322 = mul i32 %317, %321
+ %323 = load i64, i64* %7
+ %324 = load i8*, i8** %8
+ %325 = getelementptr %struct.ShortsSet_struct, i8* %324, i32 0, i32 5
+ %326 = load i8, i8* %325
+ %327 = sext i8 %326 to i64
+ %328 = sdiv i64 %323, %327
+ %329 = load i64, i64* %7
+ %330 = load i8*, i8** %8
+ %331 = getelementptr %struct.ShortsSet_struct, i8* %330, i32 0, i32 5
+ %332 = load i8, i8* %331
+ %333 = sext i8 %332 to i64
+ %334 = sdiv i64 %329, %333
+ %335 = call i32 (i8*, ...) @printf (i8* @.str.11, i32 %313, i32 %322, i64 %328, i64 %334)
+ ret i32 0
+}
