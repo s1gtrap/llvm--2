@@ -979,7 +979,9 @@ let compile_terminator pad asn phis term =
                  | [ _; Reg Rax ] -> [ (o, ops) ]
                  | [ _; (Ind3 _ as dst) ] ->
                      [
-                       (Cmoveq, [ Reg Rax; Reg Rcx ]); (Movq, [ Reg Rcx; dst ]);
+                       (Movq, [ dst; Reg Rcx ]);
+                       (Cmoveq, [ Reg Rax; Reg Rcx ]);
+                       (Movq, [ Reg Rcx; dst ]);
                      ]
                  | _ -> [ (Cmoveq, ops) ])
           |> List.flatten)
