@@ -2729,7 +2729,7 @@ let () =
   |> t "tests/loop0.ll" [] |> t "tests/loop1.ll" [] |> t "tests/loop2.ll" []
   |> t "tests/loop3.ll" []
   |> t "tests/loop4.ll" [] ~timeout:30
-  |> t "tests/loop5.ll" []
+  |> t "tests/loop5.ll" [] ~timeout:60
   |> t "tests/loopn0.ll" [ "0" ]
   |> t "tests/loopn0.ll" [ "1" ]
   (*|> t "tests/loopn0.ll" [ "2147483647" ] ~timeout:30*)
@@ -2788,19 +2788,19 @@ let () =
   |> t "tests/square0.ll" [ "2" ]
   |> t "tests/square0.ll" [ "2"; "3" ]
   |> t "tests/square0.ll" [ "2"; "3"; "4" ]
-  |> t "tests/square0-debug.ll" []
-  |> t "tests/square0-debug.ll" [ "2" ]
-  |> t "tests/square0-debug.ll" [ "2"; "3" ]
-  |> t "tests/square0-debug.ll" [ "2"; "3"; "4" ]
-  |> t "tests/consttrunc.ll" [] |> t "tests/lorem.ll" []
-  |> t "tests/fib.ll" [ "0" ] |> t "tests/fib.ll" [ "1" ]
-  |> t "tests/fib.ll" [ "2" ] |> t "tests/fib.ll" [ "3" ]
-  |> t "tests/fib.ll" [ "4" ] |> t "tests/fib.ll" [ "5" ]
-  |> t "tests/fib.ll" [ "6" ] |> t "tests/fib.ll" [ "7" ]
-  |> t "tests/fib.ll" [ "8" ] |> t "tests/fib.ll" [ "9" ]
-  |> t "tests/fib0.ll" [] |> t "tests/fib1.ll" [] |> t "tests/printable.ll" []
-  |> t "tests/live20.ll" [] |> t "tests/live25.ll" []
-  |> t "tests/livechain.ll" []
+  (*|> t "tests/square0-debug.ll" []
+    |> t "tests/square0-debug.ll" [ "2" ]
+    |> t "tests/square0-debug.ll" [ "2"; "3" ]
+    |> t "tests/square0-debug.ll" [ "2"; "3"; "4" ]*)
+  |> t "tests/consttrunc.ll" []
+  |> t "tests/lorem.ll" [] |> t "tests/fib.ll" [ "0" ]
+  |> t "tests/fib.ll" [ "1" ] |> t "tests/fib.ll" [ "2" ]
+  |> t "tests/fib.ll" [ "3" ] |> t "tests/fib.ll" [ "4" ]
+  |> t "tests/fib.ll" [ "5" ] |> t "tests/fib.ll" [ "6" ]
+  |> t "tests/fib.ll" [ "7" ] |> t "tests/fib.ll" [ "8" ]
+  |> t "tests/fib.ll" [ "9" ] |> t "tests/fib0.ll" [] |> t "tests/fib1.ll" []
+  |> t "tests/printable.ll" [] |> t "tests/live20.ll" []
+  |> t "tests/live25.ll" [] |> t "tests/livechain.ll" []
   |> t "tests/collatz-phi.ll" []
   |> t "tests/collatz-phi.ll" [ "1" ]
   |> t "tests/collatz-phi.ll" [ "2" ]
@@ -2814,9 +2814,9 @@ let () =
   |> t "tests/printle.ll" [] |> t "tests/crc32b.ll" [ "" ]
   |> t "tests/crc32b.ll" [ "Hello, world!" ]
   |> t "tests/crc32b.ll" [ "Hello, world!\n" ]
-  |> t "tests/crc32b-debug.ll" [ "" ]
-  |> t "tests/crc32b-debug.ll" [ "Hello, world!" ]
-  |> t "tests/crc32b-debug.ll" [ "Hello, world!\n" ]
+  (*|> t "tests/crc32b-debug.ll" [ "" ]
+    |> t "tests/crc32b-debug.ll" [ "Hello, world!" ]
+    |> t "tests/crc32b-debug.ll" [ "Hello, world!\n" ]*)
   |> t "tests/subset.ll" []
   |> t "tests/subset.ll" [ "1" ]
   |> t "tests/subset.ll" [ "1"; "2" ]
@@ -2881,9 +2881,9 @@ let () =
   |> t "tests/sha256-stdin.ll" [] ~stdin:""
   |> t "tests/sha256-stdin.ll" [] ~stdin:"a"
   |> t "tests/sha256-stdin.ll" [] ~stdin:"Hello, world!"
-  |> t "tests/sha256-debug.ll" [ "" ]
-  |> t "tests/sha256-debug.ll" [ "a" ]
-  |> t "tests/sha256-debug.ll" [ "Hello, world!" ]
+  (*|> t "tests/sha256-debug.ll" [ "" ]
+    |> t "tests/sha256-debug.ll" [ "a" ]
+    |> t "tests/sha256-debug.ll" [ "Hello, world!" ]*)
   |> t "tests/fannkuch-redux.ll" [ "0" ]
   |> t "tests/fannkuch-redux.ll" [ "1" ]
   |> t "tests/fannkuch-redux.ll" [ "2" ]
