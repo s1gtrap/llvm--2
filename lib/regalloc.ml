@@ -973,7 +973,10 @@ let compile_terminator pad asn phis term =
         let cmpins = (Cmpq, [ Imm (Lit 0L); Reg Rax ]) in
         let jmp = (Jmp, [ Imm (Lbl (pad thn)) ]) in
         operins @ [ cmpins ]
-        @ (S.ST.find_opt els phis |> Option.value ~default:[])
+        @ (S.ST.find_opt els phis |> Option.value ~default:[]
+          |> List.map (fun (o, ops) ->
+                 match ops with [ _; Reg Rax ] -> (o, ops) | _ -> (Cmoveq, ops))
+          )
         @ [ jeq ]
         @ (S.ST.find_opt thn phis |> Option.value ~default:[])
         @ [ jmp ]
