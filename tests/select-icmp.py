@@ -79,26 +79,12 @@ class Ty(Enum):
 
 cnd = Cnd[sys.argv[1].upper()]
 ty = Ty[sys.argv[2].upper()]
-
-def eqstr(ty1, bop, ty2, cnd):
-    str = f"{ty1} {bop} {ty2} {cnd} {ty1}"
-    l = len(str.encode('utf-8').decode('unicode_escape'))
-    return f"global [{l + 2} x i8] c\"{str}\\0A\\00\""
-
-def assertbop(ty1, op1, bop, ty2, op2):
-    if op2 == 0 and (bop == Bop.SDIV or bop == Bop.UDIV or bop == Bop.SREM or bop == Bop.UREM):
-        return ""
-    op3 = bop.apply(ty1, op1, ty2, op2) & ty1.umax()
-    return f" call void @assert ({ty1.name.lower()} {op1}, {ty2.name.lower()} {op2}, {ty1.name.lower()} {op3})\n"
+fn = sys.argv[3]
 
 def atoi(ty, i, base=10):
-    match ty:
-        case Ty.I64:
-            return f"call i64 @strtoull(i8* {i}, i8** null, i32 {base})"
-        case other:
-            raise ValueError("TODO")
+    return f"call {ty} {fn}(i8* {i}, i8** null, i32 {base})"
 
-print("declare i64 @strtoull (i8*, i8**, i32)")
+print(f"declare i64 {fn} (i8*, i8**, i32)")
 print()
 print("define i1 @main (i32 %0, i8* %1) {")
 print(f"  %3 = getelementptr i8*, i8** %1, i64 1")
