@@ -1,7 +1,7 @@
 @data = global [81 x i8] c"12345678901234567890123456789012345678901234567890123456789012345678901234567890\00"
 
 declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare i32 @memcmp(i8*, i8*, i64)
 declare void @abort()
 

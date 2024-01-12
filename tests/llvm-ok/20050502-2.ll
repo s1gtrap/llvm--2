@@ -2,7 +2,7 @@
 @.str = global [11 x i8] c"IJKL\00NOPQR\00"
 @.str.1 = global [11 x i8] c"IJKLMNOP\00R\00"
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare i32 @memcmp(i8*, i8*, i64)
 declare void @abort()
 

@@ -2,7 +2,7 @@
 
 @__const.main.s = global { i8, i8, i8, i8, i8, i8, i8, i8 } {i8 -66, i8 -83, i8 -34, i8 -17, i8 -88, i8 -66, i8 -19, i8 -2}
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @abort()
 
 define i64 @bar (i8* %0) {

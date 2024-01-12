@@ -3,7 +3,7 @@
 @.str = global [4 x i8] c"abc\00"
 @.str.1 = global [18 x i8] c"01234567890123456\00"
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
 declare void @abort()
 declare void @exit(i32)

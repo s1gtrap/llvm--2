@@ -2,7 +2,7 @@
 
 @__const.main.u = global { i16, [2 x i8] } {i16 -1, [2 x i8] 0}
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @abort()
 
 define i32 @f (i32 %0, i32 %1, i32 %2, i32 %3, i32 %4) {

@@ -2,7 +2,7 @@
 
 @__const.main.i = global %struct.mp_int {i32 2, i32 0, i32 -1, i8* null}
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @abort()
 
 define i32 @mytest (i8* %0, i64 %1) {

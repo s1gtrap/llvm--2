@@ -1,6 +1,6 @@
 @__const.main.a = global [18 x i64] [i64 4, i64 2, i64 -200, i64 200, i64 2, i64 -400, i64 400, i64 3, i64 -600, i64 0, i64 600, i64 5, i64 -100, i64 -66, i64 0, i64 66, i64 100, i64 1152921504606846976]
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @abort()
 
 define i64 @bar (i8* %0) {

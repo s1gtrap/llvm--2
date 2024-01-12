@@ -4,7 +4,7 @@
 
 @__const.main.cin = global [4 x i8] c"\83\85\87\89"
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @abort()
 
 define i32 @partial_read_le32 (i32 %0) {

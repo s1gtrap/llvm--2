@@ -1,7 +1,7 @@
 %struct.large = type { i32, [9 x i32] }
 
 declare void @abort()
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @exit(i32)
 
 define i32 @main () {

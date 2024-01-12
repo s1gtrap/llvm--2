@@ -1,7 +1,7 @@
 @__const.main.a = global [10 x i32] [i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10]
 
 declare void @abort()
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare i32 @abs(i32)
 
 define void @check (i8* %0) {

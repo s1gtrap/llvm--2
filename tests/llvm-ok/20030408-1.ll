@@ -5,7 +5,7 @@
 @__const.test3.X = global %struct.foo {i8 65, i8 0, i8 67, i8 0, i8 69, i8 0, i8 71, i8 0, i8 73, i8 0}
 @__const.test4.X = global %struct.foo {i8 0, i8 66, i8 0, i8 68, i8 0, i8 70, i8 0, i8 72, i8 0, i8 74}
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @abort()
 
 define i32 @test1 () {

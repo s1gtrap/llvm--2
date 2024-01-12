@@ -6,7 +6,7 @@
 
 @__const.main.e = global { i64, i64, { i32, { i8, i8, i8, i8 } } } {i64 5, i64 0, { i32, { i8, i8, i8, i8 } } {i32 6, { i8, i8, i8, i8 } {i8 -1, i8 -1, i8 127, i8 85}}}
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
 declare i32 @memcmp(i8*, i8*, i64)
 declare void @abort()

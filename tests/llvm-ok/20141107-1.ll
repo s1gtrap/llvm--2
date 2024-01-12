@@ -1,4 +1,4 @@
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @abort()
 
 define i1 @f (i32 %0, i1 %1) {

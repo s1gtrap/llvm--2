@@ -1,6 +1,6 @@
 @__const.main.listElem = global [4 x i32] [i32 30, i32 2, i32 10, i32 5]
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @abort()
 declare void @exit(i32)
 

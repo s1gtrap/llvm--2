@@ -1,7 +1,7 @@
 @__const.main.title = global [15 x i8] c"foo and stuff\0A\00"
 @.str = global [3 x i8] c"%s\00"
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare i32 @printf(i8*, ...)
 
 define i32 @main () {

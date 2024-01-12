@@ -2,7 +2,7 @@
 
 @__const.main.t = global %struct.T {i16 1, i16 515, i16 1029, i16 1543}
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @abort()
 
 define void @foo (i32 %0, i8* %1) {

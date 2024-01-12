@@ -2,7 +2,7 @@
 
 @__const.main.t = global { i32, [12 x i8] } {i32 0, [12 x i8] 0}
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @abort()
 
 define i32 @main () {

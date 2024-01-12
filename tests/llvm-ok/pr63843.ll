@@ -1,6 +1,6 @@
 @__const.main.x = global [8 x i8] c"\01\01\01\01\00\00\00\00"
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @abort()
 
 define i16 @bar (i8* %0) {

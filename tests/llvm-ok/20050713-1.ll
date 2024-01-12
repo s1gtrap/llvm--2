@@ -4,7 +4,7 @@
 @__const.main.b = global %struct.S {i32 6, i32 7, i32 8}
 @__const.main.c = global %struct.S {i32 9, i32 10, i32 11}
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @abort()
 
 define i32 @foo2 (i64 %0, i32 %1, i64 %2, i32 %3) {

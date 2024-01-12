@@ -4,7 +4,7 @@
 @__const.foo.l_128 = global %struct.S1 {i8 1}
 
 declare void @abort()
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 
 define i32 @main () {
  %1 = alloca i32

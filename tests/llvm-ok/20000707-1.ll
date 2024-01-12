@@ -3,7 +3,7 @@
 @__const.main.x = global %struct.baz {i32 3, i32 4, i32 5}
 
 declare void @abort()
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare void @exit(i32)
 
 define void @foo (i32 %0, i32 %1, i32 %2) {

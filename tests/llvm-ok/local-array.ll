@@ -1,7 +1,7 @@
 @__const.test.student_t = global [32 x i32] [i32 0, i32 12, i32 4, i32 3, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 2, i32 3, i32 4]
 @.str = global [20 x i8] c"error: return = %d\0A\00"
 
-declare void @llvm.memcpy.p0.p0.i64(i8*, i8*, i64, i1)
+declare void @memcpy(i8*, i8*, i64, i1)
 declare i32 @printf(i8*, ...)
 
 define i32 @test (i32 %0) {
