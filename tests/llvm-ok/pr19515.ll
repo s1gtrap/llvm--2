@@ -1,6 +1,6 @@
 %union.aun = type { [8 x i8] }
 
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 declare void @abort()
 
 define i32 @main () {

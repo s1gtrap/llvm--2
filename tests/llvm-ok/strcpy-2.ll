@@ -2,7 +2,7 @@
 @.str = global [7 x i8] c"Hi!THE\00"
 
 declare i8* @strcpy(i8*, i8*)
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 declare void @abort()
 
 define void @f (i8* %0) {

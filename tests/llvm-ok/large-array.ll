@@ -2,7 +2,7 @@
 @.str = global [7 x i8] c"error\0A\00"
 @.str.1 = global [8 x i8] c"error2\0A\00"
 
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 declare void @memcpy(i8*, i8*, i64, i1)
 declare i32 @printf(i8*, ...)
 

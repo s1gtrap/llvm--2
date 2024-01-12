@@ -1,7 +1,7 @@
 @__const.main.x2 = global [1 x i64] [i64 8589934592]
 @__const.main.x3 = global [1 x i64] [i64 8589934592]
 
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 declare void @abort()
 declare void @memcpy(i8*, i8*, i64, i1)
 

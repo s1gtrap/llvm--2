@@ -1,7 +1,7 @@
 %struct.stuff = type { i32, i32, i32, i32, i32, i8*, i32 }
 
 declare void @abort()
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 
 define void @bar (i8* %0) {
  %2 = alloca i8*

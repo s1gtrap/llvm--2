@@ -1,7 +1,7 @@
 %struct.anon = type { i32, %union.pthread_mutex_t }
 %union.pthread_mutex_t = type { i32 }
 
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 declare void @abort()
 
 define i32 @main () {

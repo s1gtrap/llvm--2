@@ -3,7 +3,7 @@
 %union.anon = type { i32, [4 x i8] }
 
 declare void @memcpy(i8*, i8*, i64, i1)
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 
 define void @frob_entry (i8* %0) {
  %2 = alloca i8*

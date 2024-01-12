@@ -1,6 +1,6 @@
 @a = global i32 0
 
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 
 define i32 @main () {
  %1 = alloca i32

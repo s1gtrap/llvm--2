@@ -3,7 +3,7 @@
 %struct.block = type { i64, i64, i8*, i8*, i8, i32, [1 x %struct.symbol] }
 %struct.symbol = type { i32, i8* }
 
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 
 define i8* @blockvector_for_pc_sect (i64 %0, i8* %1) {
  %3 = alloca i8*

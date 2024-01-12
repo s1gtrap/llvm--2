@@ -1,6 +1,6 @@
 %struct.PgHdr = type { i32, i8*, i8*, i8*, i8*, i8*, i8, i16, i8*, i8*, i32 }
 
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 declare void @abort()
 
 define i8* @sort_pagelist (i8* %0) {

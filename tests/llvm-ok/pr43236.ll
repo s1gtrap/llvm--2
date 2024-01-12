@@ -1,4 +1,4 @@
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 declare i32 @memcmp(i8*, i8*, i64)
 declare void @abort()
 

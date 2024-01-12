@@ -1,6 +1,6 @@
 %struct.anon = type { i32 }
 
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 declare void @abort()
 declare void @exit(i32)
 

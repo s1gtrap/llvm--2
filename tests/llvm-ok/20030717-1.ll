@@ -2,7 +2,7 @@
 %struct.B = type { i32, i32, i32, i32, i32 }
 %struct.A = type { i16, i64 }
 
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 
 define i32 @bar (i8* %0, i8* %1) {
  %3 = alloca i8*

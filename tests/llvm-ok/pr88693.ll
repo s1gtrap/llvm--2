@@ -3,7 +3,7 @@
 
 declare i64 @strlen(i8*)
 declare void @abort()
-declare void @llvm.memset.p0.i64(i8*, i8, i64, i1)
+declare void @memset(i8*, i8, i64, i1)
 declare void @memcpy(i8*, i8*, i64, i1)
 
 define void @foo (i8* %0) {
