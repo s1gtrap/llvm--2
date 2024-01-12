@@ -427,6 +427,2262 @@ let () =
   |> t "tests/sqrt1.ll" [ "23" ]
   |> t "tests/sqrt1.ll" [ "24" ]
   |> t "tests/sqrt1.ll" [ "25" ]
+  |> t "tests/icmpi8eq.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpi8eq.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py eq i8 @strtol *)
+  |> t "tests/icmpu8eq.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py eq i8 @strtoul *)
+  |> t "tests/icmpu8eq.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py eq i8 @strtoul *)
+  |> t "tests/icmpu8eq.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py eq i8 @strtoul *)
+  |> t "tests/icmpu8eq.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py eq i8 @strtoul *)
+  |> t "tests/icmpu8eq.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py eq i8 @strtoul *)
+  |> t "tests/icmpu8eq.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py eq i8 @strtoul *)
+  |> t "tests/icmpu8eq.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py eq i8 @strtoul *)
+  |> t "tests/icmpu8eq.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py eq i8 @strtoul *)
+  |> t "tests/icmpu8eq.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py eq i8 @strtoul *)
+  |> t "tests/icmpu8eq.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py eq i8 @strtoul *)
+  |> t "tests/icmpu8eq.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py eq i8 @strtoul *)
+  |> t "tests/icmpu8eq.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py eq i8 @strtoul *)
+  |> t "tests/icmpi16eq.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpi16eq.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py eq i16 @strtol *)
+  |> t "tests/icmpu16eq.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py eq i16 @strtoul *)
+  |> t "tests/icmpu16eq.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py eq i16 @strtoul *)
+  |> t "tests/icmpu16eq.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py eq i16 @strtoul *)
+  |> t "tests/icmpu16eq.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py eq i16 @strtoul *)
+  |> t "tests/icmpu16eq.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py eq i16 @strtoul *)
+  |> t "tests/icmpu16eq.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py eq i16 @strtoul *)
+  |> t "tests/icmpu16eq.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py eq i16 @strtoul *)
+  |> t "tests/icmpu16eq.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py eq i16 @strtoul *)
+  |> t "tests/icmpu16eq.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py eq i16 @strtoul *)
+  |> t "tests/icmpu16eq.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py eq i16 @strtoul *)
+  |> t "tests/icmpu16eq.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py eq i16 @strtoul *)
+  |> t "tests/icmpu16eq.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py eq i16 @strtoul *)
+  |> t "tests/icmpi32eq.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpi32eq.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py eq i32 @strtol *)
+  |> t "tests/icmpu32eq.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py eq i32 @strtoul *)
+  |> t "tests/icmpu32eq.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py eq i32 @strtoul *)
+  |> t "tests/icmpu32eq.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py eq i32 @strtoul *)
+  |> t "tests/icmpu32eq.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py eq i32 @strtoul *)
+  |> t "tests/icmpu32eq.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py eq i32 @strtoul *)
+  |> t "tests/icmpu32eq.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py eq i32 @strtoul *)
+  |> t "tests/icmpu32eq.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py eq i32 @strtoul *)
+  |> t "tests/icmpu32eq.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py eq i32 @strtoul *)
+  |> t "tests/icmpu32eq.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py eq i32 @strtoul *)
+  |> t "tests/icmpu32eq.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py eq i32 @strtoul *)
+  |> t "tests/icmpu32eq.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py eq i32 @strtoul *)
+  |> t "tests/icmpu32eq.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py eq i32 @strtoul *)
+  |> t "tests/icmpi64eq.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpi64eq.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py eq i64 @strtoll *)
+  |> t "tests/icmpu64eq.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py eq i64 @strtoull *)
+  |> t "tests/icmpu64eq.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py eq i64 @strtoull *)
+  |> t "tests/icmpu64eq.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py eq i64 @strtoull *)
+  |> t "tests/icmpu64eq.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py eq i64 @strtoull *)
+  |> t "tests/icmpu64eq.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py eq i64 @strtoull *)
+  |> t "tests/icmpu64eq.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py eq i64 @strtoull *)
+  |> t "tests/icmpu64eq.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py eq i64 @strtoull *)
+  |> t "tests/icmpu64eq.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py eq i64 @strtoull *)
+  |> t "tests/icmpu64eq.ll" [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py eq i64 @strtoull *)
+  |> t "tests/icmpu64eq.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py eq i64 @strtoull *)
+  |> t "tests/icmpu64eq.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py eq i64 @strtoull *)
+  |> t "tests/icmpu64eq.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py eq i64 @strtoull *)
+  |> t "tests/icmpi8ne.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpi8ne.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ne i8 @strtol *)
+  |> t "tests/icmpu8ne.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ne i8 @strtoul *)
+  |> t "tests/icmpu8ne.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ne i8 @strtoul *)
+  |> t "tests/icmpu8ne.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ne i8 @strtoul *)
+  |> t "tests/icmpu8ne.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ne i8 @strtoul *)
+  |> t "tests/icmpu8ne.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py ne i8 @strtoul *)
+  |> t "tests/icmpu8ne.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py ne i8 @strtoul *)
+  |> t "tests/icmpu8ne.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py ne i8 @strtoul *)
+  |> t "tests/icmpu8ne.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ne i8 @strtoul *)
+  |> t "tests/icmpu8ne.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py ne i8 @strtoul *)
+  |> t "tests/icmpu8ne.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py ne i8 @strtoul *)
+  |> t "tests/icmpu8ne.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py ne i8 @strtoul *)
+  |> t "tests/icmpu8ne.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ne i8 @strtoul *)
+  |> t "tests/icmpi16ne.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpi16ne.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ne i16 @strtol *)
+  |> t "tests/icmpu16ne.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ne i16 @strtoul *)
+  |> t "tests/icmpu16ne.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ne i16 @strtoul *)
+  |> t "tests/icmpu16ne.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ne i16 @strtoul *)
+  |> t "tests/icmpu16ne.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ne i16 @strtoul *)
+  |> t "tests/icmpu16ne.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py ne i16 @strtoul *)
+  |> t "tests/icmpu16ne.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py ne i16 @strtoul *)
+  |> t "tests/icmpu16ne.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py ne i16 @strtoul *)
+  |> t "tests/icmpu16ne.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ne i16 @strtoul *)
+  |> t "tests/icmpu16ne.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py ne i16 @strtoul *)
+  |> t "tests/icmpu16ne.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py ne i16 @strtoul *)
+  |> t "tests/icmpu16ne.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py ne i16 @strtoul *)
+  |> t "tests/icmpu16ne.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ne i16 @strtoul *)
+  |> t "tests/icmpi32ne.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpi32ne.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ne i32 @strtol *)
+  |> t "tests/icmpu32ne.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ne i32 @strtoul *)
+  |> t "tests/icmpu32ne.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ne i32 @strtoul *)
+  |> t "tests/icmpu32ne.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ne i32 @strtoul *)
+  |> t "tests/icmpu32ne.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ne i32 @strtoul *)
+  |> t "tests/icmpu32ne.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py ne i32 @strtoul *)
+  |> t "tests/icmpu32ne.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py ne i32 @strtoul *)
+  |> t "tests/icmpu32ne.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py ne i32 @strtoul *)
+  |> t "tests/icmpu32ne.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ne i32 @strtoul *)
+  |> t "tests/icmpu32ne.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py ne i32 @strtoul *)
+  |> t "tests/icmpu32ne.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py ne i32 @strtoul *)
+  |> t "tests/icmpu32ne.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py ne i32 @strtoul *)
+  |> t "tests/icmpu32ne.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ne i32 @strtoul *)
+  |> t "tests/icmpi64ne.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpi64ne.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ne i64 @strtoll *)
+  |> t "tests/icmpu64ne.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ne i64 @strtoull *)
+  |> t "tests/icmpu64ne.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ne i64 @strtoull *)
+  |> t "tests/icmpu64ne.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ne i64 @strtoull *)
+  |> t "tests/icmpu64ne.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ne i64 @strtoull *)
+  |> t "tests/icmpu64ne.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ne i64 @strtoull *)
+  |> t "tests/icmpu64ne.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ne i64 @strtoull *)
+  |> t "tests/icmpu64ne.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ne i64 @strtoull *)
+  |> t "tests/icmpu64ne.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ne i64 @strtoull *)
+  |> t "tests/icmpu64ne.ll" [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ne i64 @strtoull *)
+  |> t "tests/icmpu64ne.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ne i64 @strtoull *)
+  |> t "tests/icmpu64ne.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ne i64 @strtoull *)
+  |> t "tests/icmpu64ne.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ne i64 @strtoull *)
+  |> t "tests/icmpi8slt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpi8slt.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py slt i8 @strtol *)
+  |> t "tests/icmpu8slt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py slt i8 @strtoul *)
+  |> t "tests/icmpu8slt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py slt i8 @strtoul *)
+  |> t "tests/icmpu8slt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py slt i8 @strtoul *)
+  |> t "tests/icmpu8slt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py slt i8 @strtoul *)
+  |> t "tests/icmpu8slt.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py slt i8 @strtoul *)
+  |> t "tests/icmpu8slt.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py slt i8 @strtoul *)
+  |> t "tests/icmpu8slt.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py slt i8 @strtoul *)
+  |> t "tests/icmpu8slt.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py slt i8 @strtoul *)
+  |> t "tests/icmpu8slt.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py slt i8 @strtoul *)
+  |> t "tests/icmpu8slt.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py slt i8 @strtoul *)
+  |> t "tests/icmpu8slt.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py slt i8 @strtoul *)
+  |> t "tests/icmpu8slt.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py slt i8 @strtoul *)
+  |> t "tests/icmpi16slt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpi16slt.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py slt i16 @strtol *)
+  |> t "tests/icmpu16slt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py slt i16 @strtoul *)
+  |> t "tests/icmpu16slt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py slt i16 @strtoul *)
+  |> t "tests/icmpu16slt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py slt i16 @strtoul *)
+  |> t "tests/icmpu16slt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py slt i16 @strtoul *)
+  |> t "tests/icmpu16slt.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py slt i16 @strtoul *)
+  |> t "tests/icmpu16slt.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py slt i16 @strtoul *)
+  |> t "tests/icmpu16slt.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py slt i16 @strtoul *)
+  |> t "tests/icmpu16slt.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py slt i16 @strtoul *)
+  |> t "tests/icmpu16slt.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py slt i16 @strtoul *)
+  |> t "tests/icmpu16slt.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py slt i16 @strtoul *)
+  |> t "tests/icmpu16slt.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py slt i16 @strtoul *)
+  |> t "tests/icmpu16slt.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py slt i16 @strtoul *)
+  |> t "tests/icmpi32slt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpi32slt.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py slt i32 @strtol *)
+  |> t "tests/icmpu32slt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py slt i32 @strtoul *)
+  |> t "tests/icmpu32slt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py slt i32 @strtoul *)
+  |> t "tests/icmpu32slt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py slt i32 @strtoul *)
+  |> t "tests/icmpu32slt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py slt i32 @strtoul *)
+  |> t "tests/icmpu32slt.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py slt i32 @strtoul *)
+  |> t "tests/icmpu32slt.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py slt i32 @strtoul *)
+  |> t "tests/icmpu32slt.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py slt i32 @strtoul *)
+  |> t "tests/icmpu32slt.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py slt i32 @strtoul *)
+  |> t "tests/icmpu32slt.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py slt i32 @strtoul *)
+  |> t "tests/icmpu32slt.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py slt i32 @strtoul *)
+  |> t "tests/icmpu32slt.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py slt i32 @strtoul *)
+  |> t "tests/icmpu32slt.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py slt i32 @strtoul *)
+  |> t "tests/icmpi64slt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpi64slt.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py slt i64 @strtoll *)
+  |> t "tests/icmpu64slt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py slt i64 @strtoull *)
+  |> t "tests/icmpu64slt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py slt i64 @strtoull *)
+  |> t "tests/icmpu64slt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py slt i64 @strtoull *)
+  |> t "tests/icmpu64slt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py slt i64 @strtoull *)
+  |> t "tests/icmpu64slt.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py slt i64 @strtoull *)
+  |> t "tests/icmpu64slt.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py slt i64 @strtoull *)
+  |> t "tests/icmpu64slt.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py slt i64 @strtoull *)
+  |> t "tests/icmpu64slt.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py slt i64 @strtoull *)
+  |> t "tests/icmpu64slt.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py slt i64 @strtoull *)
+  |> t "tests/icmpu64slt.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py slt i64 @strtoull *)
+  |> t "tests/icmpu64slt.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py slt i64 @strtoull *)
+  |> t "tests/icmpu64slt.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py slt i64 @strtoull *)
+  |> t "tests/icmpi8sle.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpi8sle.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py sle i8 @strtol *)
+  |> t "tests/icmpu8sle.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sle i8 @strtoul *)
+  |> t "tests/icmpu8sle.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sle i8 @strtoul *)
+  |> t "tests/icmpu8sle.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sle i8 @strtoul *)
+  |> t "tests/icmpu8sle.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sle i8 @strtoul *)
+  |> t "tests/icmpu8sle.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py sle i8 @strtoul *)
+  |> t "tests/icmpu8sle.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py sle i8 @strtoul *)
+  |> t "tests/icmpu8sle.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py sle i8 @strtoul *)
+  |> t "tests/icmpu8sle.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py sle i8 @strtoul *)
+  |> t "tests/icmpu8sle.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py sle i8 @strtoul *)
+  |> t "tests/icmpu8sle.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py sle i8 @strtoul *)
+  |> t "tests/icmpu8sle.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py sle i8 @strtoul *)
+  |> t "tests/icmpu8sle.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py sle i8 @strtoul *)
+  |> t "tests/icmpi16sle.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpi16sle.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py sle i16 @strtol *)
+  |> t "tests/icmpu16sle.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sle i16 @strtoul *)
+  |> t "tests/icmpu16sle.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sle i16 @strtoul *)
+  |> t "tests/icmpu16sle.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sle i16 @strtoul *)
+  |> t "tests/icmpu16sle.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sle i16 @strtoul *)
+  |> t "tests/icmpu16sle.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py sle i16 @strtoul *)
+  |> t "tests/icmpu16sle.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py sle i16 @strtoul *)
+  |> t "tests/icmpu16sle.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py sle i16 @strtoul *)
+  |> t "tests/icmpu16sle.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py sle i16 @strtoul *)
+  |> t "tests/icmpu16sle.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py sle i16 @strtoul *)
+  |> t "tests/icmpu16sle.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py sle i16 @strtoul *)
+  |> t "tests/icmpu16sle.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py sle i16 @strtoul *)
+  |> t "tests/icmpu16sle.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py sle i16 @strtoul *)
+  |> t "tests/icmpi32sle.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpi32sle.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py sle i32 @strtol *)
+  |> t "tests/icmpu32sle.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sle i32 @strtoul *)
+  |> t "tests/icmpu32sle.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sle i32 @strtoul *)
+  |> t "tests/icmpu32sle.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sle i32 @strtoul *)
+  |> t "tests/icmpu32sle.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sle i32 @strtoul *)
+  |> t "tests/icmpu32sle.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py sle i32 @strtoul *)
+  |> t "tests/icmpu32sle.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py sle i32 @strtoul *)
+  |> t "tests/icmpu32sle.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py sle i32 @strtoul *)
+  |> t "tests/icmpu32sle.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py sle i32 @strtoul *)
+  |> t "tests/icmpu32sle.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py sle i32 @strtoul *)
+  |> t "tests/icmpu32sle.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py sle i32 @strtoul *)
+  |> t "tests/icmpu32sle.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py sle i32 @strtoul *)
+  |> t "tests/icmpu32sle.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py sle i32 @strtoul *)
+  |> t "tests/icmpi64sle.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpi64sle.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sle i64 @strtoll *)
+  |> t "tests/icmpu64sle.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sle i64 @strtoull *)
+  |> t "tests/icmpu64sle.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sle i64 @strtoull *)
+  |> t "tests/icmpu64sle.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sle i64 @strtoull *)
+  |> t "tests/icmpu64sle.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sle i64 @strtoull *)
+  |> t "tests/icmpu64sle.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py sle i64 @strtoull *)
+  |> t "tests/icmpu64sle.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py sle i64 @strtoull *)
+  |> t "tests/icmpu64sle.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sle i64 @strtoull *)
+  |> t "tests/icmpu64sle.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sle i64 @strtoull *)
+  |> t "tests/icmpu64sle.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py sle i64 @strtoull *)
+  |> t "tests/icmpu64sle.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py sle i64 @strtoull *)
+  |> t "tests/icmpu64sle.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sle i64 @strtoull *)
+  |> t "tests/icmpu64sle.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sle i64 @strtoull *)
+  |> t "tests/icmpi8sgt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpi8sgt.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py sgt i8 @strtol *)
+  |> t "tests/icmpu8sgt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sgt i8 @strtoul *)
+  |> t "tests/icmpu8sgt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sgt i8 @strtoul *)
+  |> t "tests/icmpu8sgt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sgt i8 @strtoul *)
+  |> t "tests/icmpu8sgt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sgt i8 @strtoul *)
+  |> t "tests/icmpu8sgt.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py sgt i8 @strtoul *)
+  |> t "tests/icmpu8sgt.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py sgt i8 @strtoul *)
+  |> t "tests/icmpu8sgt.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py sgt i8 @strtoul *)
+  |> t "tests/icmpu8sgt.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py sgt i8 @strtoul *)
+  |> t "tests/icmpu8sgt.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py sgt i8 @strtoul *)
+  |> t "tests/icmpu8sgt.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py sgt i8 @strtoul *)
+  |> t "tests/icmpu8sgt.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py sgt i8 @strtoul *)
+  |> t "tests/icmpu8sgt.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py sgt i8 @strtoul *)
+  |> t "tests/icmpi16sgt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpi16sgt.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py sgt i16 @strtol *)
+  |> t "tests/icmpu16sgt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sgt i16 @strtoul *)
+  |> t "tests/icmpu16sgt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sgt i16 @strtoul *)
+  |> t "tests/icmpu16sgt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sgt i16 @strtoul *)
+  |> t "tests/icmpu16sgt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sgt i16 @strtoul *)
+  |> t "tests/icmpu16sgt.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py sgt i16 @strtoul *)
+  |> t "tests/icmpu16sgt.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py sgt i16 @strtoul *)
+  |> t "tests/icmpu16sgt.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py sgt i16 @strtoul *)
+  |> t "tests/icmpu16sgt.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py sgt i16 @strtoul *)
+  |> t "tests/icmpu16sgt.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py sgt i16 @strtoul *)
+  |> t "tests/icmpu16sgt.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py sgt i16 @strtoul *)
+  |> t "tests/icmpu16sgt.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py sgt i16 @strtoul *)
+  |> t "tests/icmpu16sgt.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py sgt i16 @strtoul *)
+  |> t "tests/icmpi32sgt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpi32sgt.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py sgt i32 @strtol *)
+  |> t "tests/icmpu32sgt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sgt i32 @strtoul *)
+  |> t "tests/icmpu32sgt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sgt i32 @strtoul *)
+  |> t "tests/icmpu32sgt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sgt i32 @strtoul *)
+  |> t "tests/icmpu32sgt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sgt i32 @strtoul *)
+  |> t "tests/icmpu32sgt.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py sgt i32 @strtoul *)
+  |> t "tests/icmpu32sgt.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py sgt i32 @strtoul *)
+  |> t "tests/icmpu32sgt.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py sgt i32 @strtoul *)
+  |> t "tests/icmpu32sgt.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py sgt i32 @strtoul *)
+  |> t "tests/icmpu32sgt.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py sgt i32 @strtoul *)
+  |> t "tests/icmpu32sgt.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py sgt i32 @strtoul *)
+  |> t "tests/icmpu32sgt.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py sgt i32 @strtoul *)
+  |> t "tests/icmpu32sgt.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py sgt i32 @strtoul *)
+  |> t "tests/icmpi64sgt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpi64sgt.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoll *)
+  |> t "tests/icmpu64sgt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoull *)
+  |> t "tests/icmpu64sgt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoull *)
+  |> t "tests/icmpu64sgt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoull *)
+  |> t "tests/icmpu64sgt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoull *)
+  |> t "tests/icmpu64sgt.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoull *)
+  |> t "tests/icmpu64sgt.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoull *)
+  |> t "tests/icmpu64sgt.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoull *)
+  |> t "tests/icmpu64sgt.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoull *)
+  |> t "tests/icmpu64sgt.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoull *)
+  |> t "tests/icmpu64sgt.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoull *)
+  |> t "tests/icmpu64sgt.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoull *)
+  |> t "tests/icmpu64sgt.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sgt i64 @strtoull *)
+  |> t "tests/icmpi8sge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpi8sge.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py sge i8 @strtol *)
+  |> t "tests/icmpu8sge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sge i8 @strtoul *)
+  |> t "tests/icmpu8sge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sge i8 @strtoul *)
+  |> t "tests/icmpu8sge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sge i8 @strtoul *)
+  |> t "tests/icmpu8sge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sge i8 @strtoul *)
+  |> t "tests/icmpu8sge.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py sge i8 @strtoul *)
+  |> t "tests/icmpu8sge.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py sge i8 @strtoul *)
+  |> t "tests/icmpu8sge.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py sge i8 @strtoul *)
+  |> t "tests/icmpu8sge.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py sge i8 @strtoul *)
+  |> t "tests/icmpu8sge.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py sge i8 @strtoul *)
+  |> t "tests/icmpu8sge.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py sge i8 @strtoul *)
+  |> t "tests/icmpu8sge.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py sge i8 @strtoul *)
+  |> t "tests/icmpu8sge.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py sge i8 @strtoul *)
+  |> t "tests/icmpi16sge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpi16sge.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py sge i16 @strtol *)
+  |> t "tests/icmpu16sge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sge i16 @strtoul *)
+  |> t "tests/icmpu16sge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sge i16 @strtoul *)
+  |> t "tests/icmpu16sge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sge i16 @strtoul *)
+  |> t "tests/icmpu16sge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sge i16 @strtoul *)
+  |> t "tests/icmpu16sge.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py sge i16 @strtoul *)
+  |> t "tests/icmpu16sge.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py sge i16 @strtoul *)
+  |> t "tests/icmpu16sge.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py sge i16 @strtoul *)
+  |> t "tests/icmpu16sge.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py sge i16 @strtoul *)
+  |> t "tests/icmpu16sge.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py sge i16 @strtoul *)
+  |> t "tests/icmpu16sge.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py sge i16 @strtoul *)
+  |> t "tests/icmpu16sge.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py sge i16 @strtoul *)
+  |> t "tests/icmpu16sge.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py sge i16 @strtoul *)
+  |> t "tests/icmpi32sge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpi32sge.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py sge i32 @strtol *)
+  |> t "tests/icmpu32sge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sge i32 @strtoul *)
+  |> t "tests/icmpu32sge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sge i32 @strtoul *)
+  |> t "tests/icmpu32sge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sge i32 @strtoul *)
+  |> t "tests/icmpu32sge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sge i32 @strtoul *)
+  |> t "tests/icmpu32sge.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py sge i32 @strtoul *)
+  |> t "tests/icmpu32sge.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py sge i32 @strtoul *)
+  |> t "tests/icmpu32sge.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py sge i32 @strtoul *)
+  |> t "tests/icmpu32sge.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py sge i32 @strtoul *)
+  |> t "tests/icmpu32sge.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py sge i32 @strtoul *)
+  |> t "tests/icmpu32sge.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py sge i32 @strtoul *)
+  |> t "tests/icmpu32sge.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py sge i32 @strtoul *)
+  |> t "tests/icmpu32sge.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py sge i32 @strtoul *)
+  |> t "tests/icmpi64sge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpi64sge.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sge i64 @strtoll *)
+  |> t "tests/icmpu64sge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py sge i64 @strtoull *)
+  |> t "tests/icmpu64sge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py sge i64 @strtoull *)
+  |> t "tests/icmpu64sge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py sge i64 @strtoull *)
+  |> t "tests/icmpu64sge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py sge i64 @strtoull *)
+  |> t "tests/icmpu64sge.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py sge i64 @strtoull *)
+  |> t "tests/icmpu64sge.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py sge i64 @strtoull *)
+  |> t "tests/icmpu64sge.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sge i64 @strtoull *)
+  |> t "tests/icmpu64sge.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sge i64 @strtoull *)
+  |> t "tests/icmpu64sge.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py sge i64 @strtoull *)
+  |> t "tests/icmpu64sge.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py sge i64 @strtoull *)
+  |> t "tests/icmpu64sge.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sge i64 @strtoull *)
+  |> t "tests/icmpu64sge.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py sge i64 @strtoull *)
+  |> t "tests/icmpi8ult.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpi8ult.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ult i8 @strtol *)
+  |> t "tests/icmpu8ult.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ult i8 @strtoul *)
+  |> t "tests/icmpu8ult.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ult i8 @strtoul *)
+  |> t "tests/icmpu8ult.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ult i8 @strtoul *)
+  |> t "tests/icmpu8ult.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ult i8 @strtoul *)
+  |> t "tests/icmpu8ult.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py ult i8 @strtoul *)
+  |> t "tests/icmpu8ult.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py ult i8 @strtoul *)
+  |> t "tests/icmpu8ult.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py ult i8 @strtoul *)
+  |> t "tests/icmpu8ult.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ult i8 @strtoul *)
+  |> t "tests/icmpu8ult.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py ult i8 @strtoul *)
+  |> t "tests/icmpu8ult.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py ult i8 @strtoul *)
+  |> t "tests/icmpu8ult.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py ult i8 @strtoul *)
+  |> t "tests/icmpu8ult.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ult i8 @strtoul *)
+  |> t "tests/icmpi16ult.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpi16ult.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ult i16 @strtol *)
+  |> t "tests/icmpu16ult.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ult i16 @strtoul *)
+  |> t "tests/icmpu16ult.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ult i16 @strtoul *)
+  |> t "tests/icmpu16ult.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ult i16 @strtoul *)
+  |> t "tests/icmpu16ult.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ult i16 @strtoul *)
+  |> t "tests/icmpu16ult.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py ult i16 @strtoul *)
+  |> t "tests/icmpu16ult.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py ult i16 @strtoul *)
+  |> t "tests/icmpu16ult.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py ult i16 @strtoul *)
+  |> t "tests/icmpu16ult.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ult i16 @strtoul *)
+  |> t "tests/icmpu16ult.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py ult i16 @strtoul *)
+  |> t "tests/icmpu16ult.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py ult i16 @strtoul *)
+  |> t "tests/icmpu16ult.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py ult i16 @strtoul *)
+  |> t "tests/icmpu16ult.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ult i16 @strtoul *)
+  |> t "tests/icmpi32ult.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpi32ult.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ult i32 @strtol *)
+  |> t "tests/icmpu32ult.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ult i32 @strtoul *)
+  |> t "tests/icmpu32ult.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ult i32 @strtoul *)
+  |> t "tests/icmpu32ult.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ult i32 @strtoul *)
+  |> t "tests/icmpu32ult.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ult i32 @strtoul *)
+  |> t "tests/icmpu32ult.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py ult i32 @strtoul *)
+  |> t "tests/icmpu32ult.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py ult i32 @strtoul *)
+  |> t "tests/icmpu32ult.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py ult i32 @strtoul *)
+  |> t "tests/icmpu32ult.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ult i32 @strtoul *)
+  |> t "tests/icmpu32ult.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py ult i32 @strtoul *)
+  |> t "tests/icmpu32ult.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py ult i32 @strtoul *)
+  |> t "tests/icmpu32ult.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py ult i32 @strtoul *)
+  |> t "tests/icmpu32ult.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ult i32 @strtoul *)
+  |> t "tests/icmpi64ult.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpi64ult.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ult i64 @strtoll *)
+  |> t "tests/icmpu64ult.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ult i64 @strtoull *)
+  |> t "tests/icmpu64ult.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ult i64 @strtoull *)
+  |> t "tests/icmpu64ult.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ult i64 @strtoull *)
+  |> t "tests/icmpu64ult.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ult i64 @strtoull *)
+  |> t "tests/icmpu64ult.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ult i64 @strtoull *)
+  |> t "tests/icmpu64ult.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ult i64 @strtoull *)
+  |> t "tests/icmpu64ult.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ult i64 @strtoull *)
+  |> t "tests/icmpu64ult.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ult i64 @strtoull *)
+  |> t "tests/icmpu64ult.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ult i64 @strtoull *)
+  |> t "tests/icmpu64ult.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ult i64 @strtoull *)
+  |> t "tests/icmpu64ult.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ult i64 @strtoull *)
+  |> t "tests/icmpu64ult.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ult i64 @strtoull *)
+  |> t "tests/icmpi8ule.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpi8ule.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ule i8 @strtol *)
+  |> t "tests/icmpu8ule.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ule i8 @strtoul *)
+  |> t "tests/icmpu8ule.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ule i8 @strtoul *)
+  |> t "tests/icmpu8ule.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ule i8 @strtoul *)
+  |> t "tests/icmpu8ule.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ule i8 @strtoul *)
+  |> t "tests/icmpu8ule.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py ule i8 @strtoul *)
+  |> t "tests/icmpu8ule.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py ule i8 @strtoul *)
+  |> t "tests/icmpu8ule.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py ule i8 @strtoul *)
+  |> t "tests/icmpu8ule.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ule i8 @strtoul *)
+  |> t "tests/icmpu8ule.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py ule i8 @strtoul *)
+  |> t "tests/icmpu8ule.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py ule i8 @strtoul *)
+  |> t "tests/icmpu8ule.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py ule i8 @strtoul *)
+  |> t "tests/icmpu8ule.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ule i8 @strtoul *)
+  |> t "tests/icmpi16ule.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpi16ule.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ule i16 @strtol *)
+  |> t "tests/icmpu16ule.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ule i16 @strtoul *)
+  |> t "tests/icmpu16ule.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ule i16 @strtoul *)
+  |> t "tests/icmpu16ule.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ule i16 @strtoul *)
+  |> t "tests/icmpu16ule.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ule i16 @strtoul *)
+  |> t "tests/icmpu16ule.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py ule i16 @strtoul *)
+  |> t "tests/icmpu16ule.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py ule i16 @strtoul *)
+  |> t "tests/icmpu16ule.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py ule i16 @strtoul *)
+  |> t "tests/icmpu16ule.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ule i16 @strtoul *)
+  |> t "tests/icmpu16ule.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py ule i16 @strtoul *)
+  |> t "tests/icmpu16ule.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py ule i16 @strtoul *)
+  |> t "tests/icmpu16ule.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py ule i16 @strtoul *)
+  |> t "tests/icmpu16ule.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ule i16 @strtoul *)
+  |> t "tests/icmpi32ule.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpi32ule.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ule i32 @strtol *)
+  |> t "tests/icmpu32ule.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ule i32 @strtoul *)
+  |> t "tests/icmpu32ule.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ule i32 @strtoul *)
+  |> t "tests/icmpu32ule.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ule i32 @strtoul *)
+  |> t "tests/icmpu32ule.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ule i32 @strtoul *)
+  |> t "tests/icmpu32ule.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py ule i32 @strtoul *)
+  |> t "tests/icmpu32ule.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py ule i32 @strtoul *)
+  |> t "tests/icmpu32ule.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py ule i32 @strtoul *)
+  |> t "tests/icmpu32ule.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ule i32 @strtoul *)
+  |> t "tests/icmpu32ule.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py ule i32 @strtoul *)
+  |> t "tests/icmpu32ule.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py ule i32 @strtoul *)
+  |> t "tests/icmpu32ule.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py ule i32 @strtoul *)
+  |> t "tests/icmpu32ule.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ule i32 @strtoul *)
+  |> t "tests/icmpi64ule.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpi64ule.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ule i64 @strtoll *)
+  |> t "tests/icmpu64ule.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ule i64 @strtoull *)
+  |> t "tests/icmpu64ule.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ule i64 @strtoull *)
+  |> t "tests/icmpu64ule.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ule i64 @strtoull *)
+  |> t "tests/icmpu64ule.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ule i64 @strtoull *)
+  |> t "tests/icmpu64ule.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ule i64 @strtoull *)
+  |> t "tests/icmpu64ule.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ule i64 @strtoull *)
+  |> t "tests/icmpu64ule.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ule i64 @strtoull *)
+  |> t "tests/icmpu64ule.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ule i64 @strtoull *)
+  |> t "tests/icmpu64ule.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ule i64 @strtoull *)
+  |> t "tests/icmpu64ule.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ule i64 @strtoull *)
+  |> t "tests/icmpu64ule.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ule i64 @strtoull *)
+  |> t "tests/icmpu64ule.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ule i64 @strtoull *)
+  |> t "tests/icmpi8ugt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpi8ugt.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ugt i8 @strtol *)
+  |> t "tests/icmpu8ugt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ugt i8 @strtoul *)
+  |> t "tests/icmpu8ugt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ugt i8 @strtoul *)
+  |> t "tests/icmpu8ugt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ugt i8 @strtoul *)
+  |> t "tests/icmpu8ugt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ugt i8 @strtoul *)
+  |> t "tests/icmpu8ugt.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py ugt i8 @strtoul *)
+  |> t "tests/icmpu8ugt.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py ugt i8 @strtoul *)
+  |> t "tests/icmpu8ugt.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py ugt i8 @strtoul *)
+  |> t "tests/icmpu8ugt.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ugt i8 @strtoul *)
+  |> t "tests/icmpu8ugt.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py ugt i8 @strtoul *)
+  |> t "tests/icmpu8ugt.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py ugt i8 @strtoul *)
+  |> t "tests/icmpu8ugt.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py ugt i8 @strtoul *)
+  |> t "tests/icmpu8ugt.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py ugt i8 @strtoul *)
+  |> t "tests/icmpi16ugt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpi16ugt.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ugt i16 @strtol *)
+  |> t "tests/icmpu16ugt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ugt i16 @strtoul *)
+  |> t "tests/icmpu16ugt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ugt i16 @strtoul *)
+  |> t "tests/icmpu16ugt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ugt i16 @strtoul *)
+  |> t "tests/icmpu16ugt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ugt i16 @strtoul *)
+  |> t "tests/icmpu16ugt.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py ugt i16 @strtoul *)
+  |> t "tests/icmpu16ugt.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py ugt i16 @strtoul *)
+  |> t "tests/icmpu16ugt.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py ugt i16 @strtoul *)
+  |> t "tests/icmpu16ugt.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ugt i16 @strtoul *)
+  |> t "tests/icmpu16ugt.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py ugt i16 @strtoul *)
+  |> t "tests/icmpu16ugt.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py ugt i16 @strtoul *)
+  |> t "tests/icmpu16ugt.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py ugt i16 @strtoul *)
+  |> t "tests/icmpu16ugt.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py ugt i16 @strtoul *)
+  |> t "tests/icmpi32ugt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpi32ugt.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ugt i32 @strtol *)
+  |> t "tests/icmpu32ugt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ugt i32 @strtoul *)
+  |> t "tests/icmpu32ugt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ugt i32 @strtoul *)
+  |> t "tests/icmpu32ugt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ugt i32 @strtoul *)
+  |> t "tests/icmpu32ugt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ugt i32 @strtoul *)
+  |> t "tests/icmpu32ugt.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py ugt i32 @strtoul *)
+  |> t "tests/icmpu32ugt.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py ugt i32 @strtoul *)
+  |> t "tests/icmpu32ugt.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py ugt i32 @strtoul *)
+  |> t "tests/icmpu32ugt.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ugt i32 @strtoul *)
+  |> t "tests/icmpu32ugt.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py ugt i32 @strtoul *)
+  |> t "tests/icmpu32ugt.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py ugt i32 @strtoul *)
+  |> t "tests/icmpu32ugt.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py ugt i32 @strtoul *)
+  |> t "tests/icmpu32ugt.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py ugt i32 @strtoul *)
+  |> t "tests/icmpi64ugt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpi64ugt.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoll *)
+  |> t "tests/icmpu64ugt.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoull *)
+  |> t "tests/icmpu64ugt.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoull *)
+  |> t "tests/icmpu64ugt.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoull *)
+  |> t "tests/icmpu64ugt.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoull *)
+  |> t "tests/icmpu64ugt.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoull *)
+  |> t "tests/icmpu64ugt.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoull *)
+  |> t "tests/icmpu64ugt.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoull *)
+  |> t "tests/icmpu64ugt.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoull *)
+  |> t "tests/icmpu64ugt.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoull *)
+  |> t "tests/icmpu64ugt.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoull *)
+  |> t "tests/icmpu64ugt.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoull *)
+  |> t "tests/icmpu64ugt.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py ugt i64 @strtoull *)
+  |> t "tests/icmpi8uge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpi8uge.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py uge i8 @strtol *)
+  |> t "tests/icmpu8uge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py uge i8 @strtoul *)
+  |> t "tests/icmpu8uge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py uge i8 @strtoul *)
+  |> t "tests/icmpu8uge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py uge i8 @strtoul *)
+  |> t "tests/icmpu8uge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py uge i8 @strtoul *)
+  |> t "tests/icmpu8uge.ll" [ "255"; "255" ]
+     (* ./tests/select-icmp.py uge i8 @strtoul *)
+  |> t "tests/icmpu8uge.ll" [ "127"; "255" ]
+     (* ./tests/select-icmp.py uge i8 @strtoul *)
+  |> t "tests/icmpu8uge.ll" [ "255"; "127" ]
+     (* ./tests/select-icmp.py uge i8 @strtoul *)
+  |> t "tests/icmpu8uge.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py uge i8 @strtoul *)
+  |> t "tests/icmpu8uge.ll" [ "-256"; "-256" ]
+     (* ./tests/select-icmp.py uge i8 @strtoul *)
+  |> t "tests/icmpu8uge.ll" [ "127"; "-256" ]
+     (* ./tests/select-icmp.py uge i8 @strtoul *)
+  |> t "tests/icmpu8uge.ll" [ "-256"; "127" ]
+     (* ./tests/select-icmp.py uge i8 @strtoul *)
+  |> t "tests/icmpu8uge.ll" [ "127"; "127" ]
+     (* ./tests/select-icmp.py uge i8 @strtoul *)
+  |> t "tests/icmpi16uge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpi16uge.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py uge i16 @strtol *)
+  |> t "tests/icmpu16uge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py uge i16 @strtoul *)
+  |> t "tests/icmpu16uge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py uge i16 @strtoul *)
+  |> t "tests/icmpu16uge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py uge i16 @strtoul *)
+  |> t "tests/icmpu16uge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py uge i16 @strtoul *)
+  |> t "tests/icmpu16uge.ll" [ "65535"; "65535" ]
+     (* ./tests/select-icmp.py uge i16 @strtoul *)
+  |> t "tests/icmpu16uge.ll" [ "32767"; "65535" ]
+     (* ./tests/select-icmp.py uge i16 @strtoul *)
+  |> t "tests/icmpu16uge.ll" [ "65535"; "32767" ]
+     (* ./tests/select-icmp.py uge i16 @strtoul *)
+  |> t "tests/icmpu16uge.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py uge i16 @strtoul *)
+  |> t "tests/icmpu16uge.ll" [ "-65536"; "-65536" ]
+     (* ./tests/select-icmp.py uge i16 @strtoul *)
+  |> t "tests/icmpu16uge.ll" [ "32767"; "-65536" ]
+     (* ./tests/select-icmp.py uge i16 @strtoul *)
+  |> t "tests/icmpu16uge.ll" [ "-65536"; "32767" ]
+     (* ./tests/select-icmp.py uge i16 @strtoul *)
+  |> t "tests/icmpu16uge.ll" [ "32767"; "32767" ]
+     (* ./tests/select-icmp.py uge i16 @strtoul *)
+  |> t "tests/icmpi32uge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpi32uge.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py uge i32 @strtol *)
+  |> t "tests/icmpu32uge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py uge i32 @strtoul *)
+  |> t "tests/icmpu32uge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py uge i32 @strtoul *)
+  |> t "tests/icmpu32uge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py uge i32 @strtoul *)
+  |> t "tests/icmpu32uge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py uge i32 @strtoul *)
+  |> t "tests/icmpu32uge.ll" [ "4294967295"; "4294967295" ]
+     (* ./tests/select-icmp.py uge i32 @strtoul *)
+  |> t "tests/icmpu32uge.ll" [ "2147483647"; "4294967295" ]
+     (* ./tests/select-icmp.py uge i32 @strtoul *)
+  |> t "tests/icmpu32uge.ll" [ "4294967295"; "2147483647" ]
+     (* ./tests/select-icmp.py uge i32 @strtoul *)
+  |> t "tests/icmpu32uge.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py uge i32 @strtoul *)
+  |> t "tests/icmpu32uge.ll" [ "-4294967296"; "-4294967296" ]
+     (* ./tests/select-icmp.py uge i32 @strtoul *)
+  |> t "tests/icmpu32uge.ll" [ "2147483647"; "-4294967296" ]
+     (* ./tests/select-icmp.py uge i32 @strtoul *)
+  |> t "tests/icmpu32uge.ll" [ "-4294967296"; "2147483647" ]
+     (* ./tests/select-icmp.py uge i32 @strtoul *)
+  |> t "tests/icmpu32uge.ll" [ "2147483647"; "2147483647" ]
+     (* ./tests/select-icmp.py uge i32 @strtoul *)
+  |> t "tests/icmpi64uge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpi64uge.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py uge i64 @strtoll *)
+  |> t "tests/icmpu64uge.ll" [ "0"; "0" ]
+     (* ./tests/select-icmp.py uge i64 @strtoull *)
+  |> t "tests/icmpu64uge.ll" [ "1"; "0" ]
+     (* ./tests/select-icmp.py uge i64 @strtoull *)
+  |> t "tests/icmpu64uge.ll" [ "0"; "1" ]
+     (* ./tests/select-icmp.py uge i64 @strtoull *)
+  |> t "tests/icmpu64uge.ll" [ "1"; "1" ]
+     (* ./tests/select-icmp.py uge i64 @strtoull *)
+  |> t "tests/icmpu64uge.ll" [ "18446744073709551615"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py uge i64 @strtoull *)
+  |> t "tests/icmpu64uge.ll" [ "9223372036854775807"; "18446744073709551615" ]
+     (* ./tests/select-icmp.py uge i64 @strtoull *)
+  |> t "tests/icmpu64uge.ll" [ "18446744073709551615"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py uge i64 @strtoull *)
+  |> t "tests/icmpu64uge.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py uge i64 @strtoull *)
+  |> t "tests/icmpu64uge.ll"
+       [ "-18446744073709551616"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py uge i64 @strtoull *)
+  |> t "tests/icmpu64uge.ll" [ "9223372036854775807"; "-18446744073709551616" ]
+     (* ./tests/select-icmp.py uge i64 @strtoull *)
+  |> t "tests/icmpu64uge.ll" [ "-18446744073709551616"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py uge i64 @strtoull *)
+  |> t "tests/icmpu64uge.ll" [ "9223372036854775807"; "9223372036854775807" ]
+     (* ./tests/select-icmp.py uge i64 @strtoull *)
   |> t "tests/bubblesort0.ll" [] ~stdin:"1\n"
   |> t "tests/bubblesort0.ll" []
        ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")
