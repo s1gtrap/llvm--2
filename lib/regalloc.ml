@@ -1086,10 +1086,8 @@ let coalesce_briggs k (prefs : S.SS.t S.ST.t)
     then coalesce (S.ST.find sop l) (S.ST.find dop l) (l, g)
     else (l, g)
   in
-  let try_coalesce_prefs sop dops (l, g) =
-    S.SS.fold (try_coalesce sop) dops (l, g)
-  in
-  S.ST.fold try_coalesce_prefs prefs (l, g)
+  let try_pref sop dops (l, g) = S.SS.fold (try_coalesce sop) dops (l, g) in
+  S.ST.fold try_pref prefs (l, g)
 
 let coalesce (alc : allocator) (prefs : S.SS.t S.ST.t)
     ((l, g) : Lva.G.V.t S.ST.t * Lva.G.t) : Lva.G.V.t S.table * Lva.G.t =
