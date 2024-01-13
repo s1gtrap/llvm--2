@@ -4,7 +4,7 @@ exception CompileError
 
 module S = Map.Make (String)
 
-type compiler = Clang | Tiger | Llvm__2 of Llvm__2.Regalloc.allocator
+type compiler = Clang | Tiger | Llvm__2 of Llvm__2.Common.allocator
 
 let red = "\027[0;31m"
 and green = "\027[1;32m"
@@ -14,7 +14,7 @@ and nc = "\027[0m"
 let string_of_compiler = function
   | Clang -> "clang"
   | Tiger -> "tiger"
-  | Llvm__2 a -> Llvm__2.Regalloc.string_of_allocator a
+  | Llvm__2 a -> Llvm__2.Common.string_of_allocator a
 
 let print_diff s1 s2 =
   let rec print s1 s2 s3 =
