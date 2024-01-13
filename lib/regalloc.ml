@@ -1201,7 +1201,7 @@ let alloc a param insns (in_, out) : operand S.table =
         in
         simp S.SS.empty
     | Briggs c ->
-        let prefs = Lva.prefer insns in
+        let prefs = Coalesce.prefer insns in
         let l, g = Lva.interf param insns in_ out in
         let l, g = Coalesce.coalesce_briggs c prefs (l, g) in
         let register = function

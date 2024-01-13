@@ -2,6 +2,24 @@ open Common
 
 let sos s = Ll.mapcat " " S.name (S.SS.to_seq s |> List.of_seq)
 
+let prefer (insns : Cfg.insn list) : S.SS.t S.ST.t =
+  let insn t = function
+    | Cfg.Insn (Some d, Ll.PhiNode (_, ops)) ->
+        List.fold_left
+          (fun t o ->
+            match o with
+            | Ll.Id sop, _ ->
+                S.ST.update sop
+                  (function
+                    | Some s -> Some (S.SS.add d s)
+                    | None -> Some (S.SS.singleton d))
+                  t
+            | _ -> t)
+          t ops
+    | _ -> t
+  in
+  List.fold_left insn S.ST.empty insns
+
 let coalesce v1 v2 (st, g) =
   if v1 = v2 then (st, g)
   else
@@ -42,15 +60,15 @@ let coalesce v1 v2 (st, g) =
 let coalesce_briggs k (prefs : S.SS.t S.ST.t)
     ((l, g) : Lva.G.V.t S.ST.t * Lva.G.t) : Lva.G.V.t S.table * Lva.G.t =
   let try_coalesce sop dop (l, g) =
-    let sneighs = S.ST.find sop l |> Lva.G.succ g |> Lva.VS.of_list
-    and dneighs = S.ST.find dop l |> Lva.G.succ g |> Lva.VS.of_list in
-    let neighs = Lva.VS.union sneighs dneighs in
-    let sign v = Lva.G.succ g v |> List.length >= k in
-    let signeighs = Lva.VS.filter sign neighs in
-    if
-      (not (Lva.G.mem_edge g (S.ST.find sop l) (S.ST.find dop l)))
-      && Lva.VS.cardinal signeighs < k
-    then coalesce (S.ST.find sop l) (S.ST.find dop l) (l, g)
+    if not (Lva.G.mem_edge g (S.ST.find sop l) (S.ST.find dop l)) then
+      let sneighs = S.ST.find sop l |> Lva.G.succ g |> Lva.VS.of_list
+      and dneighs = S.ST.find dop l |> Lva.G.succ g |> Lva.VS.of_list in
+      let neighs = Lva.VS.union sneighs dneighs in
+      let sign v = Lva.G.succ g v |> List.length >= k in
+      let signeighs = Lva.VS.filter sign neighs in
+      if Lva.VS.cardinal signeighs < k then
+        coalesce (S.ST.find sop l) (S.ST.find dop l) (l, g)
+      else (l, g)
     else (l, g)
   in
   let try_pref sop dops (l, g) = S.SS.fold (try_coalesce sop) dops (l, g) in

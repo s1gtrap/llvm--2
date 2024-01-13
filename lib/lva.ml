@@ -161,24 +161,6 @@ let interf (params : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
   let t = List.mapi (fun i n -> (i, n)) insns |> List.fold_left defoutedges t in
   (t, g)
 
-let prefer (insns : Cfg.insn list) : S.SS.t S.ST.t =
-  let insn t = function
-    | Cfg.Insn (Some d, Ll.PhiNode (_, ops)) ->
-        List.fold_left
-          (fun t o ->
-            match o with
-            | Ll.Id sop, _ ->
-                S.ST.update sop
-                  (function
-                    | Some s -> Some (S.SS.add d s)
-                    | None -> Some (S.SS.singleton d))
-                  t
-            | _ -> t)
-          t ops
-    | _ -> t
-  in
-  List.fold_left insn S.ST.empty insns
-
 module VS = Set.Make (G.V)
 module VT = Map.Make (G.V)
 
