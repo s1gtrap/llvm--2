@@ -119,25 +119,24 @@ let dot g =
   Dot_.fprint_graph Format.str_formatter g;
   Format.flush_str_formatter ()
 
+let vert g e t =
+  match S.ST.find_opt e t with
+  | Some v -> (v, t)
+  | None ->
+      let v = S.SS.add e S.SS.empty |> G.V.create in
+      G.add_vertex g v;
+      (v, S.ST.add e v t)
+
 let interf (params : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
-    : G.V.t S.table * G.t =
+    =
   let g = G.create () in
-  let vert e t =
-    match S.ST.find_opt e t with
-    | Some v -> (v, t)
-    | None ->
-        let v = S.SS.add e S.SS.empty |> G.V.create in
-        G.add_vertex g v;
-        (v, S.ST.add e v t)
-  in
-  let vert2 t e = vert e t |> snd and vert3 e t = vert e t |> snd in
+  let vert2 t e = vert g e t |> snd and vert3 e t = vert g e t |> snd in
   let edge s1 s2 t =
-    let v1, t = vert s1 t in
-    let v2, t = vert s2 t in
+    let v1, t = vert g s1 t in
+    let v2, t = vert g s2 t in
     if v1 <> v2 then G.add_edge g v1 v2;
     t
   in
-  (* Add params *)
   let t = List.fold_left vert2 S.ST.empty params in
   (* connect all params *)
   let param t p1 =
