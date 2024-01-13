@@ -126,18 +126,6 @@ let cellcolor r =
   in
   color red green 0
 
-let default_compilers =
-  [
-    Llvm__2 (Llvm__2.Regalloc.Simple 12);
-    Llvm__2 (Llvm__2.Regalloc.Simple 2);
-    Llvm__2 (Llvm__2.Regalloc.Briggs 12);
-    Llvm__2 (Llvm__2.Regalloc.Briggs 2);
-    Llvm__2 (Llvm__2.Regalloc.Linearscan 2);
-    Llvm__2 (Llvm__2.Regalloc.Linearscan 12);
-    Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-    Llvm__2 (Llvm__2.Regalloc.Greedy 0);
-  ]
-
 let () =
   let newline () =
     print_newline ();
@@ -165,20 +153,31 @@ let () =
       Printf.printf "avg=%Ld (%s%f%s)\t" avg (grad avgr) avgr reset;
       Printf.printf "max=%Ld\n" max)
   in
-  let b f c args =
+  let b f
+      ?(compilers =
+        [
+          Llvm__2 (Llvm__2.Regalloc.Simple 12);
+          Llvm__2 (Llvm__2.Regalloc.Simple 2);
+          Llvm__2 (Llvm__2.Regalloc.Briggs 12);
+          Llvm__2 (Llvm__2.Regalloc.Briggs 2);
+          Llvm__2 (Llvm__2.Regalloc.Linearscan 2);
+          Llvm__2 (Llvm__2.Regalloc.Linearscan 12);
+          Llvm__2 (Llvm__2.Regalloc.Greedy 12);
+          Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+        ]) args =
     if matches !filter f then (
       if !table then (
         Printf.printf "\\begin{NiceTabular}{|c|%s|}\n\\hline\n"
-          (String.make (List.length c + 1) 'c');
+          (String.make (List.length compilers + 1) 'c');
         Printf.printf "arg(s) ";
         List.iter
           (fun alc -> Printf.printf "& %s " (string_of_compiler alc))
-          ([ Clang ] @ c);
+          ([ Clang ] @ compilers);
         Printf.printf "\\\\\n\\hline\n");
       let f args =
         Printf.printf "%s "
           (Ll.mapcat "\\\\\\" (fun s -> s) (Array.to_list args));
-        bench_all_n f args !n c |> List.iteri print;
+        bench_all_n f args !n compilers |> List.iteri print;
         if !table then Printf.printf "\\\\\n";
         flush Stdlib.stdout
       in
@@ -189,36 +188,36 @@ let () =
   Arg.parse speclist (fun _ -> ()) "append [-r n]";
   flush Stdlib.stdout;
 
-  b "benches/fib.ll" default_compilers
-    (* 1.33s *)
-    [
-      [| "8" |];
-      [| "10" |];
-      [| "12" |];
-      [| "14" |];
-      [| "16" |];
-      [| "18" |];
-      [| "20" |];
-      [| "22" |];
-      [| "24" |];
-      [| "26" |];
-      [| "28" |];
-      [| "30" |];
-      [| "32" |];
-    ];
-
   b "benches/fib.ll"
     (* 1.33s *)
     [
-      Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 8);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 6);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 4);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 2);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 1);
-      Llvm__2 (Llvm__2.Regalloc.Greedy 0);
-      Tiger;
-    ]
+      [| "8" |];
+      [| "10" |];
+      [| "12" |];
+      [| "14" |];
+      [| "16" |];
+      [| "18" |];
+      [| "20" |];
+      [| "22" |];
+      [| "24" |];
+      [| "26" |];
+      [| "28" |];
+      [| "30" |];
+      [| "32" |];
+    ];
+
+  b "benches/fib.ll" (* 1.33s *)
+    ~compilers:
+      [
+        Llvm__2 (Llvm__2.Regalloc.Greedy 12);
+        Llvm__2 (Llvm__2.Regalloc.Greedy 8);
+        Llvm__2 (Llvm__2.Regalloc.Greedy 6);
+        Llvm__2 (Llvm__2.Regalloc.Greedy 4);
+        Llvm__2 (Llvm__2.Regalloc.Greedy 2);
+        Llvm__2 (Llvm__2.Regalloc.Greedy 1);
+        Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+        Tiger;
+      ]
     [
       [| "8" |];
       [| "10" |];
@@ -235,7 +234,7 @@ let () =
       [| "32" |];
     ];
 
-  b "benches/loopn0.ll" default_compilers
+  b "benches/loopn0.ll"
     (* 1.31s *)
     [
       [| "65535" |] (* 2 ** 16 - 1 *);
@@ -248,7 +247,7 @@ let () =
       [| "8388607" |] (* 2 ** 23 - 1 *);
     ];
 
-  b "benches/loopn1.ll" default_compilers
+  b "benches/loopn1.ll"
     (* 0.85s *)
     [
       [| "65535" |] (* 2 ** 16 - 1 *);
@@ -261,7 +260,7 @@ let () =
       [| "8388607" |] (* 2 ** 23 - 1 *);
     ];
 
-  b "benches/factori32.ll" default_compilers
+  b "benches/factori32.ll"
     (* 123,85s *)
     [
       [| "16777213" |];
@@ -274,7 +273,7 @@ let () =
       [| "2147483647" |];
     ];
 
-  b "benches/factori64.ll" default_compilers
+  b "benches/factori64.ll"
     (* 0,56s *)
     [
       [| "268435399" |];
@@ -288,7 +287,7 @@ let () =
     ];
 
   (*bin "benches/bubblesort0.ll" default_compilers [];*)
-  b "benches/sieven.ll" default_compilers
+  b "benches/sieven.ll"
     (*  0,56s *)
     [
       [| "128" |];
@@ -301,7 +300,7 @@ let () =
       [| "16384" |];
     ];
 
-  b "benches/subset.ll" default_compilers
+  b "benches/subset.ll"
     (* 2,67s *)
     [
       Array.init 15 string_of_int;
@@ -312,7 +311,7 @@ let () =
          (Array.init 20 string_of_int) n*)
     ];
 
-  b "benches/fannkuch-redux.ll" default_compilers
+  b "benches/fannkuch-redux.ll"
     (* 123,61s *)
     [
       [| "4" |];
@@ -325,7 +324,7 @@ let () =
       [| "11" |];
     ];
 
-  b "benches/sha256.ll" default_compilers
+  b "benches/sha256.ll"
     (* 623,21s *)
     [
       [| "4" |];
@@ -342,5 +341,5 @@ let () =
       [| "8192" |];
     ]
 
-(*b "benches/sha256-stdin.ll" default_compilers
+(*b "benches/sha256-stdin.ll"
   [ [| "100" |]; [| "1000" |]; [| "10000" |] ];*)
