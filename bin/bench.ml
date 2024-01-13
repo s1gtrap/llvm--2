@@ -160,8 +160,8 @@ let () =
           Llvm__2 (Llvm__2.Regalloc.Simple 2);
           Llvm__2 (Llvm__2.Regalloc.Briggs 12);
           Llvm__2 (Llvm__2.Regalloc.Briggs 2);
-          Llvm__2 (Llvm__2.Regalloc.Linearscan 2);
           Llvm__2 (Llvm__2.Regalloc.Linearscan 12);
+          Llvm__2 (Llvm__2.Regalloc.Linearscan 2);
           Llvm__2 (Llvm__2.Regalloc.Greedy 12);
           Llvm__2 (Llvm__2.Regalloc.Greedy 0);
         ])
@@ -338,10 +338,14 @@ let () =
   b "benches/subset.ll"
     (* 2,67s *)
     [
-      Array.init 15 string_of_int;
-      Array.init 16 string_of_int;
-      Array.init 17 string_of_int;
-      Array.init 18 string_of_int;
+      Array.init 20 string_of_int;
+      Array.init 21 string_of_int;
+      Array.init 22 string_of_int;
+      Array.init 23 string_of_int;
+      Array.init 24 string_of_int;
+      Array.init 25 string_of_int;
+      (*Array.init 26 string_of_int;
+      Array.init 27 string_of_int;*)
       (* (Array.init 19 string_of_int) n
          (Array.init 20 string_of_int) n*)
     ];
