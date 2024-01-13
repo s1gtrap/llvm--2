@@ -42,7 +42,7 @@ define i32 @main() {
   ;call void @printf (i8* @.str, i32 %22)
   ;call void @printf (i8* @.str, i32 %23)
   %24 = add i32 %9, 1
-  %25 = icmp eq i32 %24, 4294967295
+  %25 = icmp eq i32 %24, 536870912
   br i1 %25, label %26, label %8
 26:
   ret i32 0
