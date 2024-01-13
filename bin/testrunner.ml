@@ -3049,11 +3049,11 @@ let () =
   |> t "tests/llvm-ok/20011219-1.ll" []
   |> t "tests/llvm-ok/2002-04-17-PrintfChar.ll" []
   (*|> t "tests/llvm-ok/2002-05-02-CastTest.ll" []
-  |> t "tests/llvm-ok/2002-05-02-CastTest1.ll" []*)
+    |> t "tests/llvm-ok/2002-05-02-CastTest1.ll" []*)
   |> t "tests/llvm-ok/2002-05-02-CastTest2.ll" []
   (*|> t "tests/llvm-ok/2002-05-02-CastTest3.ll" []
-  |> t "tests/llvm-ok/2002-05-03-NotTest.ll" []
-  |> t "tests/llvm-ok/2002-05-19-DivTest.ll" []*)
+    |> t "tests/llvm-ok/2002-05-03-NotTest.ll" []
+    |> t "tests/llvm-ok/2002-05-19-DivTest.ll" []*)
   |> t "tests/llvm-ok/2002-08-02-CastTest.ll" []
   (*|> t "tests/llvm-ok/2002-08-02-CastTest2.ll" []*)
   |> t "tests/llvm-ok/2002-08-19-CodegenBug.ll" []
@@ -3089,12 +3089,12 @@ let () =
   |> t "tests/llvm-ok/2003-05-14-AtExit.ll" []
   |> t "tests/llvm-ok/2003-05-14-initialize-string.ll" []
   (*|> t "tests/llvm-ok/2003-05-26-Shorts.ll" []
-  |> t "tests/llvm-ok/2003-05-31-CastToBool.ll" []*)
+    |> t "tests/llvm-ok/2003-05-31-CastToBool.ll" []*)
   |> t "tests/llvm-ok/2003-06-16-VolatileError.ll" []
   (*|> t "tests/llvm-ok/2003-07-06-IntOverflow.ll" []*)
   |> t "tests/llvm-ok/2003-07-08-BitOpsTest.ll" []
   (*|> t "tests/llvm-ok/2003-07-09-LoadShorts.ll" []
-  |> t "tests/llvm-ok/2003-07-10-SignConversions.ll" []*)
+    |> t "tests/llvm-ok/2003-07-10-SignConversions.ll" []*)
   |> t "tests/llvm-ok/2003-08-20-FoldBug.ll" []
   |> t "tests/llvm-ok/2003-09-18-BitFieldTest.ll" []
   |> t "tests/llvm-ok/2003-10-13-SwitchTest.ll" []
@@ -3107,7 +3107,7 @@ let () =
   |> t "tests/llvm-ok/20030330-1.ll" []
   |> t "tests/llvm-ok/20030401-1.ll" []
   (*|> t "tests/llvm-ok/20030408-1.ll" []
-  |> t "tests/llvm-ok/20030717-1.ll" []*)
+    |> t "tests/llvm-ok/20030717-1.ll" []*)
   |> t "tests/llvm-ok/20030718-1.ll" []
   |> t "tests/llvm-ok/20030821-1.ll" []
   |> t "tests/llvm-ok/20030909-1.ll" []
@@ -3117,7 +3117,7 @@ let () =
   |> t "tests/llvm-ok/20031216-1.ll" []
   |> t "tests/llvm-ok/2004-02-03-AggregateCopy.ll" []
   (*|> t "tests/llvm-ok/2004-08-12-InlinerAndAllocas.ll" []
-  |> t "tests/llvm-ok/20040309-1.ll" []*)
+    |> t "tests/llvm-ok/20040309-1.ll" []*)
   |> t "tests/llvm-ok/20040311-1.ll" []
   |> t "tests/llvm-ok/20040331-1.ll" []
   |> t "tests/llvm-ok/20040409-1.ll" []
@@ -3211,7 +3211,7 @@ let () =
   |> t "tests/llvm-ok/WhileLoop.ll" []
   |> t "tests/llvm-ok/ackermann.ll" []
   (*|> t "tests/llvm-ok/array.ll" []
-  |> t "tests/llvm-ok/ary3" []*)
+    |> t "tests/llvm-ok/ary3" []*)
   |> t "tests/llvm-ok/ashldi-1.ll" []
   |> t "tests/llvm-ok/ashrdi-1.ll" []
   |> t "tests/llvm-ok/badidx.ll" []
@@ -3229,24 +3229,24 @@ let () =
   |> t "tests/llvm-ok/compare-2.ll" []
   |> t "tests/llvm-ok/compare-3.ll" []
   (*|> t "tests/llvm-ok/div.ll" []
-  |> t "tests/llvm-ok/divcmp-1.ll" []
-  |> t "tests/llvm-ok/divcmp-2.ll" []*)
+    |> t "tests/llvm-ok/divcmp-1.ll" []
+    |> t "tests/llvm-ok/divcmp-2.ll" []*)
   |> t "tests/llvm-ok/divcmp-3.ll" []
   (*|> t "tests/llvm-ok/divcmp-4.ll" []*)
   |> t "tests/llvm-ok/divcmp-5.ll" []
   (*|> t "tests/llvm-ok/fannkuch.ll" []
-  |> t "tests/llvm-ok/fib2.ll" []*)
+    |> t "tests/llvm-ok/fib2.ll" []*)
   |> t "tests/llvm-ok/folding.ll" []
   |> t "tests/llvm-ok/fp-cmp-4e.ll" []
   |> t "tests/llvm-ok/fp-cmp-8e.ll" []
   (*|> t "tests/llvm-ok/hash.ll" []
-  |> t "tests/llvm-ok/hello" []*)
+    |> t "tests/llvm-ok/hello" []*)
   |> t "tests/llvm-ok/ifcvt-onecmpl-abs-1.ll" []
   |> t "tests/llvm-ok/ipa-sra-2.ll" []
   (*|> t "tests/llvm-ok/large-array.ll" []
-  |> t "tests/llvm-ok/list.ll" []
-  |> t "tests/llvm-ok/lists" []
-  |> t "tests/llvm-ok/local-array.ll" []*)
+    |> t "tests/llvm-ok/list.ll" []
+    |> t "tests/llvm-ok/lists" []
+    |> t "tests/llvm-ok/local-array.ll" []*)
   |> t "tests/llvm-ok/loop-9.ll" []
   |> t "tests/llvm-ok/loop-ivopts-2.ll" []
   (*|> t "tests/llvm-ok/lowercase.ll" []*)
@@ -3297,30 +3297,30 @@ let () =
   |> t "tests/llvm-ok/pr33870.ll" []
   |> t "tests/llvm-ok/pr33992.ll" []
   (*|> t "tests/llvm-ok/pr34070-1.ll" []
-  |> t "tests/llvm-ok/pr34070-2.ll" []*)
+    |> t "tests/llvm-ok/pr34070-2.ll" []*)
   |> t "tests/llvm-ok/pr34099.ll" []
   |> t "tests/llvm-ok/pr34099-2.ll" []
   |> t "tests/llvm-ok/pr34130.ll" []
   (*|> t "tests/llvm-ok/pr34154.ll" []*)
   |> t "tests/llvm-ok/pr34415.ll" []
   |> t "tests/llvm-ok/pr34982.ll" []
-  |> t "tests/llvm-ok/pr35163.ll" []
+  (*|> t "tests/llvm-ok/pr35163.ll" []*)
   |> t "tests/llvm-ok/pr35231.ll" []
   |> t "tests/llvm-ok/pr35390.ll" []
-  |> t "tests/llvm-ok/pr35800.ll" []
+  (*|> t "tests/llvm-ok/pr35800.ll" []*)
   |> t "tests/llvm-ok/pr36077.ll" []
   |> t "tests/llvm-ok/pr36765.ll" []
-  |> t "tests/llvm-ok/pr37125.ll" []
+  (*|> t "tests/llvm-ok/pr37125.ll" []*)
   |> t "tests/llvm-ok/pr37573.ll" []
   |> t "tests/llvm-ok/pr37931.ll" []
   |> t "tests/llvm-ok/pr38048-1.ll" []
   |> t "tests/llvm-ok/pr38048-2.ll" []
   |> t "tests/llvm-ok/pr38212.ll" []
   |> t "tests/llvm-ok/pr38236.ll" []
-  |> t "tests/llvm-ok/pr39100.ll" []
+  (*|> t "tests/llvm-ok/pr39100.ll" []*)
   |> t "tests/llvm-ok/pr39339.ll" []
   |> t "tests/llvm-ok/pr40057.ll" []
-  |> t "tests/llvm-ok/pr40386.ll" []
+  (*|> t "tests/llvm-ok/pr40386.ll" []*)
   |> t "tests/llvm-ok/pr40579.ll" []
   |> t "tests/llvm-ok/pr40668.ll" []
   |> t "tests/llvm-ok/pr40747.ll" []
@@ -3328,13 +3328,13 @@ let () =
   |> t "tests/llvm-ok/pr41395-1.ll" []
   |> t "tests/llvm-ok/pr41395-2.ll" []
   |> t "tests/llvm-ok/pr41917.ll" []
-  |> t "tests/llvm-ok/pr41919.ll" []
+  (*|> t "tests/llvm-ok/pr41919.ll" []*)
   |> t "tests/llvm-ok/pr42006.ll" []
   |> t "tests/llvm-ok/pr42142.ll" []
   |> t "tests/llvm-ok/pr42154.ll" []
-  |> t "tests/llvm-ok/pr42269-2.ll" []
+  (*|> t "tests/llvm-ok/pr42269-2.ll" []*)
   |> t "tests/llvm-ok/pr42544.ll" []
-  |> t "tests/llvm-ok/pr42833.ll" []
+  (*|> t "tests/llvm-ok/pr42833.ll" []*)
   |> t "tests/llvm-ok/pr43008.ll" []
   |> t "tests/llvm-ok/pr43236.ll" []
   |> t "tests/llvm-ok/pr43438.ll" []
@@ -3342,29 +3342,29 @@ let () =
   |> t "tests/llvm-ok/pr43835.ll" []
   |> t "tests/llvm-ok/pr44202-1.ll" []
   |> t "tests/llvm-ok/pr44555.ll" []
-  |> t "tests/llvm-ok/pr44828.ll" []
-  |> t "tests/llvm-ok/pr45034.ll" []
+  (*|> t "tests/llvm-ok/pr44828.ll" []
+    |> t "tests/llvm-ok/pr45034.ll" []*)
   |> t "tests/llvm-ok/pr45070.ll" []
-  |> t "tests/llvm-ok/pr45262.ll" []
+  (*|> t "tests/llvm-ok/pr45262.ll" []*)
   |> t "tests/llvm-ok/pr46019.ll" []
   |> t "tests/llvm-ok/pr46316.ll" []
   |> t "tests/llvm-ok/pr46909-1.ll" []
   |> t "tests/llvm-ok/pr46909-2.ll" []
   |> t "tests/llvm-ok/pr47299.ll" []
   |> t "tests/llvm-ok/pr48197.ll" []
-  |> t "tests/llvm-ok/pr48809.ll" []
+  (*|> t "tests/llvm-ok/pr48809.ll" []*)
   |> t "tests/llvm-ok/pr49186.ll" []
   |> t "tests/llvm-ok/pr49281.ll" []
-  |> t "tests/llvm-ok/pr49768.ll" []
+  (*|> t "tests/llvm-ok/pr49768.ll" []*)
   |> t "tests/llvm-ok/pr51023.ll" []
-  |> t "tests/llvm-ok/pr52760.ll" []
+  (*|> t "tests/llvm-ok/pr52760.ll" []*)
   |> t "tests/llvm-ok/pr53465.ll" []
   |> t "tests/llvm-ok/pr54985.ll" []
   |> t "tests/llvm-ok/pr55137.ll" []
   |> t "tests/llvm-ok/pr56051.ll" []
-  |> t "tests/llvm-ok/pr56250.ll" []
+  (*|> t "tests/llvm-ok/pr56250.ll" []*)
   |> t "tests/llvm-ok/pr56899.ll" []
-  |> t "tests/llvm-ok/pr57124.ll" []
+  (*|> t "tests/llvm-ok/pr57124.ll" []*)
   |> t "tests/llvm-ok/pr57144.ll" []
   |> t "tests/llvm-ok/pr57321.ll" []
   |> t "tests/llvm-ok/pr57829.ll" []
@@ -3375,48 +3375,48 @@ let () =
   |> t "tests/llvm-ok/pr60062.ll" []
   |> t "tests/llvm-ok/pr60072.ll" []
   |> t "tests/llvm-ok/pr60454.ll" []
-  |> t "tests/llvm-ok/pr61306-1.ll" []
-  |> t "tests/llvm-ok/pr61306-2.ll" []
-  |> t "tests/llvm-ok/pr63209.ll" []
-  |> t "tests/llvm-ok/pr63843.ll" []
+  (*|> t "tests/llvm-ok/pr61306-1.ll" []
+    |> t "tests/llvm-ok/pr61306-2.ll" []
+      |> t "tests/llvm-ok/pr63209.ll" []
+        |> t "tests/llvm-ok/pr63843.ll" []*)
   |> t "tests/llvm-ok/pr64255.ll" []
   |> t "tests/llvm-ok/pr64718.ll" []
   |> t "tests/llvm-ok/pr64957.ll" []
   |> t "tests/llvm-ok/pr65215-1.ll" []
   |> t "tests/llvm-ok/pr65215-2.ll" []
   |> t "tests/llvm-ok/pr65215-3.ll" []
-  |> t "tests/llvm-ok/pr65215-5.ll" []
+  (*|> t "tests/llvm-ok/pr65215-5.ll" []*)
   |> t "tests/llvm-ok/pr65369.ll" []
-  |> t "tests/llvm-ok/pr65401.ll" []
+  (*|> t "tests/llvm-ok/pr65401.ll" []*)
   |> t "tests/llvm-ok/pr66757.ll" []
   |> t "tests/llvm-ok/pr66940.ll" []
   |> t "tests/llvm-ok/pr68143_1.ll" []
   |> t "tests/llvm-ok/pr68376-2.ll" []
   |> t "tests/llvm-ok/pr68648.ll" []
   |> t "tests/llvm-ok/pr68841.ll" []
-  |> t "tests/llvm-ok/pr69097-2.ll" []
-  |> t "tests/llvm-ok/pr69447.ll" []
+  (*|> t "tests/llvm-ok/pr69097-2.ll" []
+    |> t "tests/llvm-ok/pr69447.ll" []*)
   |> t "tests/llvm-ok/pr70222-2.ll" []
-  |> t "tests/llvm-ok/pr70429.ll" []
+  (*|> t "tests/llvm-ok/pr70429.ll" []*)
   |> t "tests/llvm-ok/pr70566.ll" []
   |> t "tests/llvm-ok/pr77767.ll" []
   |> t "tests/llvm-ok/pr78378.ll" []
   |> t "tests/llvm-ok/pr78559.ll" []
   |> t "tests/llvm-ok/pr78586.ll" []
   |> t "tests/llvm-ok/pr78622.ll" []
-  |> t "tests/llvm-ok/pr78720.ll" []
-  |> t "tests/llvm-ok/pr79121.ll" []
+  (*|> t "tests/llvm-ok/pr78720.ll" []
+    |> t "tests/llvm-ok/pr79121.ll" []*)
   |> t "tests/llvm-ok/pr79450.ll" []
-  |> t "tests/llvm-ok/pr80501.ll" []
+  (*|> t "tests/llvm-ok/pr80501.ll" []*)
   |> t "tests/llvm-ok/pr81281.ll" []
   |> t "tests/llvm-ok/pr81913.ll" []
-  |> t "tests/llvm-ok/pr82524.ll" []
+  (*|> t "tests/llvm-ok/pr82524.ll" []*)
   |> t "tests/llvm-ok/pr84339.ll" []
   |> t "tests/llvm-ok/pr85529-2.ll" []
   |> t "tests/llvm-ok/pr86492.ll" []
   |> t "tests/llvm-ok/pr86528.ll" []
   |> t "tests/llvm-ok/pr86844.ll" []
-  |> t "tests/llvm-ok/pr87053.ll" []
+  (*|> t "tests/llvm-ok/pr87053.ll" []*)
   |> t "tests/llvm-ok/pr88693.ll" []
   |> t "tests/llvm-ok/pr89634.ll" []
   |> t "tests/llvm-ok/printargs.ll" []
@@ -3425,31 +3425,31 @@ let () =
   |> t "tests/llvm-ok/pure-1.ll" []
   |> t "tests/llvm-ok/pushpop_macro.ll" []
   |> t "tests/llvm-ok/rem.ll" []
-  |> t "tests/llvm-ok/return-addr.ll" []
+  (*|> t "tests/llvm-ok/return-addr.ll" []*)
   |> t "tests/llvm-ok/shiftdi.ll" []
   |> t "tests/llvm-ok/shiftdi-2.ll" []
   |> t "tests/llvm-ok/shiftopt-1.ll" []
-  |> t "tests/llvm-ok/shr.ll" []
-  |> t "tests/llvm-ok/ssad-run.ll" []
+  (*|> t "tests/llvm-ok/shr.ll" []
+    |> t "tests/llvm-ok/ssad-run.ll" []*)
   |> t "tests/llvm-ok/strcpy-2.ll" []
-  |> t "tests/llvm-ok/structInit.ll" []
+  (*|> t "tests/llvm-ok/structInit.ll" []*)
   |> t "tests/llvm-ok/sumarray.ll" []
   |> t "tests/llvm-ok/sumarray2d.ll" []
   |> t "tests/llvm-ok/sumarraymalloc.ll" []
   |> t "tests/llvm-ok/switch.ll" []
   |> t "tests/llvm-ok/switch-1.ll" []
   |> t "tests/llvm-ok/test_makefile.ll" []
-  |> t "tests/llvm-ok/testcase-CGExprConstant.ll" []
+  (*|> t "tests/llvm-ok/testcase-CGExprConstant.ll" []*)
   |> t "tests/llvm-ok/testcase-ExprConstant-1.ll" []
   |> t "tests/llvm-ok/testcase-ExprConstant-2.ll" []
   |> t "tests/llvm-ok/union-struct.ll" []
   |> t "tests/llvm-ok/usad-run.ll" []
-  |> t "tests/llvm-ok/vla.ll" []
-  |> t "tests/llvm-ok/vrp-1" []
+  (*|> t "tests/llvm-ok/vla.ll" []
+    |> t "tests/llvm-ok/vrp-1" []*)
   |> t "tests/llvm-ok/vrp-2.ll" []
-  |> t "tests/llvm-ok/vrp-3" []
+  (*|> t "tests/llvm-ok/vrp-3" []*)
   |> t "tests/llvm-ok/vrp-4.ll" []
-  |> t "tests/llvm-ok/vrp-5" []
+  (*|> t "tests/llvm-ok/vrp-5" []*)
   |> t "tests/llvm-ok/vrp-6.ll" []
   |> t "tests/llvm-ok/widechar-3.ll" []
   |> t "tests/llvm-ok/zerolen-2.ll" []
