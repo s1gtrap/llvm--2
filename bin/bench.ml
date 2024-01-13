@@ -27,8 +27,8 @@ let create_process_and_read_stdout command args =
   ignore (waitpid [] pid);
   output
 
-let bench f a c =
-  let e = compile_test c f [||] in
+let bench f a?(cargs = [||]) c =
+  let e = compile_test c f cargs in
   match Llvm__2.Regalloc.os with
   | Darwin ->
       let command = "/usr/bin/time" in
@@ -48,7 +48,7 @@ let bench f a c =
       | cycles :: _ -> Int64.of_string cycles
       | _ -> failwith ("illegal perf output: " ^ output))
 
-let bench_n f a n c =
+let bench_n f a n?(cargs = [||]) c =
   let rec iter mi sum ma = function
     | n when n <= 0 ->
         (*let cycles = bench f a c in
@@ -56,7 +56,7 @@ let bench_n f a n c =
           (Int64.min cycles mi, Int64.add cycles sum, Int64.max cycles ma)*)
         (mi, sum, ma)
     | n ->
-        let cycles = bench f a c in
+        let cycles = bench f a ~cargs:cargs c in
         let newmin = Int64.min cycles mi in
         let newsum = Int64.add cycles sum in
         let newmax = Int64.max cycles ma in
@@ -65,9 +65,9 @@ let bench_n f a n c =
   let min, avg, max = iter Int64.max_int 0L Int64.min_int n in
   (f, a, min, Int64.div avg (Int64.of_int n), max)
 
-let bench_all_n f a n c =
+let bench_all_n f a n?(cargs = [||]) c =
   flush Stdlib.stdout;
-  let cf, ca, cmin, cavg, cmax = bench_n f a n Clang in
+  let cf, ca, cmin, cavg, cmax = bench_n f a n ~cargs:cargs Clang in
   (cf, ca, Clang, cmin, cavg, cmax, 1.0, 1.0)
   :: List.map
        (fun c ->
@@ -164,7 +164,8 @@ let () =
           Llvm__2 (Llvm__2.Regalloc.Linearscan 12);
           Llvm__2 (Llvm__2.Regalloc.Greedy 12);
           Llvm__2 (Llvm__2.Regalloc.Greedy 0);
-        ]) args =
+        ])
+      ?(cargs = [||])args =
     if matches !filter f then (
       if !table then (
         Printf.printf "\\begin{NiceTabular}{|c|%s|}\n\\hline\n"
@@ -177,7 +178,7 @@ let () =
       let f args =
         Printf.printf "%s "
           (Ll.mapcat "\\\\\\" (fun s -> s) (Array.to_list args));
-        bench_all_n f args !n compilers |> List.iteri print;
+        bench_all_n f args !n ~cargs:cargs compilers |> List.iteri print;
         if !table then Printf.printf "\\\\\n";
         flush Stdlib.stdout
       in
@@ -234,7 +235,41 @@ let () =
       [| "32" |];
     ];
 
-  b "benches/loopn0.ll"
+
+  b "benches/phis0.ll"  [[||]];
+  b "benches/phis1.ll"  [[||]];
+  b "benches/phis2.ll"  [[||]];
+  b "benches/phis3.ll"  [[||]];
+  b "benches/phis4.ll"  [[||]];
+  b "benches/phis5.ll"  [[||]];
+  b "benches/phis6.ll"  [[||]];
+  b "benches/phis7.ll"  [[||]];
+
+  (*b "benches/phis0.ll" ~cargs:[|"-O1"|] [[||]];
+  b "benches/phis1.ll" ~cargs:[|"-O1"|] [[||]];
+  b "benches/phis2.ll" ~cargs:[|"-O1"|] [[||]];
+  b "benches/phis3.ll"~cargs:[|"-O1"|]  [[||]];
+  b "benches/phis4.ll"~cargs:[|"-O1"|]  [[||]];
+  b "benches/phis5.ll"~cargs:[|"-O1"|]  [[||]];
+  b "benches/phis6.ll"~cargs:[|"-O1"|]  [[||]];
+  b "benches/phis7.ll"~cargs:[|"-O1"|]  [[||]];
+
+  b "benches/phis0.ll" ~cargs:[|"-O2"|] [[||]];
+  b "benches/phis1.ll" ~cargs:[|"-O2"|] [[||]];
+  b "benches/phis2.ll" ~cargs:[|"-O2"|] [[||]];
+  b "benches/phis3.ll"~cargs:[|"-O2"|]  [[||]];
+  b "benches/phis4.ll"~cargs:[|"-O2"|]  [[||]];
+  b "benches/phis5.ll"~cargs:[|"-O2"|]  [[||]];
+  b "benches/phis6.ll"~cargs:[|"-O2"|]  [[||]];
+  b "benches/phis7.ll"~cargs:[|"-O2"|]  [[||]];*)
+
+  (*b "benches/phis16.ll"  [[||]];
+  b "benches/phis32.ll"  [[||]];
+  b "benches/phis64.ll"  [[||]];
+  b "benches/phis128.ll"  [[||]];
+  b "benches/phis256.ll"  [[||]];*)
+
+  (*b "benches/phis0.ll"
     (* 1.31s *)
     [
       [| "65535" |] (* 2 ** 16 - 1 *);
@@ -245,7 +280,7 @@ let () =
       [| "2097151" |] (* 2 ** 21 - 1 *);
       [| "4194303" |] (* 2 ** 22 - 1 *);
       [| "8388607" |] (* 2 ** 23 - 1 *);
-    ];
+    ];*)
 
   b "benches/loopn1.ll"
     (* 0.85s *)
@@ -270,7 +305,7 @@ let () =
       [| "268435399" |];
       [| "536870909" |];
       [| "1073741789" |];
-      [| "2147483647" |];
+      (*[| "2147483647" |];*)
     ];
 
   b "benches/factori64.ll"
