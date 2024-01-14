@@ -145,15 +145,14 @@ let interf (params : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
   let t = List.fold_left param t params in
   let setverts t s = S.SS.fold vert3 s t in
   let t = List.map (def S.SS.empty) insns |> List.fold_left setverts t in
+  let ids = function Ll.Id id -> Some id | _ -> None in
   let defoutedges t (i, n) =
     let defs = def S.SS.empty n in
     let out =
       match n with
       | Cfg.Insn (_, Ll.PhiNode (_, ops)) ->
-          S.SS.diff out.(i)
-            (List.map fst ops
-            |> List.filter_map (function Ll.Id id -> Some id | _ -> None)
-            |> S.SS.of_list)
+          List.map fst ops |> List.filter_map ids |> S.SS.of_list
+          |> S.SS.diff out.(i)
       | _ -> out.(i)
     in
     let outedge e1 t = S.SS.fold (edge e1) out t in
