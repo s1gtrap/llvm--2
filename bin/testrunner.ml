@@ -189,6 +189,7 @@ let rec shuffle = function
   | list ->
       let before, after = List.partition (fun _ -> Random.bool ()) list in
       List.rev_append (shuffle before) (shuffle after)
+
 let _s = shuffle
 
 let () =
@@ -357,13 +358,13 @@ let () =
   |> t "tests/count1.ll" (List.init 4 string_of_int)
   |> t "tests/count1.ll" (List.init 5 string_of_int)
   (*|> t "tests/printints0.ll" []
-  |> t "tests/printints0.ll" [] ~stdin:"1\n"
-  |> t "tests/printints0.ll" [] ~stdin:"0\n1\n2\n"
-  |> t "tests/printints0.ll" [] ~stdin:"1\n2\n3\n4\n5\n6\n7\n8\n9\n10"
-  |> t "tests/printints1.ll" []
-  |> t "tests/printints1.ll" [] ~stdin:"1\n"
-  |> t "tests/printints1.ll" [] ~stdin:"0\n1\n2\n"
-  |> t "tests/printints1.ll" [] ~stdin:"1\n2\n3\n4\n5\n6\n7\n8\n9\n10"*)
+    |> t "tests/printints0.ll" [] ~stdin:"1\n"
+    |> t "tests/printints0.ll" [] ~stdin:"0\n1\n2\n"
+    |> t "tests/printints0.ll" [] ~stdin:"1\n2\n3\n4\n5\n6\n7\n8\n9\n10"
+    |> t "tests/printints1.ll" []
+    |> t "tests/printints1.ll" [] ~stdin:"1\n"
+    |> t "tests/printints1.ll" [] ~stdin:"0\n1\n2\n"
+    |> t "tests/printints1.ll" [] ~stdin:"1\n2\n3\n4\n5\n6\n7\n8\n9\n10"*)
   (*|> t "tests/printints-debug0.ll" []
     |> t "tests/printints-debug0.ll" [] ~stdin:"1\n"
     |> t "tests/printints-debug0.ll" [] ~stdin:"0\n1\n2\n"
@@ -2684,19 +2685,19 @@ let () =
   |> t "tests/icmpu64uge.ll" [ "-18446744073709551616"; "9223372036854775807" ]
      (* ./tests/select-icmp.py uge i64 @strtoull *)
   |> t "tests/icmpu64uge.ll" [ "9223372036854775807"; "9223372036854775807" ]
-     (* ./tests/select-icmp.py uge i64 @strtoull *)
+  (* ./tests/select-icmp.py uge i64 @strtoull *)
   (*|> t "tests/bubblesort0.ll" [] ~stdin:"1\n"
-  |> t "tests/bubblesort0.ll" []
-       ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")
-  |> t "tests/bubblesort1.ll" [] ~stdin:"1\n"
-  |> t "tests/bubblesort1.ll" []
-       ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")
-  |> t "tests/quicksort0.ll" [] ~stdin:"1\n"
-  |> t "tests/quicksort0.ll" []
-       ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")
-  |> t "tests/quicksort1.ll" [] ~stdin:"1\n"
-  |> t "tests/quicksort1.ll" []
-       ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")*)
+    |> t "tests/bubblesort0.ll" []
+         ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")
+    |> t "tests/bubblesort1.ll" [] ~stdin:"1\n"
+    |> t "tests/bubblesort1.ll" []
+         ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")
+    |> t "tests/quicksort0.ll" [] ~stdin:"1\n"
+    |> t "tests/quicksort0.ll" []
+         ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")
+    |> t "tests/quicksort1.ll" [] ~stdin:"1\n"
+    |> t "tests/quicksort1.ll" []
+         ~stdin:(List.init 1024 string_of_int |> shuffle |> String.concat "\n")*)
   |> t "tests/factorial0.ll" (List.init 0 string_of_int)
   |> t "tests/factorial0.ll" (List.init 1 string_of_int)
   |> t "tests/factorial0.ll" (List.init 2 string_of_int)
@@ -3119,8 +3120,8 @@ let () =
   |> t "tests/llvm/20031216-1.ll" []
   |> t "tests/llvm/2004-02-03-AggregateCopy.ll" []
   (*|> t "tests/llvm/2004-08-12-InlinerAndAllocas.ll" []
-    |> t "tests/llvm/20040309-1.ll" []
-  |> t "tests/llvm/20040311-1.ll" []*)
+      |> t "tests/llvm/20040309-1.ll" []
+    |> t "tests/llvm/20040311-1.ll" []*)
   |> t "tests/llvm/20040331-1.ll" []
   |> t "tests/llvm/20040409-1.ll" []
   |> t "tests/llvm/20040409-1w.ll" []
@@ -3131,7 +3132,7 @@ let () =
   |> t "tests/llvm/20040704-1.ll" []
   |> t "tests/llvm/20040820-1.ll" []
   (*|> t "tests/llvm/20041126-1.ll" []
-  |> t "tests/llvm/20041201-1.ll" []*)
+    |> t "tests/llvm/20041201-1.ll" []*)
   |> t "tests/llvm/20041213-2.ll" []
   |> t "tests/llvm/2005-05-06-LongLongSignedShift.ll" []
   (*|> t "tests/llvm/2005-05-13-SDivTwo.ll" []*)
@@ -3142,7 +3143,7 @@ let () =
   |> t "tests/llvm/20050107-1.ll" []
   |> t "tests/llvm/20050111-1.ll" []
   (*|> t "tests/llvm/20050119-1.ll" []
-  |> t "tests/llvm/20050119-2.ll" []*)
+    |> t "tests/llvm/20050119-2.ll" []*)
   |> t "tests/llvm/20050124-1.ll" []
   |> t "tests/llvm/20050224-1.ll" []
   |> t "tests/llvm/20050502-1.ll" []
@@ -3264,7 +3265,7 @@ let () =
   (*|> t "tests/llvm/ms_struct_pack_layout.ll" []*)
   |> t "tests/llvm/ms_struct_pack_layout-1.ll" []
   (*|> t "tests/llvm/nestedloop.ll" []
-  |> t "tests/llvm/nsieve-bits.ll" []*)
+    |> t "tests/llvm/nsieve-bits.ll" []*)
   |> t "tests/llvm/pointer.ll" []
   |> t "tests/llvm/pointer_arithmetic.ll" []
   (*|> t "tests/llvm/pr16790-1.ll" []*)
@@ -3405,9 +3406,9 @@ let () =
   |> t "tests/llvm/pr78378.ll" []
   |> t "tests/llvm/pr78559.ll" []
   (*|> t "tests/llvm/pr78586.ll" []
-  |> t "tests/llvm/pr78622.ll" []
-  |> t "tests/llvm/pr78720.ll" []
-    |> t "tests/llvm/pr79121.ll" []*)
+    |> t "tests/llvm/pr78622.ll" []
+    |> t "tests/llvm/pr78720.ll" []
+      |> t "tests/llvm/pr79121.ll" []*)
   |> t "tests/llvm/pr79450.ll" []
   (*|> t "tests/llvm/pr80501.ll" []*)
   |> t "tests/llvm/pr81281.ll" []
