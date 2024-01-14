@@ -37,7 +37,7 @@ let proglva ?(v = 0) ?(r = false) input =
   in
   List.iter fdecl prog.fdecls
 
-let progitf (alc : Regalloc.allocator) input =
+let progitf (alc : Common.allocator) input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
@@ -45,10 +45,10 @@ let progitf (alc : Regalloc.allocator) input =
     let ids, g = Cfg.graph fdecl.cfg in
     let insns = Cfg.flatten fdecl.cfg in
     let in_, out = Lva.dataflow insns ids g in
-    let prefs = Lva.prefer insns in
+    let prefs = Coalesce.prefer insns in
     let l, itf = Lva.interf fdecl.param insns in_ out in
     (* FIXME: harcoded k *)
-    let _, itf = Regalloc.coalesce alc prefs (l, itf) in
+    let _, itf = Coalesce.coalesce alc prefs (l, itf) in
     Printf.printf "%s\n" (Lva.dot itf);
     ()
   in
@@ -66,7 +66,7 @@ let proglra input =
   in
   List.iter fdecl prog.fdecls
 
-let progasn (alloc_ : Regalloc.allocator) input =
+let progasn (alloc_ : Common.allocator) input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
@@ -82,13 +82,13 @@ let progasn (alloc_ : Regalloc.allocator) input =
   in
   List.iter fdecl prog.fdecls
 
-let progx86 (alloc_ : Regalloc.allocator) debug input =
+let progx86 (alloc_ : Common.allocator) debug input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let prog = Regalloc.compile_prog alloc_ debug prog in
   Printf.printf "%s\n" (Regalloc.string_of_prog prog)
 
-let progexe output cargs (alloc_ : Regalloc.allocator) debug input =
+let progexe output cargs (alloc_ : Common.allocator) debug input =
   let input = open_ input in
   let prog = Parse.from_channel Llparser.prog input in
   let prog = Regalloc.compile_prog alloc_ debug prog in
@@ -117,7 +117,7 @@ let progprefs input =
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
     Printf.printf "%s:\n" (Symbol.name name);
     let insns = Cfg.flatten fdecl.cfg in
-    let prefs = Lva.prefer insns in
+    let prefs = Coalesce.prefer insns in
     Symbol.ST.iter
       (fun k v ->
         Printf.printf "%s: " (Symbol.name k);
@@ -168,7 +168,7 @@ let () =
 
   Arg.parse speclist anon_fun usage_msg;
 
-  let alc = Regalloc.allocator_of_string !n !alloc in
+  let alc = Common.allocator_of_string !n !alloc in
 
   let oper =
     match !oper with

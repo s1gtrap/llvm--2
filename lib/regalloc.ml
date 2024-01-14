@@ -86,8 +86,14 @@ type opcode =
   | Negq
   | Notq
   | Addq
+  | Addl
+  | Addw
+  | Addb
   | Subq
   | Imulq
+  | Imull
+  | Imulw
+  | Imulb
   | Xorq
   | Orq
   | Andq
@@ -178,8 +184,14 @@ let string_of_opcode (opc : opcode) : string =
   | Negq -> "negq"
   | Notq -> "notq"
   | Addq -> "addq"
+  | Addl -> "addl"
+  | Addw -> "addw"
+  | Addb -> "addb"
   | Subq -> "subq"
   | Imulq -> "imulq"
+  | Imull -> "imull"
+  | Imulw -> "imulw"
+  | Imulb -> "imulb"
   | Xorq -> "xorq"
   | Orq -> "orq"
   | Andq -> "andq"
@@ -511,42 +523,51 @@ let rec size_ty : (Ll.uid * Ll.ty) list -> Ll.ty -> int =
       / 16 * 16
   | Array (len, ty) -> len * size_ty tdecls ty
 
-let compile_gep tdecls asn (ty, oper) ops =
+let compile_gep tdecls asn (_ty, oper) ops =
   let base = compile_operand asn Ll.I64 (Reg Rcx) oper in
-  let rec gep : Ll.operand list -> Ll.ty -> ins list list -> ins list list =
+  let rec gep = function
+    | (ty, op) :: tail ->
+        let ins = compile_typed_operand asn ty (Reg Rax) op in
+        let mul, add =
+          match ty with
+          | Ll.I64 -> (Imulq, Addq)
+          | Ll.I32 -> (Imulq, Addq)
+          | _ -> failwith ""
+        in
+        ins
+        @ [
+            (mul, [ Imm (Lit (Int64.of_int (size_ty tdecls ty))); Reg Rax ]);
+            (add, [ Reg Rax; Reg Rcx ]);
+          ]
+        @ gep tail
+    | [] -> []
+  in
+  base @ gep ops
+(*let rec gep : Ll.operand list -> Ll.ty -> ins list list -> ins list list =
    fun ops ty insns ->
     match (ty, ops) with
     | Namedt tid, _ -> gep ops (lookup tdecls tid) insns
-    | Struct _, IConst32 i :: tail ->
-        let offset : Ll.ty -> int -> int * Ll.ty =
-         fun ty idx ->
-          match ty with
-          | Struct tys ->
-              let rec get tys idx offset =
-                match tys with
-                | ty :: _ when idx == 0 -> (offset, ty)
-                | ty :: tys -> get tys (idx - 1) (offset + size_ty tdecls ty)
-                | _ -> raise BackendFatal
-              in
-              get tys idx 0
-          | _ -> raise BackendFatal
-        in
-        let parins =
-          compile_operand asn Ll.I64 (Reg Rax) (IConst64 (Int64.of_int32 i))
-        in
-        let offset, ty = offset ty (Int32.to_int i) in
-        let offsins = (Movq, [ Imm (Lit (Int64.of_int offset)); Reg Rax ]) in
-        let childins = (Addq, [ Reg Rax; Reg Rcx ]) in
-        gep tail ty ((parins @ [ offsins; childins ]) :: insns)
+    | Struct _, IConst32 i :: _tail ->
+        Printf.printf "struct i32 %s\n" (Int32.to_string i);
+        failwith ""
+    | Struct (ty :: ttail), op :: tail ->
+        let ins = compile_typed_operand asn ty (Reg Rcx) op in
+        Printf.printf "struct i64 %s\n" (Ll.string_of_operand op);
+        gep tail (Struct ttail)
+          [
+            ins @ [ (Imulq, [ Imm (Lit (Int64.of_int (size_ty tdecls ty))) ]) ];
+          ]
     | Array (_, ty), head :: tail ->
         let elmsize = size_ty tdecls ty in
         let parins = compile_operand asn Ll.I64 (Reg Rax) head in
         let offsins = (Imulq, [ Imm (Lit (Int64.of_int elmsize)); Reg Rax ]) in
         let childins = (Addq, [ Reg Rax; Reg Rcx ]) in
         gep tail ty ((parins @ [ offsins; childins ]) :: insns)
-    | _, head :: tail ->
+    | ty, head :: tail ->
         let parins = compile_operand asn Ll.I64 (Reg Rax) head in
-        let offsins = (Imulq, [ Imm (Lit 8L); Reg Rax ]) in
+        let offsins =
+          (Imulq, [ Imm (Lit (size_ty tdecls ty |> Int64.of_int)); Reg Rax ])
+        in
         let childins = (Addq, [ Reg Rax; Reg Rcx ]) in
         gep tail ty ((parins @ [ offsins; childins ]) :: insns)
     | _, [] -> List.rev insns
@@ -554,7 +575,7 @@ let compile_gep tdecls asn (ty, oper) ops =
   base
   @ List.concat
       (* FIXME: test if indices of varying types works: *)
-      (gep (List.map snd ops) (Array (0, ty)) [])
+      (gep (List.map snd ops) (Array (0, ty)) [])*)
 
 let compile_bop : Ll.bop -> Ll.ty -> opcode =
  fun bop ty ->

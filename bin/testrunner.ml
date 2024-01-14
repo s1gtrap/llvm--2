@@ -357,6 +357,7 @@ let () =
   |> t "tests/count1.ll" (List.init 3 string_of_int)
   |> t "tests/count1.ll" (List.init 4 string_of_int)
   |> t "tests/count1.ll" (List.init 5 string_of_int)
+  |> t "tests/vector.ll" []
   (*|> t "tests/printints0.ll" []
     |> t "tests/printints0.ll" [] ~stdin:"1\n"
     |> t "tests/printints0.ll" [] ~stdin:"0\n1\n2\n"
