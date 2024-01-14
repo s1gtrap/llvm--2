@@ -49,14 +49,14 @@ rule token = parse
   | "sdiv"             { SDIV }
   | "srem"             { SREM }
   | "xor"              { XOR }
-  | "slt"              { SLT }
-  | "sle"              { SLE }
-  | "sgt"              { SGT }
-  | "sge"              { SGE }
+  | "ult"  | "slt"              { SLT }
+  | "ule"  | "sle"              { SLE }
+  | "ugt"  | "sgt"              { SGT }
+  | "uge"  | "sge"              { SGE }
   | "shl"              { SHL }
   | "ret"              { RET }
   | "getelementptr"    { GEP }
-  | "zext"             { ZEXT }
+  | "sext" | "zext"             { ZEXT }
   | "ptrtoint"         { PTRTOINT }
   | "trunc"            { TRUNC }
   | "type"             { TYPE }

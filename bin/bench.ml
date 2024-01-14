@@ -156,14 +156,14 @@ let () =
   let b f
       ?(compilers =
         [
-          Llvm__2 (Llvm__2.Regalloc.Simple 12);
-          Llvm__2 (Llvm__2.Regalloc.Simple 2);
-          Llvm__2 (Llvm__2.Regalloc.Briggs 12);
-          Llvm__2 (Llvm__2.Regalloc.Briggs 2);
-          Llvm__2 (Llvm__2.Regalloc.Linearscan 12);
-          Llvm__2 (Llvm__2.Regalloc.Linearscan 2);
-          Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-          Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+          Llvm__2 (Common.Simple 12);
+          Llvm__2 (Common.Simple 2);
+          Llvm__2 (Common.Briggs 12);
+          Llvm__2 (Common.Briggs 2);
+          Llvm__2 (Common.Linearscan 12);
+          Llvm__2 (Common.Linearscan 2);
+          Llvm__2 (Common.Greedy 12);
+          Llvm__2 (Common.Greedy 0);
         ]) ?(cargs = [||]) args =
     if matches !filter f then (
       if !table then (
@@ -209,13 +209,13 @@ let () =
   b "benches/fib.ll" (* 1.33s *)
     ~compilers:
       [
-        Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 8);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 6);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 4);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 2);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 1);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+        Llvm__2 (Common.Greedy 12);
+        Llvm__2 (Common.Greedy 8);
+        Llvm__2 (Common.Greedy 6);
+        Llvm__2 (Common.Greedy 4);
+        Llvm__2 (Common.Greedy 2);
+        Llvm__2 (Common.Greedy 1);
+        Llvm__2 (Common.Greedy 0);
         Tiger;
       ]
     [
@@ -279,10 +279,10 @@ let () =
       [| "4194303" |] (* 2 ** 22 - 1 *);
       [| "8388607" |] (* 2 ** 23 - 1 *);
     ];*)
-  b "benches/loopn1.ll"
+  b "benches/loopn0.ll"
     (* 0.85s *)
     [
-      [| "65535" |] (* 2 ** 16 - 1 *);
+      (*[| "65535" |] (* 2 ** 16 - 1 *);*)
       [| "131071" |] (* 2 ** 17 - 1 *);
       [| "262143" |] (* 2 ** 18 - 1 *);
       [| "524287" |] (* 2 ** 19 - 1 *);
@@ -292,8 +292,57 @@ let () =
       [| "8388607" |] (* 2 ** 23 - 1 *);
     ];
 
-  b "benches/factori32.ll"
+  b "benches/loopn0.ll" (* ??? *)
+    ~compilers:
+      [
+        Llvm__2 (Common.Greedy 12);
+        Llvm__2 (Common.Greedy 8);
+        Llvm__2 (Common.Greedy 6);
+        Llvm__2 (Common.Greedy 4);
+        Llvm__2 (Common.Greedy 2);
+        Llvm__2 (Common.Greedy 1);
+        Llvm__2 (Common.Greedy 0);
+        Tiger;
+      ]
+    [
+      (*[| "65535" |] (* 2 ** 16 - 1 *);*)
+      [| "131071" |] (* 2 ** 17 - 1 *);
+      [| "262143" |] (* 2 ** 18 - 1 *);
+      [| "524287" |] (* 2 ** 19 - 1 *);
+      [| "1048575" |] (* 2 ** 20 - 1 *);
+      [| "2097151" |] (* 2 ** 21 - 1 *);
+      [| "4194303" |] (* 2 ** 22 - 1 *);
+      [| "8388607" |] (* 2 ** 23 - 1 *);
+    ];
+
+  b "benches/loopn1.ll"
+    (* 0.85s *)
+    [
+      (*[| "65535" |] (* 2 ** 16 - 1 *);*)
+      [| "131071" |] (* 2 ** 17 - 1 *);
+      [| "262143" |] (* 2 ** 18 - 1 *);
+      [| "524287" |] (* 2 ** 19 - 1 *);
+      [| "1048575" |] (* 2 ** 20 - 1 *);
+      [| "2097151" |] (* 2 ** 21 - 1 *);
+      [| "4194303" |] (* 2 ** 22 - 1 *);
+      [| "8388607" |] (* 2 ** 23 - 1 *);
+    ];
+
+  b "benches/factori32-O0.ll"
     (* 123,85s *)
+    [
+      [| "16777213" |];
+      [| "33554393" |];
+      [| "67108859" |];
+      [| "134217689" |];
+      [| "268435399" |];
+      [| "536870909" |];
+      [| "1073741789" |];
+      (*[| "2147483647" |];*)
+    ];
+
+  b "benches/factori32-O1.ll"
+    (* ??? *)
     [
       [| "16777213" |];
       [| "33554393" |];
@@ -332,7 +381,7 @@ let () =
       [| "16384" |];
     ];
 
-  b "benches/subset.ll"
+  b "benches/subset.ll" ~compilers:[ Tiger ]
     (* 2,67s *)
     [
       Array.init 20 string_of_int;
@@ -362,13 +411,13 @@ let () =
   b "benches/fannkuch-redux.ll"
     ~compilers:
       [
-        Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 8);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 6);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 4);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 2);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 1);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+        Llvm__2 (Common.Greedy 12);
+        Llvm__2 (Common.Greedy 8);
+        Llvm__2 (Common.Greedy 6);
+        Llvm__2 (Common.Greedy 4);
+        Llvm__2 (Common.Greedy 2);
+        Llvm__2 (Common.Greedy 1);
+        Llvm__2 (Common.Greedy 0);
         Tiger;
       ]
     (* 123,61s *)
@@ -402,13 +451,13 @@ let () =
   b "benches/sha256.ll"
     ~compilers:
       [
-        Llvm__2 (Llvm__2.Regalloc.Greedy 12);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 8);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 6);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 4);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 2);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 1);
-        Llvm__2 (Llvm__2.Regalloc.Greedy 0);
+        Llvm__2 (Common.Greedy 12);
+        Llvm__2 (Common.Greedy 8);
+        Llvm__2 (Common.Greedy 6);
+        Llvm__2 (Common.Greedy 4);
+        Llvm__2 (Common.Greedy 2);
+        Llvm__2 (Common.Greedy 1);
+        Llvm__2 (Common.Greedy 0);
         Tiger;
       ]
     (* 623,21s *)
