@@ -20,13 +20,13 @@ define i32 @main() {
   %14 = phi i32 [%5, %0], [%14, %8]
   %15 = phi i32 [%6, %0], [%15, %8]
   %16 = phi i32 [%7, %0], [%16, %8]
-  ;call void @printf (i8* @.str, i32 %10)
-  ;call void @printf (i8* @.str, i32 %11)
-  ;call void @printf (i8* @.str, i32 %12)
-  ;call void @printf (i8* @.str, i32 %13)
-  ;call void @printf (i8* @.str, i32 %14)
-  ;call void @printf (i8* @.str, i32 %15)
-  ;call void @printf (i8* @.str, i32 %16)
+  call void @printf (i8* @.str, i32 %10)
+  call void @printf (i8* @.str, i32 %11)
+  call void @printf (i8* @.str, i32 %12)
+  call void @printf (i8* @.str, i32 %13)
+  call void @printf (i8* @.str, i32 %14)
+  call void @printf (i8* @.str, i32 %15)
+  call void @printf (i8* @.str, i32 %16)
   %17 = add i32 %10, %16
   %18 = add i32 %11, %15
   %19 = add i32 %12, %14
@@ -34,13 +34,13 @@ define i32 @main() {
   %21 = add i32 %14, %12
   %22 = add i32 %15, %11
   %23 = add i32 %16, %10
-  ;call void @printf (i8* @.str, i32 %17)
-  ;call void @printf (i8* @.str, i32 %18)
-  ;call void @printf (i8* @.str, i32 %19)
-  ;call void @printf (i8* @.str, i32 %20)
-  ;call void @printf (i8* @.str, i32 %21)
-  ;call void @printf (i8* @.str, i32 %22)
-  ;call void @printf (i8* @.str, i32 %23)
+  call void @printf (i8* @.str, i32 %17)
+  call void @printf (i8* @.str, i32 %18)
+  call void @printf (i8* @.str, i32 %19)
+  call void @printf (i8* @.str, i32 %20)
+  call void @printf (i8* @.str, i32 %21)
+  call void @printf (i8* @.str, i32 %22)
+  call void @printf (i8* @.str, i32 %23)
   %24 = add i32 %9, 1
   %25 = icmp eq i32 %24, 536870912
   br i1 %25, label %26, label %8

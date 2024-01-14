@@ -14,18 +14,18 @@ define i32 @main() {
   %8 = phi i32 [%2, %0], [%8, %5]
   %9 = phi i32 [%3, %0], [%9, %5]
   %10 = phi i32 [%4, %0], [%10, %5]
-  ;call void @printf (i8* @.str, i32 %7)
-  ;call void @printf (i8* @.str, i32 %8)
-  ;call void @printf (i8* @.str, i32 %9)
-  ;call void @printf (i8* @.str, i32 %10)
+  call void @printf (i8* @.str, i32 %7)
+  call void @printf (i8* @.str, i32 %8)
+  call void @printf (i8* @.str, i32 %9)
+  call void @printf (i8* @.str, i32 %10)
   %11 = add i32 %7, %10
   %12 = add i32 %8, %9
   %13 = add i32 %9, %8
   %14 = add i32 %10, %7
-  ;call void @printf (i8* @.str, i32 %11)
-  ;call void @printf (i8* @.str, i32 %12)
-  ;call void @printf (i8* @.str, i32 %13)
-  ;call void @printf (i8* @.str, i32 %14)
+  call void @printf (i8* @.str, i32 %11)
+  call void @printf (i8* @.str, i32 %12)
+  call void @printf (i8* @.str, i32 %13)
+  call void @printf (i8* @.str, i32 %14)
   %15 = add i32 %6, 1
   %16 = icmp eq i32 %15, 536870912
   br i1 %16, label %17, label %5
