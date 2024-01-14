@@ -252,6 +252,8 @@ let () =
   b "benches/phis6.ll" [ [||] ];
   b "benches/phis7.ll" [ [||] ];
 
+  b "benches/hot-n-cold.ll" [ [||] ];
+
   (*b "benches/phis0.ll" ~cargs:[|"-O1"|] [[||]];
     b "benches/phis1.ll" ~cargs:[|"-O1"|] [[||]];
     b "benches/phis2.ll" ~cargs:[|"-O1"|] [[||]];
