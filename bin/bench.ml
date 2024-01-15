@@ -252,42 +252,6 @@ let () =
   b "benches/phis6.ll" [ [||] ];
   b "benches/phis7.ll" [ [||] ];
 
-  (*b "benches/phis0.ll" ~cargs:[|"-O1"|] [[||]];
-    b "benches/phis1.ll" ~cargs:[|"-O1"|] [[||]];
-    b "benches/phis2.ll" ~cargs:[|"-O1"|] [[||]];
-    b "benches/phis3.ll"~cargs:[|"-O1"|]  [[||]];
-    b "benches/phis4.ll"~cargs:[|"-O1"|]  [[||]];
-    b "benches/phis5.ll"~cargs:[|"-O1"|]  [[||]];
-    b "benches/phis6.ll"~cargs:[|"-O1"|]  [[||]];
-    b "benches/phis7.ll"~cargs:[|"-O1"|]  [[||]];
-
-    b "benches/phis0.ll" ~cargs:[|"-O2"|] [[||]];
-    b "benches/phis1.ll" ~cargs:[|"-O2"|] [[||]];
-    b "benches/phis2.ll" ~cargs:[|"-O2"|] [[||]];
-    b "benches/phis3.ll"~cargs:[|"-O2"|]  [[||]];
-    b "benches/phis4.ll"~cargs:[|"-O2"|]  [[||]];
-    b "benches/phis5.ll"~cargs:[|"-O2"|]  [[||]];
-    b "benches/phis6.ll"~cargs:[|"-O2"|]  [[||]];
-    b "benches/phis7.ll"~cargs:[|"-O2"|]  [[||]];*)
-
-  (*b "benches/phis16.ll"  [[||]];
-    b "benches/phis32.ll"  [[||]];
-    b "benches/phis64.ll"  [[||]];
-    b "benches/phis128.ll"  [[||]];
-    b "benches/phis256.ll"  [[||]];*)
-
-  (*b "benches/phis0.ll"
-    (* 1.31s *)
-    [
-      [| "65535" |] (* 2 ** 16 - 1 *);
-      [| "131071" |] (* 2 ** 17 - 1 *);
-      [| "262143" |] (* 2 ** 18 - 1 *);
-      [| "524287" |] (* 2 ** 19 - 1 *);
-      [| "1048575" |] (* 2 ** 20 - 1 *);
-      [| "2097151" |] (* 2 ** 21 - 1 *);
-      [| "4194303" |] (* 2 ** 22 - 1 *);
-      [| "8388607" |] (* 2 ** 23 - 1 *);
-    ];*)
   b "benches/loopn0.ll"
     (* 0.85s *)
     [
