@@ -2,11 +2,11 @@
 
 ## Dependencies
 
-This has been using clang 17, available on Homebrew and AUR:
+This has been using clang 16, available on Homebrew and AUR:
 ```bash
-brew install llvm
+brew install llvm@16
 -- or --
-yay -S clang17
+yay -S clang16
 ```
 It might work for earlier releases as well.
 
@@ -41,10 +41,15 @@ dune exec build -- [options] file...
 
 ## Testing
 
-Run the test suite for files/allocators only matching `filter` if specified:
+Run the test suite for files matching `filter` if specified:
+
+
+## Benchmarks
+
+Run the benchmarks for all files matching optional filter with n repetitions.
 
 ```bash
-dune exec tests -- [filter]
+dune exec tests -- [-f filter] [-n number of repetitions]
 ```
 
 ## Profiling
