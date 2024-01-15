@@ -352,21 +352,6 @@ let () =
       [| "16384" |];
     ];
 
-  b "benches/subset.ll" ~compilers:[ Tiger ]
-    (* 2,67s *)
-    [
-      Array.init 20 string_of_int;
-      Array.init 21 string_of_int;
-      Array.init 22 string_of_int;
-      Array.init 23 string_of_int;
-      Array.init 24 string_of_int;
-      Array.init 25 string_of_int;
-      (*Array.init 26 string_of_int;
-        Array.init 27 string_of_int;*)
-      (* (Array.init 19 string_of_int) n
-         (Array.init 20 string_of_int) n*)
-    ];
-
   b "benches/fannkuch-redux.ll"
     (* 123,61s *)
     [
@@ -379,58 +364,8 @@ let () =
       [| "10" |];
     ];
 
-  b "benches/fannkuch-redux.ll"
-    ~compilers:
-      [
-        Llvm__2 (Common.Greedy 12);
-        Llvm__2 (Common.Greedy 8);
-        Llvm__2 (Common.Greedy 6);
-        Llvm__2 (Common.Greedy 4);
-        Llvm__2 (Common.Greedy 2);
-        Llvm__2 (Common.Greedy 1);
-        Llvm__2 (Common.Greedy 0);
-        Tiger;
-      ]
-    (* 123,61s *)
-    [
-      [| "4" |];
-      [| "5" |];
-      [| "6" |];
-      [| "7" |];
-      [| "8" |];
-      [| "9" |];
-      [| "10" |];
-    ];
 
   b "benches/sha256.ll"
-    (* 623,21s *)
-    [
-      [| "4" |];
-      [| "8" |];
-      [| "16" |];
-      [| "32" |];
-      [| "64" |];
-      [| "128" |];
-      [| "256" |];
-      [| "512" |];
-      [| "1024" |];
-      [| "2048" |];
-      [| "4096" |];
-      [| "8192" |];
-    ];
-
-  b "benches/sha256.ll"
-    ~compilers:
-      [
-        Llvm__2 (Common.Greedy 12);
-        Llvm__2 (Common.Greedy 8);
-        Llvm__2 (Common.Greedy 6);
-        Llvm__2 (Common.Greedy 4);
-        Llvm__2 (Common.Greedy 2);
-        Llvm__2 (Common.Greedy 1);
-        Llvm__2 (Common.Greedy 0);
-        Tiger;
-      ]
     (* 623,21s *)
     [
       [| "4" |];
@@ -446,6 +381,3 @@ let () =
       [| "4096" |];
       [| "8192" |];
     ]
-
-(*b "benches/sha256-stdin.ll"
-  [ [| "100" |]; [| "1000" |]; [| "10000" |] ];*)
