@@ -24,7 +24,7 @@ let use (s : S.SS.t) (insn : Cfg.insn) =
   | Insn (_, Gep (_, bop, ops)) ->
       List.map snd ops |> List.fold_left po (op (snd bop) s)
   | Insn (_, Select (c, (_, l), (_, r))) -> op c s |> op l |> op r
-  | Insn (_, PhiNode (_, ops)) -> List.map fst ops |> List.fold_left po s
+  | Insn (_, PhiNode (_, _ops)) -> s
   | Term (Ret (_, Some o) | Cbr (o, _, _) | Switch (_, o, _, _)) -> op o s
   | Term (Ret (_, None) | Unreachable | Br _) -> s
 
