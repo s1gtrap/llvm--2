@@ -28,6 +28,25 @@ let use (s : S.SS.t) (insn : Cfg.insn) =
   | Term (Ret (_, Some o) | Cbr (o, _, _) | Switch (_, o, _, _)) -> op o s
   | Term (Ret (_, None) | Unreachable | Br _) -> s
 
+let use (s : S.SS.t) (insn : Ll.insn) =
+  let op o s = match o with Ll.Id i -> S.SS.add i s | _ -> s in
+  let po = Fun.flip op in
+  match insn with
+  | Alloca _ | Comment _ -> s
+  | AllocaN (_, (_, o))
+  | Bitcast (_, o, _)
+  | Load (_, o)
+  | Ptrtoint (_, o, _)
+  | Sext (_, o, _)
+  | Trunc (_, o, _)
+  | Zext (_, o, _) ->
+      op o s
+  | Binop (_, _, l, r) | Icmp (_, _, l, r) | Store (_, l, r) -> op l s |> op r
+  | Call (_, _, args) -> List.map snd args |> List.fold_left po s
+  | Gep (_, bop, ops) -> List.map snd ops |> List.fold_left po (op (snd bop) s)
+  | Select (c, (_, l), (_, r)) -> op c s |> op l |> op r
+  | PhiNode (_, _ops) -> s
+
 let printset s =
   let sos s = Ll.mapcat "," S.name (S.SS.elements s) in
   Printf.sprintf "{%s}" (sos s)
@@ -45,53 +64,92 @@ let print (insns : Cfg.insn list) (_ids : Cfg.G.V.t array) (_g : Cfg.G.t)
     insns;
   ()
 
-let dataflow (insns : Cfg.insn list) (ids : Cfg.G.V.t array) ?(v = 0)
-    ?(r = false) (g : Cfg.G.t) =
-  let insns = List.mapi (fun i v -> (i, v)) insns in
-  let insns = if r then List.rev insns else insns in
-  let in_ = Array.init (List.length insns) (Fun.const S.SS.empty) in
-  let out = Array.init (List.length insns) (Fun.const S.SS.empty) in
-  let changes = Array.init (List.length insns) (Fun.const []) in
-  let rec dataflow () =
-    let flowout (i, _) =
-      let succ = Cfg.G.succ g ids.(i) in
-      List.fold_left
-        (fun s v -> S.SS.union s in_.(Cfg.G.V.label v))
-        S.SS.empty succ
-    in
-    let flowin (i, insn) =
-      S.SS.union (use S.SS.empty insn) (S.SS.diff out.(i) (def S.SS.empty insn))
-    in
-    let flow changed (i, insn) =
-      let in' = flowin (i, insn) and out' = flowout (i, insn) in
-      let ic = not (S.SS.equal in' in_.(i))
-      and oc = not (S.SS.equal out' out.(i)) in
-      if ic then in_.(i) <- in';
-      if oc then out.(i) <- out';
-      if v > 0 then
-        changes.(i) <- (List.append changes.(i)) [ (in_.(i), out.(i)) ];
-      changed || ic || oc
-    in
-    if List.fold_left flow false insns then dataflow () else (in_, out)
+let dataflow (_insns : Cfg.insn list) (_ids : Cfg.G.V.t array) ?(v = 0)
+    ?(r = false) (_g : Cfg.G.t) =
+  let _ = (v, r) in
+  failwith ""
+
+let dataflow2 (((hname, head), tail) : Ll.cfg) (_ids, _g) =
+  let len = List.length head.insns + 1 in
+  let len =
+    List.fold_left
+      (fun a ((_, b) : _ * Ll.block) -> a + List.length b.insns + 1)
+      len tail
   in
-  let flow = dataflow () in
-  let printset s = Ll.mapcat "," S.name (S.SS.elements s) in
-  if v > 0 then (
-    Printf.printf "\\begin{NiceTabular}{|c|c c|%s|}\n"
-      (Ll.mapcat "|" (Fun.const "c c") changes.(0));
-    Printf.printf "  i & use & def & %s\\\\\n"
-      (Ll.mapcat " & " (Fun.const "in & out") changes.(0));
-    let printsets (s1, s2) = printset s1 ^ "  & " ^ printset s2 in
-    let insns = if r then List.rev insns else insns in
-    Array.to_list changes
-    |> List.iteri (fun i c ->
-           Printf.printf "%3d " i;
-           let insn = List.nth insns i in
-           Printf.printf " & %s"
-             (printsets (use S.SS.empty (snd insn), def S.SS.empty (snd insn)));
-           Printf.printf " & %s\\\\\n" (Ll.mapcat " & " printsets c));
-    Printf.printf "\\end{NiceTabular}\n");
-  flow
+  let in_ = Fun.const S.SS.empty |> Array.init len in
+  let out = Fun.const S.SS.empty |> Array.init len in
+  let phis source target =
+    let ({ insns; _ } : Ll.block) =
+      if Some target = hname then head
+      else List.find (fun (name, _) -> name = target) tail |> snd
+    in
+    List.filter_map
+      (function
+        | _, Ll.PhiNode (_, ops) ->
+            List.find_map
+              (function Ll.Id id, l when source = l -> Some id | _ -> None)
+              ops
+        | _ -> None)
+      insns
+    |> S.SS.of_list
+  in
+  let rec dataflow () =
+    let rec block (changed, i) : _ * Ll.block -> _ = function
+      | name, ({ insns = (def, ins) :: intail; _ } as b) ->
+          let use = use S.SS.empty ins in
+          let def =
+            Option.map S.SS.singleton def |> Option.value ~default:S.SS.empty
+          in
+          let in' = S.SS.diff out.(i) def |> S.SS.union use in
+          let inchanged = S.SS.equal in_.(i) in' |> not in
+          if inchanged then in_.(i) <- in';
+          let out' = in_.(i + 1) in
+          let outchanged = S.SS.equal out.(i) out' |> not in
+          if outchanged then out.(i) <- out';
+          let changed = changed || inchanged || outchanged in
+          block (changed, i + 1) (name, { b with insns = intail })
+      | name, { insns = []; terminator } ->
+          let _, blocks =
+            List.fold_left_map
+              (fun a ((n, b) : _ * Ll.block) ->
+                (a + List.length b.insns + 1, (a, n, b)))
+              (List.length head.insns + 1)
+              tail
+          in
+          let find l = List.find (fun (_, n, _) -> n = l) blocks in
+          let use =
+            match terminator with
+            | Ret (_, Some (Id o)) -> S.SS.singleton o
+            | Cbr (Id o, _, _) -> S.SS.singleton o
+            | _ -> S.SS.empty
+          in
+          let in' = S.SS.union use out.(i) in
+          let inchanged = S.SS.equal in_.(i) in' |> not in
+          if inchanged then in_.(i) <- in';
+          let out' =
+            match terminator with
+            | Br l ->
+                let lin, _, _ = find l in
+                S.SS.union in_.(lin) (phis name l)
+            | Cbr (_, l, r) ->
+                let lin, _, _ = find l and rin, _, _ = find r in
+                Printf.printf "%d %d\n" lin rin;
+                S.SS.union in_.(lin) in_.(rin)
+                |> S.SS.union (phis name l)
+                |> S.SS.union (phis name r)
+            | _ -> S.SS.empty
+          in
+          let outchanged = S.SS.equal out.(i) out' |> not in
+          if outchanged then out.(i) <- out';
+          (changed || inchanged || outchanged, i + 1)
+    in
+    let changed, i =
+      block (false, 0) (Option.value hname ~default:(S.symbol ""), head)
+    in
+    let changed, _ = List.fold_left block (changed, i) tail in
+    if changed then dataflow () else (in_, out)
+  in
+  dataflow ()
 
 open Graph
 
