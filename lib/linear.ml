@@ -6,23 +6,27 @@ let add e = function
   | Some s -> Some (S.SS.add e s)
   | None -> Some (S.SS.singleton e)
 
-let intervalstart insns (in_, out) =
-  let insn (ordstarts, starts, active) (i, _n) =
+let intervalstart (in_, out) =
+  let insn (ordstarts, starts, active) i =
     let out' = S.SS.diff (S.SS.union in_.(i) out.(i)) active in
     ( S.SS.fold (fun e a -> IT.update i (add e) a) out' ordstarts,
       S.SS.fold (fun e a -> S.ST.add e i a) out' starts,
       S.SS.union active out' )
   in
-  List.fold_left insn (IT.empty, S.ST.empty, S.SS.empty) insns
+  Array.mapi (fun i _ -> i) in_
+  |> Array.fold_left insn (IT.empty, S.ST.empty, S.SS.empty)
 
-let intervalends insns (in_, out) =
-  let insn (i, _n) (ordends, ends, active) =
+let intervalends (in_, out) =
+  let insn i (ordends, ends, active) =
     let in' = S.SS.diff (S.SS.union in_.(i) out.(i)) active in
     ( S.SS.fold (fun e a -> IT.update i (add e) a) in' ordends,
       S.SS.fold (fun e a -> S.ST.add e i a) in' ends,
       S.SS.union active in' )
   in
-  List.fold_right insn insns (IT.empty, S.ST.empty, S.SS.empty)
+
+  Array.fold_right insn
+    (Array.mapi (fun i _ -> i) in_)
+    (IT.empty, S.ST.empty, S.SS.empty)
 
 let rec expire i (avail, active, assign, incstart, incend) =
   match IT.min_binding_opt incend with
@@ -37,7 +41,7 @@ let rec expire i (avail, active, assign, incstart, incend) =
         expire i (avail', active', assign, incstart, incend')
   | None -> (avail, active, assign, incstart, incend)
 
-let rec linearscan insns spills (avail, active, assign, incstart, incend) =
+let rec linearscan n spills (avail, active, assign, incstart, incend) =
   match IT.min_binding_opt incstart with
   | Some (i, ss) ->
       let e = S.SS.choose ss in
@@ -84,12 +88,12 @@ let rec linearscan insns spills (avail, active, assign, incstart, incend) =
                   incstart',
                   incend' ) )
       in
-      linearscan insns spills (avail', active', assign', incstart', incend')
-  | None -> expire (List.length insns) (avail, active, assign, incstart, incend)
+      linearscan n spills (avail', active', assign', incstart', incend')
+  | None -> expire n (avail, active, assign, incstart, incend)
 
 let print (insns : (_ * Cfg.insn) list) (in_, out) =
-  let _, starts, _ = intervalstart insns (in_, out) in
-  let _, ends, _ = intervalends insns (in_, out) in
+  let _, starts, _ = intervalstart (in_, out) in
+  let _, ends, _ = intervalends (in_, out) in
   let ids = S.ST.bindings starts |> List.map fst in
   let print _ (i, n) =
     let print s =
@@ -107,13 +111,13 @@ let print (insns : (_ * Cfg.insn) list) (in_, out) =
   in
   List.iteri print insns
 
-let alloc _k _cfg (_in_, _out) = failwith ""
-(*let avail = List.init k reg_of_int |> Regs.of_list in
-  let insns = List.mapi (fun i n -> (i, n)) insns in
-  let incstart, _, _ = intervalstart insns (in_, out) in
-  let incend, _, _ = intervalends insns (in_, out) in
+let alloc k _cfg (in_, out) =
+  let avail = List.init k reg_of_int |> Regs.of_list in
+  let incstart, _, _ = intervalstart (in_, out) in
+  let incend, _, _ = intervalends (in_, out) in
   let _, _, asn, _, _ =
-    linearscan insns 0 (avail, S.ST.empty, S.ST.empty, incstart, incend)
+    linearscan (Array.length in_) 0
+      (avail, S.ST.empty, S.ST.empty, incstart, incend)
   in
   (*S.ST.iter
     (fun k v -> Printf.printf "%s: %s\n" (S.name k) (string_of_operand v))
@@ -133,4 +137,4 @@ let alloc _k _cfg (_in_, _out) = failwith ""
     (fun k v -> Printf.printf "%s: %s\n" (S.name k) (string_of_operand v))
     assign;*)
   (*S.ST.iter (fun k (b, e) -> Printf.printf "%s: (%d, %d)\n" (S.name k) b e) is;*)
-  asn*)
+  asn
