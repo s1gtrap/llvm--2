@@ -116,7 +116,10 @@ let dataflow2 (((hname, head), tail) : Ll.cfg) =
               (List.length head.insns + 1)
               tail
           in
-          let find l = List.find (fun (_, n, _) -> n = l) blocks in
+          let find l =
+            if Some l = hname then (0, Option.get hname, head)
+            else List.find (fun (_, n, _) -> n = l) blocks
+          in
           let use =
             match terminator with
             | Ret (_, Some (Id o)) -> S.SS.singleton o
