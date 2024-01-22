@@ -210,7 +210,6 @@ let interf (params : Ll.uid list) (((_, head), tail) : Ll.cfg) _
   in
   let _ids = function Ll.Id id -> Some id | _ -> None in
   let defoutedges (i, t) (n : (_ * Ll.insn) list) =
-    Printf.printf "visiting %d\n" i;
     (*let defs = def n in
       let out =
         match n with
@@ -223,7 +222,8 @@ let interf (params : Ll.uid list) (((_, head), tail) : Ll.cfg) _
       ( i + 1,
         match n with Some d, _ -> S.SS.fold (edge d) out.(i) t | None, _ -> t )
     in
-    List.fold_left outedge (i, t) n
+    let i, t = List.fold_left outedge (i, t) n in
+    (i + 1, t)
   in
   (*let t = List.mapi (fun i n -> (i, n)) insns |> List.fold_left defoutedges t in*)
   let _, t =
