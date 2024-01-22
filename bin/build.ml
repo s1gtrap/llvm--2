@@ -74,7 +74,7 @@ let progitf (alc : Common.allocator) input =
     let _insns = Cfg.flatten fdecl.cfg in
     let in_, out = Lva.dataflow2 fdecl.cfg in
     let prefs = Coalesce.prefer fdecl.cfg in
-    let l, itf = Lva.interf fdecl.param in_ out in
+    let l, itf = Lva.interf fdecl.param fdecl.cfg in_ out in
     (* FIXME: harcoded k *)
     let _, itf = Coalesce.coalesce alc prefs (l, itf) in
     Printf.printf "%s\n" (Lva.dot itf);

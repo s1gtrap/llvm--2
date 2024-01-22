@@ -202,27 +202,35 @@ let interf (params : Ll.uid list) (((_, head), tail) : Ll.cfg) _
   let t = List.fold_left param t params in
   let setverts t s = S.SS.fold vert3 s t in
   (*let t = List.map (def S.SS.empty) insns |> List.fold_left setverts t in*)
+  let def = function Some d, _ -> S.SS.singleton d | None, _ -> S.SS.empty in
   let t =
-    List.map
-      (function Some d, _ -> S.SS.singleton d | None, _ -> S.SS.empty)
-      head.insns
-    |> List.fold_left setverts t
+    List.cons head.insns
+      (List.map (fun ((_, { insns; _ }) : _ * Ll.block) -> insns) tail)
+    |> List.flatten |> List.map def |> List.fold_left setverts t
   in
-
-  let ids = function Ll.Id id -> Some id | _ -> None in
-  let defoutedges t (i, n) =
-    let defs = def S.SS.empty n in
-    let out =
-      match n with
-      | Cfg.Insn (_, Ll.PhiNode (_, ops)) ->
-          List.map fst ops |> List.filter_map ids |> S.SS.of_list
-          |> S.SS.diff out.(i)
-      | _ -> out.(i)
+  let _ids = function Ll.Id id -> Some id | _ -> None in
+  let defoutedges (i, t) (n : (_ * Ll.insn) list) =
+    Printf.printf "visiting %d\n" i;
+    (*let defs = def n in
+      let out =
+        match n with
+        | _, Ll.PhiNode (_, ops) ->
+            List.map fst ops |> List.filter_map ids |> S.SS.of_list
+            |> S.SS.diff out.(i)
+        | _ -> out.(i)
+      in*)
+    let outedge (i, t) n =
+      ( i + 1,
+        match n with Some d, _ -> S.SS.fold (edge d) out.(i) t | None, _ -> t )
     in
-    let outedge e1 t = S.SS.fold (edge e1) out t in
-    S.SS.fold outedge defs t
+    List.fold_left outedge (i, t) n
   in
-  let t = List.mapi (fun i n -> (i, n)) insns |> List.fold_left defoutedges t in
+  (*let t = List.mapi (fun i n -> (i, n)) insns |> List.fold_left defoutedges t in*)
+  let _, t =
+    List.cons head.insns
+      (List.map (fun ((_, { insns; _ }) : _ * Ll.block) -> insns) tail)
+    |> List.fold_left defoutedges (0, t)
+  in
   (t, g)
 
 module VS = Set.Make (G.V)

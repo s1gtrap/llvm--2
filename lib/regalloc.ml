@@ -1014,7 +1014,6 @@ type mark =
 type assign = Color of S.symbol * int | ActualSpill of S.symbol
 
 let alloc a param cfg (in_, out) : operand S.table =
-  Printf.printf "SDFSDF %d\n" (Array.length in_);
   let l =
     match a with
     | Greedy k ->
@@ -1023,7 +1022,7 @@ let alloc a param cfg (in_, out) : operand S.table =
           | i when i >= k -> Ind3 (Lit (Int64.of_int ((i - (k - 1)) * -8)), Rbp)
           | i -> Reg (reg_of_int i)
         in
-        let l, _g = Lva.interf param in_ out in
+        let l, _g = Lva.interf param cfg in_ out in
         let c = ref 0 in
         S.ST.map
           (fun _v ->
@@ -1032,7 +1031,7 @@ let alloc a param cfg (in_, out) : operand S.table =
             v)
           l
     | Simple c ->
-        let l, g = Lva.interf param in_ out in
+        let l, g = Lva.interf param cfg in_ out in
         let register i = Reg (reg_of_int i) in
         let count = ref 0 in
         let rec simp (spills : S.SS.t) =
@@ -1181,7 +1180,7 @@ let alloc a param cfg (in_, out) : operand S.table =
         simp S.SS.empty
     | Briggs c ->
         let prefs = Coalesce.prefer cfg in
-        let l, g = Lva.interf param in_ out in
+        let l, g = Lva.interf param cfg in_ out in
         let l, g = Coalesce.coalesce_briggs c prefs (l, g) in
         let register = function
           (*| 0 -> Reg Rax
