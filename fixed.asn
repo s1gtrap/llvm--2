@@ -1,0 +1,33 @@
+isqrt:
+0: %rdx
+2: %rsi
+3: %r9
+4: %r8
+5: %rdi
+6: %rdx
+7: %rdx
+9: %rdx
+10: %rdx
+12: %rdx
+15: %rbx
+16: %rdx
+17: %rdx
+20: %rdx
+21: %rdx
+22: %rbx
+23: %rdx
+24: %rdx
+26: %rdx
+27: %rdx
+29: %rdx
+main:
+0: %rdx
+3: %rdi
+4: %rsi
+5: %rbx
+6: %rdx
+7: %rdx
+8: %rdx
+9: %rdx
+10: %rdx
+1: %rdx
