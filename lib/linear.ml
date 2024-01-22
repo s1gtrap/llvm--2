@@ -107,8 +107,8 @@ let print (insns : (_ * Cfg.insn) list) (in_, out) =
   in
   List.iteri print insns
 
-let alloc k insns (in_, out) =
-  let avail = List.init k reg_of_int |> Regs.of_list in
+let alloc _k _cfg (_in_, _out) = failwith ""
+(*let avail = List.init k reg_of_int |> Regs.of_list in
   let insns = List.mapi (fun i n -> (i, n)) insns in
   let incstart, _, _ = intervalstart insns (in_, out) in
   let incend, _, _ = intervalends insns (in_, out) in
@@ -133,4 +133,4 @@ let alloc k insns (in_, out) =
     (fun k v -> Printf.printf "%s: %s\n" (S.name k) (string_of_operand v))
     assign;*)
   (*S.ST.iter (fun k (b, e) -> Printf.printf "%s: (%d, %d)\n" (S.name k) b e) is;*)
-  asn
+  asn*)

@@ -2,9 +2,9 @@ open Common
 
 let sos s = Ll.mapcat " " S.name (S.SS.to_seq s |> List.of_seq)
 
-let prefer (insns : Cfg.insn list) : S.SS.t S.ST.t =
+let prefer (((_, head), tail) : Ll.cfg) : S.SS.t S.ST.t =
   let insn t = function
-    | Cfg.Insn (Some d, Ll.PhiNode (_, ops)) ->
+    | Some d, Ll.PhiNode (_, ops) ->
         List.fold_left
           (fun t o ->
             match o with
@@ -18,7 +18,9 @@ let prefer (insns : Cfg.insn list) : S.SS.t S.ST.t =
           t ops
     | _ -> t
   in
-  List.fold_left insn S.ST.empty insns
+  List.fold_left insn
+    (List.fold_left insn S.ST.empty head.insns)
+    (List.map (fun (_, ({ insns; _ } : Ll.block)) -> insns) tail |> List.flatten)
 
 let coalesce v1 v2 (st, g) =
   if v1 = v2 then (st, g)

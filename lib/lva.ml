@@ -69,7 +69,7 @@ let dataflow (_insns : Cfg.insn list) (_ids : Cfg.G.V.t array) ?(v = 0)
   let _ = (v, r) in
   failwith ""
 
-let dataflow2 (((hname, head), tail) : Ll.cfg) (_ids, _g) =
+let dataflow2 (((hname, head), tail) : Ll.cfg) =
   let len = List.length head.insns + 1 in
   let len =
     List.fold_left
@@ -133,7 +133,6 @@ let dataflow2 (((hname, head), tail) : Ll.cfg) (_ids, _g) =
                 S.SS.union in_.(lin) (phis name l)
             | Cbr (_, l, r) ->
                 let lin, _, _ = find l and rin, _, _ = find r in
-                Printf.printf "%d %d\n" lin rin;
                 S.SS.union in_.(lin) in_.(rin)
                 |> S.SS.union (phis name l)
                 |> S.SS.union (phis name r)
@@ -185,8 +184,8 @@ let vert g e t =
       G.add_vertex g v;
       (v, S.ST.add e v t)
 
-let interf (params : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
-    =
+let interf (params : Ll.uid list) (((_, head), tail) : Ll.cfg) _
+    (out : S.SS.t array) =
   let g = G.create () in
   let vert2 t e = vert g e t |> snd and vert3 e t = vert g e t |> snd in
   let edge s1 s2 t =
@@ -202,7 +201,14 @@ let interf (params : Ll.uid list) (insns : Cfg.insn list) _ (out : S.SS.t array)
   in
   let t = List.fold_left param t params in
   let setverts t s = S.SS.fold vert3 s t in
-  let t = List.map (def S.SS.empty) insns |> List.fold_left setverts t in
+  (*let t = List.map (def S.SS.empty) insns |> List.fold_left setverts t in*)
+  let t =
+    List.map
+      (function Some d, _ -> S.SS.singleton d | None, _ -> S.SS.empty)
+      head.insns
+    |> List.fold_left setverts t
+  in
+
   let ids = function Ll.Id id -> Some id | _ -> None in
   let defoutedges t (i, n) =
     let defs = def S.SS.empty n in

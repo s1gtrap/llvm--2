@@ -31,8 +31,8 @@ let proglva ?(v = 0) ?(r = false) input =
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
     Printf.printf "%s:\n" (Symbol.name name);
     let _ = (v, r) in
-    let g = Cfg.graph fdecl.cfg in
-    let in_, out = Lva.dataflow2 fdecl.cfg g in
+    let _g = Cfg.graph fdecl.cfg in
+    let in_, out = Lva.dataflow2 fdecl.cfg in
     let head, tail = fdecl.cfg in
     let rec printblock : _ * Ll.block -> _ = function
       | i, ({ insns = ins :: tail; _ } as b) ->
@@ -70,11 +70,11 @@ let progitf (alc : Common.allocator) input =
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
     Printf.printf "%s:\n" (Symbol.name name);
-    let ids, g = Cfg.graph fdecl.cfg in
-    let insns = Cfg.flatten fdecl.cfg in
-    let in_, out = Lva.dataflow insns ids g in
-    let prefs = Coalesce.prefer insns in
-    let l, itf = Lva.interf fdecl.param insns in_ out in
+    let _ids, _g = Cfg.graph fdecl.cfg in
+    let _insns = Cfg.flatten fdecl.cfg in
+    let in_, out = Lva.dataflow2 fdecl.cfg in
+    let prefs = Coalesce.prefer fdecl.cfg in
+    let l, itf = Lva.interf fdecl.param in_ out in
     (* FIXME: harcoded k *)
     let _, itf = Coalesce.coalesce alc prefs (l, itf) in
     Printf.printf "%s\n" (Lva.dot itf);
@@ -87,10 +87,11 @@ let proglra input =
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
     Printf.printf "%s:\n" (Symbol.name name);
-    let ids, g = Cfg.graph fdecl.cfg in
-    let insns = Cfg.flatten fdecl.cfg in
-    let df = Lva.dataflow insns ids g in
-    Linear.print (List.mapi (fun i n -> (i, n)) insns) df
+    let _ids, _g = Cfg.graph fdecl.cfg in
+    let _insns = Cfg.flatten fdecl.cfg in
+    let _df = Lva.dataflow2 fdecl.cfg in
+    ()
+    (*Linear.print (List.mapi (fun i n -> (i, n)) insns) df*)
   in
   List.iter fdecl prog.fdecls
 
@@ -99,10 +100,8 @@ let progasn (alloc_ : Common.allocator) input =
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
     Printf.printf "%s:\n" (Symbol.name name);
-    let ids, g = Cfg.graph fdecl.cfg in
-    let insns = Cfg.flatten fdecl.cfg in
-    let df = Lva.dataflow insns ids g in
-    let asn = Regalloc.alloc alloc_ [] insns df in
+    let df = Lva.dataflow2 fdecl.cfg in
+    let asn = Regalloc.alloc alloc_ [] fdecl.cfg df in
     Symbol.ST.iter
       (fun k v ->
         Printf.printf "%s: %s\n" (Symbol.name k) (X86.string_of_operand v))
@@ -144,8 +143,8 @@ let progprefs input =
   let prog = Parse.from_channel Llparser.prog input in
   let fdecl ((name, fdecl) : _ * Ll.fdecl) =
     Printf.printf "%s:\n" (Symbol.name name);
-    let insns = Cfg.flatten fdecl.cfg in
-    let prefs = Coalesce.prefer insns in
+    let _insns = Cfg.flatten fdecl.cfg in
+    let prefs = Coalesce.prefer fdecl.cfg in
     Symbol.ST.iter
       (fun k v ->
         Printf.printf "%s: " (Symbol.name k);

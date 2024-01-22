@@ -457,7 +457,7 @@ let compile_operand asn ty dst src =
           [ (Movq, [ Ind3 src; Reg Rcx ]); (Movq, [ Reg Rcx; Ind3 dst ]) ]
       | dst, Some i when dst = i -> [] (* NOTE: don't comppile noop movs *)
       | dst, Some i -> [ (Movq, [ i; dst ]) ]
-      | _, None -> failwith (Printf.sprintf "%s" (S.name id)))
+      | _, None -> failwith (Printf.sprintf "unasn %s" (S.name id)))
 
 let arg = function
   | 0 -> Reg Rdi
@@ -1013,29 +1013,8 @@ type mark =
 
 type assign = Color of S.symbol * int | ActualSpill of S.symbol
 
-let alloc a param insns (in_, out) : operand S.table =
-  (*let var i =
-      let j =
-        match i with
-        (*| 0 -> Reg Rax
-          | 1 -> Reg Rcx (* NOTE: %rax and %rcx are scratch registers *)*)
-        | 0 -> Reg Rdx
-        | 1 -> Reg Rbx
-        | 2 -> Reg Rsi
-        | 3 -> Reg Rdi
-        | 4 -> Reg R08
-        | 5 -> Reg R09
-        | 6 -> Reg R10
-        | 7 -> Reg R11
-        | 8 -> Reg R12
-        | 9 -> Reg R13
-        | 10 -> Reg R14
-        | 11 -> Reg R15
-        | i -> Ind3 (Lit (Int64.of_int ((i - 11) * -8)), Rbp)
-      in
-      flush stdout;
-      j
-    in*)
+let alloc a param cfg (in_, out) : operand S.table =
+  Printf.printf "SDFSDF %d\n" (Array.length in_);
   let l =
     match a with
     | Greedy k ->
@@ -1044,7 +1023,7 @@ let alloc a param insns (in_, out) : operand S.table =
           | i when i >= k -> Ind3 (Lit (Int64.of_int ((i - (k - 1)) * -8)), Rbp)
           | i -> Reg (reg_of_int i)
         in
-        let l, _g = Lva.interf param insns in_ out in
+        let l, _g = Lva.interf param in_ out in
         let c = ref 0 in
         S.ST.map
           (fun _v ->
@@ -1053,7 +1032,7 @@ let alloc a param insns (in_, out) : operand S.table =
             v)
           l
     | Simple c ->
-        let l, g = Lva.interf param insns in_ out in
+        let l, g = Lva.interf param in_ out in
         let register i = Reg (reg_of_int i) in
         let count = ref 0 in
         let rec simp (spills : S.SS.t) =
@@ -1201,8 +1180,8 @@ let alloc a param insns (in_, out) : operand S.table =
         in
         simp S.SS.empty
     | Briggs c ->
-        let prefs = Coalesce.prefer insns in
-        let l, g = Lva.interf param insns in_ out in
+        let prefs = Coalesce.prefer cfg in
+        let l, g = Lva.interf param in_ out in
         let l, g = Coalesce.coalesce_briggs c prefs (l, g) in
         let register = function
           (*| 0 -> Reg Rax
@@ -1366,7 +1345,7 @@ let alloc a param insns (in_, out) : operand S.table =
           else simp (S.SS.union (S.SS.of_list spills2) spills)
         in
         simp S.SS.empty
-    | Linearscan k -> Linear.alloc k insns (in_, out)
+    | Linearscan k -> Linear.alloc k cfg (in_, out)
   in
   l
 
@@ -1379,10 +1358,9 @@ let compile_fdecl (alc : allocator) debug tdecls name
     ({ param; cfg; _ } : Ll.fdecl) =
   let fname = name in
   (* move out of pre-assigned parameter registers (rsi, rdi, .. r9) *)
-  let ids, g = Cfg.graph cfg in
   let insns : Cfg.insn list = Cfg.flatten cfg in
-  let df = Lva.dataflow insns ids g in
-  let asn = alloc alc param insns df in
+  let in_, out = Lva.dataflow2 cfg in
+  let asn = alloc alc param cfg (in_, out) in
 
   let rec phis t = function
     | Cfg.Label l :: tail ->
