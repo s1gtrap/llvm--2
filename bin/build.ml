@@ -33,34 +33,7 @@ let proglva ?(v = 0) ?(r = false) input =
     let _ = (v, r) in
     let _g = Cfg.graph fdecl.cfg in
     let in_, out = Lva.dataflow2 fdecl.cfg in
-    let head, tail = fdecl.cfg in
-    let rec printblock : _ * Ll.block -> _ = function
-      | i, ({ insns = ins :: tail; _ } as b) ->
-          Ll.string_of_named_insn ins
-          |> Printf.printf "{%s}\t{%s}\t%s\n"
-               (S.SS.elements in_.(i) |> Ll.mapcat "," S.name)
-               (S.SS.elements out.(i) |> Ll.mapcat "," S.name);
-          printblock (i + 1, { b with insns = tail })
-      | i, { insns = []; terminator } ->
-          Ll.string_of_terminator terminator
-          |> Printf.printf "{%s}\t{%s}\t%s\n"
-               (S.SS.elements in_.(i) |> Ll.mapcat "," S.name)
-               (S.SS.elements out.(i) |> Ll.mapcat "," S.name)
-    in
-    let printnamedblock (i, name, block) =
-      S.name name |> Printf.printf "%s:\n";
-      printblock (i, block)
-    in
-    (match fst head with Some l -> Printf.printf "%s:\n" (S.name l) | _ -> ());
-    printblock (0, snd head);
-    let _, blocks =
-      List.fold_left_map
-        (fun a ((n, b) : _ * Ll.block) ->
-          (a + List.length b.insns + 1, (a, n, b)))
-        (List.length (snd head).insns + 1)
-        tail
-    in
-    List.iter printnamedblock blocks;
+    Lva.print fdecl.cfg in_ out;
     ()
   in
   List.iter fdecl prog.fdecls
