@@ -5,6 +5,7 @@ declare i32 @printf(i8*, ...)
 declare i32 @atoi(i8*)
 
 define i32 @fac (i32 %0) {
+1:
  %2 = and i32 %0, 1
  %3 = icmp eq i32 %2, 0
  br i1 %3, label %8, label %4
@@ -60,6 +61,7 @@ define i32 @fac (i32 %0) {
 }
 
 define i32 @main (i32 %0, i8* %1) {
+2:
  %3 = getelementptr i8*, i8* %1, i64 1
  %4 = load i8*, i8** %3
  %5 = call i32 @atoi (i8* %4)
